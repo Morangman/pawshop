@@ -1,0 +1,193 @@
+.sidebar {
+    min-height: calc(100vh - 50px);
+}
+
+.vs__clear,
+.vs__open-indicator {
+    transform: scale(0.7) !important;
+    cursor: pointer !important;
+}
+
+.vs__dropdown-toggle {
+    min-height: 36px !important;
+}
+
+.daterangepicker.dropdown-menu {
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.daterangepicker.dropdown-menu .ranges {
+    border: 0;
+    box-shadow: none;
+}
+
+.daterangepicker.dropdown-menu .table-condensed tr > td,
+.daterangepicker.dropdown-menu .table-condensed tr > th {
+    min-width: 32px;
+}
+
+.vue-daterange-picker .reportrange-text {
+    padding: 7px 10px !important;
+}
+
+.center-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*.table-responsive td {*/
+/*    min-width: 200px !important;*/
+/*}*/
+
+.csv-file {
+    position: relative;
+    overflow: hidden;
+}
+#csv-file {
+    position: absolute;
+    font-size: 50px;
+    opacity: 0;
+    right: 0;
+    top: 0;
+}
+
+.navbar-brand img {
+    height: 1.5rem;
+}
+
+.overflow-box .custom-file-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 85px;
+}
+
+.vue-swatches__trigger__wrapper {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.vue-swatches__container:not(.vue-swatches--inline) {
+    position: absolute;
+    display: block;
+    overflow: auto;
+    border-radius: 5px;
+    box-shadow: 0 2px 3px rgba(10,10,10,.2), 0 0 0 1px rgba(10,10,10,.2);
+    z-index: 50;
+}
+
+.vue-swatches__container {
+    box-sizing: content-box;
+}
+
+.vue-swatches__wrapper {
+    background-color: inherit;
+    box-sizing: content-box;
+}
+
+.vue-swatches__row {
+    font-size: 0;
+}
+
+.vue-swatches__swatch {
+    position: relative;
+    display: inline-block;
+    font-size: 0;
+}
+
+.vue-swatches__check__path {
+    fill: #fff;
+}
+
+.vue-swatches__swatch.vue-swatches__swatch--border, .vue-swatches__swatch.vue-swatches__swatch--selected {
+    box-shadow: inset 0 0 2px rgba(0,0,0,.75);
+}
+
+.vue-swatches--has-children-centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vue-swatches__check__wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.vue-swatches__check__circle {
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    background-color: rgba(0,0,0,.15);
+}
+
+.vue-swatches__fallback__wrapper {
+    display: table;
+}
+
+.vue-swatches__fallback__input--wrapper {
+    display: table-cell;
+    padding-right: 10px;
+    width: 100%;
+    font-size: 14px;
+}
+
+.vue-swatches__fallback__input {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #dcdcdc;
+    color: #35495e;
+    background: #fff;
+}
+
+.vue-swatches__fallback__button {
+    display: table-cell;
+    padding: 6px 15px;
+    border: 0;
+    cursor: pointer;
+    font-weight: 700;
+    color: #fff;
+    background-color: #3571c8;
+    border-radius: 5px;
+}
+
+.change-blocks-wrapper__item {
+    border: 1px solid #d4d4d4;
+}
+
+.change-blocks-wrapper__item {
+    margin-bottom: 30px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.multiselect1 {
+    width: auto!important;
+    text-align: unset!important;
+    padding-left: 0!important;
+    padding-right: 0!important;
+    text-transform: none!important;
+    overflow: unset!important;
+    text-overflow: unset!important;
+    white-space: unset!important;
+}
+
+.date-centered {
+    display: flex;
+    justify-content: center;
+}
+
+@media screen and (max-width: 1520px) {
+    .table {
+        width: 1280px;
+    }
+}
+
+.product-title {
+    display: flex;
+    flex-direction: column-reverse;
+}
