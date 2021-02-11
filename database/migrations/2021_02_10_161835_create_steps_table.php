@@ -23,6 +23,7 @@ class CreateStepsTable extends Migration
             $table->unsignedBigInteger('tip_id')->nullable();
             $table->string('name');
             $table->json('items');
+            $table->boolean('is_condition')->default(0);
             $table->timestamps();
         });
     }

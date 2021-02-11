@@ -12,6 +12,7 @@ return [
         'name' => 'Name*',
         'items' => 'Items*',
         'item_text' => 'Item text',
+        'is_condition' => 'This is condition?',
         'price' => 'Price for item (Device price - this price)',
         'tip' => 'Select tip',
     ],

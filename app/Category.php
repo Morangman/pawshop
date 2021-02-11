@@ -33,6 +33,7 @@ class Category extends Model implements HasMedia
         'name',
         'image',
         'custom_text',
+        'steps',
         'is_hidden',
     ];
 
@@ -44,6 +45,7 @@ class Category extends Model implements HasMedia
         'name' => 'string',
         'image' => 'string',
         'custom_text' => 'string',
+        'steps' => 'array',
         'is_hidden' => 'bool',
     ];
 

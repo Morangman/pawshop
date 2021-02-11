@@ -90,6 +90,15 @@ class CategoryController extends Controller
      */
     public function update(UpdateRequest $request, Category $category): JsonResponse
     {
+//        $stepsIds = [];
+//        foreach ($request->get('steps') as $step) {
+//            $stepsIds[] = $step['id'];
+//        }
+//
+//        $stepsIds = implode(',', $stepsIds);
+//
+//        Step::select('*')->whereKey(explode(',', $stepsIds))->get()->toArray();
+
         $category->update($request->all());
 
         $this->handleDocuments($request, $category);

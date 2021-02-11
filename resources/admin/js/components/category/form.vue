@@ -109,11 +109,14 @@
                                                         <strong>{{ $t('admin.category.form.select_step') }}</strong>
                                                     </label>
                                                     <model-list-select :list="steps"
-                                                                       v-model="model.steps[index].id"
+                                                                       v-model="model.steps[index]"
                                                                        option-value="id"
                                                                        :custom-text="name"
                                                                        placeholder="select item">
                                                     </model-list-select>
+                                                    <div class="mt-3">
+                                                        <p>Selected:</p> <a :href="$r('admin.step.edit', { step: model.steps[index].id })">{{ model.steps[index].name }}</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -192,7 +195,14 @@
         data() {
             return {
                 categoryPreviewImage: null,
+                selectedSteps: [],
             };
+        },
+
+        watch: {
+            selectedSteps: function () {
+                this.model.steps = this.selectedSteps;
+            }
         },
 
         methods: {
@@ -201,7 +211,7 @@
             },
 
             addStep() {
-                this.model.steps.push({
+                this.selectedSteps.push({
                     id: null,
                 });
 
@@ -209,7 +219,7 @@
             },
 
             deleteStep(index) {
-                this.model.steps.splice(index, 1);
+                this.selectedSteps.splice(index, 1);
 
                 this.$forceUpdate();
             },
@@ -251,7 +261,7 @@
 
             this.categoryPreviewImage = this.model.image;
 
-            this.model.steps = [];
+            this.selectedSteps = this.model.steps;
         },
     };
 </script>

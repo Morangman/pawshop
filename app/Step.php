@@ -25,6 +25,7 @@ class Step extends Model
         'tip_id',
         'name',
         'items',
+        'is_condition',
     ];
 
     /**
@@ -34,5 +35,6 @@ class Step extends Model
         'tip_id' => 'int',
         'name' => 'string',
         'items' => 'array',
+        'is_condition' => 'bool',
     ];
 }

@@ -26,6 +26,10 @@ class StoreRequest extends FormRequest
                 'string',
                 'max:255',
             ],
+            'steps' => [
+                'nullable',
+                'array',
+            ],
         ];
     }
 }

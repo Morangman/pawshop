@@ -36,6 +36,24 @@
                     </div>
 
                     <div class="form-group">
+                        <label>
+                            <strong>{{ $t('admin.step.form.is_condition') }}</strong>
+                        </label>
+                        <b-form-checkbox
+                            v-model="model.is_condition"
+                            value="1"
+                            unchecked-value="0"
+                        >
+                        </b-form-checkbox>
+                        <div v-for="(error, i) in errors.is_condition"
+                             :key="`is_condition__error__${i}`"
+                             class="text-danger error"
+                        >
+                            {{ error }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <strong>
                             <h1>{{ $t('admin.step.form.items') }}</h1>
                         </strong>
@@ -193,6 +211,12 @@
             name (item) {
                 return `${item.name}`
             },
+        },
+
+        created() {
+            if (this.model.id) {
+                this.model.is_condition = Number(this.model.is_condition);
+            }
         },
     };
 </script>
