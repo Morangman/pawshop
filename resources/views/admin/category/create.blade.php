@@ -17,5 +17,6 @@
 @section('content')
     <category-create
         :categories="{{ json_encode($categories) }}"
+        :steps="{{ json_encode($steps) }}"
     ></category-create>
 @endsection

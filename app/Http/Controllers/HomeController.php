@@ -200,30 +200,13 @@ class HomeController extends Controller
      */
     public function accessories(): ViewContract
     {
-        $productByCategory = [];
-
-        $accessories = Product::query()->where('is_hidden', false)->get() ?? [];
-
-        foreach ($accessories as $product) {
-            $productCategory = $product->category()->first();
-            if ($productCategory->getAttribute('name') === Category::ACCESSORIES) {
-                $productByCategory[$productCategory->getAttribute('name')][] = [
-                    'id' => $product->getKey(),
-                    'title' => $product->getAttribute('title'),
-                    'image' => $product->getAttribute('image'),
-                    'price' => $product->getAttribute('price'),
-                    'old_price' => $product->getAttribute('old_price'),
-                    'general_info' => $product->getAttribute('general_info'),
-                    'variations' => $product->getAttribute('variations'),
-                ];
-            }
-        }
-
         return View::make(
             'accessories',
             [
-                'products' => $productByCategory,
-                'categories' => Category::query()->where('is_hidden', false)->get() ?? [],
+                'categories' => Category::query()
+                        ->where('is_hidden', false)
+                        ->where('subcategory_id', null)
+                        ->get() ?? [],
                 'settings' => Setting::latest('updated_at')->first() ?? null
             ]
         );

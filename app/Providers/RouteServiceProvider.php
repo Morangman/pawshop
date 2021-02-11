@@ -7,6 +7,8 @@ use App\Comment;
 use App\Order;
 use App\Product;
 use App\Setting;
+use App\Step;
+use App\Tip;
 use App\User;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Notifications\Notification;
@@ -88,6 +90,8 @@ class RouteServiceProvider extends ServiceProvider
         $models = [
             'user' => User::class,
             'category' => Category::class,
+            'tip' => Tip::class,
+            'step' => Step::class,
             'product' => Product::class,
             'media' => Media::class,
             'order' => Order::class,

@@ -18,5 +18,6 @@
     <category-edit
         :category="{{ $category }}"
         :categories="{{ json_encode($categories) }}"
+        :steps="{{ json_encode($steps) }}"
     ></category-edit>
 @endsection

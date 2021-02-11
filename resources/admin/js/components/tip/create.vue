@@ -1,32 +1,19 @@
 <template>
-    <category-form
+    <tip-form
         :model.sync="model"
-        :categories.sync="categories"
-        :steps.sync="steps"
         :errors.sync="errors"
         @submit="store"
     >
-    </category-form>
+    </tip-form>
 </template>
 
 <script>
-    import CategoryFormComponent from './form';
+    import TipFormComponent from './form';
     import FormHelper from '../../mixins/form_helper';
 
     export default {
         components: {
-            CategoryForm: CategoryFormComponent,
-        },
-
-        props: {
-            categories: {
-                type: Array,
-                required: false,
-            },
-            steps: {
-                type: Array,
-                required: false,
-            },
+            TipForm: TipFormComponent,
         },
 
         mixins: [FormHelper],
@@ -35,10 +22,7 @@
             return {
                 model: {
                     name: null,
-                    image: null,
-                    subcategory_id: null,
-                    custom_text: null,
-                    steps: [],
+                    text: null,
                 },
                 errors: {},
                 formData: null,
@@ -52,10 +36,10 @@
                 this.collectFormData(data);
 
                 axios.post(
-                    Router.route('admin.category.store'),
+                    Router.route('admin.tip.store'),
                     this.formData,
                 ).then(() => {
-                    location.href = Router.route('admin.category.index');
+                    location.href = Router.route('admin.tip.index');
                 }).catch(({ response: { data: { errors } } }) => {
                     this.errors = errors;
                     this.scrollToError();

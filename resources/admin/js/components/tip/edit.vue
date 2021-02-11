@@ -1,37 +1,27 @@
 <template>
-    <category-form
+    <tip-form
         v-if="model"
         :model.sync="model"
-        :categories.sync="categories"
-        :steps.sync="steps"
         :errors.sync="errors"
         @submit="update"
-        @delete="deleteCategory"
+        @delete="deleteStep"
     >
-    </category-form>
+    </tip-form>
 </template>
 
 <script>
-    import CategoryFormComponent from './form';
+    import TipFormComponent from './form';
     import FormHelper from '../../mixins/form_helper';
 
     export default {
         components: {
-            CategoryForm: CategoryFormComponent,
+            TipForm: TipFormComponent,
         },
 
         props: {
-            category: {
+            tip: {
                 type: Object,
                 required: true,
-            },
-            steps: {
-                type: Array,
-                required: false,
-            },
-            categories: {
-                type: Array,
-                required: false,
             },
         },
 
@@ -39,7 +29,7 @@
 
         data() {
             return {
-                model: this.category,
+                model: this.tip,
                 errors: {},
                 formData: null,
             };
@@ -53,7 +43,7 @@
                 this.collectFormData(data);
 
                 axios.post(
-                    Router.route('admin.category.update', { category: this.category.id }),
+                    Router.route('admin.tip.update', { tip: this.tip.id }),
                     this.formData,
                     {
                         headers: {
@@ -61,18 +51,18 @@
                         },
                     },
                 ).then(() => {
-                    location.href = Router.route('admin.category.edit', { category: this.category.id });
+                    location.href = Router.route('admin.tip.edit', { tip: this.tip.id });
                 }).catch(({ response: { data: { errors } } }) => {
                     this.errors = errors;
                     this.scrollToError();
                 });
             },
 
-            deleteCategory() {
+            deleteStep() {
                 axios.delete(
-                    Router.route('admin.category.delete', { category: this.category.id }),
+                    Router.route('admin.tip.delete', { tip: this.tip.id }),
                 ).then(() => {
-                    location.href = Router.route('admin.category.index');
+                    location.href = Router.route('admin.tip.index');
                 }).catch(({ response: { data: { errors } } }) => {
                     notify.error(_.head(errors));
                 });

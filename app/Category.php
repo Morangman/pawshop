@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
@@ -48,13 +48,13 @@ class Category extends Model implements HasMedia
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function products(): HasMany
+    public function subcategory(): BelongsTo
     {
-        return $this->hasMany(
-            Product::class,
-            'category_id',
+        return $this->belongsTo(
+            Category::class,
+            'subcategory_id',
             $this->primaryKey
         );
     }

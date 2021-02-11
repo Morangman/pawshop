@@ -2,7 +2,7 @@
     <step-form
         v-if="model"
         :model.sync="model"
-        :categories.sync="steps"
+        :tips.sync="tips"
         :errors.sync="errors"
         @submit="update"
         @delete="deleteStep"
@@ -24,7 +24,7 @@
                 type: Object,
                 required: true,
             },
-            categories: {
+            tips: {
                 type: Array,
                 required: false,
             },

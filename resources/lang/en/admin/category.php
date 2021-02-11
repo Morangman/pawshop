@@ -14,6 +14,8 @@ return [
         'subcategory' => 'Parent category',
         'status' => 'Status',
         'text' => 'Cash in up to..',
+        'steps' => 'Steps for device',
+        'select_step' => 'Select step',
         'hidden' => 'Is hidden',
     ],
     'index' => [

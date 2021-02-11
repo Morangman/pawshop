@@ -1,11 +1,11 @@
 <template>
     <step-form
         :model.sync="model"
-        :categories.sync="steps"
+        :tips.sync="tips"
         :errors.sync="errors"
         @submit="store"
     >
-    </category-form>
+    </step-form>
 </template>
 
 <script>
@@ -18,7 +18,7 @@
         },
 
         props: {
-            categories: {
+            tips: {
                 type: Array,
                 required: false,
             },
@@ -30,9 +30,8 @@
             return {
                 model: {
                     name: null,
-                    image: null,
-                    subcategory_id: null,
-                    custom_text: null,
+                    tip_id: null,
+                    items: [],
                 },
                 errors: {},
                 formData: null,

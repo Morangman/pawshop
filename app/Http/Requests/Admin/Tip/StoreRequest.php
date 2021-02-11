@@ -2,16 +2,16 @@
 
 declare(strict_types = 1);
 
-namespace App\Http\Requests\Admin\Step;
+namespace App\Http\Requests\Admin\Tip;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class UpdateRequest
+ * Class StoreRequest
  *
- * @package App\Http\Requests\Admin\Step
+ * @package App\Http\Requests\Admin\Tip
  */
-class UpdateRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -26,13 +26,9 @@ class UpdateRequest extends FormRequest
                 'string',
                 'max:255',
             ],
-            'items' => [
+            'text' => [
                 'required',
-                'array',
-            ],
-            'tip_id' => [
-                'nullable',
-                'integer',
+                'string',
             ],
         ];
     }

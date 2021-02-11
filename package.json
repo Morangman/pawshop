@@ -42,6 +42,7 @@
         "vue-select": "^3.10.7",
         "vue-swatches": "^2.1.0",
         "vue2-ace-editor": "0.0.15",
+        "vue2-editor": "^2.10.2",
         "weekstart": "^1.0.1"
     }
 }

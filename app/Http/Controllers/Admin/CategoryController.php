@@ -10,6 +10,7 @@ use App\Http\Requests\Admin\Category\StoreRequest;
 use App\Http\Requests\Admin\Category\UpdateRequest;
 use App\Product;
 use App\Setting;
+use App\Step;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -39,6 +40,7 @@ class CategoryController extends Controller
     {
         return View::make('admin.category.create', [
             'categories' => Category::all(),
+            'steps' => Step::all(),
         ]);
     }
 
@@ -74,6 +76,7 @@ class CategoryController extends Controller
             [
                 'category' => $category,
                 'categories' => Category::all(),
+                'steps' => Step::all(),
             ]
         );
     }

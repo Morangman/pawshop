@@ -10,6 +10,10 @@ import StepIndex from './components/step/index';
 import StepCreate from './components/step/create';
 import StepEdit from './components/step/edit';
 
+import TipIndex from './components/tip/index';
+import TipCreate from './components/tip/create';
+import TipEdit from './components/tip/edit';
+
 import ProductIndex from './components/product/index';
 import ProductCreate from './components/product/create';
 import ProductEdit from './components/product/edit';
@@ -37,6 +41,9 @@ export default {
     StepIndex,
     StepCreate,
     StepEdit,
+    TipIndex,
+    TipCreate,
+    TipEdit,
     ProductIndex,
     ProductCreate,
     ProductEdit,

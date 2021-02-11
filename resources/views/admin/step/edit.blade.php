@@ -17,6 +17,6 @@
 @section('content')
     <step-edit
         :step="{{ $step }}"
-        :steps="{{ json_encode($steps) }}"
+        :tips="{{ json_encode($tips) }}"
     ></step-edit>
 @endsection

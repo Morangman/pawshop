@@ -7,9 +7,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 /**
- * Class CreateStepsTable
+ * Class CreateTipsTable
  */
-class CreateStepsTable extends Migration
+class CreateTipsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -18,11 +18,10 @@ class CreateStepsTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('steps', function (Blueprint $table) {
+        Schema::create('tips', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('tip_id')->nullable();
             $table->string('name');
-            $table->json('items');
+            $table->text('text');
             $table->timestamps();
         });
     }
@@ -34,6 +33,6 @@ class CreateStepsTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('steps');
+        Schema::dropIfExists('tips');
     }
 }

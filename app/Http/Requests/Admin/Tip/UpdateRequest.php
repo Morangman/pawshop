@@ -2,14 +2,14 @@
 
 declare(strict_types = 1);
 
-namespace App\Http\Requests\Admin\Step;
+namespace App\Http\Requests\Admin\Tip;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Class UpdateRequest
  *
- * @package App\Http\Requests\Admin\Step
+ * @package App\Http\Requests\Admin\Tip
  */
 class UpdateRequest extends FormRequest
 {
@@ -26,13 +26,9 @@ class UpdateRequest extends FormRequest
                 'string',
                 'max:255',
             ],
-            'items' => [
+            'text' => [
                 'required',
-                'array',
-            ],
-            'tip_id' => [
-                'nullable',
-                'integer',
+                'string',
             ],
         ];
     }

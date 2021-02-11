@@ -4,11 +4,10 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin;
 
-use App\Step;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Step\StoreRequest;
-use App\Http\Requests\Admin\Step\UpdateRequest;
 use App\Tip;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Tip\StoreRequest;
+use App\Http\Requests\Admin\Tip\UpdateRequest;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,18 +16,18 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 
 /**
- * Class StepController
+ * Class tipController
  *
  * @package App\Http\Controllers\Admin
  */
-class StepController extends Controller
+class TipController extends Controller
 {
     /**
      * @return \Illuminate\Contracts\View\View
      */
     public function index(): ViewContract
     {
-        return View::make('admin.step.index');
+        return View::make('admin.tip.index');
     }
 
     /**
@@ -36,91 +35,91 @@ class StepController extends Controller
      */
     public function create(): ViewContract
     {
-        return View::make('admin.step.create', [
+        return View::make('admin.tip.create', [
             'tips' => Tip::all(),
         ]);
     }
 
     /**
-     * @param \App\Http\Requests\Admin\Step\StoreRequest $request
+     * @param \App\Http\Requests\Admin\Tip\StoreRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded
      */
     public function store(StoreRequest $request): JsonResponse
     {
-        Step::create($request->all());
+        Tip::create($request->all());
 
         Session::flash(
             'success',
-            Lang::get('admin/step.messages.create')
+            Lang::get('admin/tip.messages.create')
         );
 
         return $this->json()->noContent();
     }
 
     /**
-     * @param \App\Step $step
+     * @param \App\Tip $tip
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit(Step $step): ViewContract
+    public function edit(Tip $tip): ViewContract
     {
         return View::make(
-            'admin.step.edit',
+            'admin.tip.edit',
             [
-                'step' => $step,
+                'tip' => $tip,
                 'tips' => Tip::all(),
             ]
         );
     }
 
     /**
-     * @param \App\Http\Requests\Admin\Step\UpdateRequest $request
-     * @param \App\Step $step
+     * @param \App\Http\Requests\Admin\Tip\UpdateRequest $request
+     * @param \App\Tip $tip
      *
      * @return \Illuminate\Http\JsonResponse
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded
      */
-    public function update(UpdateRequest $request, Step $step): JsonResponse
+    public function update(UpdateRequest $request, Tip $tip): JsonResponse
     {
-        $step->update($request->all());
+        $tip->update($request->all());
 
         Session::flash(
             'success',
-            Lang::get('admin/step.messages.update')
+            Lang::get('admin/tip.messages.update')
         );
 
         return $this->json()->noContent();
     }
 
     /**
-     * @param \App\Step $step
+     * @param \App\Tip $tip
      *
      * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Exception
      */
-    public function delete(Step $step): JsonResponse
+    public function delete(Tip $tip): JsonResponse
     {
-        $step->delete();
+        $tip->delete();
 
         Session::flash(
             'success',
-            Lang::get('admin/step.messages.delete')
+            Lang::get('admin/tip.messages.delete')
         );
 
         return $this->json()->noContent();
     }
 
     /**
-     * @param \App\Step $step
+     * @param \App\Tip $tip
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function get(Step $step): JsonResponse
+    public function get(Tip $tip): JsonResponse
     {
-        return $this->json()->ok($step);
+        return $this->json()->ok($tip);
     }
 
     /**
@@ -132,7 +131,7 @@ class StepController extends Controller
      */
     public function getAll(Request $request): JsonResponse
     {
-        $steps = Step::query()
+        $tips = Tip::query()
             ->when(
                 $request->get('search'),
                 function ($query, $search) {
@@ -149,6 +148,6 @@ class StepController extends Controller
             )
             ->paginate(20);
 
-        return $this->json()->ok($steps);
+        return $this->json()->ok($tips);
     }
 }

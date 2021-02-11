@@ -86,6 +86,55 @@
                             {{ error }}
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <strong>
+                            <h1>{{ $t('admin.category.form.steps') }}</h1>
+                        </strong>
+                        <div class="form-group">
+                            <div class="change-blocks-wrapper__item" v-for="(item, index) in model.steps">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="text-right">
+                                            <a href="javascript:void(0)" class="text-danger" v-on:click="deleteStep(index)">
+                                                {{ $t('common.word.remove') }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>
+                                                        <strong>{{ $t('admin.category.form.select_step') }}</strong>
+                                                    </label>
+                                                    <model-list-select :list="steps"
+                                                                       v-model="model.steps[index].id"
+                                                                       option-value="id"
+                                                                       :custom-text="name"
+                                                                       placeholder="select item">
+                                                    </model-list-select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <button
+                                    v-on:click="addStep"
+                                    class="btn btn-primary margin-top-10"
+                                >{{ $t('common.word.add') }}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-for="(error, i) in errors.items"
+                         :key="`items__error__${i}`"
+                         class="text-danger error"
+                    >
+                        {{ error }}
+                    </div>
+
                 </div>
             </div>
             <div class="text-right">
@@ -112,7 +161,7 @@
 
 <script>
     import FormHelper from '../../mixins/form_helper';
-    import { ModelListSelect } from 'vue-search-select'
+    import { ModelListSelect } from 'vue-search-select';
 
     export default {
         props: {
@@ -124,10 +173,20 @@
                 type: Array,
                 required: false,
             },
+            steps: {
+                type: Array,
+                required: false,
+            },
             errors: {
                 type: Object,
                 required: true,
             },
+        },
+
+        mixins: [FormHelper],
+
+        components: {
+            ModelListSelect,
         },
 
         data() {
@@ -136,15 +195,27 @@
             };
         },
 
-        mixins: [FormHelper],
-
-        components: {
-            ModelListSelect
-        },
-
         methods: {
             submit() {
                 this.$emit('submit', this.model);
+            },
+
+            addStep() {
+                this.model.steps.push({
+                    id: null,
+                });
+
+                this.$forceUpdate();
+            },
+
+            deleteStep(index) {
+                this.model.steps.splice(index, 1);
+
+                this.$forceUpdate();
+            },
+
+            name (item) {
+                return `${item.name}`
             },
 
             deleteCategory() {
@@ -171,10 +242,6 @@
                     this.$t('admin.category.messages.image_delete')
                 );
             },
-
-            name (item) {
-                return `${item.name}`
-            },
         },
 
         created() {
@@ -183,6 +250,8 @@
             }
 
             this.categoryPreviewImage = this.model.image;
+
+            this.model.steps = [];
         },
     };
 </script>

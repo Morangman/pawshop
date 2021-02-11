@@ -26,6 +26,14 @@ class StoreRequest extends FormRequest
                 'string',
                 'max:255',
             ],
+            'items' => [
+                'required',
+                'array',
+            ],
+            'tip_id' => [
+                'nullable',
+                'integer',
+            ],
         ];
     }
 }

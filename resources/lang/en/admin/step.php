@@ -10,16 +10,16 @@ return [
     ],
     'form' => [
         'name' => 'Name*',
-        'image' => 'Image*',
-        'status' => 'Status',
-        'text' => 'Cash in up to..',
-        'hidden' => 'Is hidden',
+        'items' => 'Items*',
+        'item_text' => 'Item text',
+        'price' => 'Price for item (Device price - this price)',
+        'tip' => 'Select tip',
     ],
     'index' => [
         'title' => 'Step',
         'header_btn' => 'Create step',
         'filters' => [
-            'search' => 'Search categories by typing one of these fields: name',
+            'search' => 'Search steps by typing one of these fields: name',
         ],
         'table' => [
             'headers' => [
@@ -42,6 +42,5 @@ return [
         'create' => 'Step has been successfully created',
         'update' => 'Step has been successfully updated',
         'delete' => 'Step has been successfully deleted',
-        'image_delete' => 'Image has been successfully deleted',
     ],
 ];
