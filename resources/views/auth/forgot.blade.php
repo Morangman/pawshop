@@ -44,7 +44,7 @@
                                             <a href="{{ URL::route('web.register') }}" class="forgot-password">{{ Lang::get('auth.register.form.buttons.submit.text') }}</a>
                                             <ul class="socials">
                                                 <li>
-                                                    <a href=""><img src="{{ asset('client/images/google.svg') }}" alt=""></a>
+                                                    <a href="/redirect"><img src="{{ asset('client/images/google.svg') }}" alt=""></a>
                                                 </li>
                                                 <li>
                                                     <a href=""><img src="{{ asset('client/images/facebook.svg') }}" alt=""></a>

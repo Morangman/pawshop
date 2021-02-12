@@ -114,6 +114,8 @@ class LoginController extends Controller
                 'password' => 'password',
             ]);
 
+            $createdUser->attachRole('user');
+
             Auth::login($createdUser);
         }
 
