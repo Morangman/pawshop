@@ -4,8 +4,11 @@ declare(strict_types = 1);
 
 namespace App;
 
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use McMatters\LaravelRoles\Traits\HasPermission;
@@ -28,7 +31,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'phone', 'email', 'password',
+        'name',
+        'phone',
+        'email',
+        'addresses',
+        'password',
     ];
 
     /**
@@ -37,7 +44,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -46,7 +54,14 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
+        'name' => 'string',
+        'email' => 'string',
+        'phone' => 'string',
+        'addresses' => 'array',
         'email_verified_at' => 'datetime',
+        'register_code' => 'int',
+        'is_active' => 'bool',
+        'password' => 'string',
     ];
 
     /**
@@ -64,6 +79,30 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
+    public function scopeAdmins(Builder $query): Builder
+    {
+        return $query->whereHas('roles', function (Builder $subQuery) {
+            return $subQuery->where('roles.name', 'admin');
+        });
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeUsers(Builder $query): Builder
+    {
+        return $query->whereHas('roles', function (Builder $subQuery) {
+            return $subQuery->where('roles.name', 'user');
+        });
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeNotifiableUsers(Builder $query): Builder
     {
         return $query->whereHas('roles', function (Builder $subQuery) {
@@ -71,5 +110,27 @@ class User extends Authenticatable
                 ->orWhere('roles.name', 'superadmin')
                 ->orWhere('roles.name', 'manager');
         });
+    }
+
+    /**
+     * @param string|null $by
+     * @param string|null $dir
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function notifications(string $by = null, string $dir = null): MorphMany
+    {
+        return $this->morphMany(DatabaseNotification::class, 'notifiable')
+            ->orderBy($by ?? 'created_at', $dir ?? 'desc');
+    }
+
+    /**
+     * @param mixed $token
+     *
+     * @return void
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 }

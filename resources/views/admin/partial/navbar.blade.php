@@ -68,7 +68,7 @@
                 <div class="dropdown-menu dropdown-menu-right">
                     <a
                         class="dropdown-item"
-                        href="{{ route('admin.logout') }}"
+                        href="{{ route('web.logout') }}"
                     >
                         <i class="icon-switch2"></i>
                         @lang('common.navbar.logout')

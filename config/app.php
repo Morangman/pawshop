@@ -165,7 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
-
+        Laravel\Socialite\SocialiteServiceProvider::class,
         Lord\Laroute\LarouteServiceProvider::class,
         MartinLindhe\VueInternationalizationGenerator\GeneratorProvider::class,
         McMatters\Helpers\ServiceProvider::class,

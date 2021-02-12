@@ -4,11 +4,11 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Order\StoreRequest;
 use App\Http\Requests\Admin\Order\UpdateRequest;
 use App\Order;
-use App\Product;
 use App\Reminder;
 use App\SuspectIp;
 use Carbon\Carbon;
@@ -42,14 +42,13 @@ class OrderController extends Controller
     {
         $productByCategory = [];
 
-        $products = Product::query()->where('is_hidden', false)->get();
+        $categories = Category::query()->where('is_hidden', false)->whereNotNull('custom_text')->get();
 
-        foreach ($products as $product) {
-            $productCategory = $product->category()->first();
-            $productByCategory[$productCategory->getAttribute('name')][] = [
-                'id' => $product->getKey(),
-                'title' => $product->getAttribute('title'),
-                'variations' => $product->getAttribute('variations'),
+        foreach ($categories as $category) {
+            $productByCategory[$category->getAttribute('name')][] = [
+                'id' => $category->getKey(),
+                'title' => $category->getAttribute('name'),
+                'variations' => $category->getAttribute('steps'),
             ];
         }
 
@@ -97,14 +96,13 @@ class OrderController extends Controller
     {
         $productByCategory = [];
 
-        $products = Product::all();
+        $categories = Category::query()->where('is_hidden', false)->whereNotNull('custom_text')->get();
 
-        foreach ($products as $product) {
-            $productCategory = $product->category()->first();
-            $productByCategory[$productCategory->getAttribute('name')][] = [
-                'id' => $product->getKey(),
-                'title' => $product->getAttribute('title'),
-                'variations' => $product->getAttribute('variations'),
+        foreach ($categories as $category) {
+            $productByCategory[$category->getAttribute('name')][] = [
+                'id' => $category->getKey(),
+                'title' => $category->getAttribute('name'),
+                'variations' => $category->getAttribute('steps'),
             ];
         }
 

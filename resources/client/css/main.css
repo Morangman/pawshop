@@ -1,4 +1,4 @@
-/* http://meyerweb.com/eric/tools/css/reset/ 
+/* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 */
@@ -699,6 +699,21 @@ header {
   bottom: 0;
   left: 20px;
   z-index: 15;
+}
+
+.checkout-login-form{
+    margin-top: 150px;
+    margin-bottom: 150px;
+}
+
+.forgot-password{
+    margin-right: 20px;
+    text-decoration: underline;
+}
+
+.white-section{
+    margin-top: 150px;
+    margin-bottom: 150px;
 }
 
 .support-block {

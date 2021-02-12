@@ -4,45 +4,45 @@ declare(strict_types = 1);
 
 return [
     'breadcrumbs' => [
-        'index' => 'Відгуки',
-        'create' => 'Створити відгук',
-        'edit' => 'Редагувати відгук',
+        'index' => 'Comments',
+        'create' => 'Create comment',
+        'edit' => 'Edit comment',
     ],
     'form' => [
-        'name' => 'Ім\'я',
+        'name' => 'Name',
         'email' => 'Email',
-        'text' => 'Текст',
-        'value' => 'Оцінка',
-        'is_hidden' => 'Приховано',
+        'text' => 'Text',
+        'value' => 'Rating',
+        'is_hidden' => 'Is hidden',
     ],
     'index' => [
-        'title' => 'Відгуки',
-        'header_btn' => 'Створити відгук',
+        'title' => 'Comments',
+        'header_btn' => 'Create comment',
         'filters' => [
-            'search' => 'Пошук відгуків, ввівши одне з цих полів: ім’я',
+            'search' => 'Search comments by typing one of these fields: name',
         ],
         'table' => [
             'headers' => [
                 'id' => 'ID',
-                'name' => 'Ім\'я',
-                'text' => 'Текст',
-                'is_hidden' => 'Приховано',
-                'created_at' => 'Дата створення',
+                'name' => 'Name',
+                'text' => 'Text',
+                'is_hidden' => 'Is hidden',
+                'created_at' => 'Created date',
             ],
         ],
     ],
     'create' => [
-        'title' => 'Створити відгук',
+        'title' => 'Create comment',
     ],
     'edit' => [
-        'title' => 'Редагувати відгук',
+        'title' => 'Edit comment',
     ],
     'delete' => [
-        'title' => 'Видалити відгук',
+        'title' => 'Delete comment',
     ],
     'messages' => [
-        'update' => 'Відгук успішно оновлено',
-        'create' => 'Відгук успішно створено',
-        'delete' => 'Відгук успішно видалено',
+        'create' => 'Comment has been successfully created',
+        'update' => 'Comment has been successfully updated',
+        'delete' => 'Comment has been successfully deleted',
     ],
 ];

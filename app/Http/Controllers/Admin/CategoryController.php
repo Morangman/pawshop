@@ -8,7 +8,6 @@ use App\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Category\StoreRequest;
 use App\Http\Requests\Admin\Category\UpdateRequest;
-use App\Product;
 use App\Setting;
 use App\Step;
 use Illuminate\Contracts\View\View as ViewContract;
@@ -181,7 +180,7 @@ class CategoryController extends Controller
     {
         if ($categoryPreviewImage = $request->file('image')) {
             $media = $category->addMedia($categoryPreviewImage)
-                ->toMediaCollection(Product::MEDIA_COLLECTION_PRODUCT);
+                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
 
             $category->update(['image' => $media->getFullUrl()]);
         }

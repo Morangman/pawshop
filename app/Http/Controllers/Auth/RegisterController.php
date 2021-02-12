@@ -2,12 +2,25 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Category;
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
+use App\Http\Requests\Auth\RegisterRequest;
+use App\Notifications\RegisterConfirmationNotification;
+use App\Setting;
 use App\User;
+use Auth;
+use Butschster\Head\Facades\Meta;
+use Butschster\Head\Packages\Entities\OpenGraphPackage;
+use Carbon\Carbon;
+use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Lang;
+use Notification;
+use Session;
+use URL;
+use View;
 
 class RegisterController extends Controller
 {
@@ -29,45 +42,96 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/';
 
     /**
-     * Create a new controller instance.
+     * @param \App\Http\Requests\Auth\RegisterRequest $request
      *
-     * @return void
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function __construct()
+    public function register(RegisterRequest $request): RedirectResponse
     {
-        $this->middleware('guest');
+        /** @var \App\User $user */
+        $user = \App\User::query()->create($request->all());
+
+        $user->attachRole('user');
+
+        Notification::send(
+            $user,
+            new RegisterConfirmationNotification($user->getAttribute('register_code'))
+        );
+
+        Session::flash('status', Lang::get('auth.register.verify.title'));
+
+        return new RedirectResponse(URL::route('web.login.show'), 302);
     }
 
     /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @return \Illuminate\Contracts\View\View
      */
-    protected function validator(array $data)
+    public function showRegistrationForm(): ViewContract
     {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        $settings = Setting::latest('updated_at')->first() ?? null;
+
+        $categories = Category::query()->where('is_hidden', false)->whereNotNull('custom_text')->get();
+
+        $seoTitle = isset($settings) && isset($settings->getAttribute('general_settings')['seo_title'])
+            ? $settings->getAttribute('general_settings')['seo_title']
+            : '';
+        $seoImage = isset($settings) && isset($settings->getAttribute('general_settings')['seo_image'])
+            ? $settings->getAttribute('general_settings')['seo_image']
+            : '';
+
+        $og = new OpenGraphPackage('home_og');
+
+        $og->setType('OG META TAGS')
+            ->setSiteName($seoTitle)
+            ->setTitle($seoTitle)
+            ->addImage($seoImage);
+
+        $og->toHtml();
+
+        Meta::registerPackage($og);
+
+        Meta::prependTitle($seoTitle)
+            ->setKeywords(isset($settings) ? $settings->getAttribute('general_settings')['seo_keywords'] : '')
+            ->setDescription($seoTitle);
+
+        return View::make('auth.registration', [
+            'settings' => $settings ?? [],
+            'categories' => $categories
         ]);
     }
 
     /**
-     * Create a new user instance after a valid registration.
+     * @param \Illuminate\Http\Request $request
+     * @param string $code
      *
-     * @param  array  $data
-     * @return \App\User
+     * @return \Illuminate\Http\RedirectResponse
+     *
+     * @throws \Exception
      */
-    protected function create(array $data)
+    public function verifyEmail(Request $request, string $code): RedirectResponse
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        $user = User::query()
+            ->where('email', $request->get('email'))
+            ->where('register_code', $code)
+            ->first();
+
+        if ($user) {
+            User::query()->whereKey($user->getKey())->update([
+                'is_active' => true,
+                'register_code' => null,
+                'email_verified_at' => Carbon::now(),
+            ]);
+
+            Auth::login($user);
+        } else {
+            Session::flash('error', Lang::get('auth.register.verify.error'));
+
+            return new RedirectResponse(URL::route('auth.register'), 302);
+        }
+
+        return new RedirectResponse(URL::route('home'), 302);
     }
 }

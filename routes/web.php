@@ -19,8 +19,6 @@ Route::get('/comments', 'HomeController@comments')->name('comments');
 
 Route::get('/guarantee', 'HomeController@guarantee')->name('guarantee');
 
-Route::get('/product/{product}', 'HomeController@product')->name('product');
-
 Route::get('/accessories', 'HomeController@accessories')->name('accessories');
 
 Route::post('/order', 'HomeController@makeOrder')->name('order');
@@ -29,10 +27,14 @@ Route::post('/call', 'HomeController@callMe')->name('call');
 
 Route::post('/comment', 'HomeController@addComment')->name('comment');
 
+Route::get('/redirect', 'Auth\LoginController@redirectToProvider');
+
+Route::get('/callback', 'Auth\LoginController@handleProviderCallback');
+
 Route::group([
     'namespace' => 'Auth',
-    'as' => 'admin',
-    'prefix' => 'admin',
+    'as' => 'web',
+    'prefix' => 'web',
 ], static function () {
     require __DIR__.'/web/auth.php';
 });

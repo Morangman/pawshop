@@ -50,6 +50,7 @@ class UserRoleSeeder extends Seeder
                 'email' => "{$role}@example.com",
                 'phone' => $phone,
                 'email_verified_at' => $now,
+                'is_active' => true,
                 'password' => $password,
             ]);
 

@@ -10,7 +10,6 @@ use App\Http\Requests\Admin\Order\StoreRequest;
 use App\Http\Requests\Client\Order\StoreRequest as ClientOrderStoreRequest;
 use App\Notifications\CommentNotification;
 use App\Order;
-use App\Product;
 use App\Setting;
 use App\User;
 use Butschster\Head\Packages\Entities\OpenGraphPackage;
@@ -37,26 +36,7 @@ class HomeController extends Controller
     {
         $settings = Setting::latest('updated_at')->first() ?? null;
 
-        $productByCategory = [];
-
-        $products = Product::query()->where('is_hidden', false)->get() ?? [];
-
-        $categories = Category::query()->where('is_hidden', false)->get() ?? [];
-
-        foreach ($products as $product) {
-            $productCategory = $product->category()->first();
-            if ($productCategory->getAttribute('name') !== Category::ACCESSORIES) {
-                $productByCategory[$productCategory->getAttribute('name')][] = [
-                    'id' => $product->getKey(),
-                    'title' => $product->getAttribute('title'),
-                    'image' => $product->getAttribute('image'),
-                    'price' => $product->getAttribute('price'),
-                    'old_price' => $product->getAttribute('old_price'),
-                    'general_info' => $product->getAttribute('general_info'),
-                    'variations' => $product->getAttribute('variations'),
-                ];
-            }
-        }
+        $categories = Category::query()->where('is_hidden', false)->whereNotNull('custom_text')->get();
 
         $seoTitle = isset($settings) && isset($settings->getAttribute('general_settings')['seo_title'])
             ? $settings->getAttribute('general_settings')['seo_title']
@@ -82,7 +62,6 @@ class HomeController extends Controller
 
         return View::make('home', [
             'settings' => $settings ?? [],
-            'products' => $productByCategory,
             'categories' => $categories
         ]);
     }
@@ -159,40 +138,6 @@ class HomeController extends Controller
         );
 
         return $this->json()->noContent();
-    }
-
-    /**
-     * @param \App\Product $product
-     *
-     * @return \Illuminate\Contracts\View\View
-     */
-    public function product(Product $product): ViewContract
-    {
-        $og = new OpenGraphPackage('product_og');
-
-        $og->setType('OG META TAGS')
-            ->setTitle($product->getAttribute('seo')['title'] ?? '')
-            ->addImage($product->getAttribute('seo')['image'] ?? '');
-
-        $og->toHtml();
-
-        Meta::registerPackage($og);
-
-        Meta::prependTitle($product->getAttribute('seo')['title'] ?? '')
-            ->setKeywords($product->getAttribute('seo')['keywords'] ?? '')
-            ->setDescription($product->getAttribute('seo')['meta'] ?? '');
-
-        $ids = Arr::pluck($product->getAttribute('recommended_products'), 'id');
-
-        return View::make(
-            'product',
-            [
-                'product' => $product,
-                'categories' => Category::query()->where('is_hidden', false)->get() ?? [],
-                'settings' => Setting::latest('updated_at')->first() ?? null,
-                'recommended' => Product::query()->whereIn('id', $ids)->get(),
-            ]
-        );
     }
 
     /**

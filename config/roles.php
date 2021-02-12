@@ -25,5 +25,8 @@ return [
         'admin' => [
             //routes
         ],
+        'user' => [
+            //routes
+        ],
     ],
 ];

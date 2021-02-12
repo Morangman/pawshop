@@ -5,7 +5,9 @@ declare(strict_types = 1);
 namespace App\Providers;
 
 use App\Observers\OrderObserver;
+use App\Observers\UserObserver;
 use App\Order;
+use App\User;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -20,6 +22,7 @@ class ModelObserverServiceProvider extends ServiceProvider
      */
     protected $observers = [
         Order::class => OrderObserver::class,
+        User::class => UserObserver::class,
     ];
 
     /**

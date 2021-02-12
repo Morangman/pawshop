@@ -14,10 +14,6 @@ import TipIndex from './components/tip/index';
 import TipCreate from './components/tip/create';
 import TipEdit from './components/tip/edit';
 
-import ProductIndex from './components/product/index';
-import ProductCreate from './components/product/create';
-import ProductEdit from './components/product/edit';
-
 import OrderIndex from './components/order/index';
 import OrderCreate from './components/order/create';
 import OrderEdit from './components/order/edit';
@@ -44,9 +40,6 @@ export default {
     TipIndex,
     TipCreate,
     TipEdit,
-    ProductIndex,
-    ProductCreate,
-    ProductEdit,
     OrderIndex,
     OrderCreate,
     OrderEdit,
