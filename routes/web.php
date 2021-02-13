@@ -17,9 +17,7 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/comments', 'HomeController@comments')->name('comments');
 
-Route::get('/guarantee', 'HomeController@guarantee')->name('guarantee');
-
-Route::get('/accessories', 'HomeController@accessories')->name('accessories');
+Route::get('/header-search', 'HomeController@headerSearchDevice')->name('header-search');
 
 Route::post('/order', 'HomeController@makeOrder')->name('order');
 
@@ -27,9 +25,13 @@ Route::post('/call', 'HomeController@callMe')->name('call');
 
 Route::post('/comment', 'HomeController@addComment')->name('comment');
 
-Route::get('/redirect', 'Auth\LoginController@redirectToProvider');
+Route::get('/redirect-google', 'Auth\LoginController@redirectToGoogleProvider')->name('redirect-google');
 
-Route::get('/callback', 'Auth\LoginController@handleProviderCallback');
+Route::get('/redirect-facebook', 'Auth\LoginController@redirectToFacebookProvider')->name('redirect-facebook');
+
+Route::get('/callback-google', 'Auth\LoginController@handleProviderGoogleCallback')->name('callback-google');
+
+Route::get('/callback-facebook', 'Auth\LoginController@handleProviderFacebookCallback')->name('callback-facebook');
 
 Route::group([
     'namespace' => 'Auth',

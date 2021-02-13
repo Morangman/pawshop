@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Category;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\SettingTrait;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
-use App\Setting;
-use Butschster\Head\Facades\Meta;
-use Butschster\Head\Packages\Entities\OpenGraphPackage;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Support\Facades\Password;
@@ -16,6 +14,8 @@ use View;
 
 class ForgotPasswordController extends Controller
 {
+    use SettingTrait;
+
     /*
     |--------------------------------------------------------------------------
     | Password Reset Controller
@@ -34,34 +34,10 @@ class ForgotPasswordController extends Controller
      */
     public function showLinkRequestForm(): ViewContract
     {
-        $settings = Setting::latest('updated_at')->first() ?? null;
-
         $categories = Category::query()->where('is_hidden', false)->whereNotNull('custom_text')->get();
 
-        $seoTitle = isset($settings) && isset($settings->getAttribute('general_settings')['seo_title'])
-            ? $settings->getAttribute('general_settings')['seo_title']
-            : '';
-        $seoImage = isset($settings) && isset($settings->getAttribute('general_settings')['seo_image'])
-            ? $settings->getAttribute('general_settings')['seo_image']
-            : '';
-
-        $og = new OpenGraphPackage('home_og');
-
-        $og->setType('OG META TAGS')
-            ->setSiteName($seoTitle)
-            ->setTitle($seoTitle)
-            ->addImage($seoImage);
-
-        $og->toHtml();
-
-        Meta::registerPackage($og);
-
-        Meta::prependTitle($seoTitle)
-            ->setKeywords(isset($settings) ? $settings->getAttribute('general_settings')['seo_keywords'] : '')
-            ->setDescription($seoTitle);
-
         return View::make('auth.forgot', [
-            'settings' => $settings ?? [],
+            'settings' => $this->getSettings() ?? [],
             'categories' => $categories
         ]);
     }
@@ -73,31 +49,7 @@ class ForgotPasswordController extends Controller
      */
     public function sendResetLinkEmail(ForgotPasswordRequest $request)
     {
-        $settings = Setting::latest('updated_at')->first() ?? null;
-
         $categories = Category::query()->where('is_hidden', false)->whereNotNull('custom_text')->get();
-
-        $seoTitle = isset($settings) && isset($settings->getAttribute('general_settings')['seo_title'])
-            ? $settings->getAttribute('general_settings')['seo_title']
-            : '';
-        $seoImage = isset($settings) && isset($settings->getAttribute('general_settings')['seo_image'])
-            ? $settings->getAttribute('general_settings')['seo_image']
-            : '';
-
-        $og = new OpenGraphPackage('home_og');
-
-        $og->setType('OG META TAGS')
-            ->setSiteName($seoTitle)
-            ->setTitle($seoTitle)
-            ->addImage($seoImage);
-
-        $og->toHtml();
-
-        Meta::registerPackage($og);
-
-        Meta::prependTitle($seoTitle)
-            ->setKeywords(isset($settings) ? $settings->getAttribute('general_settings')['seo_keywords'] : '')
-            ->setDescription($seoTitle);
 
         $response = $this->broker()->sendResetLink(
             $request->only('email')
@@ -105,7 +57,7 @@ class ForgotPasswordController extends Controller
 
         return $response === Password::RESET_LINK_SENT
             ? View::make('auth.reset_success', [
-                'settings' => $settings ?? [],
+                'settings' => $this->getSettings() ?? [],
                 'categories' => $categories
             ])
             : $this->sendResetLinkFailedResponse($request, $response);

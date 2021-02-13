@@ -636,8 +636,8 @@ header {
 .header-search-form button {
   height: 38px;
   width: 36px;
-  padding: 0;
   padding-top: 2px;
+  padding-right: 20px;
   border: none;
   cursor: pointer;
   border-radius: 99px;
@@ -939,6 +939,20 @@ header {
   width: 188px;
   -ms-flex-negative: 0;
   flex-shrink: 0;
+}
+
+.header-search-popup{
+    position: absolute;
+    z-index: 4;
+    left: 0;
+    width: 100%;
+    top: 38px;
+    padding: 20px;
+    background: #fff;
+    overflow: hidden;
+    padding-top: 24px;
+    box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.06);
+    border: 1px solid #EDEDED;
 }
 
 .order-search-popup {

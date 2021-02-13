@@ -96,10 +96,10 @@
                                             <a href="{{ URL::route('web.login.show') }}" class="forgot-password">{{ Lang::get('login.title') }}</a>
                                             <ul class="socials">
                                                 <li>
-                                                    <a href="/redirect"><img src="{{ asset('client/images/google.svg') }}" alt=""></a>
+                                                    <a href="{{ URL::route('redirect-google') }}"><img src="{{ asset('client/images/google.svg') }}" alt=""></a>
                                                 </li>
                                                 <li>
-                                                    <a href=""><img src="{{ asset('client/images/facebook.svg') }}" alt=""></a>
+                                                    <a href="{{ URL::route('redirect-facebook') }}"><img src="{{ asset('client/images/facebook.svg') }}" alt=""></a>
                                                 </li>
                                             </ul>
                                         </div>

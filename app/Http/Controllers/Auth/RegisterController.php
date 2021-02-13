@@ -4,13 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Category;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\SettingTrait;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Notifications\RegisterConfirmationNotification;
-use App\Setting;
 use App\User;
 use Auth;
-use Butschster\Head\Facades\Meta;
-use Butschster\Head\Packages\Entities\OpenGraphPackage;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -24,6 +22,8 @@ use View;
 
 class RegisterController extends Controller
 {
+    use SettingTrait;
+
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -71,34 +71,10 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm(): ViewContract
     {
-        $settings = Setting::latest('updated_at')->first() ?? null;
-
         $categories = Category::query()->where('is_hidden', false)->whereNotNull('custom_text')->get();
 
-        $seoTitle = isset($settings) && isset($settings->getAttribute('general_settings')['seo_title'])
-            ? $settings->getAttribute('general_settings')['seo_title']
-            : '';
-        $seoImage = isset($settings) && isset($settings->getAttribute('general_settings')['seo_image'])
-            ? $settings->getAttribute('general_settings')['seo_image']
-            : '';
-
-        $og = new OpenGraphPackage('home_og');
-
-        $og->setType('OG META TAGS')
-            ->setSiteName($seoTitle)
-            ->setTitle($seoTitle)
-            ->addImage($seoImage);
-
-        $og->toHtml();
-
-        Meta::registerPackage($og);
-
-        Meta::prependTitle($seoTitle)
-            ->setKeywords(isset($settings) ? $settings->getAttribute('general_settings')['seo_keywords'] : '')
-            ->setDescription($seoTitle);
-
         return View::make('auth.registration', [
-            'settings' => $settings ?? [],
+            'settings' => $this->getSettings() ?? [],
             'categories' => $categories
         ]);
     }

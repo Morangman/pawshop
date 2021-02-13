@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Category;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\SettingTrait;
 use App\Http\Requests\Auth\ResetPasswordRequest;
-use App\Setting;
-use Butschster\Head\Facades\Meta;
-use Butschster\Head\Packages\Entities\OpenGraphPackage;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\View\View as ViewContract;
@@ -20,6 +18,8 @@ use View;
 
 class ResetPasswordController extends Controller
 {
+    use SettingTrait;
+
     /*
     |--------------------------------------------------------------------------
     | Password Reset Controller
@@ -90,36 +90,12 @@ class ResetPasswordController extends Controller
      */
     public function showResetForm(Request $request, string $token): ViewContract
     {
-        $settings = Setting::latest('updated_at')->first() ?? null;
-
         $categories = Category::query()->where('is_hidden', false)->whereNotNull('custom_text')->get();
-
-        $seoTitle = isset($settings) && isset($settings->getAttribute('general_settings')['seo_title'])
-            ? $settings->getAttribute('general_settings')['seo_title']
-            : '';
-        $seoImage = isset($settings) && isset($settings->getAttribute('general_settings')['seo_image'])
-            ? $settings->getAttribute('general_settings')['seo_image']
-            : '';
-
-        $og = new OpenGraphPackage('home_og');
-
-        $og->setType('OG META TAGS')
-            ->setSiteName($seoTitle)
-            ->setTitle($seoTitle)
-            ->addImage($seoImage);
-
-        $og->toHtml();
-
-        Meta::registerPackage($og);
-
-        Meta::prependTitle($seoTitle)
-            ->setKeywords(isset($settings) ? $settings->getAttribute('general_settings')['seo_keywords'] : '')
-            ->setDescription($seoTitle);
 
         return View::make('auth.forgot_new_pass', [
             'token' => $token,
             'email' => $request->get('email'),
-            'settings' => $settings ?? [],
+            'settings' => $this->getSettings() ?? [],
             'categories' => $categories,
         ]);
     }

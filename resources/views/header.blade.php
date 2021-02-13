@@ -15,9 +15,9 @@
                     <li>
                         <a href="" data-title="Device Repairs" class="has-drop">Device Repairs <img src="{{ asset('client/images/select_arrow.png') }}" alt="" /></a>
                         <ul class="drop-menu">
-                            <li><a href="">Phone Repairs</a></li>
-                            <li><a href="">iPads and Tablets</a></li>
-                            <li><a href="">Macbooks and Computers</a></li>
+                            @foreach($categories as $category)
+                                <li><a href="">{{ $category->getAttribute('name') }}</a></li>
+                            @endforeach
                         </ul>
                     </li>
                     <li><a href="" data-title="Mobile Service">Mobile Service</a></li>
@@ -52,13 +52,7 @@
                         @endif
                     </ul>
                 </div>
-                <div class="header-search">
-                    <form class="header-search-form">
-                        <input type="text" placeholder="Write text">
-                        <button type="submit"><img src="{{ asset('client/images/icon_search.svg') }}" alt=""></button>
-                    </form>
-                    <div class="header-search-toggle"><img src="{{ asset('client/images/icon_search.svg') }}" alt=""></div>
-                </div>
+                <search-header></search-header>
                 <div class="header-close"><img src="{{ asset('client/images/close.png') }}" alt="" /></div>
             </div>
             <a href="" class="header-cart">

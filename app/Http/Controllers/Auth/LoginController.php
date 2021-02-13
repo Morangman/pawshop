@@ -6,17 +6,15 @@ namespace App\Http\Controllers\Auth;
 
 use App\Category;
 use App\Http\Controllers\Controller;
-use App\Setting;
+use App\Http\Controllers\Traits\SettingTrait;
 use App\User;
-use Butschster\Head\Facades\Meta;
-use Butschster\Head\Packages\Entities\OpenGraphPackage;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Lang;
-use Auth;
 use Laravel\Socialite\Facades\Socialite;
 use View;
 
@@ -27,6 +25,8 @@ use View;
  */
 class LoginController extends Controller
 {
+    use SettingTrait;
+
     /*
     |--------------------------------------------------------------------------
     | Login Controller
@@ -52,9 +52,19 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function redirectToProvider()
+    public function redirectToGoogleProvider()
     {
         return Socialite::driver('google')->redirect();
+    }
+
+    /**
+     * Redirect the user to the Facebook authentication page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function redirectToFacebookProvider()
+    {
+        return Socialite::driver('facebook')->redirect();
     }
 
     /**
@@ -62,39 +72,15 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function handleProviderCallback()
+    public function handleProviderGoogleCallback()
     {
-        $settings = Setting::latest('updated_at')->first() ?? null;
-
         $categories = Category::query()->where('is_hidden', false)->whereNotNull('custom_text')->get();
-
-        $seoTitle = isset($settings) && isset($settings->getAttribute('general_settings')['seo_title'])
-            ? $settings->getAttribute('general_settings')['seo_title']
-            : '';
-        $seoImage = isset($settings) && isset($settings->getAttribute('general_settings')['seo_image'])
-            ? $settings->getAttribute('general_settings')['seo_image']
-            : '';
-
-        $og = new OpenGraphPackage('home_og');
-
-        $og->setType('OG META TAGS')
-            ->setSiteName($seoTitle)
-            ->setTitle($seoTitle)
-            ->addImage($seoImage);
-
-        $og->toHtml();
-
-        Meta::registerPackage($og);
-
-        Meta::prependTitle($seoTitle)
-            ->setKeywords(isset($settings) ? $settings->getAttribute('general_settings')['seo_keywords'] : '')
-            ->setDescription($seoTitle);
 
         try {
             $user = Socialite::driver('google')->user();
         } catch (\Exception $e) {
             return View::make('auth.login', [
-                'settings' => $settings ?? [],
+                'settings' => $this->getSettings() ?? [],
                 'categories' => $categories
             ]);
         }
@@ -110,7 +96,48 @@ class LoginController extends Controller
                 'email' => $user->email,
                 'phone' => '+18000000000',
                 'email_verified_at' => Carbon::now(),
-                'is_active' => true,
+                'is_active' => 1,
+                'password' => 'password',
+            ]);
+
+            $createdUser->attachRole('user');
+
+            Auth::login($createdUser);
+        }
+
+        return redirect()->to('/');
+    }
+
+    /**
+     * Obtain the user information from Facebook.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function handleProviderFacebookCallback()
+    {
+        $categories = Category::query()->where('is_hidden', false)->whereNotNull('custom_text')->get();
+
+        try {
+            $user = Socialite::driver('facebook')->user();
+        } catch (\Exception $e) {
+            return View::make('auth.login', [
+                'settings' => $this->getSettings() ?? [],
+                'categories' => $categories
+            ]);
+        }
+
+        // check if they're an existing user
+        $existingUser = User::query()->where('email', $user->email)->first();
+
+        if($existingUser){
+            Auth::login($existingUser);
+        } else {
+            $createdUser = User::query()->create([
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => '+18000000000',
+                'email_verified_at' => Carbon::now(),
+                'is_active' => 1,
                 'password' => 'password',
             ]);
 
@@ -128,34 +155,10 @@ class LoginController extends Controller
      */
     public function showLoginForm(): ViewContract
     {
-        $settings = Setting::latest('updated_at')->first() ?? null;
-
         $categories = Category::query()->where('is_hidden', false)->whereNotNull('custom_text')->get();
 
-        $seoTitle = isset($settings) && isset($settings->getAttribute('general_settings')['seo_title'])
-            ? $settings->getAttribute('general_settings')['seo_title']
-            : '';
-        $seoImage = isset($settings) && isset($settings->getAttribute('general_settings')['seo_image'])
-            ? $settings->getAttribute('general_settings')['seo_image']
-            : '';
-
-        $og = new OpenGraphPackage('home_og');
-
-        $og->setType('OG META TAGS')
-            ->setSiteName($seoTitle)
-            ->setTitle($seoTitle)
-            ->addImage($seoImage);
-
-        $og->toHtml();
-
-        Meta::registerPackage($og);
-
-        Meta::prependTitle($seoTitle)
-            ->setKeywords(isset($settings) ? $settings->getAttribute('general_settings')['seo_keywords'] : '')
-            ->setDescription($seoTitle);
-
         return View::make('auth.login', [
-            'settings' => $settings ?? [],
+            'settings' => $this->getSettings() ?? [],
             'categories' => $categories
         ]);
     }

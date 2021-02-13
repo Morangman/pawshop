@@ -10,15 +10,14 @@ use App\Http\Requests\Admin\Order\StoreRequest;
 use App\Http\Requests\Client\Order\StoreRequest as ClientOrderStoreRequest;
 use App\Notifications\CommentNotification;
 use App\Order;
+use Illuminate\Http\Request;
 use App\Setting;
 use App\User;
-use Butschster\Head\Packages\Entities\OpenGraphPackage;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Arr;
+use App\Http\Controllers\Traits\SettingTrait;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\View;
-use Butschster\Head\Facades\Meta;
 
 /**
  * Class HomeController
@@ -27,6 +26,8 @@ use Butschster\Head\Facades\Meta;
  */
 class HomeController extends Controller
 {
+    use SettingTrait;
+
     /**
      * @return \Illuminate\Contracts\View\View
      *
@@ -34,35 +35,11 @@ class HomeController extends Controller
      */
     public function index(): ViewContract
     {
-        $settings = Setting::latest('updated_at')->first() ?? null;
-
         $categories = Category::query()->where('is_hidden', false)->whereNotNull('custom_text')->get();
 
-        $seoTitle = isset($settings) && isset($settings->getAttribute('general_settings')['seo_title'])
-            ? $settings->getAttribute('general_settings')['seo_title']
-            : '';
-        $seoImage = isset($settings) && isset($settings->getAttribute('general_settings')['seo_image'])
-            ? $settings->getAttribute('general_settings')['seo_image']
-            : '';
-
-        $og = new OpenGraphPackage('home_og');
-
-        $og->setType('OG META TAGS')
-            ->setSiteName($seoTitle)
-            ->setTitle($seoTitle)
-            ->addImage($seoImage);
-
-        $og->toHtml();
-
-        Meta::registerPackage($og);
-
-        Meta::prependTitle($seoTitle)
-            ->setKeywords(isset($settings) ? $settings->getAttribute('general_settings')['seo_keywords'] : '')
-            ->setDescription($seoTitle);
-
         return View::make('home', [
-            'settings' => $settings ?? [],
-            'categories' => $categories
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
         ]);
     }
 
@@ -75,17 +52,6 @@ class HomeController extends Controller
             'categories' => Category::query()->where('is_hidden', false)->get() ?? [],
             'settings' => Setting::latest('updated_at')->first() ?? null,
             'comments' => Comment::query()->where('is_hidden', false)->paginate(5) ?? [],
-        ]);
-    }
-
-    /**
-     * @return \Illuminate\Contracts\View\View
-     */
-    public function guarantee(): ViewContract
-    {
-        return View::make('guarantee', [
-            'categories' => Category::query()->where('is_hidden', false)->get() ?? [],
-            'settings' => Setting::latest('updated_at')->first() ?? null,
         ]);
     }
 
@@ -124,6 +90,29 @@ class HomeController extends Controller
     }
 
     /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function headerSearchDevice(Request $request): JsonResponse
+    {
+        $categories = Category::query()
+            ->when(
+                $request->get('name'),
+                function ($query, $search) {
+                    $keyword = "%{$search}%";
+
+                    $query->where('name', 'like', $keyword);
+                }
+            )
+            ->where('is_hidden', false)
+            ->whereNotNull('custom_text')
+            ->get();
+
+        return $this->json()->ok($categories);
+    }
+
+    /**
      * @param \App\Http\Requests\Admin\Comment\StoreRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
@@ -138,22 +127,5 @@ class HomeController extends Controller
         );
 
         return $this->json()->noContent();
-    }
-
-    /**
-     * @return \Illuminate\Contracts\View\View
-     */
-    public function accessories(): ViewContract
-    {
-        return View::make(
-            'accessories',
-            [
-                'categories' => Category::query()
-                        ->where('is_hidden', false)
-                        ->where('subcategory_id', null)
-                        ->get() ?? [],
-                'settings' => Setting::latest('updated_at')->first() ?? null
-            ]
-        );
     }
 }
