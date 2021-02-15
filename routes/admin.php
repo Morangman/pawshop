@@ -22,6 +22,15 @@ Route::group(
 
 Route::group(
     [
+        'as' => '.faq',
+        'prefix' => 'faq',
+        'middleware' => ['anyrole:admin|manager']
+    ],
+    __DIR__.'/admin/faq.php'
+);
+
+Route::group(
+    [
         'as' => '.step',
         'prefix' => 'step',
         'middleware' => ['anyrole:admin|manager']

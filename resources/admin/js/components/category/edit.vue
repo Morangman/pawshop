@@ -3,6 +3,7 @@
         v-if="model"
         :model.sync="model"
         :categories.sync="categories"
+        :faqs.sync="faqs"
         :steps.sync="steps"
         :errors.sync="errors"
         @submit="update"
@@ -23,6 +24,10 @@
         props: {
             category: {
                 type: Object,
+                required: true,
+            },
+            faqs: {
+                type: Array,
                 required: true,
             },
             steps: {

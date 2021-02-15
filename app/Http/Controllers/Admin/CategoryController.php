@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Http\Controllers\Admin;
 
 use App\Category;
+use App\Faq;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Category\StoreRequest;
 use App\Http\Requests\Admin\Category\UpdateRequest;
@@ -39,6 +40,7 @@ class CategoryController extends Controller
     {
         return View::make('admin.category.create', [
             'categories' => Category::all(),
+            'faqs' => Faq::all(),
             'steps' => Step::all(),
         ]);
     }
@@ -75,6 +77,7 @@ class CategoryController extends Controller
             [
                 'category' => $category,
                 'categories' => Category::all(),
+                'faqs' => Faq::all(),
                 'steps' => Step::all(),
             ]
         );

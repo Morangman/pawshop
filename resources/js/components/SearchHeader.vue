@@ -1,13 +1,13 @@
 <template>
     <div class="header-search">
-        <form class="header-search-form">
+        <div class="header-search-form">
             <input v-on:keyup="searchDevice" v-model="name" type="text" placeholder="Write text">
-            <button><img src="../../client/images/icon_search.svg" alt=""></button>
-        </form>
+            <a href="javascript:void(0)"></a>
+        </div>
         <div class="header-search-popup" v-if="searchDevices.length">
             <ul class="header-search-popup-list" id="header-search-popup-list">
                 <li v-for="(device, index) in searchDevices" :key="`device_${index}`">
-                    <a class="link">
+                    <a :href="$r('get-category', { category: device.id })" class="link">
                         <span class="name">{{ device.name }}</span>
                     </a>
                 </li>

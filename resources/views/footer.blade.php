@@ -1,3 +1,30 @@
+<div class="footer-container">
+    <section class="support-section">
+        <div class="container">
+            <div class="support-content">
+                <img class="support-image" src="{{ asset('client/images/footer_girl.png') }}" alt="" />
+                <div class="support-block">
+                    <h1>Still have questions?</h1>
+                    <div class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim</div>
+                    <a href="#contact-popup" class="btn red-btn popup-open" data-effect="mfp-zoom-in">Contact us <img src="{{ asset('client/images/white_arrow.png') }}" alt="" /></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="contact-popup" class="popup-modal mfp-hide mfp-with-anim">
+        <div class="popup-content">
+            <form class="simple-form popup-form" action="#" method="post">
+                <h1>Contact us</h1>
+                <input type="text" placeholder="Julia" />
+                <input type="text" placeholder="Phone number" />
+                <input type="text" placeholder="E-mail" />
+                <textarea placeholder="Your question"></textarea>
+                <button type="submit" class="btn red-btn ">Send <img src="{{ asset('client/images/white_arrow.png') }}" alt="" /></button>
+            </form>
+            <button class="mfp-close" type="button" title="Close (Esc)"><img src="{{ asset('client/images/close.png') }}" alt="" /><img class="sm-only" src="{{ asset('client/images/close_popup.png') }}" alt="" /></button>
+        </div>
+    </div>
 <footer>
     <div class="container">
         <div class="footer-content">
@@ -37,3 +64,4 @@
         </div>
     </div>
 </footer>
+</div>

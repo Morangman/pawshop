@@ -11,6 +11,7 @@ return [
     'form' => [
         'name' => 'Name*',
         'image' => 'Image*',
+        'faq' => 'FAQ',
         'subcategory' => 'Parent category',
         'status' => 'Status',
         'text' => 'Cash in up to..',

@@ -25653,6 +25653,7 @@ __webpack_require__.r(__webpack_exports__);
         "form": {
           "name": "Name*",
           "image": "Image*",
+          "faq": "FAQ",
           "subcategory": "Parent category",
           "status": "Status",
           "text": "Cash in up to..",
@@ -25701,7 +25702,9 @@ __webpack_require__.r(__webpack_exports__);
           "items": "Items*",
           "item_text": "Item text",
           "is_condition": "This is condition?",
-          "price": "Price for item (Device price - this price)",
+          "is_checkboxes": "This is checkboxes?",
+          "price_minus": "Price for item (Device price - this price)",
+          "price_plus": "Price for item (Device price + this price)",
           "tip": "Select tip"
         },
         "index": {
@@ -25924,6 +25927,47 @@ __webpack_require__.r(__webpack_exports__);
           "delete": "Comment has been successfully deleted"
         }
       },
+      "faq": {
+        "breadcrumbs": {
+          "index": "FAQs",
+          "create": "Create category",
+          "edit": "Edit category"
+        },
+        "form": {
+          "name": "Name*",
+          "category": "Category for faq",
+          "faq_name": "Faq name",
+          "faq_text": "Faq text"
+        },
+        "index": {
+          "title": "FAQs",
+          "header_btn": "Create faq",
+          "filters": {
+            "search": "Search faqs by typing one of these fields: name"
+          },
+          "table": {
+            "headers": {
+              "id": "ID",
+              "name": "Name",
+              "created_at": "Created date"
+            }
+          }
+        },
+        "create": {
+          "title": "Create faq"
+        },
+        "edit": {
+          "title": "Edit faq"
+        },
+        "delete": {
+          "title": "Delete faq"
+        },
+        "messages": {
+          "create": "FAQ has been successfully created",
+          "update": "FAQ has been successfully updated",
+          "delete": "FAQ has been successfully deleted"
+        }
+      },
       "user": {
         "breadcrumbs": {
           "index": "Users",
@@ -26014,7 +26058,160 @@ __webpack_require__.r(__webpack_exports__);
     },
     "auth": {
       "failed": "These credentials do not match our records.",
-      "throttle": "Too many login attempts. Please try again in {seconds} seconds."
+      "throttle": "Too many login attempts. Please try again in {seconds} seconds.",
+      "login": {
+        "title": "Log in",
+        "form": {
+          "title": "Login",
+          "text": {
+            "not_member": "Don't have an account?",
+            "sign_up": "Create account"
+          },
+          "fields": {
+            "email": {
+              "label": "Email address"
+            },
+            "password": {
+              "label": "Password"
+            }
+          },
+          "links": {
+            "forgot_password": "Forgot your password?"
+          },
+          "buttons": {
+            "submit": {
+              "text": "Log in"
+            }
+          }
+        }
+      },
+      "password_request": {
+        "title": "Password recovery",
+        "fields": {
+          "email": {
+            "label": "Email"
+          }
+        },
+        "text": {
+          "forgot_password": "Forgot your password?",
+          "log_in": "Already have an account?",
+          "register": "Don't have an account?",
+          "before_click": "By clicking the Reset button, you agree to our",
+          "and": "and"
+        },
+        "links": {
+          "log_in": "Log in",
+          "register": "Sign up",
+          "terms": "Terms & Conditions",
+          "policy": "Privacy policy"
+        },
+        "buttons": {
+          "send": {
+            "text": "Reset"
+          }
+        },
+        "email": {
+          "subject": "Reset password notification",
+          "line": {
+            "description": "You are receiving this email because we received a password reset request for your account.",
+            "unknown_request": "If you did not request a password reset, no further action is required."
+          },
+          "button": {
+            "text": "Reset password"
+          }
+        }
+      },
+      "password_reset": {
+        "title": "Password recovery",
+        "text": {
+          "log_in": "Already have an account?",
+          "register": "Don't have an account?",
+          "before_click": "By clicking the Change my password button, you agree to our",
+          "and": "and"
+        },
+        "links": {
+          "log_in": "Log in",
+          "register": "Sign up",
+          "terms": "Terms & Conditions",
+          "policy": "Privacy policy"
+        },
+        "form": {
+          "fields": {
+            "password": {
+              "label": "New password"
+            },
+            "password_confirmation": {
+              "label": "Confirm new password"
+            }
+          },
+          "buttons": {
+            "reset": {
+              "text": "Change my password"
+            }
+          }
+        }
+      },
+      "password_request_success": {
+        "title": "Password recovery",
+        "text": {
+          "thank_you": "Thank you! Please check your email inbox for further instructions."
+        },
+        "links": {
+          "home": "Home"
+        }
+      },
+      "register": {
+        "title": "Sign up",
+        "form": {
+          "text": {
+            "have_account": "Already have an account?",
+            "before_click": "By clicking the Sign up button, you agree to our",
+            "and": "and"
+          },
+          "fields": {
+            "name": {
+              "label": "Name*"
+            },
+            "phone": {
+              "label": "Phone number*"
+            },
+            "email": {
+              "label": "Email*"
+            },
+            "password": {
+              "label": "Password"
+            },
+            "confirm_password": {
+              "label": "Confirm password"
+            }
+          },
+          "links": {
+            "terms": "Terms & Conditions",
+            "policy": "Privacy policy",
+            "log_in": "Log in"
+          },
+          "buttons": {
+            "submit": {
+              "text": "Sign up"
+            }
+          }
+        },
+        "verify": {
+          "title": "Before proceeding, please check your email for a verification link.",
+          "email": {
+            "subject": "Verify Email Address",
+            "line": {
+              "description": "Verify email address,"
+            },
+            "buttons": {
+              "submit": {
+                "text": "Verify Email"
+              }
+            }
+          },
+          "error": "Mail verification error, please try register again."
+        }
+      }
     },
     "login": {
       "title": "Log in",
@@ -26040,6 +26237,7 @@ __webpack_require__.r(__webpack_exports__);
         "tips": "Tips",
         "products": "Products",
         "orders": "Orders",
+        "faqs": "Faqs",
         "comments": "Comments",
         "notifications": "Notifications",
         "settings": "Settings"

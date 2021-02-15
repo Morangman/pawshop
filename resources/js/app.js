@@ -29,6 +29,8 @@ if (token) {
 
 Vue.component('search-header', require('./components/SearchHeader.vue').default);
 
+Vue.component('sell-device', require('./components/SellDevice.vue').default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

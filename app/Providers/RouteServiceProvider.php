@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Category;
 use App\Comment;
+use App\Faq;
 use App\Order;
 use App\Setting;
 use App\Step;
@@ -94,6 +95,7 @@ class RouteServiceProvider extends ServiceProvider
             'media' => Media::class,
             'order' => Order::class,
             'comment' => Comment::class,
+            'faq' => Faq::class,
             'setting' => Setting::class,
             'nitification' => Notification::class,
         ];

@@ -17,6 +17,7 @@
 @section('content')
     <category-edit
         :category="{{ $category }}"
+        :faqs="{{ json_encode($faqs) }}"
         :categories="{{ json_encode($categories) }}"
         :steps="{{ json_encode($steps) }}"
     ></category-edit>

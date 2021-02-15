@@ -10,6 +10,10 @@ import StepIndex from './components/step/index';
 import StepCreate from './components/step/create';
 import StepEdit from './components/step/edit';
 
+import FaqIndex from './components/faq/index';
+import FaqCreate from './components/faq/create';
+import FaqEdit from './components/faq/edit';
+
 import TipIndex from './components/tip/index';
 import TipCreate from './components/tip/create';
 import TipEdit from './components/tip/edit';
@@ -36,6 +40,9 @@ export default {
     CategoryEdit,
     StepIndex,
     StepCreate,
+    FaqIndex,
+    FaqCreate,
+    FaqEdit,
     StepEdit,
     TipIndex,
     TipCreate,

@@ -1,9 +1,14 @@
 <?php
 
+declare(strict_types = 1);
+
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+/**
+ * Class CreateCategoryStepTable
+ */
 class CreateCategoryStepTable extends Migration
 {
     /**
@@ -11,7 +16,7 @@ class CreateCategoryStepTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('category_step', function (Blueprint $table) {
             $table->bigIncrements('id');
@@ -37,7 +42,7 @@ class CreateCategoryStepTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('category_step');
     }

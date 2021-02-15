@@ -71,7 +71,7 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm(): ViewContract
     {
-        $categories = Category::query()->where('is_hidden', false)->whereNotNull('custom_text')->get();
+        $categories = Category::query()->where('is_hidden', false)->whereNull('custom_text')->get();
 
         return View::make('auth.registration', [
             'settings' => $this->getSettings() ?? [],

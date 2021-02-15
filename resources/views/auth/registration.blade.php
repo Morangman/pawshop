@@ -16,7 +16,7 @@
                                         @include('partial.alerts.block')
                                         <div class="input-block">
                                             <input type="text"
-                                                   class="input-text with-border{{ $errors->has('name') ? ' is-invalid' : '' }}"
+                                                   class="input-text with-border @error('name') is-invalid @enderror"
                                                    placeholder="{{ Lang::get('auth.register.form.fields.name.label') }}"
                                                    name="name"
                                                    value="{{ Request::old('name') }}"required/>
@@ -29,7 +29,7 @@
                                         </div>
                                         <div class="input-block">
                                             <input type="email"
-                                                   class="input-text with-border{{ $errors->has('email') ? ' is-invalid' : '' }}"
+                                                   class="input-text with-border @error('email') is-invalid @enderror"
                                                    placeholder="{{ Lang::get('auth.register.form.fields.email.label') }}"
                                                    name="email"
                                                    value="{{ Request::old('email') }}"
@@ -43,7 +43,7 @@
                                         </div>
                                         <div class="input-block">
                                             <input type="tel"
-                                                   class="input-text with-border{{ $errors->has('phone') ? ' is-invalid' : '' }}"
+                                                   class="input-text with-border @error('phone') is-invalid @enderror"
                                                    placeholder="{{ Lang::get('auth.register.form.fields.phone.label') }}"
                                                    name="phone"
                                                    value="{{ Request::old('phone') }}"
@@ -59,7 +59,7 @@
                                             <input
                                                 id="password"
                                                 type="password"
-                                                class="input-text with-border{{ $errors->has('password') ? ' is-invalid' : '' }}"
+                                                class="input-text with-border @error('password') is-invalid @enderror"
                                                 placeholder="{{ Lang::get('auth.register.form.fields.password.label') }}"
                                                 name="password"
                                                 required/>
@@ -74,7 +74,7 @@
                                             <input
                                                 id="password"
                                                 type="password"
-                                                class="input-text with-border"
+                                                class="input-text with-border @error('password_confirmation') is-invalid @enderror"
                                                 placeholder="{{ Lang::get('auth.register.form.fields.confirm_password.label') }}"
                                                 name="password_confirmation"
                                                 required/>

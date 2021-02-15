@@ -26,6 +26,7 @@ class Step extends Model
         'name',
         'items',
         'is_condition',
+        'is_checkboxes',
     ];
 
     /**
@@ -36,5 +37,6 @@ class Step extends Model
         'name' => 'string',
         'items' => 'array',
         'is_condition' => 'bool',
+        'is_checkboxes' => 'bool',
     ];
 }

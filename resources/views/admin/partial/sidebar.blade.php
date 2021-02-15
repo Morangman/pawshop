@@ -34,6 +34,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ URL::route('admin.faq.index') }}" class="nav-link @active_menu_class('admin.faq')">
+                        <i class="icon-lifebuoy"></i>
+                        <span>@lang('common.sidebar.faqs')</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ URL::route('admin.tip.index') }}" class="nav-link @active_menu_class('admin.tip')">
                         <i class="icon-help"></i>
                         <span>@lang('common.sidebar.tips')</span>

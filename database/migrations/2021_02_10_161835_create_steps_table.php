@@ -24,6 +24,7 @@ class CreateStepsTable extends Migration
             $table->string('name');
             $table->json('items');
             $table->boolean('is_condition')->default(0);
+            $table->boolean('is_checkboxes')->default(0);
             $table->timestamps();
         });
     }

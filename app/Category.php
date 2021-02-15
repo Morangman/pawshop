@@ -30,6 +30,7 @@ class Category extends Model implements HasMedia
      */
     protected $fillable = [
         'subcategory_id',
+        'faq_id',
         'name',
         'image',
         'custom_text',
@@ -42,6 +43,7 @@ class Category extends Model implements HasMedia
      */
     protected $casts = [
         'subcategory_id' => 'int',
+        'faq_id' => 'int',
         'name' => 'string',
         'image' => 'string',
         'custom_text' => 'string',

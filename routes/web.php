@@ -19,6 +19,8 @@ Route::get('/comments', 'HomeController@comments')->name('comments');
 
 Route::get('/header-search', 'HomeController@headerSearchDevice')->name('header-search');
 
+Route::get('/get-category/{category}', 'HomeController@getByCategory')->name('get-category');
+
 Route::post('/order', 'HomeController@makeOrder')->name('order');
 
 Route::post('/call', 'HomeController@callMe')->name('call');

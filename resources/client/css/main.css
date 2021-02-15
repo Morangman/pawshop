@@ -967,7 +967,6 @@ header {
   padding-top: 24px;
   box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.06);
   border: 1px solid #EDEDED;
-  display: none;
 }
 
 .order-search-popup-list {
@@ -1672,6 +1671,14 @@ h2 {
 
 .order-options-product .selected-list li {
   margin: 0 18px 15px;
+}
+
+.is-invalid{
+    border-color: #e13d55!important;
+}
+
+.input-block span strong{
+    color: #e13d55;
 }
 
 .order-options-detail {

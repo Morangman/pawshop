@@ -13,7 +13,9 @@ return [
         'items' => 'Items*',
         'item_text' => 'Item text',
         'is_condition' => 'This is condition?',
-        'price' => 'Price for item (Device price - this price)',
+        'is_checkboxes' => 'This is checkboxes?',
+        'price_minus' => 'Price for item (Device price - this price)',
+        'price_plus' => 'Price for item (Device price + this price)',
         'tip' => 'Select tip',
     ],
     'index' => [

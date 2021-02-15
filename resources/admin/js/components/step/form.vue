@@ -54,6 +54,24 @@
                     </div>
 
                     <div class="form-group">
+                        <label>
+                            <strong>{{ $t('admin.step.form.is_checkboxes') }}</strong>
+                        </label>
+                        <b-form-checkbox
+                            v-model="model.is_checkboxes"
+                            value="1"
+                            unchecked-value="0"
+                        >
+                        </b-form-checkbox>
+                        <div v-for="(error, i) in errors.is_checkboxes"
+                             :key="`is_checkboxes__error__${i}`"
+                             class="text-danger error"
+                        >
+                            {{ error }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <strong>
                             <h1>{{ $t('admin.step.form.items') }}</h1>
                         </strong>
@@ -106,11 +124,22 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>
-                                                        <strong>{{ $t('admin.step.form.price') }}</strong>
+                                                        <strong>{{ $t('admin.step.form.price_minus') }}</strong>
                                                     </label>
                                                     <input
-                                                        name="price"
-                                                        v-model="item.price"
+                                                        name="price_minus"
+                                                        v-model="item.price_minus"
+                                                        type="number"
+                                                        class="form-control"
+                                                    >
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>
+                                                        <strong>{{ $t('admin.step.form.price_plus') }}</strong>
+                                                    </label>
+                                                    <input
+                                                        name="price_plus"
+                                                        v-model="item.price_plus"
                                                         type="number"
                                                         class="form-control"
                                                     >
@@ -194,7 +223,8 @@
                 this.model.items.push({
                     name: null,
                     text: null,
-                    price: null,
+                    price_plus: null,
+                    price_minus: null,
                 });
             },
 
@@ -216,6 +246,7 @@
         created() {
             if (this.model.id) {
                 this.model.is_condition = Number(this.model.is_condition);
+                this.model.is_checkboxes = Number(this.model.is_checkboxes);
             }
         },
     };

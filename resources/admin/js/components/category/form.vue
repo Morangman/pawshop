@@ -52,6 +52,18 @@
                     </div>
                     <div class="form-group">
                         <label>
+                            <strong>{{ $t('admin.category.form.faq') }}</strong>
+                        </label>
+
+                        <model-list-select :list="faqs"
+                                           v-model="model.faq_id"
+                                           option-value="id"
+                                           :custom-text="name"
+                                           placeholder="select item">
+                        </model-list-select>
+                    </div>
+                    <div class="form-group">
+                        <label>
                             <strong>{{ $t('admin.category.form.text') }}</strong>
                         </label>
                         <input
@@ -177,6 +189,10 @@
                 required: false,
             },
             steps: {
+                type: Array,
+                required: false,
+            },
+            faqs: {
                 type: Array,
                 required: false,
             },

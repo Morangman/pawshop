@@ -15,6 +15,7 @@ return [
         'tips' => 'Tips',
         'products' => 'Products',
         'orders' => 'Orders',
+        'faqs' => 'Faqs',
         'comments' => 'Comments',
         'notifications' => 'Notifications',
         'settings' => 'Settings',

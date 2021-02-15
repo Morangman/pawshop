@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Comment;
+use App\Faq;
 use App\Http\Requests\Admin\Order\StoreRequest;
 use App\Http\Requests\Client\Order\StoreRequest as ClientOrderStoreRequest;
 use App\Notifications\CommentNotification;
@@ -18,6 +19,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Traits\SettingTrait;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\View;
+use stdClass;
 
 /**
  * Class HomeController
@@ -35,11 +37,13 @@ class HomeController extends Controller
      */
     public function index(): ViewContract
     {
-        $categories = Category::query()->where('is_hidden', false)->whereNotNull('custom_text')->get();
+        $categories = Category::query()->where('is_hidden', false)->whereNull('custom_text')->get();
 
         return View::make('home', [
             'settings' => $this->getSettings() ?? [],
             'categories' => $categories,
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
         ]);
     }
 
@@ -110,6 +114,29 @@ class HomeController extends Controller
             ->get();
 
         return $this->json()->ok($categories);
+    }
+
+    /**
+     * @param \App\Category $category
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function getByCategory(Category $category): ViewContract
+    {
+        $relatedCategories = Category::query()
+            ->where('subcategory_id', '=', $category->getKey())
+            ->get();
+
+        $categories = Category::query()->where('is_hidden', false)->whereNull('custom_text')->get();
+
+        $faqs = Faq::query()->whereKey($category->getAttribute('faq_id'))->first();
+
+        return View::make('home', [
+            'categories' => $categories,
+            'settings' => $this->getSettings() ?? [],
+            'relatedCategories' => $relatedCategories,
+            'faqs' => $faqs ?? [],
+        ]);
     }
 
     /**

@@ -2,6 +2,7 @@
     <category-form
         :model.sync="model"
         :categories.sync="categories"
+        :faqs.sync="faqs"
         :steps.sync="steps"
         :errors.sync="errors"
         @submit="store"
@@ -23,6 +24,10 @@
                 type: Array,
                 required: false,
             },
+            faqs: {
+                type: Array,
+                required: false,
+            },
             steps: {
                 type: Array,
                 required: false,
@@ -37,6 +42,7 @@
                     name: null,
                     image: null,
                     subcategory_id: null,
+                    faq_id: null,
                     custom_text: null,
                     steps: [],
                 },
