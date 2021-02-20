@@ -55,6 +55,17 @@ class CategoryController extends Controller
     {
         $category = Category::create($request->all());
 
+        if ($steps = $request->get('steps')) {
+            $stepsIds = [];
+            foreach ($steps as $step) {
+                $stepsIds[] = $step['id'];
+            }
+
+            $steps = Step::find($stepsIds);
+
+            $category->steps()->attach($steps);
+        }
+
         $this->handleDocuments($request, $category);
 
         Session::flash(
@@ -79,6 +90,7 @@ class CategoryController extends Controller
                 'categories' => Category::all(),
                 'faqs' => Faq::all(),
                 'steps' => Step::all(),
+                'categorysteps' => $category->steps()->get(),
             ]
         );
     }
@@ -92,14 +104,16 @@ class CategoryController extends Controller
      */
     public function update(UpdateRequest $request, Category $category): JsonResponse
     {
-//        $stepsIds = [];
-//        foreach ($request->get('steps') as $step) {
-//            $stepsIds[] = $step['id'];
-//        }
-//
-//        $stepsIds = implode(',', $stepsIds);
-//
-//        Step::select('*')->whereKey(explode(',', $stepsIds))->get()->toArray();
+        if ($steps = $request->get('steps')) {
+            $stepsIds = [];
+            foreach ($steps as $step) {
+                $stepsIds[] = $step['id'];
+            }
+
+            $steps = Step::find($stepsIds);
+
+            $category->steps()->sync($steps);
+        }
 
         $category->update($request->all());
 

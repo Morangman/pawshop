@@ -6,6 +6,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
@@ -34,7 +35,6 @@ class Category extends Model implements HasMedia
         'name',
         'image',
         'custom_text',
-        'steps',
         'is_hidden',
     ];
 
@@ -47,7 +47,6 @@ class Category extends Model implements HasMedia
         'name' => 'string',
         'image' => 'string',
         'custom_text' => 'string',
-        'steps' => 'array',
         'is_hidden' => 'bool',
     ];
 
@@ -61,5 +60,13 @@ class Category extends Model implements HasMedia
             'subcategory_id',
             $this->primaryKey
         );
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function steps(): BelongsToMany
+    {
+        return $this->belongsToMany(Step::class);
     }
 }

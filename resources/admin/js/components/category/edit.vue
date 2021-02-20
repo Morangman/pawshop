@@ -5,6 +5,7 @@
         :categories.sync="categories"
         :faqs.sync="faqs"
         :steps.sync="steps"
+        :categorysteps.sync="categorysteps"
         :errors.sync="errors"
         @submit="update"
         @delete="deleteCategory"
@@ -31,6 +32,10 @@
                 required: true,
             },
             steps: {
+                type: Array,
+                required: false,
+            },
+            categorysteps: {
                 type: Array,
                 required: false,
             },

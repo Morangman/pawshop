@@ -11,6 +11,7 @@ use App\Http\Requests\Admin\Order\StoreRequest;
 use App\Http\Requests\Client\Order\StoreRequest as ClientOrderStoreRequest;
 use App\Notifications\CommentNotification;
 use App\Order;
+use App\Tip;
 use Illuminate\Http\Request;
 use App\Setting;
 use App\User;
@@ -37,11 +38,17 @@ class HomeController extends Controller
      */
     public function index(): ViewContract
     {
-        $categories = Category::query()->where('is_hidden', false)->whereNull('custom_text')->get();
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
 
         return View::make('home', [
             'settings' => $this->getSettings() ?? [],
             'categories' => $categories,
+            'category' => new stdClass(),
+            'steps' => [],
             'relatedCategories' => $categories,
             'faqs' => new stdClass(),
         ]);
@@ -127,15 +134,29 @@ class HomeController extends Controller
             ->where('subcategory_id', '=', $category->getKey())
             ->get();
 
-        $categories = Category::query()->where('is_hidden', false)->whereNull('custom_text')->get();
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
 
         $faqs = Faq::query()->whereKey($category->getAttribute('faq_id'))->first();
 
+        if ($steps = $category->steps()->get()->toArray()) {
+            foreach ($steps as $key => $step) {
+                if (isset($step['tip_id'])) {
+                    $steps[$key]['tip'] = Tip::query()->whereKey($step['tip_id'])->first()->toArray() ?? [];
+                }
+            }
+        }
+
         return View::make('home', [
+            'category' => $category,
+            'steps' => $steps ?? [],
             'categories' => $categories,
             'settings' => $this->getSettings() ?? [],
             'relatedCategories' => $relatedCategories,
-            'faqs' => $faqs ?? [],
+            'faqs' => $faqs ?? new stdClass(),
         ]);
     }
 

@@ -26,10 +26,6 @@ class UpdateRequest extends FormRequest
                 'string',
                 'max:255',
             ],
-            'steps' => [
-                'nullable',
-                'array',
-            ],
         ];
     }
 }

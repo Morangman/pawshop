@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Class Step
@@ -39,4 +40,12 @@ class Step extends Model
         'is_condition' => 'bool',
         'is_checkboxes' => 'bool',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class);
+    }
 }

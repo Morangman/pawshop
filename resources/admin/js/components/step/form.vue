@@ -124,17 +124,6 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>
-                                                        <strong>{{ $t('admin.step.form.price_minus') }}</strong>
-                                                    </label>
-                                                    <input
-                                                        name="price_minus"
-                                                        v-model="item.price_minus"
-                                                        type="number"
-                                                        class="form-control"
-                                                    >
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>
                                                         <strong>{{ $t('admin.step.form.price_plus') }}</strong>
                                                     </label>
                                                     <input
@@ -223,8 +212,7 @@
                 this.model.items.push({
                     name: null,
                     text: null,
-                    price_plus: null,
-                    price_minus: null,
+                    price_plus: 0,
                 });
             },
 

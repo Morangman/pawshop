@@ -8,6 +8,8 @@
         <section class="order-section">
             <div class="container">
                 <sell-device
+                    :category="{{ json_encode($category) }}"
+                    :steps="{{ json_encode($steps) }}"
                     :categories="{{ json_encode($relatedCategories) }}"
                     :faqs="{{ json_encode($faqs) }}"
                 ></sell-device>

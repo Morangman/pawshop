@@ -74,7 +74,11 @@ class LoginController extends Controller
      */
     public function handleProviderGoogleCallback()
     {
-        $categories = Category::query()->where('is_hidden', false)->whereNull('custom_text')->get();
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
 
         try {
             $user = Socialite::driver('google')->user();
@@ -115,7 +119,11 @@ class LoginController extends Controller
      */
     public function handleProviderFacebookCallback()
     {
-        $categories = Category::query()->where('is_hidden', false)->whereNull('custom_text')->get();
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
 
         try {
             $user = Socialite::driver('facebook')->user();
@@ -155,7 +163,11 @@ class LoginController extends Controller
      */
     public function showLoginForm(): ViewContract
     {
-        $categories = Category::query()->where('is_hidden', false)->whereNull('custom_text')->get();
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
 
         return View::make('auth.login', [
             'settings' => $this->getSettings() ?? [],

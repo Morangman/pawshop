@@ -90,7 +90,11 @@ class ResetPasswordController extends Controller
      */
     public function showResetForm(Request $request, string $token): ViewContract
     {
-        $categories = Category::query()->where('is_hidden', false)->whereNull('custom_text')->get();
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
 
         return View::make('auth.forgot_new_pass', [
             'token' => $token,

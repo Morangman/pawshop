@@ -192,6 +192,10 @@
                 type: Array,
                 required: false,
             },
+            categorysteps: {
+                type: Array,
+                required: false,
+            },
             faqs: {
                 type: Array,
                 required: false,
@@ -273,11 +277,11 @@
         created() {
             if (this.model.id) {
                 this.model.is_hidden = Number(this.model.is_hidden);
+
+                this.selectedSteps = this.categorysteps;
             }
 
             this.categoryPreviewImage = this.model.image;
-
-            this.selectedSteps = this.model.steps;
         },
     };
 </script>

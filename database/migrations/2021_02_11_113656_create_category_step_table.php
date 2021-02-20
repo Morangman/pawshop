@@ -32,8 +32,6 @@ class CreateCategoryStepTable extends Migration
                 ->references('id')
                 ->on('steps')
                 ->onDelete('cascade');
-
-            $table->timestamps();
         });
     }
 

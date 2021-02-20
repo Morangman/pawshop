@@ -1731,7 +1731,7 @@ h2 {
   margin-bottom: 10px;
 }
 
-.options-radio .radiobox-block {
+.options-radio .radiobox-block, .options-radio .checkbox-block {
   display: -ms-flexbox;
   display: flex;
   background: #FFFFFF;

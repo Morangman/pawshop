@@ -34,7 +34,11 @@ class ForgotPasswordController extends Controller
      */
     public function showLinkRequestForm(): ViewContract
     {
-        $categories = Category::query()->where('is_hidden', false)->whereNull('custom_text')->get();
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
 
         return View::make('auth.forgot', [
             'settings' => $this->getSettings() ?? [],
@@ -49,7 +53,11 @@ class ForgotPasswordController extends Controller
      */
     public function sendResetLinkEmail(ForgotPasswordRequest $request)
     {
-        $categories = Category::query()->where('is_hidden', false)->whereNull('custom_text')->get();
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
 
         $response = $this->broker()->sendResetLink(
             $request->only('email')

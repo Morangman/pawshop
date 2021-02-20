@@ -25,7 +25,6 @@ class CreateCategoriesTable extends Migration
             $table->string('name');
             $table->string('text')->nullable();
             $table->string('image');
-            $table->json('steps')->nullable();
             $table->string('custom_text')->nullable();
             $table->boolean('is_hidden')->default(0);
             $table->timestamps();
