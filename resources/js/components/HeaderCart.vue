@@ -1,7 +1,7 @@
 <template>
     <div>
         <a :href="$r('cart')" class="header-cart">
-            <div class="count">{{ this.orders['order'].length }}</div>
+            <div class="count">{{ orders ? orders['order'].length : 0 }}</div>
             <span>My box</span>
         </a>
     </div>

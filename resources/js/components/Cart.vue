@@ -3,11 +3,11 @@
         <div class="container">
             <div class="cart-section-title">
                 <h1>Your box</h1>
-                <a href="" v-if="orders['order'].length" v-on:click="clearCart" class="empty-cart-link">Empty your box</a>
-                <a href="/" v-if="!orders['order'].length" class="empty-cart-link">Select Your Repair</a>
+                <a href="" v-if="orders && orders['order'].length" v-on:click="clearCart" class="empty-cart-link">Empty your box</a>
+                <a href="/" v-if="!orders || !orders['order'].length" class="empty-cart-link">Select Your Repair</a>
             </div>
 
-            <form class="cart-form">
+            <form class="cart-form" v-if="orders">
                 <div class="cart-table-outer">
                     <table class="cart-table">
                         <thead>
@@ -129,7 +129,7 @@
             valuate(){
                 this.totalSumm = 0;
 
-                if (this.orders['order'].length) {
+                if (this.orders && this.orders['order'].length) {
                     _.each(this.orders['order'], (key, value) => {
                         if(key) {
                             this.totalSumm += key.total;
