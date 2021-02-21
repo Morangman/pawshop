@@ -229,7 +229,7 @@
                 required: false,
             },
             faqs: {
-                type: Array,
+                type: Object,
                 required: false,
             },
         },
