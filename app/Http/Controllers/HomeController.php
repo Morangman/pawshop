@@ -18,8 +18,10 @@ use App\User;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\View;
+use Lang;
 use Session;
 use stdClass;
 
@@ -106,6 +108,8 @@ class HomeController extends Controller
             'steps' => [],
             'relatedCategories' => $categories,
             'faqs' => new stdClass(),
+            'user' => Auth::user() ?? new stdClass(),
+            'states' => Lang::get('states'),
         ]);
     }
 

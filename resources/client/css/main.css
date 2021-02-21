@@ -2635,7 +2635,7 @@ h2 {
 }
 
 .checkout-payment-content {
-  display: none;
+  display: block;
   background: #FAFAFA;
   border: 1px solid #ECECEC;
   border-radius: 6px;
@@ -2655,6 +2655,25 @@ h2 {
   border-radius: 6px;
   margin-bottom: 30px;
   padding: 26px 30px 10px;
+}
+
+.custom-select{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: solid 1px #DADADA;
+    transition: all 0.3s ease-out;
+    border-radius: 1px;
+    background: #fff;
+    font-family: 'GothamPro', Arial, Tahoma, sans-serif;
+    font-weight: 300;
+    display: block;
+    width: 100%;
+    height: 38px;
+    color: #0b3057;
+    font-size: 15px;
+    padding: 0 20px;
+    border-radius: 99px;
 }
 
 /*======================= MEDIA ===========================*/

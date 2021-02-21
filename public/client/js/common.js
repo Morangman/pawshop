@@ -98,12 +98,4 @@ $(document).ready(function() {
 		$(".condition-tabs-content").not($searchId).css("display", "none");
 		$searchId.fadeIn(0);
 	});
-
-	/*Табы оплаты*/
-	$(".checkout-payment-list .payment-radiobox").click(function(){
-		var $searchId = $( $(this).data("tab") );
-		$(".checkout-payment-content").not($searchId).css("display", "none");
-		$searchId.fadeIn(0);
-	});
-
 });

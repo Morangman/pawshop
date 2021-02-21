@@ -5,45 +5,51 @@
             <div class="checkout-flex">
                 <div class="checkout-content">
                     <ul class="order-steps-list">
-                        <li>
+                        <li :class="stepIndex === 1 ? 'active-step' : ''">
                             <a href=""><i>1.</i> <span>Account</span></a>
                         </li>
-                        <li class="active-step">
+                        <li :class="stepIndex === 2 ? 'active-step' : ''">
                             <a href=""><i>2.</i> <span>Payment</span></a>
                         </li>
-                        <li>
+                        <li :class="stepIndex === 3 ? 'active-step' : ''">
                             <a href=""><i>3.</i> <span>Shipping</span></a>
                         </li>
-                        <li>
+                        <li :class="stepIndex === 4 ? 'active-step' : ''">
                             <a href=""><i>4.</i> <span>Options & Terms</span></a>
                         </li>
                     </ul>
 
                     <!-- Step 1 -->
-                    <div class="checkout-content-step">
+                    <div class="checkout-content-step" v-if="stepIndex === 1 && !this.user.id">
                         <h2>Account</h2>
                         <div class="checkout-login">
                             <div class="inner-block">
                                 <div class="checkout-customer">
                                     <h4>Customer login</h4>
                                     <div class="input-block">
-                                        <input type="text" placeholder="E-mail">
+                                        <input v-model="email" type="text" placeholder="E-mail">
+                                        <span v-if="errors.email" v-for="error in errors.email" class="invalid-feedback">
+                                            <strong>{{ error }}</strong>
+                                        </span>
                                     </div>
                                     <div class="input-block">
-                                        <input type="password" placeholder="Password">
+                                        <input v-model="password" type="password" placeholder="Password">
+                                        <span v-if="errors.password" v-for="error in errors.password" class="invalid-feedback">
+                                            <strong>{{ error }}</strong>
+                                        </span>
                                     </div>
                                     <div class="password-forget">
-                                        <a href="">Forgot your password?</a>
+                                        <a :href="$r('web.password.request')">Forgot your password?</a>
                                     </div>
                                     <div class="bottom-links">
-                                        <button class="btn red-btn">Login</button>
+                                        <button v-on:click="login" class="btn red-btn">Login</button>
                                         <div class="divider">or</div>
                                         <ul class="socials">
                                             <li>
-                                                <a href=""><img src="../../client/images/google.svg" alt=""></a>
+                                                <a :href="$r('redirect-google')"><img src="../../client/images/google.svg" alt=""></a>
                                             </li>
                                             <li>
-                                                <a href=""><img src="../../client/images/facebook.svg" alt=""></a>
+                                                <a :href="$r('redirect-facebook')"><img src="../../client/images/facebook.svg" alt=""></a>
                                             </li>
                                         </ul>
                                     </div>
@@ -53,122 +59,133 @@
                                 <div class="checkout-guest">
                                     <h4>Guest Checkout</h4>
                                     <div class="input-block">
-                                        <input type="text" placeholder="E-mail">
+                                        <input v-model="orderData.userEmail" type="text" placeholder="E-mail">
+                                        <span v-if="emailError" class="invalid-feedback">
+                                            <strong>{{ emailError }}</strong>
+                                        </span>
                                     </div>
-                                    <button class="btn red-btn">Continue as Guest</button>
+                                    <button v-if="orderData.userEmail" v-on:click="validateEmail" class="btn red-btn">Continue as Guest</button>
                                 </div>
                                 <div class="checkout-account">
-                                    <a href="">Create an Account</a>
+                                    <a :href="$r('web.register')">Create an Account</a>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Step 2 -->
-                    <div class="checkout-content-step">
+                    <div class="checkout-content-step" v-if="stepIndex === 2">
                         <h2>Payment</h2>
                         <div class="checkout-payment">
                             <h4>How would you like to be paid?</h4>
                             <div class="checkout-payment-list">
-                                <label class="payment-radiobox" data-tab="#payment-1">
+                                <label v-on:click="selectPaymentCheck()" class="payment-radiobox">
                                     <input type="radio" name="payment-radios">
                                     <span>
-												<img src="../../client/images/pay_check.svg" alt="">
-												<small>Check</small>
-											</span>
+                                        <img src="../../client/images/pay_check.svg" alt="">
+                                        <small>Check</small>
+                                    </span>
                                 </label>
-                                <label class="payment-radiobox" data-tab="#payment-2">
+                                <label v-on:click="selectPaymentPayPal()" class="payment-radiobox">
                                     <input type="radio" name="payment-radios">
                                     <span>
-												<img src="../../client/images/pay_paypal.svg" alt="">
-												<small>PayPal</small>
-											</span>
+                                        <img src="../../client/images/pay_paypal.svg" alt="">
+                                        <small>PayPal</small>
+                                    </span>
                                 </label>
-                                <label class="payment-radiobox" data-tab="#payment-3">
+                                <label v-on:click="selectPaymentZelle()" class="payment-radiobox">
                                     <input type="radio" name="payment-radios">
                                     <span>
-												<img src="../../client/images/pay_zelle.png" alt="">
-												<small>Zelle</small>
-											</span>
+                                        <img src="../../client/images/pay_zelle.png" alt="">
+                                        <small>Zelle</small>
+                                    </span>
                                 </label>
-                                <label class="payment-radiobox" data-tab="#payment-4">
+                                <label v-on:click="selectPaymentVenmo()" class="payment-radiobox">
                                     <input type="radio" name="payment-radios">
                                     <span>
-												<img src="../../client/images/pay_venmo.png" alt="">
-												<small>Venmo</small>
-											</span>
+                                        <img src="../../client/images/pay_venmo.png" alt="">
+                                        <small>Venmo</small>
+                                    </span>
                                 </label>
                             </div>
                         </div>
-                        <div id="payment-1" class="checkout-payment-content">
+                        <div class="checkout-payment-content" v-if="orderData.payment.type === 1">
                             <p>We'll mail you a check once your item(s) have been received and verified by our team.</p>
                         </div>
-                        <div id="payment-2" class="checkout-payment-content">
+                        <div class="checkout-payment-content" v-if="orderData.payment.type === 2">
                             <p>We'll credit your PayPal Email Address once your item(s) have been verified by our staff. Please note that PayPal charges a fee ($0.30 + 2.9%) to receive funds using their service.</p>
                             <div class="inputs-flex">
                                 <div class="input-block width-50">
-                                    <input type="text" placeholder="PayPal E-mail Adress">
+                                    <input v-model="orderData.payment.email" type="text" placeholder="PayPal E-mail Adress">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input type="text" placeholder="Confirm PayPal E-mail Adress">
+                                    <input v-model="checkEmail" type="text" placeholder="Confirm PayPal E-mail Adress">
                                 </div>
                             </div>
                         </div>
-                        <div id="payment-3" class="checkout-payment-content">
+                        <div class="checkout-payment-content" v-if="orderData.payment.type === 3">
                             <p>We'll credit your Zelle® account once your item(s) have been verified by our staff. Email address provided must be associated and linked with your Zelle® account to avoid any delays.</p>
                             <div class="inputs-flex">
                                 <div class="input-block width-50">
-                                    <input type="text" placeholder="Zelle E-mail Adress">
+                                    <input v-model="orderData.payment.email" type="text" placeholder="Zelle E-mail Adress">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input type="text" placeholder="Confirm Zelle E-mail Adress">
+                                    <input v-model="checkEmail" type="text" placeholder="Confirm Zelle E-mail Adress">
                                 </div>
                             </div>
                         </div>
-                        <div id="payment-4" class="checkout-payment-content">
+                        <div class="checkout-payment-content" v-if="orderData.payment.type === 4">
                             <p>We'll credit your Venmo® account once your item(s) have been verified by our staff. Email address provided must be associated and linked with your Venmo® account to avoid any delays.</p>
                             <div class="inputs-flex">
                                 <div class="input-block width-50">
-                                    <input type="text" placeholder="Venmo E-mail Adress">
+                                    <input v-model="orderData.payment.email" type="text" placeholder="Venmo E-mail Adress">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input type="text" placeholder="Confirm Venmo E-mail Adress">
+                                    <input v-model="checkEmail" type="text" placeholder="Confirm Venmo E-mail Adress">
                                 </div>
                             </div>
                         </div>
                         <div class="order-options-links">
-                            <button class="btn gray-btn">Back</button>
-                            <button class="btn red-btn">Next step</button>
+                            <button v-if="!this.user.id" v-on:click="backStep" class="btn gray-btn">Back</button>
+                            <button v-on:click="validatePayment" class="btn red-btn">Next step</button>
                         </div>
+                        <br>
+                        <span v-if="paymentError" class="desc red-note">
+                            <p>You must select the type of payment and confirm the mail</p>
+                        </span>
                     </div>
 
                     <!-- Step 3 -->
-                    <div class="checkout-content-step">
+                    <div class="checkout-content-step" v-if="stepIndex === 3">
                         <h2>Shipping</h2>
                         <div class="checkout-simple-block">
                             <h4>Your adress</h4>
                             <div class="inputs-flex">
                                 <div class="input-block width-50">
-                                    <input type="text" placeholder="First and Last Name">
+                                    <input v-model="orderData.address.name" type="text" placeholder="First and Last Name*">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input type="text" placeholder="Phone">
+                                    <input v-model="orderData.address.phone" type="text" placeholder="Phone*">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input type="text" placeholder="Adress 1">
+                                    <input v-model="orderData.address.address1" type="text" placeholder="Adress 1*">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input type="text" placeholder="Adress 2">
+                                    <input v-model="orderData.address.address2" type="text" placeholder="Adress 2">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input type="text" placeholder="City">
+                                    <input v-model="orderData.address.city" type="text" placeholder="City*">
                                 </div>
                                 <div class="input-block width-25">
-                                    <input type="text" placeholder="State">
+                                    <b-form-select type="text" placeholder="State" v-model="orderData.address.state" :options="states"></b-form-select>
                                 </div>
                                 <div class="input-block width-25">
-                                    <input type="text" placeholder="Postal Code">
+                                    <input v-model="orderData.address.postal_code" type="text" placeholder="Postal Code*">
                                 </div>
+                                <br>
+                                <span v-if="addressError" class="desc red-note">
+                                    <p>Please fill all required fields</p>
+                                </span>
                             </div>
                         </div>
                         <div class="checkout-simple-block">
@@ -176,7 +193,7 @@
                             <ul class="checkbox-list">
                                 <li>
                                     <label class="checkbox-block">
-                                        <input type="checkbox" name="paid-checkbox">
+                                        <input v-model="orderData.exp_service" type="checkbox" name="paid-checkbox">
                                         <i></i>
                                         <span>Expedited Service <strong>($20.00)</strong></span>
                                     </label>
@@ -188,13 +205,13 @@
                             </div>
                         </div>
                         <div class="order-options-links">
-                            <button class="btn gray-btn">Back</button>
-                            <button class="btn red-btn">Next step</button>
+                            <button v-on:click="backStep" class="btn gray-btn">Back</button>
+                            <button v-on:click="validateAddress" class="btn red-btn">Next step</button>
                         </div>
                     </div>
 
                     <!-- Step 4 -->
-                    <div class="checkout-content-step">
+                    <div class="checkout-content-step" v-if="stepIndex === 4">
                         <h2>Options & Terms</h2>
                         <div class="checkout-simple-block">
                             <h4>Shipping insurance</h4>
@@ -204,20 +221,20 @@
                             <div class="radio-list">
                                 <div class="options-radio">
                                     <label class="radiobox-block">
-                                        <input type="radio" name="step-4-radios" checked="">
+                                        <input v-on:click="addInsurance" type="radio" name="step-4-radios" :checked="orderData.insurance === true">
                                         <i></i>
                                         <span>
-													<strong>Yes, Add Insurance</strong>
-												</span>
+                                            <strong>Yes, Add Insurance</strong>
+                                        </span>
                                     </label>
                                 </div>
                                 <div class="options-radio">
                                     <label class="radiobox-block">
-                                        <input type="radio" name="step-4-radios">
+                                        <input v-on:click="deleteInsurance" type="radio" name="step-4-radios" :checked="orderData.insurance === false">
                                         <i></i>
                                         <span>
-													<strong>No Thanks</strong>
-												</span>
+                                            <strong>No Thanks</strong>
+                                        </span>
                                     </label>
                                 </div>
                             </div>
@@ -233,30 +250,20 @@
                             <ul class="checkbox-list">
                                 <li>
                                     <label class="checkbox-block">
-                                        <input type="checkbox" name="Options-checkbox">
+                                        <input v-model="accept_terms" :checked="accept_terms === true" type="checkbox" name="Options-checkbox">
                                         <i></i>
                                         <span>I accept the terms and conditions</span>
                                     </label>
                                 </li>
-                                <li>
-                                    <label class="checkbox-block">
-                                        <input type="checkbox" name="Options-checkbox">
-                                        <i></i>
-                                        <span>Send me occasional special offers</span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="checkbox-block">
-                                        <input type="checkbox" name="Options-checkbox">
-                                        <i></i>
-                                        <span>Send me important SMS notifications to <strong>+1 234 567 89 22</strong></span>
-                                    </label>
-                                </li>
+                                <br>
+                                <span v-if="termsError" class="desc red-note">
+                                    <p>You must be accept the terms and conditions</p>
+                                </span>
                             </ul>
                         </div>
                         <div class="order-options-links">
-                            <button class="btn gray-btn">Back</button>
-                            <button class="btn red-btn">Checkout</button>
+                            <button v-on:click="backStep" class="btn gray-btn">Back</button>
+                            <button v-on:click="validateTerms" class="btn red-btn">Checkout</button>
                         </div>
                     </div>
 
@@ -290,10 +297,51 @@
 
 <script>
     export default {
+        props: {
+            user: {
+                type: Object,
+                required: false,
+            },
+            states: {
+                type: Object,
+                required: true,
+            },
+        },
+
         data() {
             return {
                 orders: JSON.parse(localStorage.getItem("orders")),
-                totalSumm: 0
+                totalSumm: 0,
+                stepIndex: 1,
+                email: null,
+                checkEmail: null,
+                password: null,
+                emailError: null,
+                paymentError: false,
+                addressError: false,
+                termsError: false,
+                orderData: {
+                    user: null,
+                    userEmail: null,
+                    payment: {
+                        name: null,
+                        type: null,
+                        email: null,
+                    },
+                    address: {
+                        name: null,
+                        phone: null,
+                        address1: null,
+                        address2: null,
+                        city: null,
+                        state: 'AL',
+                        postal_code: null,
+                    },
+                    exp_service: false,
+                    insurance: false,
+                },
+                errors: [],
+                accept_terms: false,
             };
         },
 
@@ -309,10 +357,155 @@
                     });
                 }
             },
+
+            backStep(){
+                if (this.stepIndex !== 1) {
+                    this.stepIndex--;
+                }
+            },
+
+            nextStep() {
+                this.stepIndex++;
+            },
+
+            login(){
+                axios.post(
+                    Router.route('web.login.post', { email: this.email, password: this.password }),
+                ).then((data) => {
+                    location.reload();
+                }).catch(({ response: { data: { errors } } }) => {
+                    this.errors = errors;
+                });
+            },
+
+            selectPaymentCheck() {
+                this.paymentError = false;
+
+                this.orderData.payment.email = this.user.id ? this.user.email : this.userEmail;
+                this.checkEmail = this.user.id ? this.user.email : this.userEmail;
+                this.orderData.payment.name = 'Check';
+                this.orderData.payment.type = 1;
+
+                this.$forceUpdate();
+            },
+
+            selectPaymentPayPal() {
+                this.paymentError = false;
+
+                this.orderData.payment.email = this.user.id ? this.user.email : this.userEmail;
+                this.checkEmail = '';
+                this.orderData.payment.name = 'PayPal';
+                this.orderData.payment.type = 2;
+
+                this.$forceUpdate();
+            },
+
+            selectPaymentZelle() {
+                this.paymentError = false;
+
+                this.orderData.payment.email = this.user.id ? this.user.email : this.userEmail;
+                this.checkEmail = '';
+                this.orderData.payment.name = 'Zelle';
+                this.orderData.payment.type = 3;
+
+                this.$forceUpdate();
+            },
+
+            selectPaymentVenmo() {
+                this.paymentError = false;
+
+                this.orderData.payment.email = this.user.id ? this.user.email : this.userEmail;
+                this.checkEmail = '';
+                this.orderData.payment.name = 'Venmo';
+                this.orderData.payment.type = 4;
+
+                this.$forceUpdate();
+            },
+
+            validateEmail()
+            {
+                this.emailError = null;
+
+                if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.orderData.userEmail))
+                {
+                    this.stepIndex++;
+                } else {
+                    this.emailError = 'You have entered an invalid email address!';
+                }
+            },
+
+            validatePayment(){
+                this.paymentError = false;
+
+                if (
+                    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.orderData.payment.email) &&
+                    this.orderData.payment.type &&
+                    this.orderData.payment.email &&
+                    this.orderData.payment.email === this.checkEmail
+                )
+                {
+                    this.stepIndex++;
+                } else {
+                    this.paymentError = true;
+                }
+            },
+
+            validateAddress(){
+                this.addressError = false;
+
+                if (this.orderData.exp_service) {
+                    this.totalSumm -= 20;
+                } else {
+                    this.valuate();
+                }
+
+                if (
+                    this.orderData.address.name &&
+                    this.orderData.address.phone &&
+                    this.orderData.address.postal_code &&
+                    this.orderData.address.address1 &&
+                    this.orderData.address.city &&
+                    this.orderData.address.state
+                )
+                {
+                    this.stepIndex++;
+                } else {
+                    this.addressError = true;
+                }
+            },
+
+            addInsurance(){
+                this.orderData.insurance = true;
+            },
+
+            deleteInsurance(){
+                this.orderData.insurance = false;
+            },
+
+            validateTerms() {
+                this.termsError = false;
+
+                if (this.accept_terms)
+                {
+                    if (this.orderData.insurance) {
+                        this.totalSumm -= 4;
+                    }
+
+                    location.reload();
+                } else {
+                    this.termsError = true;
+                }
+            }
         },
 
         created(){
             this.valuate();
+
+            if (this.user.id) {
+                this.stepIndex = 2;
+            } else {
+                this.stepIndex = 1;
+            }
         }
     }
 </script>
