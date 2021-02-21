@@ -7,19 +7,20 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Comment;
 use App\Faq;
+use App\Http\Controllers\Traits\SettingTrait;
 use App\Http\Requests\Admin\Order\StoreRequest;
 use App\Http\Requests\Client\Order\StoreRequest as ClientOrderStoreRequest;
 use App\Notifications\CommentNotification;
 use App\Order;
-use App\Tip;
-use Illuminate\Http\Request;
 use App\Setting;
+use App\Tip;
 use App\User;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\Traits\SettingTrait;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\View;
+use Session;
 use stdClass;
 
 /**
@@ -63,6 +64,48 @@ class HomeController extends Controller
             'categories' => Category::query()->where('is_hidden', false)->get() ?? [],
             'settings' => Setting::latest('updated_at')->first() ?? null,
             'comments' => Comment::query()->where('is_hidden', false)->paginate(5) ?? [],
+        ]);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function cart(): ViewContract
+    {
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
+
+        return View::make('cart', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'category' => new stdClass(),
+            'steps' => [],
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
+        ]);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function checkout(): ViewContract
+    {
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
+
+        return View::make('checkout', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'category' => new stdClass(),
+            'steps' => [],
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
         ]);
     }
 

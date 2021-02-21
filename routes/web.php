@@ -17,6 +17,10 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/comments', 'HomeController@comments')->name('comments');
 
+Route::get('/cart', 'HomeController@cart')->name('cart');
+
+Route::get('/checkout', 'HomeController@checkout')->name('checkout');
+
 Route::get('/header-search', 'HomeController@headerSearchDevice')->name('header-search');
 
 Route::get('/get-category/{category}', 'HomeController@getByCategory')->name('get-category');

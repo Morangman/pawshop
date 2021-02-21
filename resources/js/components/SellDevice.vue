@@ -87,7 +87,7 @@
                     <div class="price">${{ summ }}</div>
                     <div class="order-options-links">
                         <button class="btn gray-btn" v-on:click="backStep">Back</button>
-                        <button class="btn red-btn">Add to box</button>
+                        <button v-on:click="addToBox" class="btn red-btn">Add to box</button>
                     </div>
                 </div>
                 <ul class="order-advantages-list">
@@ -243,7 +243,7 @@
                 selectedSteps: [],
                 stepIndex: 0,
                 options: [],
-                summ: parseInt(this.category.custom_text)
+                summ: parseFloat(this.category.custom_text)
             };
         },
 
@@ -291,11 +291,11 @@
             },
 
             valuate(){
-                this.summ = parseInt(this.category.custom_text);
+                this.summ = parseFloat(this.category.custom_text);
 
                 _.each(this.selectedSteps, (key, value) => {
                     if(key) {
-                        this.summ += parseInt(key.price_plus);
+                        this.summ += parseFloat(key.price_plus);
                     }
                 });
             },
@@ -304,6 +304,39 @@
                 _.set(this.selectedStep.items[index], 'checked',true);
 
                 this.$forceUpdate();
+            },
+
+            addToBox(){
+                let orders = {
+                    order: []
+                };
+
+                let localValue = localStorage.getItem("orders");
+                let storedNames = JSON.parse(localStorage.getItem("orders"));
+                if(localValue){
+                    //Добавляем или изменяем значение:
+                    storedNames.order.push({
+                        id: this.category.id,
+                        device: this.category,
+                        steps: this.selectedSteps,
+                        summ: this.summ,
+                        total: this.summ,
+                        ctn: 1
+                    });
+                    localStorage.setItem("orders", JSON.stringify(storedNames));
+                }else{
+                    orders.order.push({
+                        id: this.category.id,
+                        device: this.category,
+                        steps: this.selectedSteps,
+                        summ: this.summ,
+                        total: this.summ,
+                        ctn: 1
+                    });
+                    localStorage.setItem("orders", JSON.stringify(orders));
+                }
+
+                location.href = Router.route('cart');
             }
         },
 

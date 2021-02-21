@@ -29,6 +29,6 @@ Vue.component('spinner', Spinner);
 
 Vue.use(BootstrapVue);
 
-Settings.defaultLocale = 'uk';
+Settings.defaultLocale = 'en';
 
 export { Vue };

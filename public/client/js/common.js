@@ -71,55 +71,6 @@ $(document).ready(function() {
 		$(this).next(".faqs-answer").slideToggle(300);
 	});
 
-	/*Плюс-минус*/
-    $('.qtyplus').click(function(e){
-        // Stop acting like a button
-        e.preventDefault();
-        // Get the field name
-        fieldName = $(this).siblings('.qty');
-        // Get its current value
-        var currentVal = parseInt(fieldName.val());
-        var maxCount = $(".qtyplus").data("max")
-        // If is not undefined
-        if (!isNaN(currentVal)) {
-            // Increment only if value is < 20
-            if (currentVal < maxCount)
-            {
-             fieldName.val(currentVal + 1);
-              $('.qtyminus').val("-").removeAttr('style');
-							}
-            else
-            {
-            	$(this).val("+").css('color','#aaa');
-        		$(this).val("+").css('cursor','not-allowed');
-            }
-        } else {
-            // Otherwise put a 0 there
-            fieldName.val(1);
-
-        }
-    });
-    // This button will decrement the value till 0
-    $(".qtyminus").click(function(e) {
-        // Stop acting like a button
-        e.preventDefault();
-        // Get the field name
-        fieldName = $(this).siblings('.qty');
-        // Get its current value
-        var currentVal = parseInt(fieldName.val());
-        // If it isn't undefined or its greater than 0
-        if (!isNaN(currentVal) && currentVal > 1) {
-            // Decrement one only if value is > 1
-           fieldName.val(currentVal - 1);
-             $('.qtyplus').val("+").removeAttr('style');
-        } else {
-            // Otherwise put a 0 there
-            fieldName.val(1);
-            $(this).val("-").css('color','#aaa');
-            $(this).val("-").css('cursor','not-allowed');
-        }
-    });
-
     // Видео
     if($('.popup-youtube').length){
 		$('.popup-youtube').magnificPopup({

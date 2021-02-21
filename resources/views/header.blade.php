@@ -55,10 +55,7 @@
                 <search-header></search-header>
                 <div class="header-close"><img src="{{ asset('client/images/close.png') }}" alt="" /></div>
             </div>
-            <a href="" class="header-cart">
-                <div class="count">2</div>
-                <span>My box</span>
-            </a>
+            <header-cart></header-cart>
         </div>
     </div>
 </header>
