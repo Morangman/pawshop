@@ -381,45 +381,37 @@
             selectPaymentCheck() {
                 this.paymentError = false;
 
-                this.orderData.payment.email = this.user.id ? this.user.email : this.userEmail;
-                this.checkEmail = this.user.id ? this.user.email : this.userEmail;
+                this.orderData.payment.email = this.user.id ? this.user.email : this.orderData.userEmail;
+                this.checkEmail = this.user.id ? this.user.email : this.orderData.userEmail;
                 this.orderData.payment.name = 'Check';
                 this.orderData.payment.type = 1;
-
-                this.$forceUpdate();
             },
 
             selectPaymentPayPal() {
                 this.paymentError = false;
 
-                this.orderData.payment.email = this.user.id ? this.user.email : this.userEmail;
+                this.orderData.payment.email = this.user.id ? this.user.email : this.orderData.userEmail;
                 this.checkEmail = '';
                 this.orderData.payment.name = 'PayPal';
                 this.orderData.payment.type = 2;
-
-                this.$forceUpdate();
             },
 
             selectPaymentZelle() {
                 this.paymentError = false;
 
-                this.orderData.payment.email = this.user.id ? this.user.email : this.userEmail;
+                this.orderData.payment.email = this.user.id ? this.user.email : this.orderData.userEmail;
                 this.checkEmail = '';
                 this.orderData.payment.name = 'Zelle';
                 this.orderData.payment.type = 3;
-
-                this.$forceUpdate();
             },
 
             selectPaymentVenmo() {
                 this.paymentError = false;
 
-                this.orderData.payment.email = this.user.id ? this.user.email : this.userEmail;
+                this.orderData.payment.email = this.user.id ? this.user.email : this.orderData.userEmail;
                 this.checkEmail = '';
                 this.orderData.payment.name = 'Venmo';
                 this.orderData.payment.type = 4;
-
-                this.$forceUpdate();
             },
 
             validateEmail()

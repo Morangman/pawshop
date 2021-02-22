@@ -6,7 +6,7 @@
         </div>
         <div class="header-search-popup" v-if="searchDevices.length">
             <ul class="header-search-popup-list" id="header-search-popup-list">
-                <li v-for="(device, index) in searchDevices" :key="`device_${index}`">
+                <li v-for="(device, index) in searchDevices" :key="`device_${index}`" style="margin-bottom: 10px;">
                     <a :href="$r('get-category', { category: device.id })" class="link">
                         <span class="name">{{ device.name }}</span>
                     </a>

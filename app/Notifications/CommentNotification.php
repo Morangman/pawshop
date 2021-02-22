@@ -50,7 +50,7 @@ class CommentNotification extends Notification
     public function toArray(): array
     {
         return [
-            'title' => 'Новий відгук',
+            'title' => 'New comment',
             'comment_id' => $this->commentId,
         ];
     }

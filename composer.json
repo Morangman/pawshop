@@ -17,7 +17,8 @@
         "lord/laroute": "^2.5",
         "mcmatters/laravel-helpers": "^2.3",
         "mcmatters/laravel-roles": "dev-master",
-        "spatie/laravel-medialibrary": "^7.19"
+        "spatie/laravel-medialibrary": "^7.19",
+        "swiftmailer/swiftmailer": "^6.0"
     },
     "require-dev": {
         "butschster/meta-tags": "^1.8",

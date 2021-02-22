@@ -19,7 +19,15 @@ Route::get('/comments', 'HomeController@comments')->name('comments');
 
 Route::get('/cart', 'HomeController@cart')->name('cart');
 
+Route::get('/support', 'HomeController@support')->name('support');
+
 Route::get('/checkout', 'HomeController@checkout')->name('checkout');
+
+Route::get('/account', [
+    'middleware' => 'auth',
+    'as' => 'account',
+    'uses' => 'HomeController@account',
+]);
 
 Route::get('/header-search', 'HomeController@headerSearchDevice')->name('header-search');
 
@@ -27,7 +35,13 @@ Route::get('/get-category/{category}', 'HomeController@getByCategory')->name('ge
 
 Route::post('/order', 'HomeController@makeOrder')->name('order');
 
-Route::post('/call', 'HomeController@callMe')->name('call');
+Route::post('/callback', 'HomeController@callback')->name('callback');
+
+Route::patch('/update-account', [
+    'middleware' => 'auth',
+    'as' => 'update-account',
+    'uses' => 'HomeController@updateAccountInfo',
+]);
 
 Route::post('/comment', 'HomeController@addComment')->name('comment');
 

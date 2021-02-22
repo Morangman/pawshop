@@ -9,14 +9,18 @@ use App\Comment;
 use App\Faq;
 use App\Http\Controllers\Traits\SettingTrait;
 use App\Http\Requests\Admin\Order\StoreRequest;
+use App\Http\Requests\Client\Callback\StoreRequest as CallbackRequest;
 use App\Http\Requests\Client\Order\StoreRequest as ClientOrderStoreRequest;
+use App\Http\Requests\Client\Account\StoreRequest as UpdateAccountInfoRequest;
 use App\Notifications\CommentNotification;
+use App\Notifications\ContactNotification;
 use App\Order;
 use App\Setting;
 use App\Tip;
 use App\User;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
@@ -24,6 +28,7 @@ use Illuminate\Support\Facades\View;
 use Lang;
 use Session;
 use stdClass;
+use App\Services\FedexService;
 
 /**
  * Class HomeController
@@ -41,6 +46,9 @@ class HomeController extends Controller
      */
     public function index(): ViewContract
     {
+//        $fedexService = new FedexService();
+//        $fedexService->ship();
+
         $categories = Category::query()
             ->where('is_hidden', false)
             ->whereNull('custom_text')
@@ -93,6 +101,27 @@ class HomeController extends Controller
     /**
      * @return \Illuminate\Contracts\View\View
      */
+    public function support(): ViewContract
+    {
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
+
+        return View::make('support', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'category' => new stdClass(),
+            'steps' => [],
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
+        ]);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\View
+     */
     public function checkout(): ViewContract
     {
         $categories = Category::query()
@@ -128,21 +157,64 @@ class HomeController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\Client\Order\StoreRequest $request
+     * @param \App\Http\Requests\Client\Callback\StoreRequest $request
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function callback(CallbackRequest $request): ViewContract
+    {
+        Notification::send(
+            User::query()->scopes(['notifiableUsers'])->get(),
+            new ContactNotification($request)
+        );
+
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
+
+        return View::make('support', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'category' => new stdClass(),
+            'steps' => [],
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
+        ]);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function account(): ViewContract
+    {
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
+
+        return View::make('account', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'category' => new stdClass(),
+            'steps' => [],
+            'user' => Auth::user(),
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
+        ]);
+    }
+
+    /**
+     * @param \App\Http\Requests\Client\Account\StoreRequest $request
+     * @param \App\User $user
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function callMe(ClientOrderStoreRequest $request): JsonResponse
+    public function updateAccountInfo(UpdateAccountInfoRequest $request, User $user): JsonResponse
     {
-        $orderData = $request->except(
-                [
-                    'ordered_product',
-                ]
-            ) + [
-                'ordered_product' => $request->get('ordered_product') ?? [],
-            ];
-
-        Order::create(array_merge($orderData, ['ip_address' => $request->ip()]));
+        $user->update($request->all());
 
         return $this->json()->noContent();
     }
@@ -165,6 +237,7 @@ class HomeController extends Controller
             )
             ->where('is_hidden', false)
             ->whereNotNull('custom_text')
+            ->take(7)
             ->get();
 
         return $this->json()->ok($categories);

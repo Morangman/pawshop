@@ -14,12 +14,13 @@
 
     <div id="contact-popup" class="popup-modal mfp-hide mfp-with-anim">
         <div class="popup-content">
-            <form class="simple-form popup-form" action="#" method="post">
+            <form method="POST" action="{{ URL::route('callback') }}" name="contactform" class="simple-form popup-form" autocomplete="on">
+                @csrf
                 <h1>Contact us</h1>
-                <input type="text" placeholder="Julia" />
-                <input type="text" placeholder="Phone number" />
-                <input type="text" placeholder="E-mail" />
-                <textarea placeholder="Your question"></textarea>
+                <input name="name" type="text" placeholder="Julia" required />
+                <input name="phone" type="tel" placeholder="Phone number" />
+                <input name="email" type="email" placeholder="E-mail" required />
+                <textarea name="text" placeholder="Your question"></textarea>
                 <button type="submit" class="btn red-btn ">Send <img src="{{ asset('client/images/white_arrow.png') }}" alt="" /></button>
             </form>
             <button class="mfp-close" type="button" title="Close (Esc)"><img src="{{ asset('client/images/close.png') }}" alt="" /><img class="sm-only" src="{{ asset('client/images/close_popup.png') }}" alt="" /></button>
@@ -38,10 +39,7 @@
             <div class="footer-menu">
                 <ul>
                     <li class="title">Menu</li>
-                    <li><a href="">About us</a></li>
-                    <li><a href="">FAQ</a></li>
-                    <li><a href="">Contact us</a></li>
-                    <li><a href="">Financing</a></li>
+                    <li><a href="{{ URL::route('support') }}" data-title="Mobile Service">Support</a></li>
                 </ul>
                 <ul>
                     <li class="title">Store Locations</li>
@@ -50,10 +48,9 @@
                     <li class="location"><img src="{{ asset('client/images/marker_white.png') }}" alt="" /><a href="">1730 E Warner Rd, Suite 7, Tempe, AZ 85284</a></li>
                 </ul>
                 <ul>
-                    <li class="title">Device Repairs</li>
-                    <li><a href="">Phones</a></li>
-                    <li><a href="">Ipads and Tablets</a></li>
-                    <li><a href="">Macbooks and Computers</a></li>
+                    @foreach($categories as $category)
+                        <li><a href="{{ URL::route('get-category', ['category' => $category->getKey()]) }}">{{ $category->getAttribute('name') }}</a></li>
+                    @endforeach
                 </ul>
             </div>
             <div class="footer-info">

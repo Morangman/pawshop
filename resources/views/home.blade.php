@@ -45,5 +45,5 @@
         </section>
     </div>
     <!--//main-content-->
-    @yield('footer', View::make('footer'))
+    @yield('footer', View::make('footer', ['categories' => $categories]))
 @endsection

@@ -54,9 +54,9 @@ class OrderNotification extends Notification
         $date = (new Carbon())->toDateTimeString();
 
         return (new MailMessage)
-            ->greeting('Вітаю!')
-            ->line('Нове замовлення')
-            ->action('Замовлення', URL::route('admin.order.edit', ['order' => $this->orderId]))
+            ->greeting('Congratulations!')
+            ->line('New order')
+            ->action('Show order', URL::route('admin.order.edit', ['order' => $this->orderId]))
             ->salutation($date);
     }
 
@@ -68,7 +68,7 @@ class OrderNotification extends Notification
     public function toArray(): array
     {
         return [
-            'title' => 'Нове замовлення',
+            'title' => 'New order',
             'order_id' => $this->orderId,
         ];
     }

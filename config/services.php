@@ -45,4 +45,11 @@ return [
         'client_secret' => env('FACEBOOK_APP_SECRET'),
         'redirect' => env('FACEBOOK_REDIRECT'),
     ],
+
+    'fedex' => [
+        'key' => env('FEDEX_KEY'),
+        'password' => env('FEDEX_PASSWORD'),
+        'account_number' => env('FEDEX_ACCOUNT_NUMBER'),
+        'meter_number' => env('FEDEX_METER_NUMBER'),
+    ],
 ];

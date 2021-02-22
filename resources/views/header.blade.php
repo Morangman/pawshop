@@ -20,10 +20,7 @@
                             @endforeach
                         </ul>
                     </li>
-                    <li><a href="" data-title="Mobile Service">Mobile Service</a></li>
-                    <li><a href="" data-title="FAQ">FAQ</a></li>
-                    <li><a href="" data-title="About us">About us</a></li>
-                    <li><a href="" data-title="Financing">Financing</a></li>
+                    <li><a href="{{ URL::route('support') }}" data-title="Mobile Service">Support</a></li>
                 </ul>
                 <div class="header-login">
                     <ul class="header-menu">
@@ -31,7 +28,7 @@
                             <li>
                                 <a href="" data-title="My account" class="has-drop">My account<img src="{{ asset('client/images/select_arrow.png') }}" alt="" /></a>
                                 <ul class="drop-menu">
-                                    <li><a href="">Account info</a></li>
+                                    <li><a href="{{ URL::route('account') }}">Account info</a></li>
                                     <li><a href="">Trade-ins</a></li>
                                     <li><a href="">Addresses</a></li>
                                     @auth
