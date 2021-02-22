@@ -5,13 +5,13 @@
             <b-card no-body>
                 <b-tabs card>
                     <b-tab title="Account Info" active>
-                        <div class="row">
+                        <div class="row checkout-content-step">
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="form-group">
                                             <label>
-                                                <strong>First and Last Name</strong>
+                                                <p>First and Last Name</p>
                                             </label>
                                             <input
                                                 name="name"
@@ -19,30 +19,66 @@
                                                 v-model="model.name"
                                                 class="form-control"
                                             >
+                                            <div v-for="(error, i) in errors.name"
+                                                 :key="`name__error__${i}`"
+                                                 class="text-danger error"
+                                            >
+                                                {{ error }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>
+                                                <p>Email</p>
+                                            </label>
+                                            <input
+                                                name="email"
+                                                type="email"
+                                                v-model="model.email"
+                                                class="form-control"
+                                            >
+                                            <div v-for="(error, i) in errors.email"
+                                                 :key="`email__error__${i}`"
+                                                 class="text-danger error"
+                                            >
+                                                {{ error }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label>
-                                    <h4>dfgd</h4>
-                                </label>
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="form-group">
                                             <label>
-                                                <strong>Email</strong>
+                                                <p>Phone</p>
                                             </label>
                                             <input
-                                                name="email"
-                                                type="mail"
-                                                v-model="model.email"
+                                                name="phone"
+                                                type="tel"
+                                                v-model="model.phone"
                                                 class="form-control"
                                             >
+                                            <div v-for="(error, i) in errors.phone"
+                                                 :key="`phone__error__${i}`"
+                                                 class="text-danger error"
+                                            >
+                                                {{ error }}
+                                            </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </b-tab>
+                    <b-tab title="Addresses">
+                        <div class="row checkout-content-step">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
                                         <div class="form-group">
                                             <label>
-                                                <strong>Phone</strong>
+                                                <p>Phone</p>
                                             </label>
                                             <input
                                                 name="phone"
@@ -58,12 +94,21 @@
                     </b-tab>
                 </b-tabs>
             </b-card>
+            <div class="bottom-links">
+                <button v-on:click="update" type="submit" class="btn red-btn">
+                    Save Account Details
+                </button>
+            </div>
         </div>
     </section>
 </template>
 
 <script>
+    import FormHelper from "../../admin/js/mixins/form_helper";
+
     export default {
+        mixins: [FormHelper],
+
         props: {
             user: {
                 type: Object,
@@ -74,6 +119,7 @@
         data() {
             return {
                 model: this.user,
+                errors: {},
             };
         },
 
@@ -96,7 +142,6 @@
                     location.href = Router.route('account');
                 }).catch(({ response: { data: { errors } } }) => {
                     this.errors = errors;
-                    this.scrollToError();
                 });
             },
         }

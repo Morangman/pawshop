@@ -27,9 +27,10 @@ class StoreRequest extends FormRequest
                 'max:255',
             ],
             'email' => [
-                'nullable',
+                'required',
                 'string',
                 'max:255',
+                'unique:users,email',
             ],
             'phone' => [
                 'required',

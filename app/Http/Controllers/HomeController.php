@@ -214,7 +214,7 @@ class HomeController extends Controller
      */
     public function updateAccountInfo(UpdateAccountInfoRequest $request, User $user): JsonResponse
     {
-        $user->update($request->all());
+        $user->update($request->only(['name', 'phone', 'email', 'addresses']));
 
         return $this->json()->noContent();
     }

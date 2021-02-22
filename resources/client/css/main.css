@@ -741,6 +741,15 @@ header {
   padding: 41px 0 31px;
 }
 
+.account-section label p{
+    font-size: 20px;
+    font-weight: 300;
+    color: #0d2a54;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    line-height: 1.2;
+}
+
 .sprt-section p{
     font-family: inherit;
     font-size: 1rem;

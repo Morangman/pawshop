@@ -37,7 +37,7 @@ Route::post('/order', 'HomeController@makeOrder')->name('order');
 
 Route::post('/callback', 'HomeController@callback')->name('callback');
 
-Route::patch('/update-account', [
+Route::patch('/update-account/{user}', [
     'middleware' => 'auth',
     'as' => 'update-account',
     'uses' => 'HomeController@updateAccountInfo',
