@@ -39,26 +39,26 @@ class OrderNotification extends Notification
      */
     public function via()
     {
-        return ['mail', 'database'];
+        return ['database'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     *
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
-    {
-        $date = (new Carbon())->toDateTimeString();
-
-        return (new MailMessage)
-            ->greeting('Congratulations!')
-            ->line('New order')
-            ->action('Show order', URL::route('admin.order.edit', ['order' => $this->orderId]))
-            ->salutation($date);
-    }
+//    /**
+//     * Get the mail representation of the notification.
+//     *
+//     * @param  mixed  $notifiable
+//     *
+//     * @return \Illuminate\Notifications\Messages\MailMessage
+//     */
+//    public function toMail($notifiable)
+//    {
+//        $date = (new Carbon())->toDateTimeString();
+//
+//        return (new MailMessage)
+//            ->greeting('Congratulations!')
+//            ->line('New order')
+//            ->action('Show order', URL::route('admin.order.edit', ['order' => $this->orderId]))
+//            ->salutation($date);
+//    }
 
     /**
      * @return array

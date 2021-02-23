@@ -106,8 +106,8 @@
                         <template v-if="!isLoading">
                             <tr v-for="(order, i) in orders" :key="`order${i}`">
                                     <td><a :href="$r('admin.order.edit', { order: order.id })">{{ order.id }}</a></td>
-                                    <td v-html="highlightSearchResult(order.name, filters.search)"></td>
-                                    <td>{{ order.phone }} <br> {{ order.email }}</td>
+                                    <td v-html="highlightSearchResult(order.address.name, filters.search)"></td>
+                                    <td>{{ order.address.phone }}</td>
                                     <td>
                                         {{ $t('admin.order.order_statuses.' + order.ordered_status) }}
                                     </td>

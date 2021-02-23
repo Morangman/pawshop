@@ -21,27 +21,40 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => [
+            'orders' => [
                 'required',
-                'string',
-                'max:255',
+                'array',
             ],
-            'email' => [
+            'user_id' => [
+                'nullable',
+                'integer',
+            ],
+            'user_email' => [
                 'nullable',
                 'string',
-                'max:255',
             ],
-            'phone' => [
+            'total_summ' => [
+                'integer',
                 'required',
+            ],
+            'payment' => [
+                'array',
+                'required',
+            ],
+            'address' => [
+                'array',
+                'required',
+            ],
+            'exp_service' => [
                 'string',
-                'max:255',
+                'nullable',
+            ],
+            'insurance' => [
+                'string',
+                'nullable',
             ],
             'notes' => [
                 'string',
-            ],
-            'ordered_product' => [
-                'required',
-                'array',
             ],
             'ordered_status' => [
                 'nullable',

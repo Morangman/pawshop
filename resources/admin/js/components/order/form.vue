@@ -6,60 +6,175 @@
                     <strong v-if="suspect && suspect.length > 0" class="text-danger date-centered">
                         {{ $t('admin.order.form.suspect_ip') + ' ' + suspect.length + ' ' + $t('common.word.times') }}
                     </strong>
-                    <div class="form-group">
+                    <div class="form-group" v-if="model.user_id">
                         <label>
-                            <strong>{{ $t('admin.order.form.name') }}</strong>
+                            <strong>{{ $t('admin.order.form.user') }}</strong>
                         </label>
-                        <input
-                            name="name"
-                            type="text"
-                            v-model="model.name"
-                            class="form-control"
-                            :class="{ 'border-danger': errors.name }"
-                        >
-                        <div v-for="(error, i) in errors.name"
-                             :key="`name__error__${i}`"
+                        <a :href="$r('admin.user.edit', {user: model.user_id})">{{ model.user_id }}</a>
+                        <div v-for="(error, i) in errors.user"
+                             :key="`user__error__${i}`"
                              class="text-danger error"
                         >
                             {{ error }}
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>
-                            <strong>{{ $t('admin.order.form.phone') }}</strong>
-                        </label>
-                        <input
-                            name="phone"
-                            type="text"
-                            v-model="model.phone"
-                            class="form-control"
-                            :class="{ 'border-danger': errors.phone }"
-                        >
-                        <div v-for="(error, i) in errors.phone"
-                             :key="`phone__error__${i}`"
-                             class="text-danger error"
-                        >
-                            {{ error }}
+                    <div class="form-group row">
+                        <div class="form-group col-md-6">
+                            <label>
+                                <strong>{{ $t('admin.order.form.name') }}</strong>
+                            </label>
+                            <input
+                                name="name"
+                                type="text"
+                                v-model="model.address.name"
+                                class="form-control"
+                                :class="{ 'border-danger': errors.address }"
+                            >
+                            <div v-for="(error, i) in errors.address"
+                                 :key="`address__error__${i}`"
+                                 class="text-danger error"
+                            >
+                                {{ error }}
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>
+                                <strong>{{ $t('admin.order.form.phone') }}</strong>
+                            </label>
+                            <input
+                                name="phone"
+                                type="text"
+                                v-model="model.address.phone"
+                                class="form-control"
+                                :class="{ 'border-danger': errors.address }"
+                            >
+                            <div v-for="(error, i) in errors.address"
+                                 :key="`address__error__${i}`"
+                                 class="text-danger error"
+                            >
+                                {{ error }}
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>
-                            <strong>{{ $t('admin.order.form.email') }}</strong>
-                        </label>
-                        <input
-                            name="email"
-                            type="text"
-                            v-model="model.email"
-                            class="form-control"
-                            :class="{ 'border-danger': errors.email }"
-                        >
-                        <div v-for="(error, i) in errors.email"
-                             :key="`email__error__${i}`"
-                             class="text-danger error"
-                        >
-                            {{ error }}
+
+                    <div class="form-group row">
+                        <div class="form-group col-md-6">
+                            <label>
+                                <strong>{{ $t('admin.order.form.email') }}</strong>
+                            </label>
+                            <input
+                                name="email"
+                                type="text"
+                                v-model="model.user_email"
+                                class="form-control"
+                                :class="{ 'border-danger': errors.address }"
+                            >
+                            <div v-for="(error, i) in errors.address"
+                                 :key="`address__error__${i}`"
+                                 class="text-danger error"
+                            >
+                                {{ error }}
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>
+                                <strong>{{ $t('admin.order.form.city') }}</strong>
+                            </label>
+                            <input
+                                name="city"
+                                type="text"
+                                v-model="model.address.city"
+                                class="form-control"
+                                :class="{ 'border-danger': errors.address }"
+                            >
+                            <div v-for="(error, i) in errors.address"
+                                 :key="`address__error__${i}`"
+                                 class="text-danger error"
+                            >
+                                {{ error }}
+                            </div>
                         </div>
                     </div>
+
+
+                    <div class="form-group row">
+                        <div class="form-group col-md-6">
+                            <label>
+                                <strong>{{ $t('admin.order.form.state') }}</strong>
+                            </label>
+                            <input
+                                name="state"
+                                type="text"
+                                v-model="model.address.state"
+                                class="form-control"
+                                :class="{ 'border-danger': errors.address }"
+                            >
+                            <div v-for="(error, i) in errors.address"
+                                 :key="`address__error__${i}`"
+                                 class="text-danger error"
+                            >
+                                {{ error }}
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>
+                                <strong>{{ $t('admin.order.form.postal_code') }}</strong>
+                            </label>
+                            <input
+                                name="postal_code"
+                                type="text"
+                                v-model="model.address.postal_code"
+                                class="form-control"
+                                :class="{ 'border-danger': errors.address }"
+                            >
+                            <div v-for="(error, i) in errors.address"
+                                 :key="`address__error__${i}`"
+                                 class="text-danger error"
+                            >
+                                {{ error }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="form-group col-md-6">
+                            <label>
+                                <strong>{{ $t('admin.order.form.address_1') }}</strong>
+                            </label>
+                            <input
+                                name="address1"
+                                type="text"
+                                v-model="model.address.address1"
+                                class="form-control"
+                                :class="{ 'border-danger': errors.address }"
+                            >
+                            <div v-for="(error, i) in errors.address"
+                                 :key="`address__error__${i}`"
+                                 class="text-danger error"
+                            >
+                                {{ error }}
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>
+                                <strong>{{ $t('admin.order.form.address_2') }}</strong>
+                            </label>
+                            <input
+                                name="address2"
+                                type="text"
+                                v-model="model.address.address2"
+                                class="form-control"
+                                :class="{ 'border-danger': errors.address }"
+                            >
+                            <div v-for="(error, i) in errors.address"
+                                 :key="`address__error__${i}`"
+                                 class="text-danger error"
+                            >
+                                {{ error }}
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label>
                             <strong>{{ $t('admin.order.form.notes') }}</strong>
@@ -81,60 +196,53 @@
                     </div>
                     <div class="form-group">
                         <label>
-                            <strong>{{ $t('admin.order.form.ordered_product') }}: <span v-if="model.id">{{ model.ordered_product.length }}</span></strong>
+                            <strong>{{ $t('admin.order.form.ordered_product') }}: <span v-if="model.id">{{ model.orders.length }}</span></strong>
                         </label>
-                        <div class="change-blocks-wrapper__item" v-for="(product, index) in model.ordered_product">
+                        <div class="change-blocks-wrapper__item" v-for="(product, index) in model.orders.order">
                                 <div class="text-right mb-2">
                                     <a href="#" class="text-danger" v-on:click="deleteOrderedProduct(index)" :title="$t('common.word.remove')">
                                         <i class="icon-bin"></i>
                                     </a>
                                 </div>
                                 <div class="form-group">
-                                    <select class="form-control selectpicker" v-model="selectedOrderedProduct[index]" v-on:change="selectOrderedProduct(index)" required>
-                                        <optgroup v-for="(category, index) in products" :label="index">
-                                            <option v-for="(product, index) in category" :value="product">{{ product.title }}</option>
-                                        </optgroup>
+                                    <select class="form-control selectpicker" v-model="product.id" required>
+                                        <option v-for="(item, index) in products" :value="item.id">{{ item.name }}</option>
                                     </select>
                                 </div>
                                 <div class="form-group row">
-                                    <div class="form-group col-md-4" v-if="selectedOrderedProduct[index]">
-                                        <select class="form-control" name="ordered_product-product_color" v-model="selectedOrderedProductColor[index]" v-on:change="selectOrderedProductColor(index)" required>
-                                            <option v-for="(variation, i) in selectedOrderedProduct[index].variations" :value="variation">{{ variation.color_name }}</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-3">
+                                    <div class="form-group col-md-6">
                                         <input
                                             name="ordered_product-quantity"
                                             type="text"
                                             :placeholder="$t('admin.order.form.ordered_products.quantity')"
-                                            v-model="product.quantity"
+                                            v-model="product.ctn"
                                             class="form-control"
                                         >
                                     </div>
-                                    <div class="form-group col-md-5">
+                                    <div class="form-group col-md-6">
                                         <div class="input-group">
                                             <input
                                                 type="text"
                                                 class="form-control price-summ product-order-list__item"
                                                 name="ordered_product-price"
                                                 :placeholder="$t('admin.order.form.ordered_products.price')"
-                                                v-model="product.price"
+                                                v-model="product.total"
                                             >
                                             <div class="input-group-append">
-                                                <span class="input-group-text" id="basic-addon2">грн.</span>
+                                                <span class="input-group-text" id="basic-addon2">$</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                         </div>
-                        <div v-for="(error, i) in errors.ordered_product"
-                             :key="`ordered_product__error__${i}`"
+                        <div v-for="(error, i) in errors.orders"
+                             :key="`orders_product__error__${i}`"
                              class="text-danger error"
                         >
                             {{ error }}
                         </div>
                         <label>
-                            <strong>{{ $t('admin.order.form.summ') }}: <span v-if="summOrdered">{{ summOrdered }}</span></strong>
+                            <strong>{{ $t('admin.order.form.summ') }}: <span v-if="model.id">{{ model.total_summ }}</span></strong>
                         </label>
                         <div class="text-right">
                             <button
@@ -259,7 +367,7 @@
                 required: true,
             },
             products: {
-                type: Object,
+                type: Array,
                 required: true,
             },
             suspect: {
@@ -363,30 +471,6 @@
             normalizeDate(date) {
                 return moment(date).format("DD.MM.YYYY hh:mm");
             },
-        },
-
-        created() {
-            if (this.model.id) {
-                _.each(this.model.ordered_product, (key, value) => {
-                    this.selectedOrderedProduct.push({
-                        id: key.product.id,
-                        title: key.product.title,
-                        variations: key.product.variations,
-                    });
-                    this.selectedOrderedProductColor.push(key.variation);
-                });
-            } else {
-                this.model.ordered_product.push({
-                    product_title: null,
-                    product_color: null,
-                    quantity: null,
-                    price: null,
-                    product: {},
-                    variation: {},
-                });
-            }
-
-            this.summOrderedProducts();
         }
     };
 </script>

@@ -40,20 +40,14 @@ class OrderController extends Controller
      */
     public function create(): ViewContract
     {
-        $productByCategory = [];
-
-        $categories = Category::query()->where('is_hidden', false)->whereNotNull('custom_text')->get();
-
-        foreach ($categories as $category) {
-            $productByCategory[$category->getAttribute('name')][] = [
-                'id' => $category->getKey(),
-                'title' => $category->getAttribute('name'),
-                'variations' => $category->getAttribute('steps'),
-            ];
-        }
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNotNull('custom_text')
+            ->whereNotNull('subcategory_id')
+            ->get();
 
         return View::make('admin.order.create', [
-            'productByCategory' => $productByCategory,
+            'productByCategory' => $categories,
         ]);
     }
 
@@ -94,17 +88,11 @@ class OrderController extends Controller
      */
     public function edit(Order $order): ViewContract
     {
-        $productByCategory = [];
-
-        $categories = Category::query()->where('is_hidden', false)->whereNotNull('custom_text')->get();
-
-        foreach ($categories as $category) {
-            $productByCategory[$category->getAttribute('name')][] = [
-                'id' => $category->getKey(),
-                'title' => $category->getAttribute('name'),
-                'variations' => $category->getAttribute('steps'),
-            ];
-        }
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNotNull('custom_text')
+            ->whereNotNull('subcategory_id')
+            ->get();
 
         $suspectIp = SuspectIp::query()->where('ip_address', $order->getAttribute('ip_address'))->get();
 
@@ -112,7 +100,7 @@ class OrderController extends Controller
             'admin.order.edit',
             [
                 'order' => $order,
-                'productByCategory' => $productByCategory,
+                'productByCategory' => $categories,
                 'suspectIp' => $suspectIp,
             ]
         );
@@ -206,7 +194,7 @@ class OrderController extends Controller
                 function ($query, $search) {
                     $keyword = "%{$search}%";
 
-                    $query->where('name', 'like', $keyword);
+                    $query->where('address->name', 'like', $keyword);
                 }
             )
             ->when(

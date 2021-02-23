@@ -21,31 +21,37 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => [
+            'orders' => [
                 'required',
-                'string',
-                'max:255',
-            ],
-            'email' => [
-                'nullable',
-                'string',
-                'max:255',
-            ],
-            'phone' => [
-                'required',
-                'string',
-                'max:255',
-            ],
-            'notes' => [
-                'string',
-            ],
-            'ordered_product' => [
-                'nullable',
                 'array',
             ],
-            'ordered_status' => [
+            'user_id' => [
                 'nullable',
                 'integer',
+            ],
+            'user_email' => [
+                'nullable',
+                'string',
+            ],
+            'total_summ' => [
+                'integer',
+                'required',
+            ],
+            'payment' => [
+                'array',
+                'required',
+            ],
+            'address' => [
+                'array',
+                'required',
+            ],
+            'exp_service' => [
+                'string',
+                'nullable',
+            ],
+            'insurance' => [
+                'string',
+                'nullable',
             ],
         ];
     }

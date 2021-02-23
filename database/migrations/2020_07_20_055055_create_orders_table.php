@@ -20,14 +20,22 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('phone');
-            $table->string('email')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->text('notes')->nullable();
-            $table->json('ordered_product');
+            $table->json('orders');
+            $table->string('user_email')->nullable();
+            $table->string('total_summ');
+            $table->json('payment');
+            $table->json('address');
+            $table->string('exp_service')->nullable();
+            $table->string('insurance')->nullable();
             $table->string('ip_address')->nullable();
             $table->tinyInteger('ordered_status')->unsigned()->default(1);
             $table->timestamps();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users');
         });
     }
 

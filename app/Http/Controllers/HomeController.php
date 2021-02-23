@@ -143,17 +143,17 @@ class HomeController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\Admin\Order\StoreRequest $request
+     * @param \App\Http\Requests\Client\Order\StoreRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function makeOrder(StoreRequest $request): JsonResponse
+    public function makeOrder(ClientOrderStoreRequest $request): JsonResponse
     {
         $orderData = array_merge($request->all(), ['ip_address' => $request->ip()]);
 
-        Order::create($orderData);
+        $order = Order::create($orderData);
 
-        return $this->json()->noContent();
+        return $this->json()->ok(['order_id' => $order->getKey()]);
     }
 
     /**

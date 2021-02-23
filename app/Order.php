@@ -28,11 +28,15 @@ class Order extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
-        'phone',
-        'email',
+        'user_id',
+        'user_email',
+        'orders',
+        'total_summ',
+        'payment',
+        'address',
+        'exp_service',
+        'insurance',
         'notes',
-        'ordered_product',
         'ordered_status',
         'ip_address',
     ];
@@ -41,11 +45,15 @@ class Order extends Model
      * @var array
      */
     protected $casts = [
-        'name' => 'string',
-        'phone' => 'string',
-        'email' => 'string',
+        'user_id' => 'int',
+        'user_email' => 'string',
+        'orders' => 'array',
+        'total_summ' => 'string',
+        'payment' => 'array',
+        'address' => 'array',
+        'exp_service' => 'string',
+        'insurance' => 'string',
         'notes' => 'string',
-        'ordered_product' => 'array',
         'ordered_status' => 'int',
         'ip_address' => 'string',
     ];

@@ -3174,6 +3174,10 @@ h2 {
     margin-bottom: 30px;
   }
 
+  .header-search-popup{
+      background-color: #0b3057;
+  }
+
   .header-info {
     padding-bottom: 15px;
   }

@@ -27,7 +27,7 @@
                                 <div class="checkout-customer">
                                     <h4>Customer login</h4>
                                     <div class="input-block">
-                                        <input v-model="email" type="text" placeholder="E-mail">
+                                        <input v-model="email" type="email" placeholder="E-mail">
                                         <span v-if="errors.email" v-for="error in errors.email" class="invalid-feedback">
                                             <strong>{{ error }}</strong>
                                         </span>
@@ -59,12 +59,12 @@
                                 <div class="checkout-guest">
                                     <h4>Guest Checkout</h4>
                                     <div class="input-block">
-                                        <input v-model="orderData.userEmail" type="text" placeholder="E-mail">
+                                        <input v-model="orderData.user_email" type="email" placeholder="E-mail">
                                         <span v-if="emailError" class="invalid-feedback">
                                             <strong>{{ emailError }}</strong>
                                         </span>
                                     </div>
-                                    <button v-if="orderData.userEmail" v-on:click="validateEmail" class="btn red-btn">Continue as Guest</button>
+                                    <button v-if="orderData.user_email" v-on:click="validateEmail" class="btn red-btn">Continue as Guest</button>
                                 </div>
                                 <div class="checkout-account">
                                     <a :href="$r('web.register')">Create an Account</a>
@@ -116,10 +116,10 @@
                             <p>We'll credit your PayPal Email Address once your item(s) have been verified by our staff. Please note that PayPal charges a fee ($0.30 + 2.9%) to receive funds using their service.</p>
                             <div class="inputs-flex">
                                 <div class="input-block width-50">
-                                    <input v-model="orderData.payment.email" type="text" placeholder="PayPal E-mail Adress">
+                                    <input v-model="orderData.payment.email" type="email" placeholder="PayPal E-mail Adress">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input v-model="checkEmail" type="text" placeholder="Confirm PayPal E-mail Adress">
+                                    <input v-model="checkEmail" type="email" placeholder="Confirm PayPal E-mail Adress">
                                 </div>
                             </div>
                         </div>
@@ -127,10 +127,10 @@
                             <p>We'll credit your Zelle® account once your item(s) have been verified by our staff. Email address provided must be associated and linked with your Zelle® account to avoid any delays.</p>
                             <div class="inputs-flex">
                                 <div class="input-block width-50">
-                                    <input v-model="orderData.payment.email" type="text" placeholder="Zelle E-mail Adress">
+                                    <input v-model="orderData.payment.email" type="email" placeholder="Zelle E-mail Adress">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input v-model="checkEmail" type="text" placeholder="Confirm Zelle E-mail Adress">
+                                    <input v-model="checkEmail" type="email" placeholder="Confirm Zelle E-mail Adress">
                                 </div>
                             </div>
                         </div>
@@ -138,10 +138,10 @@
                             <p>We'll credit your Venmo® account once your item(s) have been verified by our staff. Email address provided must be associated and linked with your Venmo® account to avoid any delays.</p>
                             <div class="inputs-flex">
                                 <div class="input-block width-50">
-                                    <input v-model="orderData.payment.email" type="text" placeholder="Venmo E-mail Adress">
+                                    <input v-model="orderData.payment.email" type="email" required placeholder="Venmo E-mail Adress">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input v-model="checkEmail" type="text" placeholder="Confirm Venmo E-mail Adress">
+                                    <input v-model="checkEmail" type="email" required placeholder="Confirm Venmo E-mail Adress">
                                 </div>
                             </div>
                         </div>
@@ -165,7 +165,7 @@
                                     <input v-model="orderData.address.name" type="text" placeholder="First and Last Name*">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input v-model="orderData.address.phone" type="text" placeholder="Phone*">
+                                    <input v-model="orderData.address.phone" type="tel" placeholder="Phone*">
                                 </div>
                                 <div class="input-block width-50">
                                     <input v-model="orderData.address.address1" type="text" placeholder="Adress 1*">
@@ -180,7 +180,7 @@
                                     <b-form-select type="text" placeholder="State" v-model="orderData.address.state" :options="states"></b-form-select>
                                 </div>
                                 <div class="input-block width-25">
-                                    <input v-model="orderData.address.postal_code" type="text" placeholder="Postal Code*">
+                                    <input v-model="orderData.address.postal_code" type="number" placeholder="Postal Code*">
                                 </div>
                                 <br>
                                 <span v-if="addressError" class="desc red-note">
@@ -296,7 +296,11 @@
 </template>
 
 <script>
+    import FormHelper from "../../admin/js/mixins/form_helper";
+
     export default {
+        mixins: [FormHelper],
+
         props: {
             user: {
                 type: Object,
@@ -321,8 +325,10 @@
                 addressError: false,
                 termsError: false,
                 orderData: {
-                    user: null,
-                    userEmail: null,
+                    orders: [],
+                    user_id: null,
+                    total_summ: 0,
+                    user_email: null,
                     payment: {
                         name: null,
                         type: null,
@@ -381,8 +387,8 @@
             selectPaymentCheck() {
                 this.paymentError = false;
 
-                this.orderData.payment.email = this.user.id ? this.user.email : this.orderData.userEmail;
-                this.checkEmail = this.user.id ? this.user.email : this.orderData.userEmail;
+                this.orderData.payment.email = this.user.id ? this.user.email : this.orderData.user_email;
+                this.checkEmail = this.user.id ? this.user.email : this.orderData.user_email;
                 this.orderData.payment.name = 'Check';
                 this.orderData.payment.type = 1;
             },
@@ -390,7 +396,7 @@
             selectPaymentPayPal() {
                 this.paymentError = false;
 
-                this.orderData.payment.email = this.user.id ? this.user.email : this.orderData.userEmail;
+                this.orderData.payment.email = this.user.id ? this.user.email : this.orderData.user_email;
                 this.checkEmail = '';
                 this.orderData.payment.name = 'PayPal';
                 this.orderData.payment.type = 2;
@@ -399,7 +405,7 @@
             selectPaymentZelle() {
                 this.paymentError = false;
 
-                this.orderData.payment.email = this.user.id ? this.user.email : this.orderData.userEmail;
+                this.orderData.payment.email = this.user.id ? this.user.email : this.orderData.user_email;
                 this.checkEmail = '';
                 this.orderData.payment.name = 'Zelle';
                 this.orderData.payment.type = 3;
@@ -408,7 +414,7 @@
             selectPaymentVenmo() {
                 this.paymentError = false;
 
-                this.orderData.payment.email = this.user.id ? this.user.email : this.orderData.userEmail;
+                this.orderData.payment.email = this.user.id ? this.user.email : this.orderData.user_email;
                 this.checkEmail = '';
                 this.orderData.payment.name = 'Venmo';
                 this.orderData.payment.type = 4;
@@ -418,7 +424,7 @@
             {
                 this.emailError = null;
 
-                if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.orderData.userEmail))
+                if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.orderData.user_email))
                 {
                     this.stepIndex++;
                 } else {
@@ -445,12 +451,6 @@
             validateAddress(){
                 this.addressError = false;
 
-                if (this.orderData.exp_service) {
-                    this.totalSumm -= 20;
-                } else {
-                    this.valuate();
-                }
-
                 if (
                     this.orderData.address.name &&
                     this.orderData.address.phone &&
@@ -460,6 +460,12 @@
                     this.orderData.address.state
                 )
                 {
+                    if (this.orderData.exp_service) {
+                        this.totalSumm -= 20;
+                    } else {
+                        this.valuate();
+                    }
+
                     this.stepIndex++;
                 } else {
                     this.addressError = true;
@@ -483,7 +489,35 @@
                         this.totalSumm -= 4;
                     }
 
-                    location.reload();
+                    this.orderData.total_summ = this.totalSumm;
+
+                    this.orderData.orders = this.orders;
+
+                    this.orderData.user_id = this.user ? this.user.id : null;
+
+                    this.formData = new FormData();
+                    this.formData.set('_method', 'POST');
+                    this.collectFormData(this.orderData);
+
+                    axios.post(
+                        Router.route('order'),
+                        this.formData,
+                        {
+                            headers: {
+                                'Content-Type': 'multipart/form-data',
+                            },
+                        },
+                    ).then(() => {
+                        let orders = {
+                            order: []
+                        };
+
+                        localStorage.setItem("orders", JSON.stringify(orders));
+
+                        location.href = Router.route('account');
+                    }).catch(({ response: { data: { errors } } }) => {
+                        this.errors = errors;
+                    });
                 } else {
                     this.termsError = true;
                 }

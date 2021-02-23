@@ -45,6 +45,7 @@ return [
         'actions' => 'Actions',
         'no' => 'No',
         'yes' => 'Yes',
+        'times' => 'times',
         'more' => 'Show more',
         'less' => 'Show less',
         'load_more' => 'Load more',
