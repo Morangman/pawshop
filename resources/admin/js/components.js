@@ -14,6 +14,10 @@ import FaqIndex from './components/faq/index';
 import FaqCreate from './components/faq/create';
 import FaqEdit from './components/faq/edit';
 
+import TaskIndex from './components/task/index';
+import TaskCreate from './components/task/create';
+import TaskEdit from './components/task/edit';
+
 import TipIndex from './components/tip/index';
 import TipCreate from './components/tip/create';
 import TipEdit from './components/tip/edit';
@@ -43,6 +47,9 @@ export default {
     FaqIndex,
     FaqCreate,
     FaqEdit,
+    TaskIndex,
+    TaskCreate,
+    TaskEdit,
     StepEdit,
     TipIndex,
     TipCreate,

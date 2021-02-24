@@ -15,6 +15,12 @@
             <ul class="nav nav-sidebar" data-nav-type="accordion">
                 @role('admin')
                 <li class="nav-item">
+                    <a href="{{ URL::route('admin.task.index') }}" class="nav-link @active_menu_class('admin.user')">
+                        <i class="icon-task"></i>
+                        <span>@lang('common.sidebar.tasks')</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ URL::route('admin.user.index') }}" class="nav-link @active_menu_class('admin.user')">
                         <i class="icon-users2"></i>
                         <span>@lang('common.sidebar.users')</span>

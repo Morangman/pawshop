@@ -10,6 +10,7 @@ return [
     ],
     'sidebar' => [
         'users' => 'Users',
+        'tasks' => 'Tasks',
         'categories' => 'Categories',
         'steps' => 'Steps',
         'tips' => 'Tips',

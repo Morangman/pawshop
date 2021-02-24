@@ -8,6 +8,7 @@ use App\Faq;
 use App\Order;
 use App\Setting;
 use App\Step;
+use App\Task;
 use App\Tip;
 use App\User;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -96,6 +97,7 @@ class RouteServiceProvider extends ServiceProvider
             'order' => Order::class,
             'comment' => Comment::class,
             'faq' => Faq::class,
+            'task' => Task::class,
             'setting' => Setting::class,
             'nitification' => Notification::class,
         ];

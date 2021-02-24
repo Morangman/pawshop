@@ -31,6 +31,15 @@ Route::group(
 
 Route::group(
     [
+        'as' => '.task',
+        'prefix' => 'task',
+        'middleware' => ['anyrole:admin|manager']
+    ],
+    __DIR__.'/admin/task.php'
+);
+
+Route::group(
+    [
         'as' => '.step',
         'prefix' => 'step',
         'middleware' => ['anyrole:admin|manager']

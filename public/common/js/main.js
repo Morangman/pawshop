@@ -25858,6 +25858,57 @@ __webpack_require__.r(__webpack_exports__);
           "delete": "Tip has been successfully deleted"
         }
       },
+      "task": {
+        "breadcrumbs": {
+          "index": "Tasks",
+          "create": "Create task",
+          "edit": "Edit task"
+        },
+        "form": {
+          "name": "Name*",
+          "text": "Description of the task*",
+          "notes": "Notes",
+          "task_status": "Status"
+        },
+        "index": {
+          "title": "Tasks",
+          "header_btn": "Create task",
+          "filters": {
+            "search": "Search task by typing one of these fields: name"
+          },
+          "table": {
+            "headers": {
+              "id": "ID",
+              "name": "Name",
+              "status": "Status",
+              "created_at": "Created date"
+            }
+          },
+          "search": {
+            "all": "All"
+          }
+        },
+        "task_statuses": {
+          "1": "New task",
+          "2": "In work",
+          "3": "Successfully completed",
+          "4": "The decision is postponed"
+        },
+        "create": {
+          "title": "Create task"
+        },
+        "edit": {
+          "title": "Edit task"
+        },
+        "delete": {
+          "title": "Delete task"
+        },
+        "messages": {
+          "create": "Task has been successfully created",
+          "update": "Task has been successfully updated",
+          "delete": "Task has been successfully deleted"
+        }
+      },
       "setting": {
         "breadcrumbs": {
           "index": "Settings"
@@ -26290,6 +26341,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       "sidebar": {
         "users": "Users",
+        "tasks": "Tasks",
         "categories": "Categories",
         "steps": "Steps",
         "tips": "Tips",
