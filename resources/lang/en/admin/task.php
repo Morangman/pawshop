@@ -14,6 +14,7 @@ return [
         'name' => 'Name*',
         'text' => 'Description of the task*',
         'notes' => 'Notes',
+        'videos' => 'Videos',
         'task_status' => 'Status',
     ],
     'index' => [

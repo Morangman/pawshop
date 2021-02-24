@@ -36,6 +36,29 @@
                     </div>
                     <div class="form-group">
                         <label>
+                            <strong>{{ $t('admin.task.form.videos') }}</strong>
+                        </label>
+                        <div class="form-group overflow-box">
+                            <div
+                                v-if="model.id"
+                                v-for="(media, i) in model.task_videos"
+                                :key="`task_file__${i}`"
+                                class="row"
+                            >
+                                <div class="col-8">
+                                    <a :href="media.url" target="_blank">{{ media.url }}</a>
+                                </div>
+                            </div>
+                            <b-form-file
+                                v-model="model.task_videos"
+                                class="mt-1"
+                                multiple
+                                @change="showTaskFiles"
+                            ></b-form-file>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
                             <strong>{{ $t('admin.task.form.notes') }}</strong>
                         </label>
                         <vue-editor v-model="model.notes"></vue-editor>
@@ -107,6 +130,12 @@
             VueEditor
         },
 
+        data() {
+            return {
+                taskFiles: [],
+            };
+        },
+
         methods: {
             submit() {
                 this.$emit('submit', this.model);
@@ -116,6 +145,28 @@
                 confirmation.delete(() => {
                     this.$emit('delete');
                 });
+            },
+
+            showTaskFiles(e) {
+                this.taskFiles = [];
+
+                const files = e.target.files;
+
+                _.each(files, (value) => {
+                    this.taskFiles.push(URL.createObjectURL(value));
+                });
+            },
+
+            handleDocumentDeleted(media) {
+                this.model.task_vieos = _.filter(
+                    this.model.task_vieos,
+                    (file) => {
+                        return file.id !== media.id;
+                    });
+
+                notify.success(
+                    'File success deleted!'
+                );
             },
         },
     };

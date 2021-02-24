@@ -23,6 +23,8 @@
                 model: {
                     name: null,
                     category_id: null,
+                    task_videos: null,
+                    task_status: 1,
                     data: [],
                 },
                 errors: {},

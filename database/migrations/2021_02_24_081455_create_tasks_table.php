@@ -22,7 +22,7 @@ class CreateTasksTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->text('text');
-            $table->text('notes');
+            $table->text('notes')->nullable();
             $table->tinyInteger('task_status')->unsigned()->default(1);
             $table->timestamps();
         });

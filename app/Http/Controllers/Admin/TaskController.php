@@ -42,10 +42,13 @@ class TaskController extends Controller
      * @param \App\Http\Requests\Admin\Task\StoreRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded
      */
     public function store(StoreRequest $request): JsonResponse
     {
-        Task::create($request->all());
+        $task = Task::create($request->all());
+
+        $this->handleDocuments($request, $task);
 
         Session::flash(
             'success',
@@ -65,7 +68,7 @@ class TaskController extends Controller
         return View::make(
             'admin.task.edit',
             [
-                'task' => $task,
+                'task' => $task->append('task_videos'),
             ]
         );
     }
@@ -75,10 +78,13 @@ class TaskController extends Controller
      * @param \App\Task $task
      *
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded
      */
     public function update(UpdateRequest $request, Task $task): JsonResponse
     {
         $task->update($request->all());
+
+        $this->handleDocuments($request, $task);
 
         Session::flash(
             'success',
@@ -114,7 +120,7 @@ class TaskController extends Controller
      */
     public function get(Task $task): JsonResponse
     {
-        return $this->json()->ok($task);
+        return $this->json()->ok($task->append('task_videos'));
     }
 
     /**
@@ -152,5 +158,27 @@ class TaskController extends Controller
             ->paginate(20);
 
         return $this->json()->ok($tasks);
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Task $task
+     *
+     * @return void
+     *
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded
+     */
+    protected function handleDocuments(Request $request, Task $task): void
+    {
+        if ((integer) $request->get('task_status') === Task::STATUS_COMPLETED) {
+            $task->clearMediaCollection(Task::MEDIA_COLLECTION_TASK);
+        } else {
+            $videos = $request->file('task_videos', []);
+
+            foreach ($videos as $video) {
+                $task->addMedia($video)
+                    ->toMediaCollection(Task::MEDIA_COLLECTION_TASK);
+            }
+        }
     }
 }
