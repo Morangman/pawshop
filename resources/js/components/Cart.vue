@@ -26,7 +26,9 @@
                                     <div class="inner">
                                         <div class="name"><a :href="$r('get-category', { category:  order.device.id })">{{ order.device.name }}</a></div>
                                         <div class="chars" v-if="order.steps">
-                                            <span v-for="option in order.steps" v-if="option">{{ option ? option.name + ', ' : '' }}</span>
+                                            <span v-for="(option, key) in order.steps" v-if="option">
+                                                {{ option ? option.name === 'Yes' || option.name === 'No' ? '' : key == Object.keys(order.steps).pop() ? option.name : option.name + ', ' : '' }}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -132,7 +134,7 @@
                 if (this.orders && this.orders['order'].length) {
                     _.each(this.orders['order'], (key, value) => {
                         if(key) {
-                            this.totalSumm += key.total;
+                            this.totalSumm += parseFloat(key.total);
                         }
                     });
                 }

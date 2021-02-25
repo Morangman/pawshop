@@ -30,7 +30,7 @@ class StoreRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                'unique:users,email',
+                "unique:users,email,{$this->request->get('id')}",
             ],
             'phone' => [
                 'required',

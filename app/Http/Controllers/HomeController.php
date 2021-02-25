@@ -149,7 +149,10 @@ class HomeController extends Controller
      */
     public function makeOrder(ClientOrderStoreRequest $request): JsonResponse
     {
-        $orderData = array_merge($request->all(), ['ip_address' => $request->ip()]);
+        $orderData = array_merge($request->all(), [
+            'ip_address' => $request->ip(),
+            'user_email' => $request->get('user_email') ?? Auth::user()->getAttribute('email')
+        ]);
 
         $order = Order::create($orderData);
 
@@ -185,9 +188,11 @@ class HomeController extends Controller
     }
 
     /**
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Contracts\View\View
      */
-    public function account(): ViewContract
+    public function account(Request $request): ViewContract
     {
         $categories = Category::query()
             ->where('is_hidden', false)
@@ -203,6 +208,9 @@ class HomeController extends Controller
             'user' => Auth::user(),
             'relatedCategories' => $categories,
             'faqs' => new stdClass(),
+            'states' => Lang::get('states'),
+            'orders' => Order::query()->where('user_id', Auth::id())->get() ?? [],
+            'tab' => $request->get('tab')
         ]);
     }
 
@@ -214,7 +222,14 @@ class HomeController extends Controller
      */
     public function updateAccountInfo(UpdateAccountInfoRequest $request, User $user): JsonResponse
     {
-        $user->update($request->only(['name', 'phone', 'email', 'addresses']));
+        $userData = array_merge(
+            $request->only(['name', 'phone', 'email', 'addresses']),
+            [
+                'addresses' => $request->get('addresses') ?? []
+            ]
+        );
+
+        $user->update($userData);
 
         return $this->json()->noContent();
     }

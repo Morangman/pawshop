@@ -5,6 +5,9 @@
     <div class="main-content">
         <account
             :user="{{ json_encode($user) }}"
+            :states="{{ json_encode($states) }}"
+            :orders="{{ json_encode($orders) }}"
+            :tab="{{ json_encode($tab) }}"
         ></account>
     </div>
     @yield('footer', View::make('footer', ['categories' => $categories]))

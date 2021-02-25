@@ -34,7 +34,7 @@ class UpdateRequest extends FormRequest
                 'string',
             ],
             'total_summ' => [
-                'integer',
+                'numeric',
                 'required',
             ],
             'payment' => [

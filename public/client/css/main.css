@@ -1498,6 +1498,11 @@ h2 {
   width: 1px;
 }
 
+.orders-table th:last-child,
+.orders-table td:last-child{
+    width: auto!important;
+}
+
 .cart-table th {
   font-size: 13px;
   color: #5C5C5C;
@@ -2334,6 +2339,37 @@ h2 {
   margin-bottom: 35px;
 }
 
+.account-tab{
+    margin-top: 35px;
+}
+
+.text-right{
+    text-align: right;
+}
+
+.custom-checkbox input{
+    -webkit-appearance: auto!important;
+    -moz-appearance: auto!important;
+    appearance: auto!important;
+    border: solid 1px #DADADA;
+    transition: all 0.3s ease-out;
+    border-radius: 0!important;
+    background: #fff;
+    font-family: 'GothamPro', Arial, Tahoma, sans-serif;
+    font-weight: 300;
+    display: inline-block!important;
+    color: #0b3057;
+    font-size: 15px;
+    padding: 0!important;
+    width: auto!important;
+    height: auto!important;
+    border-radius: 0!important;
+}
+
+.add-address-btn{
+    margin-top: 20px;
+}
+
 .checkout-content-step h2 {
   margin-bottom: 22px;
 }
@@ -2350,7 +2386,8 @@ h2 {
 }
 
 .checkout-content-step input,
-.checkout-content-step textarea {
+.checkout-content-step textarea,
+.checkout-content-step select{
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -2426,6 +2463,31 @@ h2 {
 
 .checkout-content-step .checkbox-list strong {
   font-weight: 500;
+}
+
+.nav-tabs{
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    display: flex;
+}
+
+.nav-tabs .nav-item{
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+}
+
+.nav-tabs .nav-item:hover{
+    background-color: #ddd;
+}
+
+.nav-tabs .nav-item .active {
+    font-weight: 500;
 }
 
 .checkout-content-step .timing-note {
@@ -3901,6 +3963,7 @@ h2 {
   }
 
   .checkout-content-step input,
+  .checkout-content-step select,
   .checkout-content-step textarea {
     font-size: 13px;
   }

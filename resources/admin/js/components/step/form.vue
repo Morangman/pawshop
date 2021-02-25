@@ -136,6 +136,23 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-12 mt-3">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>
+                                                        <strong>{{ $t('admin.step.form.price_percent') }}</strong>
+                                                    </label>
+                                                    <input
+                                                        name="price_plus"
+                                                        v-model="item.price_percent"
+                                                        type="number"
+                                                        class="form-control"
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="text-right">
@@ -213,6 +230,7 @@
                     name: null,
                     text: null,
                     price_plus: 0,
+                    price_percent: 0,
                 });
             },
 

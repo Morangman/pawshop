@@ -14,7 +14,8 @@ return [
         'item_text' => 'Item text',
         'is_condition' => 'This is condition?',
         'is_checkboxes' => 'This is checkboxes?',
-        'price_plus' => 'Price for item (Device price + this price)',
+        'price_plus' => 'Price for item (Device price + or - this price)',
+        'price_percent' => 'Percentage of the price (Device price + or - this percent)',
         'tip' => 'Select tip',
     ],
     'index' => [

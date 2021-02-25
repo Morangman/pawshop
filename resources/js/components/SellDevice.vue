@@ -295,7 +295,13 @@
 
                 _.each(this.selectedSteps, (key, value) => {
                     if(key) {
-                        this.summ += parseFloat(key.price_plus);
+                        if (key.price_plus) {
+                            this.summ += parseFloat(key.price_plus);
+                        }
+                        if (key.price_percent){
+                            let percent = (this.summ * parseFloat(key.price_percent)) / 100;
+                            this.summ += percent;
+                        }
                     }
                 });
             },

@@ -160,33 +160,49 @@
                         <h2>Shipping</h2>
                         <div class="checkout-simple-block">
                             <h4>Your adress</h4>
-                            <div class="inputs-flex">
+                            <select
+                                id="taskStatus"
+                                class="form-control form-control-sm d-inline-block"
+                                style="width: auto;"
+                                v-model="orderData.address"
+                                v-if="user.id"
+                                required
+                            >
+                                <option :value="orderData.address">Select address</option>
+                                <option v-for="(address, key) in user.addresses" :value="address">{{ address.name + ' ' + address.phone + ' ' + address.address1 }}</option>
+                            </select>
+                            <br>
+                            <br>
+                            <form autocomplete="on" class="inputs-flex">
                                 <div class="input-block width-50">
-                                    <input v-model="orderData.address.name" type="text" placeholder="First and Last Name*">
+                                    <input v-model="orderData.address.name" name="name" autocomplete="on" type="text" placeholder="First and Last Name*">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input v-model="orderData.address.phone" type="tel" placeholder="Phone*">
+                                    <input v-model="orderData.address.phone" name="tel" autocomplete="on" type="tel" placeholder="Phone*">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input v-model="orderData.address.address1" type="text" placeholder="Adress 1*">
+                                    <input v-model="orderData.address.address1" name="address-line1" autocomplete="on" type="text" placeholder="Adress 1*">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input v-model="orderData.address.address2" type="text" placeholder="Adress 2">
+                                    <input v-model="orderData.address.address2" name="address-line2" autocomplete="on" type="text" placeholder="Adress 2">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input v-model="orderData.address.city" type="text" placeholder="City*">
+                                    <input v-model="orderData.address.city" name="country-name" autocomplete="on" type="text" placeholder="City*">
                                 </div>
                                 <div class="input-block width-25">
-                                    <b-form-select type="text" placeholder="State" v-model="orderData.address.state" :options="states"></b-form-select>
+                                    <select name="state" autocomplete="on" type="text" v-model="orderData.address.state">
+                                        <option :value="null">State*</option>
+                                        <option v-for="(state, i) in states" :key="`state_${i}`" :value="i">{{ state }}</option>
+                                    </select>
                                 </div>
                                 <div class="input-block width-25">
-                                    <input v-model="orderData.address.postal_code" type="number" placeholder="Postal Code*">
+                                    <input v-model="orderData.address.postal_code" name="postal-code" autocomplete="on" type="text" placeholder="Postal Code*">
                                 </div>
                                 <br>
                                 <span v-if="addressError" class="desc red-note">
                                     <p>Please fill all required fields</p>
                                 </span>
-                            </div>
+                            </form>
                         </div>
                         <div class="checkout-simple-block">
                             <h4>Get paid faster <small>(optional)</small></h4>
@@ -340,7 +356,7 @@
                         address1: null,
                         address2: null,
                         city: null,
-                        state: 'AL',
+                        state: null,
                         postal_code: null,
                     },
                     exp_service: false,
@@ -358,7 +374,7 @@
                 if (this.orders['order'].length) {
                     _.each(this.orders['order'], (key, value) => {
                         if(key) {
-                            this.totalSumm += key.total;
+                            this.totalSumm += parseFloat(key.total);
                         }
                     });
                 }
@@ -396,7 +412,7 @@
             selectPaymentPayPal() {
                 this.paymentError = false;
 
-                this.orderData.payment.email = this.user.id ? this.user.email : this.orderData.user_email;
+                this.orderData.payment.email = '';
                 this.checkEmail = '';
                 this.orderData.payment.name = 'PayPal';
                 this.orderData.payment.type = 2;
@@ -405,7 +421,7 @@
             selectPaymentZelle() {
                 this.paymentError = false;
 
-                this.orderData.payment.email = this.user.id ? this.user.email : this.orderData.user_email;
+                this.orderData.payment.email = '';
                 this.checkEmail = '';
                 this.orderData.payment.name = 'Zelle';
                 this.orderData.payment.type = 3;
@@ -414,7 +430,7 @@
             selectPaymentVenmo() {
                 this.paymentError = false;
 
-                this.orderData.payment.email = this.user.id ? this.user.email : this.orderData.user_email;
+                this.orderData.payment.email = '';
                 this.checkEmail = '';
                 this.orderData.payment.name = 'Venmo';
                 this.orderData.payment.type = 4;
@@ -529,8 +545,18 @@
 
             if (this.user.id) {
                 this.stepIndex = 2;
+
+                _.each(this.user.addresses, (value, key) => {
+                    if (value.is_default === "1") {
+                        this.orderData.address = this.user.addresses[key];
+                    }
+                });
             } else {
                 this.stepIndex = 1;
+            }
+
+            if (!this.orders || this.orders['order'] === [] || this.orders['order'].length === 0) {
+                location.href = Router.route('home');
             }
         }
     }

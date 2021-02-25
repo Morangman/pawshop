@@ -28,9 +28,9 @@
                             <li>
                                 <a href="" data-title="My account" class="has-drop">My account<img src="{{ asset('client/images/select_arrow.png') }}" alt="" /></a>
                                 <ul class="drop-menu">
-                                    <li><a href="{{ URL::route('account') }}">Account info</a></li>
-                                    <li><a href="">Trade-ins</a></li>
-                                    <li><a href="">Addresses</a></li>
+                                    <li><a href="{{ URL::route('account', ['tab' => 'account']) }}">Account info</a></li>
+                                    <li><a href="{{ URL::route('account', ['tab' => 'trade']) }}">Trade-ins</a></li>
+                                    <li><a href="{{ URL::route('account', ['tab' => 'address']) }}">Addresses</a></li>
                                     @auth
                                         @role('admin')
                                         <li class="nav-item">

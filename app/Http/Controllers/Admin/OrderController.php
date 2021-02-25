@@ -11,6 +11,7 @@ use App\Http\Requests\Admin\Order\UpdateRequest;
 use App\Order;
 use App\Reminder;
 use App\SuspectIp;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
@@ -58,9 +59,14 @@ class OrderController extends Controller
      */
     public function store(StoreRequest $request): JsonResponse
     {
-        $orderData = array_merge($request->all(), ['ip_address' => $request->ip()]);
+        $orderData = array_merge(
+            $request->all(),
+            [
+                'ip_address' => $request->ip()
+            ]
+        );
 
-        $order = Order::create($orderData);
+       $order = Order::create($orderData);
 
         if ($remindData = $request->get('reminder')) {
             Reminder::query()->create([
