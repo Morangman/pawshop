@@ -24,7 +24,7 @@
         <div class="order-options-detail">
 
             <!-- Step 1 -->
-            <div class="order-options-block" v-if="selectedStep">
+            <div id="step" class="order-options-block" v-if="selectedStep">
                 <h4>{{ selectedStep.name }}</h4>
                 <div class="helping-block" v-if="selectedStep.tip">
                     <a href="#helping-popup" class="popup-open" data-effect="mfp-zoom-in">
@@ -50,22 +50,22 @@
                                 <small>{{ option.text }}</small>
                             </span>
                         </label>
-                        <div class="options-radio-detail" v-if="selectedStep.is_condition">
-                            <h5>For a device to be in this condition. The following must also be true.</h5>
-                            <ol>
-                                <li>Zero scratches, scuffs or other marks. Looks like new.</li>
-                                <li>Display is free of defects such as dead pixels, white spots, or burn-in.</li>
-                            </ol>
-                            <div class="links">
-                                <a href="#condition-popup" class="btn popup-open" data-effect="mfp-zoom-in">Condition Examples</a>
-                                <a href="https://www.youtube.com/watch?v=N2EPWemOuuE" class="play-link popup-youtube"><img src="../../client/images/play.svg" alt=""></a>
-                            </div>
+                    </div>
+                    <div class="options-radio-detail" v-if="selectedStep.is_condition">
+                        <h5>For a device to be in this condition. The following must also be true.</h5>
+                        <ol>
+                            <li>Zero scratches, scuffs or other marks. Looks like new.</li>
+                            <li>Display is free of defects such as dead pixels, white spots, or burn-in.</li>
+                        </ol>
+                        <div class="links">
+                            <a href="#condition-popup" class="btn popup-open" data-effect="mfp-zoom-in">Condition Examples</a>
+                            <a href="https://www.youtube.com/watch?v=N2EPWemOuuE" class="play-link popup-youtube"><img src="../../client/images/play.svg" alt=""></a>
                         </div>
                     </div>
                 </div>
                 <div class="order-options-links">
-                    <button v-on:click="backStep" class="btn gray-btn">Back</button>
-                    <button v-on:click="nextStep" class="btn red-btn">Next step</button>
+                    <button v-on:click="backStep" class="btn gray-btn step-button">Back</button>
+                    <button v-on:click="nextStep" class="btn red-btn step-button">Next step</button>
                 </div>
 
                 <div v-if="selectedStep.tip" id="helping-popup" class="popup-modal mfp-hide mfp-with-anim">
@@ -276,6 +276,9 @@
                 this.stepIndex++;
 
                 this.selectedStep = this.steps[this.stepIndex];
+
+                let container = this.$el.querySelector("#step");
+                container.scrollTop = container.scrollHeight;
 
                 this.valuate();
             },

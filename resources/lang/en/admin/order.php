@@ -67,6 +67,7 @@ return [
         Order::STATUS_PAYMENT_EXPECTED => 'Payment expected',
         Order::STATUS_COMPLETED => 'Successfully completed',
         Order::STATUS_POSTPONED => 'The decision is postponed',
+        Order::STATUS_CANCELED => 'Canceled',
     ],
     'create' => [
         'title' => 'Create order',

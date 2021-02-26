@@ -83,10 +83,9 @@ $(document).ready(function() {
 	}
 
 	// Появление скрытого поля радиокнопки
-	$(".radiobox-block").click(function(){
-		var tabParent = $(this).parents(".order-options-radios");
-		tabParent.find(".options-radio-detail").not($(this).next(".options-radio-detail")).slideUp(300);
-		$(this).next(".options-radio-detail").slideDown(300);
+	$(".step-button").click(function(){
+        document.getElementById("step").scrollIntoView(true);
+        window.scrollBy(0, -70);
 	});
 
 	/*Табы повреждений*/

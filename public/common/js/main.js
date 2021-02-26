@@ -25798,7 +25798,8 @@ __webpack_require__.r(__webpack_exports__);
           "2": "In work",
           "3": "Payment expected",
           "4": "Successfully completed",
-          "5": "The decision is postponed"
+          "5": "The decision is postponed",
+          "6": "Canceled"
         },
         "create": {
           "title": "Create order"

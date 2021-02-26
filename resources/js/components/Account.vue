@@ -152,6 +152,7 @@
                                     <tr>
                                         <th>Items</th>
                                         <th>Quantity</th>
+                                        <th>Status</th>
                                         <th>Item value</th>
                                     </tr>
                                     </thead>
@@ -174,7 +175,10 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <div class="price">${{ order.total }}</div>
+                                                <p>{{ statuses[userOrder.ordered_status] }}</p>
+                                            </td>
+                                            <td>
+                                                <div class="price">${{ userOrder.total_summ }}</div>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -205,6 +209,10 @@
                 required: true,
             },
             states: {
+                type: Object,
+                required: true,
+            },
+            statuses: {
                 type: Object,
                 required: true,
             },

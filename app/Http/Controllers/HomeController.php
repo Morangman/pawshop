@@ -188,6 +188,30 @@ class HomeController extends Controller
     }
 
     /**
+     * @param \App\Order $order
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function thanks(Order $order): ViewContract
+    {
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
+
+        return View::make('thanks', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'order' => $order,
+            'category' => new stdClass(),
+            'steps' => [],
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
+        ]);
+    }
+
+    /**
      * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Contracts\View\View
@@ -209,6 +233,7 @@ class HomeController extends Controller
             'relatedCategories' => $categories,
             'faqs' => new stdClass(),
             'states' => Lang::get('states'),
+            'statuses' => Lang::get('admin/order.order_statuses'),
             'orders' => Order::query()->where('user_id', Auth::id())->get() ?? [],
             'tab' => $request->get('tab')
         ]);

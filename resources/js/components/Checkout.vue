@@ -161,11 +161,11 @@
                         <div class="checkout-simple-block">
                             <h4>Your adress</h4>
                             <select
-                                id="taskStatus"
+                                id="addresses"
                                 class="form-control form-control-sm d-inline-block"
                                 style="width: auto;"
                                 v-model="orderData.address"
-                                v-if="user.id"
+                                v-if="user.id && user.addresses && user.addresses.length"
                                 required
                             >
                                 <option :value="orderData.address">Select address</option>
@@ -232,7 +232,7 @@
                         <div class="checkout-simple-block">
                             <h4>Shipping insurance</h4>
                             <div class="desc">
-                                <p>All packages are insured up to $100 for free. If you'd like, you can purchase additional shipping insurance to cover the full value of your offer for just $4.00.</p>
+                                <p>All packages are insured up to $100 for free. If you'd like, you can purchase additional shipping insurance to cover the full value of your offer for just 1% of the cost.</p>
                             </div>
                             <div class="radio-list">
                                 <div class="options-radio">
@@ -440,7 +440,7 @@
             {
                 this.emailError = null;
 
-                if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.orderData.user_email))
+                if (/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.orderData.user_email))
                 {
                     this.stepIndex++;
                 } else {
@@ -452,7 +452,7 @@
                 this.paymentError = false;
 
                 if (
-                    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(this.orderData.payment.email) &&
+                    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.orderData.payment.email) &&
                     this.orderData.payment.type &&
                     this.orderData.payment.email &&
                     this.orderData.payment.email === this.checkEmail
@@ -502,7 +502,7 @@
                 if (this.accept_terms)
                 {
                     if (this.orderData.insurance) {
-                        this.totalSumm -= 4;
+                        this.totalSumm = this.totalSumm - (this.totalSumm * 1)/100;
                     }
 
                     this.orderData.total_summ = this.totalSumm;
@@ -530,7 +530,7 @@
 
                         localStorage.setItem("orders", JSON.stringify(orders));
 
-                        location.href = Router.route('account');
+                        location.href = Router.route('account', {tab: 'trade'});
                     }).catch(({ response: { data: { errors } } }) => {
                         this.errors = errors;
                     });

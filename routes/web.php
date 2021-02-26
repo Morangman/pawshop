@@ -33,17 +33,7 @@ Route::get('/header-search', 'HomeController@headerSearchDevice')->name('header-
 
 Route::get('/get-category/{category}', 'HomeController@getByCategory')->name('get-category');
 
-Route::post('/order', 'HomeController@makeOrder')->name('order');
-
-Route::post('/callback', 'HomeController@callback')->name('callback');
-
-Route::patch('/update-account/{user}', [
-    'middleware' => 'auth',
-    'as' => 'update-account',
-    'uses' => 'HomeController@updateAccountInfo',
-]);
-
-Route::post('/comment', 'HomeController@addComment')->name('comment');
+Route::get('/order/{order}/thanks', 'HomeController@thanks')->name('thanks');
 
 Route::get('/redirect-google', 'Auth\LoginController@redirectToGoogleProvider')->name('redirect-google');
 
@@ -52,6 +42,18 @@ Route::get('/redirect-facebook', 'Auth\LoginController@redirectToFacebookProvide
 Route::get('/callback-google', 'Auth\LoginController@handleProviderGoogleCallback')->name('callback-google');
 
 Route::get('/callback-facebook', 'Auth\LoginController@handleProviderFacebookCallback')->name('callback-facebook');
+
+Route::post('/callback', 'HomeController@callback')->name('callback');
+
+Route::post('/order', 'HomeController@makeOrder')->name('order');
+
+Route::post('/comment', 'HomeController@addComment')->name('comment');
+
+Route::patch('/update-account/{user}', [
+    'middleware' => 'auth',
+    'as' => 'update-account',
+    'uses' => 'HomeController@updateAccountInfo',
+]);
 
 Route::group([
     'namespace' => 'Auth',

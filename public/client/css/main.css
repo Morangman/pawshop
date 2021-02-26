@@ -1981,7 +1981,6 @@ h2 {
   padding: 30px;
   font-size: 15px;
   color: #1E1E1E;
-  display: none;
 }
 
 .options-radio-detail h5 {
@@ -2756,6 +2755,53 @@ h2 {
     border-radius: 99px;
 }
 
+.shipping{
+    font-size: 20px;
+    font-weight: 300;
+    color: #0d2a54;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    line-height: 1.2;
+}
+
+.shipping-top{
+    border-style: solid;
+    border-width: 1px;
+    border-color: #d8d8d8;
+    padding: 1.25rem;
+    background: #f2f2f2;
+    color: #333;
+}
+
+.shipping-card{
+    border: 0.5px solid #d8d8d8;
+}
+
+.shipping-card-top{
+    text-align: center;
+    margin-top: 40px;
+}
+
+.shipping-card-item{
+    display: flex;
+    margin: 40px 60px 40px 60px;
+}
+
+.shipping-card-item-image{
+    max-width: 100px;
+    max-height: 110px;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.shipping-card-item_row{
+    margin-left: 20px;
+}
+
+.shipping-card-item_row h2{
+    margin-bottom: 10px;
+}
+
 /*======================= MEDIA ===========================*/
 
 @media (min-width: 1330px) {
@@ -2867,8 +2913,8 @@ h2 {
   }
 
   .main-logo {
-    margin-right: 0;
-    margin-left: 9px;
+      margin-left: auto;
+      margin-right: auto;
   }
 
   .mobile-buter {
