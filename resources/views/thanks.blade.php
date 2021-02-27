@@ -6,6 +6,7 @@
     <div class="main-content">
         <thanks
             :order="{{ json_encode($order) }}"
+            :statuses="{{ json_encode($statuses) }}"
         ></thanks>
     </div>
 

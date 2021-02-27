@@ -2771,6 +2771,7 @@ h2 {
     padding: 1.25rem;
     background: #f2f2f2;
     color: #333;
+    font-weight: 500;
 }
 
 .shipping-card{
@@ -2800,6 +2801,168 @@ h2 {
 
 .shipping-card-item_row h2{
     margin-bottom: 10px;
+}
+.ready-section{
+    margin-top: 5rem;
+}
+
+.ready-section h1{
+    text-align: center;
+}
+
+.ready-section-check-image{
+    max-width: 80px;
+    max-height: 80px;
+}
+
+.ready-section-row{
+    display: flex;
+    justify-content: center;
+}
+
+.ready-section-item{
+    max-width: 450px;
+}
+
+.ready-section-item p{
+    margin-bottom: 15px;
+}
+
+.ready-section-item_arrow{
+    width: 1px;
+    border: 1px solid;
+    margin-left: 40px;
+    margin-right: 40px;
+    position: relative;
+}
+
+.ready-section-check{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.ready-section-check h2{
+    margin-top: 20px;
+}
+
+.ready-section-image_arrow-top{
+    width: 16px;
+    height: auto;
+    position: absolute;
+    top: -12px;
+    left: -8px;
+    transform: rotate(180deg);
+}
+
+.ready-section-image_arrow-bottom{
+    width: 16px;
+    height: auto;
+    position: absolute;
+    left: -8px;
+    bottom: -7px;
+}
+
+.shipping-card-item_buttons{
+    display: flex;
+    align-items: center;
+}
+
+.fedex-button, .ups-button{
+    height: 90px;
+    width: 200px;
+    border: 2px solid #e6e6fa;
+    background-color: #f0f8ff;
+    border-radius: 5px;
+    margin-right: 20px;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.fedex-button:hover, .ups-button:hover{
+    background-color: #f0ffff;
+}
+
+.fedex-button p, .ups-button p{
+    margin-bottom: 5px;
+}
+
+.shipping-card-item-image_fedex{
+    height: 24px;
+    width: auto;
+    margin-top: 20px;
+}
+
+.offer-info_card hr{
+    margin: 9px;
+}
+
+.shipping-card-item-image_ups{
+    height: 46px;
+    width: auto;
+    margin-top: 7px;
+}
+
+.offer-section, .contact-section{
+    min-width: 50%;
+}
+
+.offer-section{
+    margin-right: 20px;
+}
+
+.offer-section_title{
+    border-style: solid;
+    border-width: 1px;
+    border-color: #d8d8d8;
+    padding: 9px;
+    background: #f2f2f2;
+    color: #333;
+    font-weight: 500;
+}
+
+.offer-info_card, .contact-section_card{
+    border: 0.5px solid #d8d8d8;
+}
+
+.order-info_row{
+    display: flex;
+    justify-content: center;
+}
+
+.offer-info_card p, .contact-section p{
+    font-size: 17px;
+    padding: 9px;
+    font-weight: 500;
+}
+
+.offer-section p span{
+    font-family: 'HeliosCondBold';
+}
+
+.contact-section_card p span{
+    background-color: #ebebeb;
+}
+
+.offer-info_card .order-search{
+    margin: 40px;
+}
+
+.thanks-search-title{
+    margin: 40px;
+    text-align: center;
+}
+
+.search-section, .orders-section{
+    margin-top: 40px;
+}
+
+.offer-info_card .checkout-content-step{
+    margin: 20px;
 }
 
 /*======================= MEDIA ===========================*/
@@ -3092,6 +3255,38 @@ h2 {
   h1 {
     font-size: 45px;
   }
+
+    .shipping-card-item{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 40px 20px 40px 20px;
+    }
+
+    .shipping-card-item_row h2 {
+        margin-top: 30px;
+    }
+
+    .ready-section-row{
+        flex-direction: column;
+    }
+
+    .ready-section-item_arrow{
+        display: none;
+    }
+
+    .shipping-card-item_buttons{
+        flex-direction: column;
+    }
+
+    .order-info_row{
+        flex-direction: column;
+    }
+
+    .offer-section{
+        margin-right: 0;
+        margin-bottom: 30px;
+    }
 
   .support-section {
     border-top: none;

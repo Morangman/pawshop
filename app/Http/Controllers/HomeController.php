@@ -208,6 +208,7 @@ class HomeController extends Controller
             'steps' => [],
             'relatedCategories' => $categories,
             'faqs' => new stdClass(),
+            'statuses' => Lang::get('admin/order.order_statuses'),
         ]);
     }
 
