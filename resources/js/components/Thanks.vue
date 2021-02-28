@@ -211,13 +211,11 @@
                             <div class="input-block width-25">
                                 <input v-model="order.address.postal_code" name="postal-code" autocomplete="on" type="text" placeholder="Postal Code*">
                             </div>
-                            <br>
-                            <a href="javascript:void(0)" v-on:click="tryAgainFedex" class="btn red-btn popup-open">Try Again</a>
-                            <br>
-                            <br>
                             <span v-if="addressError" class="address-error">
                                 <p>Please fill all required fields</p>
                             </span>
+                            <br>
+                            <a href="javascript:void(0)" v-on:click="tryAgainFedex" class="btn red-btn popup-open">Try Again</a>
                         </form>
                     </div>
                 </div>

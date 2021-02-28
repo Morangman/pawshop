@@ -45,6 +45,34 @@ class UpdateRequest extends FormRequest
                 'array',
                 'required',
             ],
+            'address.name' => [
+                'string',
+                'required',
+            ],
+            'address.phone' => [
+                'string',
+                'required',
+            ],
+            'address.address1' => [
+                'string',
+                'required',
+            ],
+            'address.address2' => [
+                'string',
+                'required',
+            ],
+            'address.postal_code' => [
+                'string',
+                'required',
+            ],
+            'address.city' => [
+                'string',
+                'required',
+            ],
+            'address.state' => [
+                'string',
+                'required',
+            ],
             'exp_service' => [
                 'string',
                 'nullable',

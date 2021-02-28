@@ -28,9 +28,9 @@
                                 type="text"
                                 v-model="model.address.name"
                                 class="form-control"
-                                :class="{ 'border-danger': errors.address }"
+                                :class="{ 'border-danger': errors['address.name'] }"
                             >
-                            <div v-for="(error, i) in errors.address"
+                            <div v-for="(error, i) in errors['address.name']"
                                  :key="`address__error__${i}`"
                                  class="text-danger error"
                             >
@@ -46,9 +46,9 @@
                                 type="text"
                                 v-model="model.address.phone"
                                 class="form-control"
-                                :class="{ 'border-danger': errors.address }"
+                                :class="{ 'border-danger': errors['address.phone'] }"
                             >
-                            <div v-for="(error, i) in errors.address"
+                            <div v-for="(error, i) in errors['address.phone']"
                                  :key="`address__error__${i}`"
                                  class="text-danger error"
                             >
@@ -85,9 +85,9 @@
                                 type="text"
                                 v-model="model.address.city"
                                 class="form-control"
-                                :class="{ 'border-danger': errors.address }"
+                                :class="{ 'border-danger': errors['address.city'] }"
                             >
-                            <div v-for="(error, i) in errors.address"
+                            <div v-for="(error, i) in errors['address.city']"
                                  :key="`address__error__${i}`"
                                  class="text-danger error"
                             >
@@ -107,9 +107,9 @@
                                 type="text"
                                 v-model="model.address.state"
                                 class="form-control"
-                                :class="{ 'border-danger': errors.address }"
+                                :class="{ 'border-danger': errors['address.state'] }"
                             >
-                            <div v-for="(error, i) in errors.address"
+                            <div v-for="(error, i) in errors['address.state']"
                                  :key="`address__error__${i}`"
                                  class="text-danger error"
                             >
@@ -125,9 +125,9 @@
                                 type="text"
                                 v-model="model.address.postal_code"
                                 class="form-control"
-                                :class="{ 'border-danger': errors.address }"
+                                :class="{ 'border-danger': errors['address.postal_code'] }"
                             >
-                            <div v-for="(error, i) in errors.address"
+                            <div v-for="(error, i) in errors['address.postal_code']"
                                  :key="`address__error__${i}`"
                                  class="text-danger error"
                             >
@@ -146,9 +146,9 @@
                                 type="text"
                                 v-model="model.address.address1"
                                 class="form-control"
-                                :class="{ 'border-danger': errors.address }"
+                                :class="{ 'border-danger': errors['address.address1'] }"
                             >
-                            <div v-for="(error, i) in errors.address"
+                            <div v-for="(error, i) in errors['address.address1']"
                                  :key="`address__error__${i}`"
                                  class="text-danger error"
                             >
@@ -164,9 +164,9 @@
                                 type="text"
                                 v-model="model.address.address2"
                                 class="form-control"
-                                :class="{ 'border-danger': errors.address }"
+                                :class="{ 'border-danger':  errors['address.address2'] }"
                             >
-                            <div v-for="(error, i) in errors.address"
+                            <div v-for="(error, i) in errors['address.address2']"
                                  :key="`address__error__${i}`"
                                  class="text-danger error"
                             >

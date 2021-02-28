@@ -8,20 +8,19 @@ use App\Category;
 use App\Comment;
 use App\Faq;
 use App\Http\Controllers\Traits\SettingTrait;
-use App\Http\Requests\Admin\Order\StoreRequest;
+use App\Http\Requests\Admin\Order\UpdateRequest;
+use App\Http\Requests\Client\Account\StoreRequest as UpdateAccountInfoRequest;
 use App\Http\Requests\Client\Callback\StoreRequest as CallbackRequest;
 use App\Http\Requests\Client\Order\StoreRequest as ClientOrderStoreRequest;
-use App\Http\Requests\Client\Account\StoreRequest as UpdateAccountInfoRequest;
 use App\Notifications\CommentNotification;
 use App\Notifications\ContactNotification;
 use App\Order;
+use App\Services\FedexService;
 use App\Setting;
 use App\Tip;
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -31,7 +30,6 @@ use Illuminate\Support\Facades\View;
 use Lang;
 use Session;
 use stdClass;
-use App\Services\FedexService;
 
 /**
  * Class HomeController
@@ -262,12 +260,12 @@ class HomeController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\Client\Order\StoreRequest $request
+     * @param \App\Http\Requests\Admin\Order\UpdateRequest $request
      * @param \App\Order $order
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateOrderAddress(StoreRequest $request, Order $order): JsonResponse
+    public function updateOrderAddress(UpdateRequest $request, Order $order): JsonResponse
     {
         $order->update($request->all());
 
