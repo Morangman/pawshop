@@ -3332,6 +3332,25 @@ h2 {
     font-size: 45px;
   }
 
+    #popup1{
+        height: 1000px;
+        z-index: 9999999;
+    }
+
+    #popup1 .popup-address{
+        height: 1000px;
+    }
+
+    #popup1 .popup-data{
+        height: 1000px;
+        overflow: auto;
+    }
+
+    #popup1 .content{
+        height: 1000px;
+        max-height: max-content;
+    }
+
     .shipping-card-item{
         flex-direction: column;
         justify-content: center;

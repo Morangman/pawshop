@@ -181,43 +181,45 @@
         </div>
         <div v-if="fedexError && isPopupOpen" id="popup1" class="overlay-address" style="display: block!important;">
             <div class="popup-address">
-                <h2>Address Error</h2>
-                <p>Whoops, it appears there was an issue generating your free shipping label. Try double checking your shipping address; if your address is correct and a label won't generate, contact our support team and we'll send you a label right away!</p>
-                <a v-on:click="fedexError = false" class="close" href="#">&times;</a>
-                <div class="content">
-                    <form name="contactform" class="simple-form popup-form" autocomplete="on">
-                        <div class="input-block width-50">
-                            <input v-model="order.address.name" name="name" autocomplete="on" type="text" placeholder="First and Last Name*">
-                        </div>
-                        <div class="input-block width-50">
-                            <input v-model="order.address.phone" name="tel" autocomplete="on" type="tel" placeholder="Phone*">
-                        </div>
-                        <div class="input-block width-50">
-                            <input v-model="order.address.address1" name="address-line1" autocomplete="on" type="text" placeholder="Adress 1*">
-                        </div>
-                        <div class="input-block width-50">
-                            <input v-model="order.address.address2" name="address-line2" autocomplete="on" type="text" placeholder="Adress 2">
-                        </div>
-                        <div class="input-block width-50">
-                            <input v-model="order.address.city" name="country-name" autocomplete="on" type="text" placeholder="City*">
-                        </div>
-                        <div class="input-block width-25">
-                            <select name="state" autocomplete="on" type="text" v-model="order.address.state">
-                                <option :value="null">State*</option>
-                                <option v-for="(state, i) in states" :key="`state_${i}`" :value="i">{{ state }}</option>
-                            </select>
-                        </div>
-                        <div class="input-block width-25">
-                            <input v-model="order.address.postal_code" name="postal-code" autocomplete="on" type="text" placeholder="Postal Code*">
-                        </div>
-                        <br>
-                        <a href="javascript:void(0)" v-on:click="tryAgainFedex" class="btn red-btn popup-open">Try Again</a>
-                        <br>
-                        <br>
-                        <span v-if="addressError" class="address-error">
-                            <p>Please fill all required fields</p>
-                        </span>
-                    </form>
+                <div class="popup-data">
+                    <h2>Address Error</h2>
+                    <p>Whoops, it appears there was an issue generating your free shipping label. Try double checking your shipping address; if your address is correct and a label won't generate, contact our support team and we'll send you a label right away!</p>
+                    <a v-on:click="fedexError = false" class="close" href="#">&times;</a>
+                    <div class="content">
+                        <form name="contactform" class="simple-form popup-form" autocomplete="on">
+                            <div class="input-block width-50">
+                                <input v-model="order.address.name" name="name" autocomplete="on" type="text" placeholder="First and Last Name*">
+                            </div>
+                            <div class="input-block width-50">
+                                <input v-model="order.address.phone" name="tel" autocomplete="on" type="tel" placeholder="Phone*">
+                            </div>
+                            <div class="input-block width-50">
+                                <input v-model="order.address.address1" name="address-line1" autocomplete="on" type="text" placeholder="Adress 1*">
+                            </div>
+                            <div class="input-block width-50">
+                                <input v-model="order.address.address2" name="address-line2" autocomplete="on" type="text" placeholder="Adress 2">
+                            </div>
+                            <div class="input-block width-50">
+                                <input v-model="order.address.city" name="country-name" autocomplete="on" type="text" placeholder="City*">
+                            </div>
+                            <div class="input-block width-25">
+                                <select name="state" autocomplete="on" type="text" v-model="order.address.state">
+                                    <option :value="null">State*</option>
+                                    <option v-for="(state, i) in states" :key="`state_${i}`" :value="i">{{ state }}</option>
+                                </select>
+                            </div>
+                            <div class="input-block width-25">
+                                <input v-model="order.address.postal_code" name="postal-code" autocomplete="on" type="text" placeholder="Postal Code*">
+                            </div>
+                            <br>
+                            <a href="javascript:void(0)" v-on:click="tryAgainFedex" class="btn red-btn popup-open">Try Again</a>
+                            <br>
+                            <br>
+                            <span v-if="addressError" class="address-error">
+                                <p>Please fill all required fields</p>
+                            </span>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
