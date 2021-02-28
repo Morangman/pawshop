@@ -38,7 +38,7 @@
                                 <h2>Shipping Information</h2>
                                 <p class="shipping-card-item_row-text">Once your phone is packed nicely you can add the correct shipping label. Be sure the barcode is flat and legible to ensure your package is not delayed. You can drop off your package at the chosen shipping carrier. Your trade-in offer is guaranteed for 14 days, so be sure to ship within that time frame.</p>
                                 <div class="shipping-card-item_buttons">
-                                    <a href="#" class="fedex-button">
+                                    <a href="#" v-on:click="getFedexLable" class="fedex-button">
                                         <img src="../../client/images/fedex-logo.svg" class="shipping-card-item-image_fedex">
                                         <p>Print Label</p>
                                     </a>
@@ -178,6 +178,48 @@
                 </div>
             </div>
         </div>
+        <div v-if="fedexError && isPopupOpen" id="popup1" class="overlay-address" style="display: block!important;">
+            <div class="popup-address">
+                <h2>Address Error</h2>
+                <p>Whoops, it appears there was an issue generating your free shipping label. Try double checking your shipping address; if your address is correct and a label won't generate, contact our support team and we'll send you a label right away!</p>
+                <a v-on:click="fedexError = false" class="close" href="#">&times;</a>
+                <div class="content">
+                    <form name="contactform" class="simple-form popup-form" autocomplete="on">
+                        <div class="input-block width-50">
+                            <input v-model="order.address.name" name="name" autocomplete="on" type="text" placeholder="First and Last Name*">
+                        </div>
+                        <div class="input-block width-50">
+                            <input v-model="order.address.phone" name="tel" autocomplete="on" type="tel" placeholder="Phone*">
+                        </div>
+                        <div class="input-block width-50">
+                            <input v-model="order.address.address1" name="address-line1" autocomplete="on" type="text" placeholder="Adress 1*">
+                        </div>
+                        <div class="input-block width-50">
+                            <input v-model="order.address.address2" name="address-line2" autocomplete="on" type="text" placeholder="Adress 2">
+                        </div>
+                        <div class="input-block width-50">
+                            <input v-model="order.address.city" name="country-name" autocomplete="on" type="text" placeholder="City*">
+                        </div>
+                        <div class="input-block width-25">
+                            <select name="state" autocomplete="on" type="text" v-model="order.address.state">
+                                <option :value="null">State*</option>
+                                <option v-for="(state, i) in states" :key="`state_${i}`" :value="i">{{ state }}</option>
+                            </select>
+                        </div>
+                        <div class="input-block width-25">
+                            <input v-model="order.address.postal_code" name="postal-code" autocomplete="on" type="text" placeholder="Postal Code*">
+                        </div>
+                        <br>
+                        <a href="javascript:void(0)" v-on:click="tryAgainFedex" class="btn red-btn popup-open">Try Again</a>
+                        <br>
+                        <br>
+                        <span v-if="addressError" class="address-error">
+                            <p>Please fill all required fields</p>
+                        </span>
+                    </form>
+                </div>
+            </div>
+        </div>
     </section>
 </template>
 
@@ -197,12 +239,19 @@
                 type: Object,
                 required: true,
             },
+            states: {
+                type: Object,
+                required: true,
+            },
         },
 
         data() {
             return {
                 name: null,
                 searchDevices: {},
+                fedexError: false,
+                addressError: false,
+                isPopupOpen: false,
             };
         },
 
@@ -218,6 +267,64 @@
                     console.log(errors);
                 });
             },
+
+            getFedexLable() {
+                this.addressError = false;
+                this.isPopupOpen = false;
+
+                axios.get(
+                    Router.route('fedex-label', { order: this.order.id }),
+                ).then((data) => {
+                    let win = window.open(data.data.url, '_blank');
+                    win.focus();
+
+                    this.fedexError = false;
+                    this.addressError = false;
+                }).catch(({ response: { data: { errors } } }) => {
+                    this.fedexError = true;
+                    this.isPopupOpen = true;
+                });
+            },
+
+            tryAgainFedex(){
+                this.addressError = false;
+                this.isPopupOpen = false;
+
+                if (
+                    this.order.address.name &&
+                    this.order.address.phone &&
+                    this.order.address.postal_code &&
+                    this.order.address.address1 &&
+                    this.order.address.city &&
+                    this.order.address.state
+                )
+                {
+                    this.formData = new FormData();
+                    this.formData.set('_method', 'PATCH');
+                    this.collectFormData(this.order);
+
+                    axios.post(
+                        Router.route('update-order', { order: this.order.id }),
+                        this.formData,
+                        {
+                            headers: {
+                                'Content-Type': 'multipart/form-data',
+                            },
+                        },
+                    ).then((data) => {
+                        let win = window.open(data.data.url, '_blank');
+                        win.focus();
+
+                        this.fedexError = false;
+                        this.addressError = false;
+                    }).catch(({ response: { data: { errors } } }) => {
+                        this.fedexError = true;
+                        this.isPopupOpen = true;
+                    });
+                } else {
+                    this.addressError = true;
+                }
+            }
         },
 
         created(){

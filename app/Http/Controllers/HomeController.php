@@ -18,12 +18,15 @@ use App\Order;
 use App\Setting;
 use App\Tip;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Lang;
 use Session;
@@ -46,9 +49,6 @@ class HomeController extends Controller
      */
     public function index(): ViewContract
     {
-//        $fedexService = new FedexService();
-//        $fedexService->ship();
-
         $categories = Category::query()
             ->where('is_hidden', false)
             ->whereNull('custom_text')
@@ -209,6 +209,7 @@ class HomeController extends Controller
             'relatedCategories' => $categories,
             'faqs' => new stdClass(),
             'statuses' => Lang::get('admin/order.order_statuses'),
+            'states' => Lang::get('states'),
         ]);
     }
 
@@ -261,6 +262,29 @@ class HomeController extends Controller
     }
 
     /**
+     * @param \App\Http\Requests\Client\Order\StoreRequest $request
+     * @param \App\Order $order
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateOrderAddress(StoreRequest $request, Order $order): JsonResponse
+    {
+        $order->update($request->all());
+
+        $fedexService = new FedexService();
+
+        $pdf = $fedexService->ship($order);
+
+        if ($pdf === []) {
+            return $this->json()->badRequest();
+        } else {
+            Storage::disk('media')->put("pdf/fedex/{$order->getKey()}/label.pdf", $pdf);
+
+            return $this->json()->ok(['url' => Config::get('app.url')."/media/pdf/fedex/{$order->getKey()}/label.pdf"]);
+        }
+    }
+
+    /**
      * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\JsonResponse
@@ -282,6 +306,26 @@ class HomeController extends Controller
             ->get();
 
         return $this->json()->ok($categories);
+    }
+
+    /**
+     * @param \App\Order $order
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getFedexLabel(Order $order): JsonResponse
+    {
+        $fedexService = new FedexService();
+
+        $pdf = $fedexService->ship($order);
+
+        if ($pdf === []) {
+            return $this->json()->badRequest();
+        } else {
+            Storage::disk('media')->put("pdf/fedex/{$order->getKey()}/label.pdf", $pdf);
+
+            return $this->json()->ok(['url' => Config::get('app.url')."/media/pdf/fedex/{$order->getKey()}/label.pdf"]);
+        }
     }
 
     /**

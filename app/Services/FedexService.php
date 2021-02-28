@@ -4,13 +4,13 @@ declare(strict_types = 1);
 
 namespace App\Services;
 
+use App\Order;
 use FedEx\ShipService;
 use FedEx\ShipService\ComplexType;
 use FedEx\ShipService\SimpleType;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
-use Spatie\PdfToImage\Pdf;
 
 /**
  * Class FedexService
@@ -40,7 +40,7 @@ class FedexService
     protected $meterNumber;
 
     /**
-     * MGAutoService constructor.
+     * FedexService constructor.
      *
      * @throws \InvalidArgumentException
      */
@@ -54,7 +54,13 @@ class FedexService
         $this->meterNumber = Arr::get($config, 'meter_number');
     }
 
-    public function ship(){
+    /**
+     * @param \App\Order $order
+     *
+     * @return array|string
+     */
+    public function ship(Order $order)
+    {
         $userCredential = new ComplexType\WebAuthenticationCredential();
         $userCredential
             ->setKey($this->key)
@@ -77,18 +83,17 @@ class FedexService
 
         $shipperAddress = new ComplexType\Address();
         $shipperAddress
-            ->setStreetLines(['Address Line 1'])
-            ->setCity('Austin')
-            ->setStateOrProvinceCode('TX')
-            ->setPostalCode('73301')
+            ->setStreetLines([$order->getAttribute('address')['address1'], $order->getAttribute('address')['address2']])
+            ->setCity($order->getAttribute('address')['city'])
+            ->setStateOrProvinceCode(str_replace('string:', '', $order->getAttribute('address')['state']))
+            ->setPostalCode($order->getAttribute('address')['postal_code'])
             ->setCountryCode('US');
 
         $shipperContact = new ComplexType\Contact();
         $shipperContact
-            ->setCompanyName('Company Name')
-            ->setEMailAddress('test@example.com')
-            ->setPersonName('Person Name')
-            ->setPhoneNumber(('123-123-1234'));
+            ->setEMailAddress($order->getAttribute('user_email'))
+            ->setPersonName($order->getAttribute('address')['name'])
+            ->setPhoneNumber(($order->getAttribute('address')['phone']));
 
         $shipper = new ComplexType\Party();
         $shipper
@@ -168,14 +173,21 @@ class FedexService
         //$shipService->getSoapClient()->__setLocation('https://ws.fedex.com:443/web-services/ship');
         $result = $shipService->getProcessShipmentReply($processShipmentRequest);
 
-        var_dump($result->toArray());
+        $arrayResult = $result->toArray();
+
+        //var_dump($result->toArray());
         // Save .pdf label
         //file_put_contents('/path/to/label.pdf', $result->CompletedShipmentDetail->CompletedPackageDetails[0]->Label->Parts[0]->Image);
 
         //Storage::put('public/pdf/invoice.pdf', $result->CompletedShipmentDetail->CompletedPackageDetails[0]->Label->Parts[0]->Image);
 
-        Storage::put('public/pdf/info.json', json_encode($result->toArray(), JSON_PRETTY_PRINT));
+        if ($arrayResult['HighestSeverity'] === 'SUCCESS') {
+            //Storage::put('public/pdf/info.json', json_encode($result->toArray(), JSON_PRETTY_PRINT));
+            //var_dump($result->CompletedShipmentDetail->CompletedPackageDetails[0]->Label->Parts[0]->Image);
 
-        //var_dump($result->CompletedShipmentDetail->CompletedPackageDetails[0]->Label->Parts[0]->Image);
+            return $result->CompletedShipmentDetail->CompletedPackageDetails[0]->Label->Parts[0]->Image;
+        } else {
+            return [];
+        }
     }
 }

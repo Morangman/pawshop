@@ -2965,6 +2965,77 @@ h2 {
     margin: 20px;
 }
 
+
+.overlay-address {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    transition: opacity 500ms;
+    z-index: 99;
+}
+.overlay-address:target {
+    visibility: visible;
+    opacity: 1;
+}
+
+.popup-address {
+    margin: 70px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    width: 600px;
+    position: relative;
+    transition: all .1s ease-in-out;
+}
+
+.popup-address .simple-form{
+    text-align: center;
+}
+
+.popup-address h2 {
+    text-align: center;
+}
+
+.popup-address p{
+    text-align: center;
+    font-size: 17px;
+}
+
+.popup-address .close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    transition: all 200ms;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+}
+.popup-address .close:hover {
+    color: #06D85F;
+}
+.popup-address .content {
+    max-height: 30%;
+    overflow: auto;
+}
+
+.address-error{
+    color: #ff0000;
+}
+
+@media screen and (max-width: 700px){
+    .box{
+        width: 100%;
+        height: 100%;
+    }
+    .popup-address{
+        width: 100%;
+    }
+}
+
 /*======================= MEDIA ===========================*/
 
 @media (min-width: 1330px) {

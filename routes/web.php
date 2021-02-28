@@ -35,6 +35,8 @@ Route::get('/get-category/{category}', 'HomeController@getByCategory')->name('ge
 
 Route::get('/order/{order}/thanks', 'HomeController@thanks')->name('thanks');
 
+Route::get('/{order}/fedex-label', 'HomeController@getFedexLabel')->name('fedex-label');
+
 Route::get('/redirect-google', 'Auth\LoginController@redirectToGoogleProvider')->name('redirect-google');
 
 Route::get('/redirect-facebook', 'Auth\LoginController@redirectToFacebookProvider')->name('redirect-facebook');
@@ -53,6 +55,12 @@ Route::patch('/update-account/{user}', [
     'middleware' => 'auth',
     'as' => 'update-account',
     'uses' => 'HomeController@updateAccountInfo',
+]);
+
+Route::patch('/update-order/{order}', [
+    'middleware' => 'auth',
+    'as' => 'update-order',
+    'uses' => 'HomeController@updateOrderAddress',
 ]);
 
 Route::group([

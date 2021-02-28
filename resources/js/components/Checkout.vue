@@ -523,14 +523,14 @@
                                 'Content-Type': 'multipart/form-data',
                             },
                         },
-                    ).then(() => {
+                    ).then((data) => {
                         let orders = {
                             order: []
                         };
 
                         localStorage.setItem("orders", JSON.stringify(orders));
 
-                        location.href = Router.route('account', {tab: 'trade'});
+                        location.href = Router.route('thanks', {order: data.data.order_id});
                     }).catch(({ response: { data: { errors } } }) => {
                         this.errors = errors;
                     });
