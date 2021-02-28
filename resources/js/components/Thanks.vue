@@ -38,16 +38,15 @@
                                 <h2>Shipping Information</h2>
                                 <p class="shipping-card-item_row-text">Once your phone is packed nicely you can add the correct shipping label. Be sure the barcode is flat and legible to ensure your package is not delayed. You can drop off your package at the chosen shipping carrier. Your trade-in offer is guaranteed for 14 days, so be sure to ship within that time frame.</p>
                                 <div class="shipping-card-item_buttons">
-                                    <a href="javascript:void(0)" v-on:click="getFedexLable" class="fedex-button">
+                                    <a  v-if="!fedexPdfUrl" href="javascript:void(0)" v-on:click="getFedexLable" class="fedex-button">
                                         <img src="../../client/images/fedex-logo.svg" class="shipping-card-item-image_fedex">
                                         <p>Print Label</p>
                                     </a>
+                                    <a v-if="fedexPdfUrl" class="btn btn-info fedex-pdf-label" :href="fedexPdfUrl" target="_blank">Open PDF</a>
                                     <a href="#" class="ups-button">
                                         <img src="../../client/images/ups-logo.svg" class="shipping-card-item-image_ups">
                                         <p>Print Label</p>
                                     </a>
-
-                                    <a v-if="fedexPdfUrl" class="btn btn-info" :href="fedexPdfUrl" target="_blank">Open PDF</a>
                                 </div>
                             </div>
                         </div>
@@ -316,7 +315,7 @@
                             },
                         },
                     ).then((data) => {
-                        window.open(URL.createObjectURL(data.data.url), '_blank');
+                        window.open(data.data.url, '_blank');
 
                         this.fedexPdfUrl = data.data.url;
 

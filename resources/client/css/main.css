@@ -2883,6 +2883,10 @@ h2 {
     justify-content: space-between;
 }
 
+.fedex-pdf-label{
+    margin-right: 20px;
+}
+
 .fedex-button:hover, .ups-button:hover{
     background-color: #f0ffff;
 }
@@ -3363,6 +3367,10 @@ h2 {
     .offer-section{
         margin-right: 0;
         margin-bottom: 30px;
+    }
+
+    .fedex-pdf-label{
+        margin-right: 0;
     }
 
   .support-section {
