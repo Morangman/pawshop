@@ -328,6 +328,8 @@
                         this.isPopupOpen = true;
                     });
                 } else {
+                    this.isPopupOpen = true;
+                    this.fedexError = true;
                     this.addressError = true;
                 }
             }
