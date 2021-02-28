@@ -2366,15 +2366,6 @@ h2 {
     margin-left: 15px;
 }
 
-.input-block .row{
-    position: relative;
-}
-
-.checkbox-absolute{
-    display: none;
-    position: absolute;
-}
-
 .add-address-btn{
     margin-top: 20px;
 }
@@ -3364,10 +3355,6 @@ h2 {
     #popup1 .content{
         height: 1000px;
         max-height: max-content;
-    }
-
-    .checkbox-absolute{
-        display: block;
     }
 
     .shipping-card-item{
