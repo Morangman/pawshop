@@ -113,13 +113,18 @@
                                                                         <input v-model="model.addresses[index].postal_code" name="postal-code" autocomplete="on" type="text" placeholder="Postal Code*">
                                                                     </div>
                                                                     <div class="input-block">
-                                                                        <b-form-checkbox
-                                                                            v-model="model.addresses[index].is_default"
-                                                                            value="1"
-                                                                            unchecked-value="0"
-                                                                        >
-                                                                            Default Address
-                                                                        </b-form-checkbox>
+                                                                        <div class="row">
+                                                                            <div class="checkbox-absolute custom-control custom-checkbox">
+                                                                                <input type="checkbox" :checked="model.addresses[index].is_default === '1'" name="is_default">
+                                                                            </div>
+                                                                            <b-form-checkbox
+                                                                                v-model="model.addresses[index].is_default"
+                                                                                value="1"
+                                                                                unchecked-value="0"
+                                                                            >
+                                                                                Default Address
+                                                                            </b-form-checkbox>
+                                                                        </div>
                                                                     </div>
                                                                 </form>
                                                             </div>

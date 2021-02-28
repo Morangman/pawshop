@@ -2363,11 +2363,16 @@ h2 {
     width: auto!important;
     height: auto!important;
     border-radius: 0!important;
-    -ms-transform: scale(2); /* IE */
-    -moz-transform: scale(2); /* FF */
-    -webkit-transform: scale(2); /* Safari and Chrome */
-    -o-transform: scale(2); /* Opera */
-    margin: 12px!important;
+    margin-left: 15px;
+}
+
+.input-block .row{
+    position: relative;
+}
+
+.checkbox-absolute{
+    display: none;
+    position: absolute;
 }
 
 .add-address-btn{
@@ -3359,6 +3364,10 @@ h2 {
     #popup1 .content{
         height: 1000px;
         max-height: max-content;
+    }
+
+    .checkbox-absolute{
+        display: block;
     }
 
     .shipping-card-item{
