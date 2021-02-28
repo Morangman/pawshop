@@ -293,17 +293,7 @@
 
             tryAgainFedex(){
                 this.addressError = false;
-                this.isPopupOpen = false;
 
-                if (
-                    this.order.address.name &&
-                    this.order.address.phone &&
-                    this.order.address.postal_code &&
-                    this.order.address.address1 &&
-                    this.order.address.city &&
-                    this.order.address.state
-                )
-                {
                     this.formData = new FormData();
                     this.formData.set('_method', 'PATCH');
                     this.collectFormData(this.order);
@@ -327,11 +317,6 @@
                         this.fedexError = true;
                         this.isPopupOpen = true;
                     });
-                } else {
-                    this.isPopupOpen = true;
-                    this.fedexError = true;
-                    this.addressError = true;
-                }
             }
         },
 
