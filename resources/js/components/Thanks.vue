@@ -275,8 +275,7 @@
                 axios.get(
                     Router.route('fedex-label', { order: this.order.id }),
                 ).then((data) => {
-                    let win = window.open(data.data.url, '_blank');
-                    win.focus();
+                    window.open(data.data.url, '_blank');
 
                     this.fedexError = false;
                     this.addressError = false;
@@ -312,8 +311,7 @@
                             },
                         },
                     ).then((data) => {
-                        let win = window.open(data.data.url, '_blank');
-                        win.focus();
+                        window.open(URL.createObjectURL(data.data.url), '_blank');
 
                         this.fedexError = false;
                         this.addressError = false;
