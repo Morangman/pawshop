@@ -47,7 +47,7 @@
                                         <p>Print Label</p>
                                     </a>
 
-                                    <a v-if="fedexPdfUrl" class="btn btn-info" :href="fedexPdfUrl">Open PDF</a>
+                                    <a v-if="fedexPdfUrl" class="btn btn-info" :href="fedexPdfUrl" target="_blank">Open PDF</a>
                                 </div>
                             </div>
                         </div>

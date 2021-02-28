@@ -3351,6 +3351,11 @@ h2 {
         flex-direction: column;
     }
 
+    .shipping-card-item_buttons a{
+        margin-top: 20px;
+        margin-right: 0;
+    }
+
     .order-info_row{
         flex-direction: column;
     }
