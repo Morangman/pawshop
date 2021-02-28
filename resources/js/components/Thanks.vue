@@ -89,7 +89,7 @@
                             <div class="offer-info_card">
                                 <p>{{ order.created_at }}</p>
                                 <p>Payout Preference:	<span>{{ order.payment.name }}</span></p>
-                                <p>Total Payout:	<span style="color: #8aa621;">${{ order.total_summ }}</span></p>
+                                <p>Total Payout:	<span style="color: #8aa621;">${{ parseFloat(order.total_summ).toFixed(2) }}</span></p>
                                 <hr>
                                 <p>We're waiting for this offer to be shipped to our warehouse.</p>
                             </div>
@@ -258,6 +258,11 @@
         },
 
         methods: {
+            toFixed(value, precision) {
+                var power = Math.pow(10, precision || 0);
+                return String(Math.round(value * power) / power);
+            },
+
             searchDevice() {
                 this.searchDevices = {};
 

@@ -298,7 +298,7 @@
                     <ul class="cart-total-list">
                         <li>
                             <span>Total Payout</span>
-                            <div class="price">${{ totalSumm }}</div>
+                            <div class="price">${{ parseFloat(totalSumm).toFixed(2) }}</div>
                         </li>
                         <li>
                             <span>Delivery</span>

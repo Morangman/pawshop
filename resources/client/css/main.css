@@ -2363,6 +2363,11 @@ h2 {
     width: auto!important;
     height: auto!important;
     border-radius: 0!important;
+    -ms-transform: scale(2); /* IE */
+    -moz-transform: scale(2); /* FF */
+    -webkit-transform: scale(2); /* Safari and Chrome */
+    -o-transform: scale(2); /* Opera */
+    margin: 12px!important;
 }
 
 .add-address-btn{
@@ -3158,7 +3163,12 @@ h2 {
 
   .mobile-buter {
     display: block;
-    margin-right: auto;
+  }
+
+  .header-search-popup{
+      color: #0d2a54;
+      text-align: left;
+      background-color: #ffffff!important;
   }
 
   .header-close {

@@ -242,7 +242,7 @@
                             {{ error }}
                         </div>
                         <label>
-                            <strong>{{ $t('admin.order.form.summ') }}: <span v-if="model.id">{{ model.total_summ }}</span></strong>
+                            <strong>{{ $t('admin.order.form.summ') }}: <span v-if="model.id">{{ parseFloat(model.total_summ).toFixed(2) }}</span></strong>
                         </label>
                         <div class="text-right">
                             <button

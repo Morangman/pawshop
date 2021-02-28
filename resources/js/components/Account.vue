@@ -178,7 +178,7 @@
                                                 <p>{{ statuses[userOrder.ordered_status] }}</p>
                                             </td>
                                             <td>
-                                                <div class="price">${{ order.total }}</div>
+                                                <div class="price">${{ parseFloat(userOrder.total_summ).toFixed(2) }}</div>
                                             </td>
                                         </tr>
                                     </tbody>
