@@ -234,6 +234,8 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <p><span v-for="(step, key) in product.steps">{{ key === Object.keys(product.steps).pop() ? step.name :  step.name + ', ' }}</span></p>
                         </div>
                         <div v-for="(error, i) in errors.orders"
                              :key="`orders_product__error__${i}`"
@@ -244,12 +246,25 @@
                         <label>
                             <strong>{{ $t('admin.order.form.summ') }}: <span v-if="model.id">{{ parseFloat(model.total_summ).toFixed(2) }}</span></strong>
                         </label>
-                        <div class="text-right">
-                            <button
-                                v-on:click="addOrderedProduct"
-                                class="btn btn-primary margin-top-10"
-                            >{{ $t('common.word.add') }}</button>
-                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <strong>Payment method:</strong>
+                        </label>
+                        <p>{{ model.payment.name }}</p>
+                        <p>{{ model.payment.email }}</p>
+                    </div>
+                    <div class="form-group" v-if="model.exp_service">
+                        <label>
+                            <strong>Expedited Service (-20$):</strong>
+                        </label>
+                        <p>{{ model.exp_service }}</p>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <strong>Shipping insurance (-1%):</strong>
+                        </label>
+                        <p>{{ model.insurance }}</p>
                     </div>
                 </div>
             </div>
