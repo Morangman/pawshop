@@ -260,7 +260,7 @@
                         </label>
                         <p>{{ model.exp_service }}</p>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" v-if="model.insurance">
                         <label>
                             <strong>Shipping insurance (-1%):</strong>
                         </label>
