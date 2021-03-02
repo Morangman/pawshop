@@ -774,7 +774,7 @@ header {
 }
 
 .order-steps-list li {
-  width: calc(100% / 6);
+  width: 100%;
   margin-right: 3px;
   color: #e13d55;
   font-size: 14.5px;

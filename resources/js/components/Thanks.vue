@@ -43,10 +43,6 @@
                                         <p>Print Label</p>
                                     </a>
                                     <a v-if="fedexPdfUrl" class="btn btn-info fedex-pdf-label" :href="fedexPdfUrl" target="_blank">Open PDF</a>
-                                    <a href="#" class="ups-button">
-                                        <img src="../../client/images/ups-logo.svg" class="shipping-card-item-image_ups">
-                                        <p>Print Label</p>
-                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -97,14 +93,14 @@
                         <div class="contact-section">
                             <p class="offer-section_title">CONTACT INFORMATION</p>
                             <div class="contact-section_card">
-                                <p><span>{{ order.address.name }},</span></p>
+                                <p>{{ order.address.name }},</p>
                                 <p>{{ order.address.address1 }},</p>
                                 <p v-if="order.address.address2">{{ order.address.address2 }},</p>
                                 <p>{{ order.address.postal_code }},</p>
-                                <p>{{ order.address.state }},</p>
+                                <p>{{ states[order.address.state] }},</p>
                                 <p>{{ order.address.city }},</p>
-                                <p><span>{{ order.address.phone }},</span></p>
-                                <p><span>{{ order.user_email }}</span></p>
+                                <p>{{ order.address.phone }},</p>
+                                <p>{{ order.user_email }}</p>
                             </div>
                         </div>
                     </div>
@@ -164,7 +160,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <p>{{ statuses[order.ordered_status] }}</p>
+                                                <p style="color: #8aa621;">{{ statuses[order.ordered_status] }}</p>
                                             </td>
                                             <td>
                                                 <div class="price">${{ product.total }}</div>
