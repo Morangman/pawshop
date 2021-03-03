@@ -12,6 +12,11 @@ Route::get('all', [
     'uses' => 'OrderController@getAll',
 ]);
 
+Route::get('{order}/barcode', [
+    'as' => '.barcode',
+    'uses' => 'OrderController@barcode',
+]);
+
 Route::get('create', [
     'as' => '.create',
     'uses' => 'OrderController@create',

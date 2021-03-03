@@ -133,7 +133,7 @@ table {
 }
 
 body {
-  font-family: 'GothamPro', Arial, Tahoma, sans-serif;
+  font-family: ubuntu,helvetica neue,Helvetica,Roboto,Arial,sans-serif;
   background: #fff;
   font-size: 14px;
 }
@@ -2885,7 +2885,7 @@ h2 {
 }
 
 .fedex-pdf-label{
-    margin-right: 20px;
+    margin-top: 20px;
 }
 
 .fedex-button:hover, .ups-button:hover{

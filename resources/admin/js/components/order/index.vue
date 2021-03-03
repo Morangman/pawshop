@@ -23,6 +23,7 @@
                 </div>
                 <div class="col col-md-5">
                     <input
+                        id="searchOrder"
                         v-model="filters.search"
                         name="search"
                         type="text"

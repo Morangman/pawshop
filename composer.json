@@ -17,6 +17,7 @@
         "lord/laroute": "^2.5",
         "mcmatters/laravel-helpers": "^2.3",
         "mcmatters/laravel-roles": "dev-master",
+        "milon/barcode": "5.1",
         "spatie/laravel-medialibrary": "^7.19",
         "swiftmailer/swiftmailer": "^6.0"
     },

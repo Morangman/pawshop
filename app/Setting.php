@@ -29,6 +29,7 @@ class Setting extends Model implements HasMedia
      */
     protected $fillable = [
         'general_settings',
+        'terms',
         'code_insert',
     ];
 
@@ -37,6 +38,7 @@ class Setting extends Model implements HasMedia
      */
     protected $casts = [
         'general_settings' => 'array',
+        'terms' => 'string',
         'code_insert' => 'string',
     ];
 }

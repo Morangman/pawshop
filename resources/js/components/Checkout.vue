@@ -64,7 +64,7 @@
                                             <strong>{{ emailError }}</strong>
                                         </span>
                                     </div>
-                                    <button v-if="orderData.user_email" v-on:click="validateEmail" class="btn red-btn">Continue as Guest</button>
+                                    <a href="#" v-if="orderData.user_email" v-on:click="validateEmail" class="btn red-btn">Continue as Guest</a>
                                 </div>
                                 <div class="checkout-account">
                                     <a :href="$r('web.register')">Create an Account</a>
@@ -146,8 +146,8 @@
                             </div>
                         </div>
                         <div class="order-options-links">
-                            <button v-if="!this.user.id" v-on:click="backStep" class="btn gray-btn">Back</button>
-                            <button v-on:click="validatePayment" class="btn red-btn">Next step</button>
+                            <a href="#" v-if="!this.user.id" v-on:click="backStep" class="btn gray-btn">Back</a>
+                            <a href="#" v-on:click="validatePayment" class="btn red-btn">Next step</a>
                         </div>
                         <br>
                         <span v-if="paymentError" class="desc red-note">
@@ -221,8 +221,8 @@
                             </div>
                         </div>
                         <div class="order-options-links">
-                            <button v-on:click="backStep" class="btn gray-btn">Back</button>
-                            <button v-on:click="validateAddress" class="btn red-btn">Next step</button>
+                            <a href="#" v-on:click="backStep" class="btn gray-btn">Back</a>
+                            <a href="#" v-on:click="validateAddress" class="btn red-btn">Next step</a>
                         </div>
                     </div>
 
@@ -268,7 +268,7 @@
                                     <label class="checkbox-block">
                                         <input v-model="accept_terms" :checked="accept_terms === true" type="checkbox" name="Options-checkbox">
                                         <i></i>
-                                        <span>I accept the terms and conditions</span>
+                                        <span>I accept the <a :href="$r('terms')" target="_blank" style="text-decoration: revert; color: #0000FF;">terms and conditions</a></span>
                                     </label>
                                 </li>
                                 <br>
@@ -278,8 +278,8 @@
                             </ul>
                         </div>
                         <div class="order-options-links">
-                            <button v-on:click="backStep" class="btn gray-btn">Back</button>
-                            <button v-on:click="validateTerms" class="btn red-btn">Checkout</button>
+                            <a href="#" v-on:click="backStep" class="btn gray-btn">Back</a>
+                            <a href="#" v-on:click="validateTerms" class="btn red-btn">Checkout</a>
                         </div>
                     </div>
 

@@ -22,6 +22,7 @@ class SettingSeeder extends Seeder
                 "seo_title" => "Seo title",
                 "seo_keywords" => "Seo keywords"
             ],
+            'terms' => '',
             'code_insert' => '',
         ]);
     }

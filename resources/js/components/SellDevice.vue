@@ -277,9 +277,6 @@
 
                 this.selectedStep = this.steps[this.stepIndex];
 
-                let container = this.$el.querySelector("#step");
-                container.scrollTop = container.scrollHeight;
-
                 this.valuate();
             },
 

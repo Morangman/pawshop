@@ -3,6 +3,7 @@
         v-if="model"
         :model.sync="model"
         :products.sync="products"
+        :bcode.sync="bcode"
         :suspect.sync="suspect"
         :errors.sync="errors"
         @submit="update"
@@ -23,6 +24,10 @@
         props: {
             order: {
                 type: Object,
+                required: true,
+            },
+            bcode: {
+                type: String,
                 required: true,
             },
             products: {

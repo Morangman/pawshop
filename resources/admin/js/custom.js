@@ -13,4 +13,6 @@ $(document).ready(() => {
 
     // Dropdown.
     $('.dropdown-toggle').dropdown();
+
+    $('#searchOrder').focus();
 });

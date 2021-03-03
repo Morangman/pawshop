@@ -82,7 +82,7 @@ $(document).ready(function() {
 	    });
 	}
 
-	// Появление скрытого поля радиокнопки
+	// Выравнивание
 	$(".step-button").click(function(){
         document.getElementById("step").scrollIntoView(true);
         window.scrollBy(0, -70);

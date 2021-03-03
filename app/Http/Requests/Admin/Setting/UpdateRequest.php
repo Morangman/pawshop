@@ -33,6 +33,10 @@ class UpdateRequest extends FormRequest
                 'nullable',
                 'string',
             ],
+            'terms' => [
+                'nullable',
+                'string',
+            ],
         ];
     }
 }

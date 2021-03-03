@@ -38,6 +38,7 @@ class Order extends Model implements HasMedia
      */
     protected $fillable = [
         'user_id',
+        'tracking_number',
         'user_email',
         'orders',
         'total_summ',
@@ -55,6 +56,7 @@ class Order extends Model implements HasMedia
      */
     protected $casts = [
         'user_id' => 'int',
+        'tracking_number' => 'int',
         'user_email' => 'string',
         'orders' => 'array',
         'total_summ' => 'string',

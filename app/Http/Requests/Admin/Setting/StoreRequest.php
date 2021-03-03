@@ -29,6 +29,10 @@ class StoreRequest extends FormRequest
                 'nullable',
                 'string',
             ],
+            'terms' => [
+                'nullable',
+                'string',
+            ],
         ];
     }
 }

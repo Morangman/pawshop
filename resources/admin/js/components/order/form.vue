@@ -6,6 +6,20 @@
                     <strong v-if="suspect && suspect.length > 0" class="text-danger date-centered">
                         {{ $t('admin.order.form.suspect_ip') + ' ' + suspect.length + ' ' + $t('common.word.times') }}
                     </strong>
+                    <div class="form-group">
+                        <div id="barcode">
+                            <span v-html="bcode"></span>
+                            <p>{{ model.address.name + ', ' +  model.address.city + ', ' +  model.address.address1 }}</p>
+                        </div>
+                        <a
+                            type="submit"
+                            class="btn btn-primary"
+                            :href="$r('admin.order.barcode', {order: model.id})"
+                            target="_blank"
+                        >
+                            Print barcode
+                        </a>
+                    </div>
                     <div class="form-group" v-if="model.user_id">
                         <label>
                             <strong>{{ $t('admin.order.form.user') }}</strong>
@@ -266,6 +280,12 @@
                         </label>
                         <p>{{ model.insurance }}</p>
                     </div>
+                    <div class="form-group" v-if="model.tracking_number">
+                        <label>
+                            <strong>Fedex tracking number</strong>
+                        </label>
+                        <p>{{ model.tracking_number }}</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -379,6 +399,10 @@
         props: {
             model: {
                 type: Object,
+                required: true,
+            },
+            bcode: {
+                type: String,
                 required: true,
             },
             products: {

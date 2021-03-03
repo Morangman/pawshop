@@ -29,6 +29,10 @@ class UpdateRequest extends FormRequest
                 'nullable',
                 'integer',
             ],
+            'tracking_number' => [
+                'nullable',
+                'string',
+            ],
             'user_email' => [
                 'nullable',
                 'string',

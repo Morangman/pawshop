@@ -56,7 +56,7 @@
                     <ul class="cart-total-list">
                         <li>
                             <span>Total Payout</span>
-                            <div class="price">${{ totalSumm }}</div>
+                            <div class="price">${{ parseFloat(totalSumm).toFixed(2) }}</div>
                         </li>
                         <li>
                             <span>Delivery</span>
@@ -106,6 +106,8 @@
                 localStorage.setItem("orders", JSON.stringify(this.orders));
 
                 this.valuate();
+
+                location.reload();
             },
 
             minusQtn(index) {
@@ -118,6 +120,8 @@
                 localStorage.setItem("orders", JSON.stringify(this.orders));
 
                 this.valuate();
+
+                location.reload();
             },
 
             onChangeQtn(index) {
@@ -126,6 +130,8 @@
                 localStorage.setItem("orders", JSON.stringify(this.orders));
 
                 this.valuate();
+
+                location.reload();
             },
 
             valuate(){

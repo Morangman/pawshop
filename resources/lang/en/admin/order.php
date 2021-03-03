@@ -46,7 +46,7 @@ return [
         'title' => 'Orders',
         'header_btn' => 'Create order',
         'filters' => [
-            'search' => 'Search orders by typing one of these fields: name',
+            'search' => 'Search orders by typing one of these fields: name, id or tracking number',
         ],
         'table' => [
             'headers' => [

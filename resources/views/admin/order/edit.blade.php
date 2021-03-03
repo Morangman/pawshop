@@ -17,6 +17,7 @@
 @section('content')
     <order-edit
         :order="{{ $order }}"
+        :bcode="{{ json_encode($barcodeSrc, true) }}"
         :products="{{ json_encode($productByCategory, true) }}"
         :suspect="{{ json_encode($suspectIp, true) }}"
     ></order-edit>

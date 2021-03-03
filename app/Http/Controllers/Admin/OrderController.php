@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
+use Milon\Barcode\DNS1D;
 
 /**
  * Class OrderController
@@ -94,6 +95,9 @@ class OrderController extends Controller
      */
     public function edit(Order $order): ViewContract
     {
+        $d = new DNS1D();
+        $d->setStorPath(storage_path().'/');
+
         $categories = Category::query()
             ->where('is_hidden', false)
             ->whereNotNull('custom_text')
@@ -108,8 +112,25 @@ class OrderController extends Controller
                 'order' => $order,
                 'productByCategory' => $categories,
                 'suspectIp' => $suspectIp,
+                'barcodeSrc' => $d->getBarcodeHTML($order->getKey(), 'EAN13', 3.5, 100),
             ]
         );
+    }
+
+    /**
+     * @param \App\Order $order
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function barcode(Order $order): ViewContract
+    {
+        $d = new DNS1D();
+        $d->setStorPath(storage_path().'/');
+
+        return View::make('admin.order.barcode', [
+            'barcode' => $d->getBarcodeHTML($order->getKey(), 'EAN13', 3.5, 100),
+            'order' => $order,
+        ]);
     }
 
     /**
@@ -200,7 +221,9 @@ class OrderController extends Controller
                 function ($query, $search) {
                     $keyword = "%{$search}%";
 
-                    $query->where('address->name', 'like', $keyword);
+                    $query->where('address->name', 'like', $keyword)
+                        ->orWhere('id', 'like', $keyword)
+                        ->orWhere('tracking_number', 'like', $keyword);
                 }
             )
             ->when(

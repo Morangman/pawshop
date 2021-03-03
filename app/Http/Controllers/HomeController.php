@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Lang;
+use Milon\Barcode\DNS1D;
 use Session;
 use stdClass;
 
@@ -108,6 +109,27 @@ class HomeController extends Controller
             ->get();
 
         return View::make('support', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'category' => new stdClass(),
+            'steps' => [],
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
+        ]);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function terms(): ViewContract
+    {
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
+
+        return View::make('terms', [
             'settings' => $this->getSettings() ?? [],
             'categories' => $categories,
             'category' => new stdClass(),

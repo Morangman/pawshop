@@ -5,7 +5,7 @@
                 <img class="support-image" src="{{ asset('client/images/footer_girl.png') }}" alt="" />
                 <div class="support-block">
                     <h1>Still have questions?</h1>
-                    <div class="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim</div>
+                    <div class="text">Use this form to get answers.</div>
                     <a href="#contact-popup" class="btn red-btn popup-open" data-effect="mfp-zoom-in">Contact us <img src="{{ asset('client/images/white_arrow.png') }}" alt="" /></a>
                 </div>
             </div>
@@ -34,7 +34,7 @@
                     <img src="{{ asset('client/images/footer_logo.png') }}" alt="" />
                     <span>Rapid iPhone <i>Repair</i></span>
                 </a>
-                <div class="copyright">&copy; 2013-2020. All rights reserved. Rapid iPhone Repair.</div>
+                <div class="copyright">&copy; 2021-2022. All rights reserved.</div>
             </div>
             <div class="footer-menu">
                 <ul>

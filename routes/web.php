@@ -21,6 +21,8 @@ Route::get('/cart', 'HomeController@cart')->name('cart');
 
 Route::get('/support', 'HomeController@support')->name('support');
 
+Route::get('/terms', 'HomeController@terms')->name('terms');
+
 Route::get('/checkout', 'HomeController@checkout')->name('checkout');
 
 Route::get('/account', [

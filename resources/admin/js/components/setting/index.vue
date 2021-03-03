@@ -85,6 +85,18 @@
                     </div>
                     </div>
                 </b-tab>
+                <b-tab title="Terms and Conditions">
+                    <label>
+                        <h4>Terms and Conditions</h4>
+                    </label>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <vue-editor v-model="model.terms"></vue-editor>
+                            </div>
+                        </div>
+                    </div>
+                </b-tab>
                 <b-tab :title="$t('admin.setting.form.code_insert.title')">
                     <label>
                         <h4>{{ $t('admin.setting.form.code_insert.title') }}</h4>
@@ -143,12 +155,14 @@
 
 <script>
     import FormHelper from "../../mixins/form_helper";
+    import { VueEditor } from "vue2-editor";
 
     export default {
         mixins: [FormHelper],
 
         components: {
             editor: require('vue2-ace-editor'),
+            VueEditor
         },
 
         props: {
@@ -171,6 +185,7 @@
                         seo_keywords: null,
                         seo_image: null,
                     },
+                    terms: null,
                     code_insert: null,
                     is_seo_image_deleted: false,
                 },

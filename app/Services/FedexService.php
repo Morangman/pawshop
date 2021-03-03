@@ -185,6 +185,8 @@ class FedexService
             //Storage::put('public/pdf/info.json', json_encode($result->toArray(), JSON_PRETTY_PRINT));
             //var_dump($result->CompletedShipmentDetail->CompletedPackageDetails[0]->Label->Parts[0]->Image);
 
+            $order->update(['tracking_number' => (int)$arrayResult['CompletedShipmentDetail']['MasterTrackingId']['TrackingNumber'] ]);
+
             return $result->CompletedShipmentDetail->CompletedPackageDetails[0]->Label->Parts[0]->Image;
         } else {
             return [];
