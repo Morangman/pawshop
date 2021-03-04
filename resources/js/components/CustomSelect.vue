@@ -57,6 +57,8 @@
 
     .custom-select {
         position: relative;
+        border-radius: 90px;
+        border: 1px solid #DADADA;
         width: 100%;
         text-align: left;
         outline: none;
@@ -68,13 +70,11 @@
         position: relative;
         z-index: 2;
         background: #fff;
-        border: 1px solid #DADADA;
         padding-left: 1em;
         cursor: pointer;
         user-select: none;
         border-radius: 99px;
         height: 38px;
-        border: 1px solid #dadada;
         transition: all 0.3s ease-out;
     }
 

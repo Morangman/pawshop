@@ -3025,6 +3025,16 @@ h2 {
     color: #ff0000;
 }
 
+.invalid-feedback{
+    margin: 10px 0 10px 0;
+    color: #ff0000;
+}
+
+.input-error{
+    background-color: #fce4e4!important;
+    border: 1px solid #cc0033!important;
+}
+
 @media screen and (max-width: 700px){
     .box{
         width: 100%;
@@ -3292,7 +3302,7 @@ h2 {
   }
 
   .order-options-product {
-    width: 340px;
+    width: 50%;
   }
 
   .order-total-block {

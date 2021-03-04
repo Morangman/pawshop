@@ -22,9 +22,9 @@
                                                    value="{{ Request::old('name') }}"required/>
 
                                             @error('name')
-                                            <span class="invalid-feedback">
+                                            <div class="invalid-feedback">
                                                 <strong>{{ $message }}</strong>
-                                            </span>
+                                            </div>
                                             @enderror
                                         </div>
                                         <div class="input-block">
@@ -36,9 +36,9 @@
                                                    required/>
 
                                             @error('email')
-                                            <span class="invalid-feedback">
+                                            <div class="invalid-feedback">
                                                 <strong>{{ $message }}</strong>
-                                            </span>
+                                            </div>
                                             @enderror
                                         </div>
                                         <div class="input-block">
@@ -50,9 +50,9 @@
                                                    required/>
 
                                             @error('phone')
-                                            <span class="invalid-feedback">
+                                            <div class="invalid-feedback">
                                                 <strong>{{ $message }}</strong>
-                                            </span>
+                                            </div>
                                             @enderror
                                         </div>
                                         <div class="input-block">
@@ -65,9 +65,9 @@
                                                 required/>
 
                                             @error('password')
-                                            <span class="invalid-feedback">
+                                            <div class="invalid-feedback">
                                                 <strong>{{ $message }}</strong>
-                                            </span>
+                                            </div>
                                             @enderror
                                         </div>
                                         <div class="input-block">
@@ -80,9 +80,9 @@
                                                 required/>
 
                                             @error('password_confirmation')
-                                            <span class="invalid-feedback">
+                                            <div class="invalid-feedback">
                                                 <strong>{{ $message }}</strong>
-                                            </span>
+                                            </div>
                                             @enderror
                                         </div>
                                         <div class="password-forget">

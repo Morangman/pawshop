@@ -27,16 +27,16 @@
                                 <div class="checkout-customer">
                                     <h4>Customer login</h4>
                                     <div class="input-block">
-                                        <input v-model="email" type="email" placeholder="E-mail">
-                                        <span v-if="errors.email" v-for="error in errors.email" class="invalid-feedback">
+                                        <input v-model="email" :class="loginErrors.email ? 'input-error' : ''" type="email" placeholder="E-mail">
+                                        <div v-if="loginErrors.email" v-for="error in loginErrors.email" class="invalid-feedback">
                                             <strong>{{ error }}</strong>
-                                        </span>
+                                        </div>
                                     </div>
                                     <div class="input-block">
-                                        <input v-model="password" type="password" placeholder="Password">
-                                        <span v-if="errors.password" v-for="error in errors.password" class="invalid-feedback">
+                                        <input v-model="password" :class="loginErrors.password ? 'input-error' : ''" type="password" placeholder="Password">
+                                        <div v-if="loginErrors.password" v-for="error in loginErrors.password" class="invalid-feedback">
                                             <strong>{{ error }}</strong>
-                                        </span>
+                                        </div>
                                     </div>
                                     <div class="password-forget">
                                         <a :href="$r('web.password.request')">Forgot your password?</a>
@@ -59,10 +59,13 @@
                                 <div class="checkout-guest">
                                     <h4>Guest Checkout</h4>
                                     <div class="input-block">
-                                        <input v-model="orderData.user_email" type="email" placeholder="E-mail">
-                                        <span v-if="emailError" class="invalid-feedback">
+                                        <input v-model="orderData.user_email" :class="registerErrors.email || emailError ? 'input-error' : ''" type="email" placeholder="E-mail">
+                                        <div v-if="registerErrors.email" v-for="error in registerErrors.email" class="invalid-feedback">
+                                            <strong>{{ error }}</strong>
+                                        </div>
+                                        <div v-if="emailError" class="invalid-feedback">
                                             <strong>{{ emailError }}</strong>
-                                        </span>
+                                        </div>
                                     </div>
                                     <a href="#" v-if="orderData.user_email" v-on:click="validateEmail" class="btn red-btn">Continue as Guest</a>
                                 </div>
@@ -107,6 +110,9 @@
                                         <small>Venmo</small>
                                     </span>
                                 </label>
+                                <div v-if="paymentError" class="invalid-feedback">
+                                    <strong>You must select the type of payment and confirm the mail</strong>
+                                </div>
                             </div>
                         </div>
                         <div class="checkout-payment-content" v-if="orderData.payment.type === 1">
@@ -116,10 +122,10 @@
                             <p>We'll credit your PayPal Email Address once your item(s) have been verified by our staff. Please note that PayPal charges a fee ($0.30 + 2.9%) to receive funds using their service.</p>
                             <div class="inputs-flex">
                                 <div class="input-block width-50">
-                                    <input v-model="orderData.payment.email" type="email" placeholder="PayPal E-mail Adress">
+                                    <input v-model="orderData.payment.email" :class="paymentError ? 'input-error' : ''" type="email" placeholder="PayPal E-mail Adress">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input v-model="checkEmail" type="email" placeholder="Confirm PayPal E-mail Adress">
+                                    <input v-model="checkEmail" :class="paymentError ? 'input-error' : ''" type="email" placeholder="Confirm PayPal E-mail Adress">
                                 </div>
                             </div>
                         </div>
@@ -127,10 +133,10 @@
                             <p>We'll credit your Zelle® account once your item(s) have been verified by our staff. Email address provided must be associated and linked with your Zelle® account to avoid any delays.</p>
                             <div class="inputs-flex">
                                 <div class="input-block width-50">
-                                    <input v-model="orderData.payment.email" type="email" placeholder="Zelle E-mail Adress">
+                                    <input v-model="orderData.payment.email" :class="paymentError ? 'input-error' : ''" type="email" placeholder="Zelle E-mail Adress">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input v-model="checkEmail" type="email" placeholder="Confirm Zelle E-mail Adress">
+                                    <input v-model="checkEmail" :class="paymentError ? 'input-error' : ''" type="email" placeholder="Confirm Zelle E-mail Adress">
                                 </div>
                             </div>
                         </div>
@@ -138,10 +144,10 @@
                             <p>We'll credit your Venmo® account once your item(s) have been verified by our staff. Email address provided must be associated and linked with your Venmo® account to avoid any delays.</p>
                             <div class="inputs-flex">
                                 <div class="input-block width-50">
-                                    <input v-model="orderData.payment.email" type="email" required placeholder="Venmo E-mail Adress">
+                                    <input v-model="orderData.payment.email" :class="paymentError ? 'input-error' : ''" type="email" required placeholder="Venmo E-mail Adress">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input v-model="checkEmail" type="email" required placeholder="Confirm Venmo E-mail Adress">
+                                    <input v-model="checkEmail" :class="paymentError ? 'input-error' : ''" type="email" required placeholder="Confirm Venmo E-mail Adress">
                                 </div>
                             </div>
                         </div>
@@ -149,10 +155,6 @@
                             <a href="#" v-if="!this.user.id" v-on:click="backStep" class="btn gray-btn">Back</a>
                             <a href="#" v-on:click="validatePayment" class="btn red-btn">Next step</a>
                         </div>
-                        <br>
-                        <span v-if="paymentError" class="desc red-note">
-                            <p>You must select the type of payment and confirm the mail</p>
-                        </span>
                     </div>
 
                     <!-- Step 3 -->
@@ -166,7 +168,6 @@
                                 style="width: auto;"
                                 v-model="orderData.address"
                                 v-if="user.id && user.addresses && user.addresses.length"
-                                required
                             >
                                 <option :value="orderData.address">Select address</option>
                                 <option v-for="(address, key) in user.addresses" :value="address">{{ address.name + ' ' + address.phone + ' ' + address.address1 }}</option>
@@ -175,19 +176,31 @@
                             <br>
                             <form autocomplete="on" class="inputs-flex">
                                 <div class="input-block width-50">
-                                    <input v-model="orderData.address.name" name="name" autocomplete="on" type="text" placeholder="First and Last Name*">
+                                    <input v-model="orderData.address.name" :class="addressError.name ? 'input-error' : ''" name="name" autocomplete="on" type="text" placeholder="First and Last Name*">
+                                    <div v-if="addressError.name" class="invalid-feedback">
+                                        <strong>Please provide a first and last name.</strong>
+                                    </div>
                                 </div>
                                 <div class="input-block width-50">
-                                    <input v-model="orderData.address.phone" name="tel" autocomplete="on" type="tel" placeholder="Phone*">
+                                    <input v-model="orderData.address.phone" :class="addressError.phone ? 'input-error' : ''" name="tel" autocomplete="on" type="tel" placeholder="Phone*">
+                                    <div v-if="addressError.phone" class="invalid-feedback">
+                                        <strong>Please provide a valid phone number.</strong>
+                                    </div>
                                 </div>
                                 <div class="input-block width-50">
-                                    <input v-model="orderData.address.address1" name="address-line1" autocomplete="on" type="text" placeholder="Adress 1*">
+                                    <input v-model="orderData.address.address1" :class="addressError.address1 ? 'input-error' : ''" name="address-line1" autocomplete="on" type="text" placeholder="Adress 1*">
+                                    <div v-if="addressError.address1" class="invalid-feedback">
+                                        <strong>Please provide a street address.</strong>
+                                    </div>
                                 </div>
                                 <div class="input-block width-50">
                                     <input v-model="orderData.address.address2" name="address-line2" autocomplete="on" type="text" placeholder="Adress 2">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input v-model="orderData.address.city" name="country-name" autocomplete="on" type="text" placeholder="City*">
+                                    <input v-model="orderData.address.city" :class="addressError.city ? 'input-error' : ''" name="country-name" autocomplete="on" type="text" placeholder="City*">
+                                    <div v-if="addressError.city" class="invalid-feedback">
+                                        <strong>Please provide a city.</strong>
+                                    </div>
                                 </div>
                                 <div class="input-block width-25">
                                     <CustomSelect
@@ -195,16 +208,19 @@
                                         :default="'States*'"
                                         :value="orderData.address.state"
                                         class="select"
+                                        :class="addressError.state ? 'input-error' : ''"
                                         v-model="orderData.address.state"
                                     />
+                                    <div v-if="addressError.state" class="invalid-feedback">
+                                        <strong>Please select a state.</strong>
+                                    </div>
                                 </div>
                                 <div class="input-block width-25">
-                                    <input v-model="orderData.address.postal_code" name="postal-code" autocomplete="on" type="text" placeholder="Postal Code*">
+                                    <input v-model="orderData.address.postal_code" :class="addressError.postal_code ? 'input-error' : ''" name="postal-code" autocomplete="on" type="text" placeholder="Postal Code*">
+                                    <div v-if="addressError.postal_code" class="invalid-feedback">
+                                        <strong>Please provide a valid 5 digit zip code.</strong>
+                                    </div>
                                 </div>
-                                <br>
-                                <span v-if="addressError" class="desc red-note">
-                                    <p>Please fill all required fields</p>
-                                </span>
                             </form>
                         </div>
                         <div class="checkout-simple-block">
@@ -274,10 +290,9 @@
                                         <span>I accept the <a :href="$r('terms')" target="_blank" style="text-decoration: revert; color: #0000FF;">terms and conditions</a></span>
                                     </label>
                                 </li>
-                                <br>
-                                <span v-if="termsError" class="desc red-note">
-                                    <p>You must be accept the terms and conditions</p>
-                                </span>
+                                <div v-if="termsError" class="invalid-feedback">
+                                    <strong>You must be accept the terms and conditions.</strong>
+                                </div>
                             </ul>
                         </div>
                         <div class="order-options-links">
@@ -302,6 +317,14 @@
                         <li>
                             <span>Total Payout</span>
                             <div class="price">${{ parseFloat(totalSumm).toFixed(2) }}</div>
+                        </li>
+                        <li v-if="orderData.exp_service">
+                            <span>Expedited Service</span>
+                            <div class="price free">-20$</div>
+                        </li>
+                        <li v-if="orderData.insurance">
+                            <span>Shipping insurance</span>
+                            <div class="price free">-1% ( {{ parseFloat((totalSumm * 1)/100).toFixed(2) }} )</div>
                         </li>
                         <li>
                             <span>Delivery</span>
@@ -346,7 +369,15 @@
                 password: null,
                 emailError: null,
                 paymentError: false,
-                addressError: false,
+                addressError: {
+                    name: false,
+                    phone: false,
+                    address1: false,
+                    address2: false,
+                    city: false,
+                    state: false,
+                    postal_code: false,
+                },
                 termsError: false,
                 orderData: {
                     orders: [],
@@ -370,7 +401,8 @@
                     exp_service: false,
                     insurance: false,
                 },
-                errors: [],
+                registerErrors: [],
+                loginErrors: [],
                 accept_terms: false,
             };
         },
@@ -399,12 +431,14 @@
             },
 
             login(){
+                this.loginErrors = [];
+
                 axios.post(
                     Router.route('web.login.post', { email: this.email, password: this.password }),
                 ).then((data) => {
                     location.reload();
                 }).catch(({ response: { data: { errors } } }) => {
-                    this.errors = errors;
+                    this.loginErrors = errors;
                 });
             },
 
@@ -450,9 +484,24 @@
 
                 if (/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.orderData.user_email))
                 {
-                    this.stepIndex++;
+                    this.registerErrors = [];
+
+                    axios.post(
+                        Router.route('web.register.store', {
+                            name: this.orderData.user_email,
+                            email: this.orderData.user_email,
+                            phone: '1234567890',
+                            password: 'pass123',
+                            password_confirmation: 'pass123',
+                            is_guest: !!this.user.id
+                        }),
+                    ).then((data) => {
+                        location.reload();
+                    }).catch(({ response: { data: { errors } } }) => {
+                        this.registerErrors = errors;
+                    });
                 } else {
-                    this.emailError = 'You have entered an invalid email address!';
+                    this.emailError = 'Please provide a valid email address.';
                 }
             },
 
@@ -473,7 +522,12 @@
             },
 
             validateAddress(){
-                this.addressError = false;
+                this.addressError.name = false;
+                this.addressError.phone = false;
+                this.addressError.postal_code = false;
+                this.addressError.address1 = false;
+                this.addressError.city = false;
+                this.addressError.state = false;
 
                 if (
                     this.orderData.address.name &&
@@ -492,7 +546,24 @@
 
                     this.stepIndex++;
                 } else {
-                    this.addressError = true;
+                    if (!this.orderData.address.name) {
+                        this.addressError.name = true;
+                    }
+                    if (!this.orderData.address.phone) {
+                        this.addressError.phone = true;
+                    }
+                    if (!this.orderData.address.postal_code) {
+                        this.addressError.postal_code = true;
+                    }
+                    if (!this.orderData.address.address1) {
+                        this.addressError.address1 = true;
+                    }
+                    if (!this.orderData.address.city) {
+                        this.addressError.city = true;
+                    }
+                    if (!this.orderData.address.state) {
+                        this.addressError.state = true;
+                    }
                 }
             },
 

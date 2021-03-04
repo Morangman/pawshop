@@ -7,14 +7,6 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        @if (Session::has('errors'))
-                            <div class="alert alert-danger">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                @foreach ($errors->all() as $error)
-                                    <div>{{ $error }}</div>
-                                @endforeach
-                            </div>
-                        @endif
                         <form method="POST" action="{{ URL::route('web.password.email') }}">
                             @csrf
                             <div class="checkout-content-step">
@@ -31,9 +23,9 @@
                                                 required/>
 
                                             @error('email')
-                                            <span class="invalid-feedback">
+                                            <div class="invalid-feedback">
                                                 <strong>{{ $message }}</strong>
-                                            </span>
+                                            </div>
                                             @enderror
                                         </div>
                                         <div class="bottom-links">

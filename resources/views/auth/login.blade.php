@@ -18,18 +18,18 @@
                                             <input id="email" placeholder="{{ Lang::get('auth.register.form.fields.email.label') }}" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ Request::old('email') }}" required autocomplete="email" autofocus>
 
                                             @error('email')
-                                            <span class="invalid-feedback">
+                                            <div class="invalid-feedback">
                                                 <strong>{{ $message }}</strong>
-                                            </span>
+                                            </div>
                                             @enderror
                                         </div>
                                         <div class="input-block">
                                             <input id="password" placeholder="{{ Lang::get('auth.register.form.fields.password.label') }}" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
 
                                             @error('password')
-                                            <span class="invalid-feedback">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
+                                            <div class="invalid-feedback">
+                                                <strong>{{ $message }}</strong>
+                                            </div>
                                             @enderror
                                         </div>
                                         <div class="password-forget">

@@ -61,6 +61,10 @@ class RegisterController extends Controller
             new RegisterConfirmationNotification($user->getAttribute('register_code'))
         );
 
+        if ($request->get('is_guest')) {
+            Auth::login($user);
+        }
+
         Session::flash('status', Lang::get('auth.register.verify.title'));
 
         return new RedirectResponse(URL::route('web.login.show'), 302);
