@@ -20,7 +20,7 @@
                             @endforeach
                         </ul>
                     </li>
-                    <li><a href="{{ URL::route('support') }}" data-title="Mobile Service">Support</a></li>
+                    <li class="text-centered"><a href="{{ URL::route('support') }}" data-title="Mobile Service">Support</a></li>
                 </ul>
                 <div class="header-login">
                     <ul class="header-menu">

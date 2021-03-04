@@ -97,4 +97,9 @@ $(document).ready(function() {
 		$(".condition-tabs-content").not($searchId).css("display", "none");
 		$searchId.fadeIn(0);
 	});
+
+    // Кастомизация селекта
+        $('.states-select').click( () => {
+            console.log("click!");
+        });
 });

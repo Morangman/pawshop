@@ -18,8 +18,8 @@
                         <form method="POST" action="{{ URL::route('web.password.email') }}">
                             @csrf
                             <div class="checkout-content-step">
-                                <div class="inner-block">
-                                    <div class="checkout-customer checkout-login-form">
+                                <div class="inner-block auth-form-centered">
+                                    <div class="checkout-customer checkout-login-form auth-form">
                                         <h4>{{ Lang::get('login.title') }}</h4> </br>
                                         @include('partial.alerts.block')
                                         <div class="input-block">

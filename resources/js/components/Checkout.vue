@@ -190,10 +190,13 @@
                                     <input v-model="orderData.address.city" name="country-name" autocomplete="on" type="text" placeholder="City*">
                                 </div>
                                 <div class="input-block width-25">
-                                    <select name="state" autocomplete="on" type="text" v-model="orderData.address.state">
-                                        <option :value="null">State*</option>
-                                        <option v-for="(state, i) in states" :key="`state_${i}`" :value="i">{{ state }}</option>
-                                    </select>
+                                    <CustomSelect
+                                        :options="states"
+                                        :default="'States*'"
+                                        :value="orderData.address.state"
+                                        class="select"
+                                        v-model="orderData.address.state"
+                                    />
                                 </div>
                                 <div class="input-block width-25">
                                     <input v-model="orderData.address.postal_code" name="postal-code" autocomplete="on" type="text" placeholder="Postal Code*">
@@ -313,9 +316,14 @@
 
 <script>
     import FormHelper from "../../admin/js/mixins/form_helper";
+    import CustomSelect from "./CustomSelect.vue";
 
     export default {
         mixins: [FormHelper],
+
+        components: {
+            CustomSelect,
+        },
 
         props: {
             user: {

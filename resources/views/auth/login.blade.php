@@ -10,12 +10,12 @@
                         <form method="POST" action="{{ URL::route('web.login.post') }}">
                             @csrf
                             <div class="checkout-content-step">
-                                <div class="inner-block">
-                                    <div class="checkout-customer checkout-login-form">
+                                <div class="inner-block auth-form-centered">
+                                    <div class="checkout-customer checkout-login-form auth-form">
                                         <h4>{{ Lang::get('login.title') }}</h4> </br>
                                         @include('partial.alerts.block')
                                         <div class="input-block">
-                                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ Request::old('email') }}" required autocomplete="email" autofocus>
+                                            <input id="email" placeholder="{{ Lang::get('auth.register.form.fields.email.label') }}" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ Request::old('email') }}" required autocomplete="email" autofocus>
 
                                             @error('email')
                                             <span class="invalid-feedback">
@@ -24,7 +24,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-block">
-                                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                                            <input id="password" placeholder="{{ Lang::get('auth.register.form.fields.password.label') }}" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
 
                                             @error('password')
                                             <span class="invalid-feedback">

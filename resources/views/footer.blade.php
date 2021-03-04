@@ -17,7 +17,7 @@
             <form method="POST" action="{{ URL::route('callback') }}" name="contactform" class="simple-form popup-form" autocomplete="on">
                 @csrf
                 <h1>Contact us</h1>
-                <input name="name" type="text" placeholder="Julia" required />
+                <input name="name" type="text" placeholder="Name" required />
                 <input name="phone" type="tel" placeholder="Phone number" />
                 <input name="email" type="email" placeholder="E-mail" required />
                 <textarea name="text" placeholder="Your question"></textarea>
