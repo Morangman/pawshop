@@ -206,9 +206,9 @@
                                     <CustomSelect
                                         :options="states"
                                         :default="'States*'"
+                                        :error="addressError.state"
                                         :value="orderData.address.state"
                                         class="select"
-                                        :class="addressError.state ? 'input-error' : ''"
                                         v-model="orderData.address.state"
                                     />
                                     <div v-if="addressError.state" class="invalid-feedback">

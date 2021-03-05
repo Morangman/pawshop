@@ -1,6 +1,6 @@
 <template>
     <div class="custom-select" :tabindex="tabindex" @blur="open = false">
-        <div class="selected" :class="{ open: open }" @click="open = !open">
+        <div class="selected" :class="{ open: open, 'input-error': error }" @click="open = !open">
             <p v-if="!selected && !value">State*</p>
             <p>{{ value ? options[value] : selected }}</p>
         </div>
@@ -36,6 +36,11 @@
                 required: false,
                 default: 0,
             },
+            error: {
+                type: Boolean,
+                required: false,
+                default: false,
+            },
         },
         data() {
             return {
@@ -58,7 +63,6 @@
     .custom-select {
         position: relative;
         border-radius: 90px;
-        border: 1px solid #DADADA;
         width: 100%;
         text-align: left;
         outline: none;
@@ -70,6 +74,7 @@
         position: relative;
         z-index: 2;
         background: #fff;
+        border: 1px solid #DADADA;
         padding-left: 1em;
         cursor: pointer;
         user-select: none;
