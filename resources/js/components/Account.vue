@@ -89,37 +89,36 @@
                                                             <div class="form-group">
                                                                 <form autocomplete="on" class="inputs-flex">
                                                                     <div class="input-block width-50">
-                                                                        <input v-model="model.addresses[index].name" name="name" autocomplete="on" type="text" placeholder="First and Last Name*">
+                                                                        <input v-model="model.addresses[index].name" :class="{'input-error': dataErrors[index].name }" name="name" autocomplete="on" type="text" placeholder="First and Last Name*">
                                                                     </div>
                                                                     <div class="input-block width-50">
-                                                                        <input v-model="model.addresses[index].phone" name="tel" autocomplete="on" type="tel" placeholder="Phone*">
+                                                                        <input v-model="model.addresses[index].phone" :class="{'input-error': dataErrors[index].phone }" name="tel" autocomplete="on" type="tel" placeholder="Phone*">
                                                                     </div>
                                                                     <div class="input-block width-50">
-                                                                        <input v-model="model.addresses[index].address1" name="address-line1" autocomplete="on" type="text" placeholder="Adress 1*">
+                                                                        <input v-model="model.addresses[index].address1" :class="{'input-error': dataErrors[index].address1 }" name="address-line1" autocomplete="on" type="text" placeholder="Adress 1*">
                                                                     </div>
                                                                     <div class="input-block width-50">
                                                                         <input v-model="model.addresses[index].address2" name="address-line2" autocomplete="on" type="text" placeholder="Adress 2">
                                                                     </div>
                                                                     <div class="input-block width-50">
-                                                                        <input v-model="model.addresses[index].city" name="country-name" autocomplete="on" type="text" placeholder="City*">
+                                                                        <input v-model="model.addresses[index].city" :class="{'input-error': dataErrors[index].city }" name="country-name" autocomplete="on" type="text" placeholder="City*">
                                                                     </div>
                                                                     <div class="input-block width-25">
-                                                                        <select name="state" autocomplete="on" type="text" v-model="model.addresses[index].state">
+                                                                        <select name="state" autocomplete="on" type="text" :class="{'input-error': dataErrors[index].state }" v-model="model.addresses[index].state">
                                                                             <option :value="null">State*</option>
                                                                             <option v-for="(state, i) in states" :key="`state_${i}`" :value="i">{{ state }}</option>
                                                                         </select>
                                                                     </div>
                                                                     <div class="input-block width-25">
-                                                                        <input v-model="model.addresses[index].postal_code" name="postal-code" autocomplete="on" type="text" placeholder="Postal Code*">
+                                                                        <input v-model="model.addresses[index].postal_code" :class="{'input-error': dataErrors[index].postal_code }" name="postal-code" autocomplete="on" type="text" placeholder="Postal Code*">
                                                                     </div>
                                                                     <div class="input-block">
-                                                                        <b-form-checkbox
+                                                                        <custom-checkbox
+                                                                            :id="`checkbox_${index}`"
+                                                                            :name="'Default Address'"
+                                                                            :option="model.addresses[index].is_default ? model.addresses[index].is_default : '0'"
                                                                             v-model="model.addresses[index].is_default"
-                                                                            value="1"
-                                                                            unchecked-value="0"
-                                                                        >
-                                                                            Default Address
-                                                                        </b-form-checkbox>
+                                                                        ></custom-checkbox>
                                                                     </div>
                                                                 </form>
                                                             </div>
@@ -129,16 +128,14 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    <div v-if="addressError" class="invalid-feedback">
+                                        <strong>Please fill all required fields.</strong>
+                                    </div>
                                     <div class="add-address-btn">
                                         <button
                                             v-on:click="addAddress"
                                             class="btn btn-primary margin-top-10"
                                         >Add</button>
-                                        <br>
-                                        <br>
-                                        <span v-if="addressError" class="desc red-note">
-                                            <p>Please fill all required fields</p>
-                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -199,9 +196,14 @@
 
 <script>
     import FormHelper from "../../admin/js/mixins/form_helper";
+    import CustomCheckbox from "./CustomCheckbox.vue";
 
     export default {
         mixins: [FormHelper],
+
+        components: {
+            CustomCheckbox,
+        },
 
         props: {
             user: {
@@ -247,6 +249,18 @@
                     postal_code: null,
                     is_default: 0,
                 });
+
+                _.each(this.model.addresses, (data, index) => {
+                    this.dataErrors[index] = {
+                        name: false,
+                        phone: false,
+                        address1: false,
+                        address2: false,
+                        city: false,
+                        state: false,
+                        postal_code: false,
+                    };
+                });
             },
 
             deleteAddress(index) {
@@ -257,26 +271,39 @@
                 this.addressError = false;
 
                 _.each(this.model.addresses, (data, index) => {
+                    this.dataErrors[index] = {
+                        name: false,
+                        phone: false,
+                        address1: false,
+                        address2: false,
+                        city: false,
+                        state: false,
+                        postal_code: false,
+                    };
+
                     if (!data.name) {
                         this.addressError = true;
+                        this.dataErrors[index].name = true;
                     }
                     if (!data.phone) {
                         this.addressError = true;
+                        this.dataErrors[index].phone = true;
                     }
                     if (!data.address1) {
                         this.addressError = true;
-                    }
-                    if (!data.address2) {
-                        this.addressError = true;
+                        this.dataErrors[index].address1 = true;
                     }
                     if (!data.city) {
                         this.addressError = true;
+                        this.dataErrors[index].city = true;
                     }
                     if (!data.state) {
                         this.addressError = true;
+                        this.dataErrors[index].state = true;
                     }
                     if (!data.postal_code) {
                         this.addressError = true;
+                        this.dataErrors[index].postal_code = true;
                     }
                 });
 
@@ -306,6 +333,18 @@
         created() {
             if (!this.model.addresses) {
                 this.model.addresses = [];
+            } else {
+                _.each(this.model.addresses, (data, index) => {
+                    this.dataErrors[index] = {
+                        name: false,
+                        phone: false,
+                        address1: false,
+                        address2: false,
+                        city: false,
+                        state: false,
+                        postal_code: false,
+                    };
+                });
             }
         }
     }
