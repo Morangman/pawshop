@@ -27,7 +27,7 @@ class PullData extends Command
      *
      * @var string
      */
-    protected $description = 'Scrape data from https://www.sellcell.com/';
+    protected $description = 'Parse devices from https://www.sellcell.com/';
 
     /**
      * Create a new command instance.
@@ -61,7 +61,7 @@ class PullData extends Command
         Schema::enableForeignKeyConstraints();
 
         $conditionStep = Step::query()->create([
-            'name' => 'What is the condition of the phone?',
+            'name' => 'What is the condition of the device?',
             'items' => [
                 [
                     'name' => 'LIKE NEW',
@@ -88,7 +88,7 @@ class PullData extends Command
         ]);
 
         $carrierStep = Step::query()->create([
-            'name' => 'Please select the phone\'s carrier',
+            'name' => 'Please select the device\'s carrier',
             'items' => [
                 [
                     'name' => 'Verizon',
@@ -130,6 +130,11 @@ class PullData extends Command
         $basePath = 'https://www.sellcell.com';
 
         $phoneImage = '/client/images/phone.png';
+        $tabletImage = '/client/images/tablet.png';
+        $ipodImage = '/client/images/ipod.png';
+        $cameraImage = '/client/images/camera.png';
+        $consoleImage = '/client/images/console.png';
+        $watchImage = '/client/images/watch.png';
 
         $iphonesPoint = 'https://www.sellcell.com/sell-iphone/';
 
@@ -229,25 +234,29 @@ class PullData extends Command
 
             if (!$capacityStep && $iphone['capacities'] != []) {
                 $capacityStep = Step::query()->create([
-                    'name' => 'What is the phone\'s storage capacity?',
+                    'name' => 'What is the device\'s storage capacity?',
                     'items' => $iphone['capacities'],
                 ]);
             }
 
-            $category = Category::query()->create([
-                'subcategory_id' => $iphoneCategory->getKey(),
-                'name' => $iphone['title'],
-                'slug' => $iphone['slug'],
-                'custom_text' => $iphone['price'],
-                'is_parsed' => 1,
-            ]);
+            $isExist = Category::query()->where('name', $iphone['title'])->exists();
 
-            $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $iphoneCategory->getKey(),
+                    'name' => $iphone['title'],
+                    'slug' => $iphone['slug'],
+                    'custom_text' => $iphone['price'],
+                    'is_parsed' => 1,
+                ]);
 
-            $media = $category->addMediaFromUrl($iphone['image'])
-                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
 
-            $category->update(['image' => $media->getFullUrl()]);
+                $media = $category->addMediaFromUrl($iphone['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
         }
 
         $this->line('Iphones was parsed...');
@@ -286,25 +295,29 @@ class PullData extends Command
 
             if (!$capacityStep && $phone['capacities'] != []) {
                 $capacityStep = Step::query()->create([
-                    'name' => 'What is the phone\'s storage capacity?',
+                    'name' => 'What is the device\'s storage capacity?',
                     'items' => $phone['capacities'],
                 ]);
             }
 
-            $category = Category::query()->create([
-                'subcategory_id' => $samsungCategory->getKey(),
-                'name' => $phone['title'],
-                'slug' => $phone['slug'],
-                'custom_text' => $phone['price'],
-                'is_parsed' => 1,
-            ]);
+            $isExist = Category::query()->where('name', $phone['title'])->exists();
 
-            $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $samsungCategory->getKey(),
+                    'name' => $phone['title'],
+                    'slug' => $phone['slug'],
+                    'custom_text' => $phone['price'],
+                    'is_parsed' => 1,
+                ]);
 
-            $media = $category->addMediaFromUrl($phone['image'])
-                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
 
-            $category->update(['image' => $media->getFullUrl()]);
+                $media = $category->addMediaFromUrl($phone['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
         }
 
         $this->line('Samsung phones was parsed...');
@@ -348,25 +361,29 @@ class PullData extends Command
 
             if (!$capacityStep && $phone['capacities'] != []) {
                 $capacityStep = Step::query()->create([
-                    'name' => 'What is the phone\'s storage capacity?',
+                    'name' => 'What is the device\'s storage capacity?',
                     'items' => $phone['capacities'],
                 ]);
             }
 
-            $category = Category::query()->create([
-                'subcategory_id' => $htcCategory->getKey(),
-                'name' => $phone['title'],
-                'slug' => $phone['slug'],
-                'custom_text' => $phone['price'],
-                'is_parsed' => 1,
-            ]);
+            $isExist = Category::query()->where('name', $phone['title'])->exists();
 
-            $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $htcCategory->getKey(),
+                    'name' => $phone['title'],
+                    'slug' => $phone['slug'],
+                    'custom_text' => $phone['price'],
+                    'is_parsed' => 1,
+                ]);
 
-            $media = $category->addMediaFromUrl($phone['image'])
-                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
 
-            $category->update(['image' => $media->getFullUrl()]);
+                $media = $category->addMediaFromUrl($phone['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
         }
 
         $this->line('HTC Phones was parsed...');
@@ -405,25 +422,29 @@ class PullData extends Command
 
             if (!$capacityStep && $phone['capacities'] != []) {
                 $capacityStep = Step::query()->create([
-                    'name' => 'What is the phone\'s storage capacity?',
+                    'name' => 'What is the device\'s storage capacity?',
                     'items' => $phone['capacities'],
                 ]);
             }
 
-            $category = Category::query()->create([
-                'subcategory_id' => $motorolaCategory->getKey(),
-                'name' => $phone['title'],
-                'slug' => $phone['slug'],
-                'custom_text' => $phone['price'],
-                'is_parsed' => 1,
-            ]);
+            $isExist = Category::query()->where('name', $phone['title'])->exists();
 
-            $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $motorolaCategory->getKey(),
+                    'name' => $phone['title'],
+                    'slug' => $phone['slug'],
+                    'custom_text' => $phone['price'],
+                    'is_parsed' => 1,
+                ]);
 
-            $media = $category->addMediaFromUrl($phone['image'])
-                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
 
-            $category->update(['image' => $media->getFullUrl()]);
+                $media = $category->addMediaFromUrl($phone['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
         }
 
         $this->line('MOTOROLA Phones was parsed...');
@@ -462,25 +483,29 @@ class PullData extends Command
 
             if (!$capacityStep && $phone['capacities'] != []) {
                 $capacityStep = Step::query()->create([
-                    'name' => 'What is the phone\'s storage capacity?',
+                    'name' => 'What is the device\'s storage capacity?',
                     'items' => $phone['capacities'],
                 ]);
             }
 
-            $category = Category::query()->create([
-                'subcategory_id' => $lgCategory->getKey(),
-                'name' => $phone['title'],
-                'slug' => $phone['slug'],
-                'custom_text' => $phone['price'],
-                'is_parsed' => 1,
-            ]);
+            $isExist = Category::query()->where('name', $phone['title'])->exists();
 
-            $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $lgCategory->getKey(),
+                    'name' => $phone['title'],
+                    'slug' => $phone['slug'],
+                    'custom_text' => $phone['price'],
+                    'is_parsed' => 1,
+                ]);
 
-            $media = $category->addMediaFromUrl($phone['image'])
-                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
 
-            $category->update(['image' => $media->getFullUrl()]);
+                $media = $category->addMediaFromUrl($phone['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
         }
 
         $this->line('LG Phones was parsed...');
@@ -519,25 +544,29 @@ class PullData extends Command
 
             if (!$capacityStep && $phone['capacities'] != []) {
                 $capacityStep = Step::query()->create([
-                    'name' => 'What is the phone\'s storage capacity?',
+                    'name' => 'What is the device\'s storage capacity?',
                     'items' => $phone['capacities'],
                 ]);
             }
 
-            $category = Category::query()->create([
-                'subcategory_id' => $oneplusCategory->getKey(),
-                'name' => $phone['title'],
-                'slug' => $phone['slug'],
-                'custom_text' => $phone['price'],
-                'is_parsed' => 1,
-            ]);
+            $isExist = Category::query()->where('name', $phone['title'])->exists();
 
-            $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $oneplusCategory->getKey(),
+                    'name' => $phone['title'],
+                    'slug' => $phone['slug'],
+                    'custom_text' => $phone['price'],
+                    'is_parsed' => 1,
+                ]);
 
-            $media = $category->addMediaFromUrl($phone['image'])
-                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
 
-            $category->update(['image' => $media->getFullUrl()]);
+                $media = $category->addMediaFromUrl($phone['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
         }
 
         $this->line('OnePlus Phones was parsed...');
@@ -576,25 +605,29 @@ class PullData extends Command
 
             if (!$capacityStep && $phone['capacities'] != []) {
                 $capacityStep = Step::query()->create([
-                    'name' => 'What is the phone\'s storage capacity?',
+                    'name' => 'What is the device\'s storage capacity?',
                     'items' => $phone['capacities'],
                 ]);
             }
 
-            $category = Category::query()->create([
-                'subcategory_id' => $googleCategory->getKey(),
-                'name' => $phone['title'],
-                'slug' => $phone['slug'],
-                'custom_text' => $phone['price'],
-                'is_parsed' => 1,
-            ]);
+            $isExist = Category::query()->where('name', $phone['title'])->exists();
 
-            $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $googleCategory->getKey(),
+                    'name' => $phone['title'],
+                    'slug' => $phone['slug'],
+                    'custom_text' => $phone['price'],
+                    'is_parsed' => 1,
+                ]);
 
-            $media = $category->addMediaFromUrl($phone['image'])
-                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
 
-            $category->update(['image' => $media->getFullUrl()]);
+                $media = $category->addMediaFromUrl($phone['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
         }
 
         $this->line('Google Phones was parsed...');
@@ -633,25 +666,29 @@ class PullData extends Command
 
             if (!$capacityStep && $phone['capacities'] != []) {
                 $capacityStep = Step::query()->create([
-                    'name' => 'What is the phone\'s storage capacity?',
+                    'name' => 'What is the device\'s storage capacity?',
                     'items' => $phone['capacities'],
                 ]);
             }
 
-            $category = Category::query()->create([
-                'subcategory_id' => $sonyCategory->getKey(),
-                'name' => $phone['title'],
-                'slug' => $phone['slug'],
-                'custom_text' => $phone['price'],
-                'is_parsed' => 1,
-            ]);
+            $isExist = Category::query()->where('name', $phone['title'])->exists();
 
-            $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $sonyCategory->getKey(),
+                    'name' => $phone['title'],
+                    'slug' => $phone['slug'],
+                    'custom_text' => $phone['price'],
+                    'is_parsed' => 1,
+                ]);
 
-            $media = $category->addMediaFromUrl($phone['image'])
-                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
 
-            $category->update(['image' => $media->getFullUrl()]);
+                $media = $category->addMediaFromUrl($phone['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
         }
 
         $this->line('Sony Phones was parsed...');
@@ -690,25 +727,29 @@ class PullData extends Command
 
             if (!$capacityStep && $phone['capacities'] != []) {
                 $capacityStep = Step::query()->create([
-                    'name' => 'What is the phone\'s storage capacity?',
+                    'name' => 'What is the device\'s storage capacity?',
                     'items' => $phone['capacities'],
                 ]);
             }
 
-            $category = Category::query()->create([
-                'subcategory_id' => $blackBerryCategory->getKey(),
-                'name' => $phone['title'],
-                'slug' => $phone['slug'],
-                'custom_text' => $phone['price'],
-                'is_parsed' => 1,
-            ]);
+            $isExist = Category::query()->where('name', $phone['title'])->exists();
 
-            $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $blackBerryCategory->getKey(),
+                    'name' => $phone['title'],
+                    'slug' => $phone['slug'],
+                    'custom_text' => $phone['price'],
+                    'is_parsed' => 1,
+                ]);
 
-            $media = $category->addMediaFromUrl($phone['image'])
-                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
 
-            $category->update(['image' => $media->getFullUrl()]);
+                $media = $category->addMediaFromUrl($phone['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
         }
 
         $this->line('BlackBerry Phones was parsed...');
@@ -747,25 +788,29 @@ class PullData extends Command
 
             if (!$capacityStep && $phone['capacities'] != []) {
                 $capacityStep = Step::query()->create([
-                    'name' => 'What is the phone\'s storage capacity?',
+                    'name' => 'What is the device\'s storage capacity?',
                     'items' => $phone['capacities'],
                 ]);
             }
 
-            $category = Category::query()->create([
-                'subcategory_id' => $huaweiCategory->getKey(),
-                'name' => $phone['title'],
-                'slug' => $phone['slug'],
-                'custom_text' => $phone['price'],
-                'is_parsed' => 1,
-            ]);
+            $isExist = Category::query()->where('name', $phone['title'])->exists();
 
-            $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $huaweiCategory->getKey(),
+                    'name' => $phone['title'],
+                    'slug' => $phone['slug'],
+                    'custom_text' => $phone['price'],
+                    'is_parsed' => 1,
+                ]);
 
-            $media = $category->addMediaFromUrl($phone['image'])
-                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
 
-            $category->update(['image' => $media->getFullUrl()]);
+                $media = $category->addMediaFromUrl($phone['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
         }
 
         $this->line('Huawei Phones was parsed...');
@@ -804,25 +849,29 @@ class PullData extends Command
 
             if (!$capacityStep && $phone['capacities'] != []) {
                 $capacityStep = Step::query()->create([
-                    'name' => 'What is the phone\'s storage capacity?',
+                    'name' => 'What is the device\'s storage capacity?',
                     'items' => $phone['capacities'],
                 ]);
             }
 
-            $category = Category::query()->create([
-                'subcategory_id' => $kyoceraCategory->getKey(),
-                'name' => $phone['title'],
-                'slug' => $phone['slug'],
-                'custom_text' => $phone['price'],
-                'is_parsed' => 1,
-            ]);
+            $isExist = Category::query()->where('name', $phone['title'])->exists();
 
-            $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $kyoceraCategory->getKey(),
+                    'name' => $phone['title'],
+                    'slug' => $phone['slug'],
+                    'custom_text' => $phone['price'],
+                    'is_parsed' => 1,
+                ]);
 
-            $media = $category->addMediaFromUrl($phone['image'])
-                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
 
-            $category->update(['image' => $media->getFullUrl()]);
+                $media = $category->addMediaFromUrl($phone['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
         }
 
         $this->line('Kyocera Phones was parsed...');
@@ -860,25 +909,29 @@ class PullData extends Command
 
             if (!$capacityStep && $phone['capacities'] != []) {
                 $capacityStep = Step::query()->create([
-                    'name' => 'What is the phone\'s storage capacity?',
+                    'name' => 'What is the device\'s storage capacity?',
                     'items' => $phone['capacities'],
                 ]);
             }
 
-            $category = Category::query()->create([
-                'subcategory_id' => $zteCategory->getKey(),
-                'name' => $phone['title'],
-                'slug' => $phone['slug'],
-                'custom_text' => $phone['price'],
-                'is_parsed' => 1,
-            ]);
+            $isExist = Category::query()->where('name', $phone['title'])->exists();
 
-            $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $zteCategory->getKey(),
+                    'name' => $phone['title'],
+                    'slug' => $phone['slug'],
+                    'custom_text' => $phone['price'],
+                    'is_parsed' => 1,
+                ]);
 
-            $media = $category->addMediaFromUrl($phone['image'])
-                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
 
-            $category->update(['image' => $media->getFullUrl()]);
+                $media = $category->addMediaFromUrl($phone['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
         }
 
         $this->line('ZTE Phones was parsed...');
@@ -917,25 +970,29 @@ class PullData extends Command
 
             if (!$capacityStep && $phone['capacities'] != []) {
                 $capacityStep = Step::query()->create([
-                    'name' => 'What is the phone\'s storage capacity?',
+                    'name' => 'What is the device\'s storage capacity?',
                     'items' => $phone['capacities'],
                 ]);
             }
 
-            $category = Category::query()->create([
-                'subcategory_id' => $xiaomiCategory->getKey(),
-                'name' => $phone['title'],
-                'slug' => $phone['slug'],
-                'custom_text' => $phone['price'],
-                'is_parsed' => 1,
-            ]);
+            $isExist = Category::query()->where('name', $phone['title'])->exists();
 
-            $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $xiaomiCategory->getKey(),
+                    'name' => $phone['title'],
+                    'slug' => $phone['slug'],
+                    'custom_text' => $phone['price'],
+                    'is_parsed' => 1,
+                ]);
 
-            $media = $category->addMediaFromUrl($phone['image'])
-                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
 
-            $category->update(['image' => $media->getFullUrl()]);
+                $media = $category->addMediaFromUrl($phone['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
         }
 
         $this->line('Xiaomi Phones was parsed...');
@@ -974,25 +1031,29 @@ class PullData extends Command
 
             if (!$capacityStep && $phone['capacities'] != []) {
                 $capacityStep = Step::query()->create([
-                    'name' => 'What is the phone\'s storage capacity?',
+                    'name' => 'What is the device\'s storage capacity?',
                     'items' => $phone['capacities'],
                 ]);
             }
 
-            $category = Category::query()->create([
-                'subcategory_id' => $razerCategory->getKey(),
-                'name' => $phone['title'],
-                'slug' => $phone['slug'],
-                'custom_text' => $phone['price'],
-                'is_parsed' => 1,
-            ]);
+            $isExist = Category::query()->where('name', $phone['title'])->exists();
 
-            $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $razerCategory->getKey(),
+                    'name' => $phone['title'],
+                    'slug' => $phone['slug'],
+                    'custom_text' => $phone['price'],
+                    'is_parsed' => 1,
+                ]);
 
-            $media = $category->addMediaFromUrl($phone['image'])
-                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
 
-            $category->update(['image' => $media->getFullUrl()]);
+                $media = $category->addMediaFromUrl($phone['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
         }
 
         $this->line('Razer Phones was parsed...');
@@ -1031,25 +1092,29 @@ class PullData extends Command
 
             if (!$capacityStep && $phone['capacities'] != []) {
                 $capacityStep = Step::query()->create([
-                    'name' => 'What is the phone\'s storage capacity?',
+                    'name' => 'What is the device\'s storage capacity?',
                     'items' => $phone['capacities'],
                 ]);
             }
 
-            $category = Category::query()->create([
-                'subcategory_id' => $nokiaCategory->getKey(),
-                'name' => $phone['title'],
-                'slug' => $phone['slug'],
-                'custom_text' => $phone['price'],
-                'is_parsed' => 1,
-            ]);
+            $isExist = Category::query()->where('name', $phone['title'])->exists();
 
-            $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $nokiaCategory->getKey(),
+                    'name' => $phone['title'],
+                    'slug' => $phone['slug'],
+                    'custom_text' => $phone['price'],
+                    'is_parsed' => 1,
+                ]);
 
-            $media = $category->addMediaFromUrl($phone['image'])
-                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
 
-            $category->update(['image' => $media->getFullUrl()]);
+                $media = $category->addMediaFromUrl($phone['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
         }
 
         $this->line('Nokia Phones was parsed...');
@@ -1088,28 +1153,779 @@ class PullData extends Command
 
             if (!$capacityStep && $phone['capacities'] != []) {
                 $capacityStep = Step::query()->create([
-                    'name' => 'What is the phone\'s storage capacity?',
+                    'name' => 'What is the device\'s storage capacity?',
                     'items' => $phone['capacities'],
                 ]);
             }
 
-            $category = Category::query()->create([
-                'subcategory_id' => $asusCategory->getKey(),
-                'name' => $phone['title'],
-                'slug' => $phone['slug'],
-                'custom_text' => $phone['price'],
-                'is_parsed' => 1,
-            ]);
+            $isExist = Category::query()->where('name', $phone['title'])->exists();
 
-            $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $asusCategory->getKey(),
+                    'name' => $phone['title'],
+                    'slug' => $phone['slug'],
+                    'custom_text' => $phone['price'],
+                    'is_parsed' => 1,
+                ]);
 
-            $media = $category->addMediaFromUrl($phone['image'])
-                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
 
-            $category->update(['image' => $media->getFullUrl()]);
+                $media = $category->addMediaFromUrl($phone['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
         }
 
         $this->line('Asus Phones was parsed...');
+
+        $this->line('Phones was parsed!');
+
+        //PARSING TABLETS
+
+        $this->line('Starting parsing tablets...');
+
+        $ipadsPoint = 'https://www.sellcell.com/sell-ipad/';
+
+        $samsungTabletsPoint = 'https://www.sellcell.com/sell/samsung-tablet/';
+
+        $microsoftTabletsPoint = 'https://www.sellcell.com/sell/microsoft-surface/';
+
+        $ipadsCrawler = $client->request('GET', $ipadsPoint);
+
+        $samsungTabletsCrawler = $client->request('GET', $samsungTabletsPoint);
+
+        $microsoftTabletsCrawler = $client->request('GET', $microsoftTabletsPoint);
+
+        $tabletCategory = Category::query()->create([
+            'name' => 'Sell Tablet',
+            'image' => $tabletImage,
+        ]);
+
+        $ipads = $ipadsCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
+
+            $ipadStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
+
+            $capacities = $ipadStepsCrawler->filter('.capacity-logos-sprite')->each(function (Crawler $nodeCrawler) {
+                $cpies = [];
+
+                return $cpies[] = [
+                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                ];
+            });
+
+            $networks = $ipadStepsCrawler->filter('.network-logos-sprite')->each(function (Crawler $nodeCrawler) {
+                $ntwrks = [];
+
+                return $ntwrks[] = [
+                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                ];
+            });
+
+            return [
+                'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
+                'title' => $nodeCrawler->filter('.h4')->text(),
+                'slug' =>   preg_replace('/^\/(.+?)\/apple-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
+                'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
+                'capacities' => $capacities,
+                'networks' => $networks,
+            ];
+        });
+
+        $ipadCategory = Category::query()->create([
+            'name' => 'Sell iPad',
+            'image' => $tabletImage,
+            'subcategory_id' => $tabletCategory->getKey(),
+        ]);
+
+        foreach ($ipads as $tablet) {
+            $networksStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($tablet['networks']))->first();
+
+            if (!$networksStep && $tablet['networks'] != []) {
+                $networksStep = Step::query()->create([
+                    'name' => 'Please select the device\'s carrier',
+                    'items' => $tablet['networks'],
+                ]);
+            }
+
+            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($tablet['capacities']))->first();
+
+            if (!$capacityStep && $tablet['capacities'] != []) {
+                $capacityStep = Step::query()->create([
+                    'name' => 'What is the device\'s storage capacity?',
+                    'items' => $tablet['capacities'],
+                ]);
+            }
+
+            $isExist = Category::query()->where('name', $tablet['title'])->exists();
+
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $ipadCategory->getKey(),
+                    'name' => $tablet['title'],
+                    'slug' => $tablet['slug'],
+                    'custom_text' => $tablet['price'],
+                    'is_parsed' => 1,
+                ]);
+
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $networksStep ? $networksStep->getKey() : 0, $capacityStep ? $capacityStep->getKey() : 0]));
+
+                $media = $category->addMediaFromUrl($tablet['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
+        }
+
+        $this->line('iPads tablets was parsed...');
+
+        $samsungTablts = $samsungTabletsCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
+
+            $samsungTabletsStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
+
+            $capacities = $samsungTabletsStepsCrawler->filter('.capacity-logos-sprite')->each(function (Crawler $nodeCrawler) {
+                $cpies = [];
+
+                return $cpies[] = [
+                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                ];
+            });
+
+            $networks = $samsungTabletsStepsCrawler->filter('.network-logos-sprite')->each(function (Crawler $nodeCrawler) {
+                $ntwrks = [];
+
+                return $ntwrks[] = [
+                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                ];
+            });
+
+            return [
+                'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
+                'title' => $nodeCrawler->filter('.h4')->text(),
+                'slug' =>   preg_replace('/^\/(.+?)\/samsung-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
+                'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
+                'capacities' => $capacities,
+                'networks' => $networks,
+            ];
+        });
+
+        $samsungTabletCategory = Category::query()->create([
+            'name' => 'Sell Samsung tablet',
+            'image' => $tabletImage,
+            'subcategory_id' => $tabletCategory->getKey(),
+        ]);
+
+        foreach ($samsungTablts as $tablet) {
+            $networksStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($tablet['networks']))->first();
+
+            if (!$networksStep && $tablet['networks'] != []) {
+                $networksStep = Step::query()->create([
+                    'name' => 'Please select the device\'s carrier',
+                    'items' => $tablet['networks'],
+                ]);
+            }
+
+            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($tablet['capacities']))->first();
+
+            if (!$capacityStep && $tablet['capacities'] != []) {
+                $capacityStep = Step::query()->create([
+                    'name' => 'What is the device\'s storage capacity?',
+                    'items' => $tablet['capacities'],
+                ]);
+            }
+
+            $isExist = Category::query()->where('name', $tablet['title'])->exists();
+
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $samsungTabletCategory->getKey(),
+                    'name' => $tablet['title'],
+                    'slug' => $tablet['slug'],
+                    'custom_text' => $tablet['price'],
+                    'is_parsed' => 1,
+                ]);
+
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $networksStep ? $networksStep->getKey() : 0, $capacityStep ? $capacityStep->getKey() : 0]));
+
+                $media = $category->addMediaFromUrl($tablet['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
+        }
+
+        $this->line('Samsung tablets was parsed...');
+
+        $microsoftTablets = $microsoftTabletsCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
+
+            $microsoftTabletsStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
+
+            $capacities = $microsoftTabletsStepsCrawler->filter('.capacity-logos-sprite')->each(function (Crawler $nodeCrawler) {
+                $cpies = [];
+
+                return $cpies[] = [
+                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                ];
+            });
+
+            $networks = $microsoftTabletsStepsCrawler->filter('.network-logos-sprite')->each(function (Crawler $nodeCrawler) {
+                $ntwrks = [];
+
+                return $ntwrks[] = [
+                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                ];
+            });
+
+            return [
+                'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
+                'title' => $nodeCrawler->filter('.h4')->text(),
+                'slug' =>   preg_replace('/^\/(.+?)\/microsoft-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
+                'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
+                'capacities' => $capacities,
+                'networks' => $networks,
+            ];
+        });
+
+        $microsoftTabletCategory = Category::query()->create([
+            'name' => 'Sell Microsoft Surface',
+            'image' => $tabletImage,
+            'subcategory_id' => $tabletCategory->getKey(),
+        ]);
+
+        foreach ($microsoftTablets as $tablet) {
+            $networksStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($tablet['networks']))->first();
+
+            if (!$networksStep && $tablet['networks'] != []) {
+                $networksStep = Step::query()->create([
+                    'name' => 'Please select the device\'s carrier',
+                    'items' => $tablet['networks'],
+                ]);
+            }
+
+            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($tablet['capacities']))->first();
+
+            if (!$capacityStep && $tablet['capacities'] != []) {
+                $capacityStep = Step::query()->create([
+                    'name' => 'What is the device\'s storage capacity?',
+                    'items' => $tablet['capacities'],
+                ]);
+            }
+
+            $isExist = Category::query()->where('name', $tablet['title'])->exists();
+
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $microsoftTabletCategory->getKey(),
+                    'name' => $tablet['title'],
+                    'slug' => $tablet['slug'],
+                    'custom_text' => $tablet['price'],
+                    'is_parsed' => 1,
+                ]);
+
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $networksStep ? $networksStep->getKey() : 0, $capacityStep ? $capacityStep->getKey() : 0]));
+
+                $media = $category->addMediaFromUrl($tablet['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
+        }
+
+        $this->line('Microsoft tablets was parsed...');
+
+        $this->line('Tablets was parsed!');
+
+        $this->line('Starting parsing iPods...');
+
+        $iPodsPoint = 'https://www.sellcell.com/sell/apple-ipod/';
+
+        $iPodsCrawler = $client->request('GET', $iPodsPoint);
+
+        $iPodsCategory = Category::query()->create([
+            'name' => 'Sell iPod',
+            'image' => $ipodImage,
+        ]);
+
+        $iPods = $iPodsCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
+
+            $iPodsStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
+
+            $capacities = $iPodsStepsCrawler->filter('.capacity-logos-sprite')->each(function (Crawler $nodeCrawler) {
+                $cpies = [];
+
+                return $cpies[] = [
+                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                ];
+            });
+
+            return [
+                'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
+                'title' => $nodeCrawler->filter('.h4')->text(),
+                'slug' =>   preg_replace('/^\/(.+?)\/microsoft-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
+                'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
+                'capacities' => $capacities,
+            ];
+        });
+
+        foreach ($iPods as $device) {
+            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['capacities']))->first();
+
+            if (!$capacityStep && $device['capacities'] != []) {
+                $capacityStep = Step::query()->create([
+                    'name' => 'What is the device\'s storage capacity?',
+                    'items' => $device['capacities'],
+                ]);
+            }
+
+            $isExist = Category::query()->where('name', $device['title'])->exists();
+
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $iPodsCategory->getKey(),
+                    'name' => $device['title'],
+                    'slug' => $device['slug'],
+                    'custom_text' => $device['price'],
+                    'is_parsed' => 1,
+                ]);
+
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+
+                $media = $category->addMediaFromUrl($device['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
+        }
+
+        $this->line('iPods was parsed...');
+
+        $this->line('Starting parsing GoPro...');
+
+        $goproPoint = 'https://www.sellcell.com/sell/gopro/';
+
+        $goproCrawler = $client->request('GET', $goproPoint);
+
+        $goproCategory = Category::query()->create([
+            'name' => 'Sell GoPro',
+            'image' => $cameraImage,
+        ]);
+
+        $gopro = $goproCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
+
+            $goproStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
+
+            $capacities = $goproStepsCrawler->filter('.capacity-logos-sprite')->each(function (Crawler $nodeCrawler) {
+                $cpies = [];
+
+                return $cpies[] = [
+                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                ];
+            });
+
+            return [
+                'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
+                'title' => $nodeCrawler->filter('.h4')->text(),
+                'slug' =>   preg_replace('/^\/(.+?)\/microsoft-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
+                'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
+                'capacities' => $capacities,
+            ];
+        });
+
+        foreach ($gopro as $device) {
+            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['capacities']))->first();
+
+            if (!$capacityStep && $device['capacities'] != []) {
+                $capacityStep = Step::query()->create([
+                    'name' => 'What is the device\'s storage capacity?',
+                    'items' => $device['capacities'],
+                ]);
+            }
+
+            $isExist = Category::query()->where('name', $device['title'])->exists();
+
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $goproCategory->getKey(),
+                    'name' => $device['title'],
+                    'slug' => $device['slug'],
+                    'custom_text' => $device['price'],
+                    'is_parsed' => 1,
+                ]);
+
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+
+                $media = $category->addMediaFromUrl($device['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
+        }
+
+        $this->line('GoPro was parsed...');
+
+        $this->line('Starting parsing gaming consoles...');
+
+        $xboxPoint = 'https://www.sellcell.com/sell/microsoft-xbox/';
+
+        $playstationPoint = 'https://www.sellcell.com/sell/sony-playstation/';
+
+        $switchPoint = 'https://www.sellcell.com/sell/nintendo-switch/';
+
+        $dsPoint = 'https://www.sellcell.com/sell/nintendo-ds/';
+
+        $xboxCrawler = $client->request('GET', $xboxPoint);
+
+        $playstationCrawler = $client->request('GET', $playstationPoint);
+
+        $switchCrawler = $client->request('GET', $switchPoint);
+
+        $dsCrawler = $client->request('GET', $dsPoint);
+
+        $consoleCategory = Category::query()->create([
+            'name' => 'Sell gaming consoles',
+            'image' => $consoleImage,
+        ]);
+
+        $xbox = $xboxCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
+
+            $xboxStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
+
+            $capacities = $xboxStepsCrawler->filter('.capacity-logos-sprite')->each(function (Crawler $nodeCrawler) {
+                $cpies = [];
+
+                return $cpies[] = [
+                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                ];
+            });
+
+            return [
+                'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
+                'title' => $nodeCrawler->filter('.h4')->text(),
+                'slug' =>   preg_replace('/^\/(.+?)\/microsoft-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
+                'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
+                'capacities' => $capacities,
+            ];
+        });
+
+        $xboxCategory = Category::query()->create([
+            'name' => 'Sell Xbox',
+            'image' => $consoleImage,
+            'subcategory_id' => $consoleCategory->getKey(),
+        ]);
+
+        foreach ($xbox as $device) {
+            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['capacities']))->first();
+
+            if (!$capacityStep && $device['capacities'] != []) {
+                $capacityStep = Step::query()->create([
+                    'name' => 'What is the device\'s storage capacity?',
+                    'items' => $device['capacities'],
+                ]);
+            }
+
+            $isExist = Category::query()->where('name', $device['title'])->exists();
+
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $xboxCategory->getKey(),
+                    'name' => $device['title'],
+                    'slug' => $device['slug'],
+                    'custom_text' => $device['price'],
+                    'is_parsed' => 1,
+                ]);
+
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+
+                $media = $category->addMediaFromUrl($device['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
+        }
+
+        $this->line('Xbox consoles was parsed...');
+
+        $playstation = $playstationCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
+
+            $playstationStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
+
+            $capacities = $playstationStepsCrawler->filter('.capacity-logos-sprite')->each(function (Crawler $nodeCrawler) {
+                $cpies = [];
+
+                return $cpies[] = [
+                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                ];
+            });
+
+            return [
+                'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
+                'title' => $nodeCrawler->filter('.h4')->text(),
+                'slug' =>   preg_replace('/^\/(.+?)\/sony-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
+                'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
+                'capacities' => $capacities,
+            ];
+        });
+
+        $playstationCategory = Category::query()->create([
+            'name' => 'Sell Playstation',
+            'image' => $consoleImage,
+            'subcategory_id' => $consoleCategory->getKey(),
+        ]);
+
+        foreach ($playstation as $device) {
+            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['capacities']))->first();
+
+            if (!$capacityStep && $device['capacities'] != []) {
+                $capacityStep = Step::query()->create([
+                    'name' => 'What is the device\'s storage capacity?',
+                    'items' => $device['capacities'],
+                ]);
+            }
+
+            $isExist = Category::query()->where('name', $device['title'])->exists();
+
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $playstationCategory->getKey(),
+                    'name' => $device['title'],
+                    'slug' => $device['slug'],
+                    'custom_text' => $device['price'],
+                    'is_parsed' => 1,
+                ]);
+
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+
+                $media = $category->addMediaFromUrl($device['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
+        }
+
+        $this->line('Playstation consoles was parsed...');
+
+        $switch = $switchCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
+
+            $switchStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
+
+            $capacities = $switchStepsCrawler->filter('.capacity-logos-sprite')->each(function (Crawler $nodeCrawler) {
+                $cpies = [];
+
+                return $cpies[] = [
+                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                ];
+            });
+
+            return [
+                'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
+                'title' => $nodeCrawler->filter('.h4')->text(),
+                'slug' =>   preg_replace('/^\/(.+?)\/nintendo-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
+                'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
+                'capacities' => $capacities,
+            ];
+        });
+
+        $switchCategory = Category::query()->create([
+            'name' => 'Sell Nintendo Switch',
+            'image' => $consoleImage,
+            'subcategory_id' => $consoleCategory->getKey(),
+        ]);
+
+        foreach ($switch as $device) {
+            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['capacities']))->first();
+
+            if (!$capacityStep && $device['capacities'] != []) {
+                $capacityStep = Step::query()->create([
+                    'name' => 'What is the device\'s storage capacity?',
+                    'items' => $device['capacities'],
+                ]);
+            }
+
+            $isExist = Category::query()->where('name', $device['title'])->exists();
+
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $switchCategory->getKey(),
+                    'name' => $device['title'],
+                    'slug' => $device['slug'],
+                    'custom_text' => $device['price'],
+                    'is_parsed' => 1,
+                ]);
+
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+
+                $media = $category->addMediaFromUrl($device['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
+        }
+
+        $this->line('Nintendo Switch consoles was parsed...');
+
+        $ds = $dsCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
+
+            $dsStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
+
+            $capacities = $dsStepsCrawler->filter('.capacity-logos-sprite')->each(function (Crawler $nodeCrawler) {
+                $cpies = [];
+
+                return $cpies[] = [
+                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                ];
+            });
+
+            return [
+                'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
+                'title' => $nodeCrawler->filter('.h4')->text(),
+                'slug' =>   preg_replace('/^\/(.+?)\/nintendo-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
+                'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
+                'capacities' => $capacities,
+            ];
+        });
+
+        $dsCategory = Category::query()->create([
+            'name' => 'Sell Nintendo DS',
+            'image' => $consoleImage,
+            'subcategory_id' => $consoleCategory->getKey(),
+        ]);
+
+        foreach ($ds as $device) {
+            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['capacities']))->first();
+
+            if (!$capacityStep && $device['capacities'] != []) {
+                $capacityStep = Step::query()->create([
+                    'name' => 'What is the device\'s storage capacity?',
+                    'items' => $device['capacities'],
+                ]);
+            }
+
+            $isExist = Category::query()->where('name', $device['title'])->exists();
+
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $dsCategory->getKey(),
+                    'name' => $device['title'],
+                    'slug' => $device['slug'],
+                    'custom_text' => $device['price'],
+                    'is_parsed' => 1,
+                ]);
+
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+
+                $media = $category->addMediaFromUrl($device['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
+        }
+
+        $this->line('Nintendo DS consoles was parsed...');
+
+        $this->line('Gaming consoles was parsed!');
+
+        $this->line('Starting parsing apple watch...');
+
+        $appleWatchPoint = 'https://www.sellcell.com/sell/apple-watch/';
+
+        $appleWatchCrawler = $client->request('GET', $appleWatchPoint);
+
+        $watchCategory = Category::query()->create([
+            'name' => 'Sell Smart Watch',
+            'image' => $watchImage,
+        ]);
+
+        $appleWatch = $appleWatchCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
+
+            $appleWatchStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
+
+            $capacities = $appleWatchStepsCrawler->filter('.capacity-logos-sprite')->each(function (Crawler $nodeCrawler) {
+                $cpies = [];
+
+                return $cpies[] = [
+                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                ];
+            });
+
+            $networks = $appleWatchStepsCrawler->filter('.network-logos-sprite')->each(function (Crawler $nodeCrawler) {
+                $ntwrks = [];
+
+                return $ntwrks[] = [
+                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                ];
+            });
+
+            return [
+                'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
+                'title' => $nodeCrawler->filter('.h4')->text(),
+                'slug' =>   preg_replace('/^\/(.+?)\/apple-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
+                'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
+                'capacities' => $capacities,
+                'networks' => $networks,
+            ];
+        });
+
+        $appleWatchCategory = Category::query()->create([
+            'name' => 'Sell Apple Watch',
+            'image' => $watchImage,
+            'subcategory_id' => $watchCategory->getKey(),
+        ]);
+
+        foreach ($appleWatch as $device) {
+            $networksStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['networks']))->first();
+
+            if (!$networksStep && $device['networks'] != []) {
+                $networksStep = Step::query()->create([
+                    'name' => 'Please select the device\'s carrier',
+                    'items' => $device['networks'],
+                ]);
+            }
+
+            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['capacities']))->first();
+
+            if (!$capacityStep && $device['capacities'] != []) {
+                $capacityStep = Step::query()->create([
+                    'name' => 'What is the device\'s storage capacity?',
+                    'items' => $device['capacities'],
+                ]);
+            }
+
+            $isExist = Category::query()->where('name', $device['title'])->exists();
+
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $appleWatchCategory->getKey(),
+                    'name' => $device['title'],
+                    'slug' => $device['slug'],
+                    'custom_text' => $device['price'],
+                    'is_parsed' => 1,
+                ]);
+
+                $category->steps()->attach(Step::find([$conditionStep->getKey(), $networksStep ? $networksStep->getKey() : 0, $capacityStep ? $capacityStep->getKey() : 0]));
+
+                $media = $category->addMediaFromUrl($device['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
+        }
+
+        $this->line('Apple watch was parsed...');
 
         $this->line('Work is done!');
     }
