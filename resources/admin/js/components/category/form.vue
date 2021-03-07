@@ -104,7 +104,7 @@
                             <h1>{{ $t('admin.category.form.steps') }}</h1>
                         </strong>
                         <div class="form-group">
-                            <div class="change-blocks-wrapper__item" v-for="(item, index) in model.steps">
+                            <div class="change-blocks-wrapper__item" v-for="(item, index) in categorysteps">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="text-right">
@@ -121,13 +121,13 @@
                                                         <strong>{{ $t('admin.category.form.select_step') }}</strong>
                                                     </label>
                                                     <model-list-select :list="steps"
-                                                                       v-model="model.steps[index]"
+                                                                       v-model="categorysteps[index]"
                                                                        option-value="id"
                                                                        :custom-text="name"
                                                                        placeholder="select item">
                                                     </model-list-select>
                                                     <div class="mt-3">
-                                                        <p>Selected:</p> <a :href="$r('admin.step.edit', { step: model.steps[index].id })">{{ model.steps[index].name }}</a>
+                                                        <p>Selected:</p> <a :href="$r('admin.step.edit', { step: categorysteps[index].id })">{{ categorysteps[index].name }}</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -215,23 +215,19 @@
         data() {
             return {
                 categoryPreviewImage: null,
-                selectedSteps: [],
             };
         },
 
-        watch: {
-            selectedSteps: function () {
-                this.model.steps = this.selectedSteps;
-            }
-        },
 
         methods: {
             submit() {
+                this.model.steps = this.categorysteps;
+
                 this.$emit('submit', this.model);
             },
 
             addStep() {
-                this.selectedSteps.push({
+                this.categorysteps.push({
                     id: null,
                 });
 
@@ -239,7 +235,7 @@
             },
 
             deleteStep(index) {
-                this.selectedSteps.splice(index, 1);
+                this.categorysteps.splice(index, 1);
 
                 this.$forceUpdate();
             },
@@ -278,7 +274,9 @@
             if (this.model.id) {
                 this.model.is_hidden = Number(this.model.is_hidden);
 
-                this.selectedSteps = this.categorysteps;
+                this.model.steps = this.categorysteps ? this.categorysteps : [];
+            } else {
+                this.categorysteps = [];
             }
 
             this.categoryPreviewImage = this.model.image;

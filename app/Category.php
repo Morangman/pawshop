@@ -33,9 +33,11 @@ class Category extends Model implements HasMedia
         'subcategory_id',
         'faq_id',
         'name',
+        'slug',
         'image',
         'custom_text',
         'is_hidden',
+        'is_parsed',
     ];
 
     /**
@@ -45,9 +47,11 @@ class Category extends Model implements HasMedia
         'subcategory_id' => 'int',
         'faq_id' => 'int',
         'name' => 'string',
+        'slug' => 'string',
         'image' => 'string',
         'custom_text' => 'string',
         'is_hidden' => 'bool',
+        'is_parsed' => 'bool',
     ];
 
     /**

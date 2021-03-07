@@ -23,10 +23,12 @@ class CreateCategoriesTable extends Migration
             $table->unsignedBigInteger('subcategory_id')->nullable();
             $table->unsignedBigInteger('faq_id')->nullable();
             $table->string('name');
+            $table->string('slug')->nullable();
             $table->string('text')->nullable();
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('custom_text')->nullable();
             $table->boolean('is_hidden')->default(0);
+            $table->boolean('is_parsed')->default(0);
             $table->timestamps();
         });
     }
