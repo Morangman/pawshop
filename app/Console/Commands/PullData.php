@@ -65,21 +65,25 @@ class PullData extends Command
             'items' => [
                 [
                     'name' => 'LIKE NEW',
+                    'attribute' => 'condition',
                     'item_text' => 'Phone still in factory original packaging. Must come with the box and all accessories sealed/untouched.',
                     'slug' => 'new',
                 ],
                 [
                     'name' => 'GOOD',
+                    'attribute' => 'condition',
                     'item_text' => 'Shows light to moderate signs of wear. Contains few light scratches and/or dents.',
                     'slug' => 'working',
                 ],
                 [
                     'name' => 'POOR',
+                    'attribute' => 'condition',
                     'item_text' => 'Shows moderate to excessive signs of wear. Contains excessive scratching, major dents, and/or mild housing damage such as a slightly bent frame.',
                     'slug' => 'poor',
                 ],
                 [
                     'name' => 'FAULTY',
+                    'attribute' => 'condition',
                     'item_text' => 'Cracks (regardless of size) or broken parts on either screen or body of the item.',
                     'slug' => 'broken',
                 ],
@@ -92,31 +96,37 @@ class PullData extends Command
             'items' => [
                 [
                     'name' => 'Verizon',
+                    'attribute' => 'network',
                     'slug' => '59',
                     'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/59.png',
                 ],
                 [
                     'name' => 'AT&T',
+                    'attribute' => 'network',
                     'slug' => '48',
                     'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/48.png',
                 ],
                 [
                     'name' => 'T-Mobile',
+                    'attribute' => 'network',
                     'slug' => '30',
                     'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/30.png',
                 ],
                 [
                     'name' => 'Sprint',
+                    'attribute' => 'network',
                     'slug' => '49',
                     'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/49.png',
                 ],
                 [
                     'name' => 'Other',
+                    'attribute' => 'network',
                     'slug' => '104',
                     'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/104.png',
                 ],
                 [
                     'name' => 'Unlocked',
+                    'attribute' => 'network',
                     'slug' => '29',
                     'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/29.png',
                 ],
@@ -128,6 +138,8 @@ class PullData extends Command
         $client = new Client(HttpClient::create(['timeout' => 30 * 30 * 24]));
 
         $basePath = 'https://www.sellcell.com';
+
+        $maxPrice = 5;
 
         $phoneImage = '/client/images/phone.png';
         $tabletImage = '/client/images/tablet.png';
@@ -210,7 +222,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -248,6 +261,7 @@ class PullData extends Command
                     'slug' => $iphone['slug'],
                     'custom_text' => $iphone['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $iphone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -270,7 +284,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -309,6 +324,7 @@ class PullData extends Command
                     'slug' => $phone['slug'],
                     'custom_text' => $phone['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -336,7 +352,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -351,7 +368,7 @@ class PullData extends Command
         });
 
         $htcCategory = Category::query()->create([
-            'name' => 'Sell HTC Phones',
+            'name' => 'Sell HTC Phone',
             'image' => $phoneImage,
             'subcategory_id' => $androidCategory->getKey(),
         ]);
@@ -375,6 +392,7 @@ class PullData extends Command
                     'slug' => $phone['slug'],
                     'custom_text' => $phone['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -397,7 +415,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -412,7 +431,7 @@ class PullData extends Command
         });
 
         $motorolaCategory = Category::query()->create([
-            'name' => 'Sell MOTOROLA Phones',
+            'name' => 'Sell MOTOROLA Phone',
             'image' => $phoneImage,
             'subcategory_id' => $androidCategory->getKey(),
         ]);
@@ -436,6 +455,7 @@ class PullData extends Command
                     'slug' => $phone['slug'],
                     'custom_text' => $phone['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -458,7 +478,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -473,7 +494,7 @@ class PullData extends Command
         });
 
         $lgCategory = Category::query()->create([
-            'name' => 'Sell LG Phones',
+            'name' => 'Sell LG Phone',
             'image' => $phoneImage,
             'subcategory_id' => $androidCategory->getKey(),
         ]);
@@ -497,6 +518,7 @@ class PullData extends Command
                     'slug' => $phone['slug'],
                     'custom_text' => $phone['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -519,7 +541,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -534,7 +557,7 @@ class PullData extends Command
         });
 
         $oneplusCategory = Category::query()->create([
-            'name' => 'Sell OnePlus Phones',
+            'name' => 'Sell OnePlus Phone',
             'image' => $phoneImage,
             'subcategory_id' => $androidCategory->getKey(),
         ]);
@@ -558,6 +581,7 @@ class PullData extends Command
                     'slug' => $phone['slug'],
                     'custom_text' => $phone['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -580,7 +604,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -595,7 +620,7 @@ class PullData extends Command
         });
 
         $googleCategory = Category::query()->create([
-            'name' => 'Sell Google Phones',
+            'name' => 'Sell Google Phone',
             'image' => $phoneImage,
             'subcategory_id' => $androidCategory->getKey(),
         ]);
@@ -619,6 +644,7 @@ class PullData extends Command
                     'slug' => $phone['slug'],
                     'custom_text' => $phone['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -641,7 +667,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -656,7 +683,7 @@ class PullData extends Command
         });
 
         $sonyCategory = Category::query()->create([
-            'name' => 'Sell Sony Phones',
+            'name' => 'Sell Sony Phone',
             'image' => $phoneImage,
             'subcategory_id' => $androidCategory->getKey(),
         ]);
@@ -680,6 +707,7 @@ class PullData extends Command
                     'slug' => $phone['slug'],
                     'custom_text' => $phone['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -702,7 +730,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -717,7 +746,7 @@ class PullData extends Command
         });
 
         $blackBerryCategory = Category::query()->create([
-            'name' => 'Sell BlackBerry Phones',
+            'name' => 'Sell BlackBerry Phone',
             'image' => $phoneImage,
             'subcategory_id' => $androidCategory->getKey(),
         ]);
@@ -741,6 +770,7 @@ class PullData extends Command
                     'slug' => $phone['slug'],
                     'custom_text' => $phone['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -763,7 +793,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -778,7 +809,7 @@ class PullData extends Command
         });
 
         $huaweiCategory = Category::query()->create([
-            'name' => 'Sell Huawei Phones',
+            'name' => 'Sell Huawei Phone',
             'image' => $phoneImage,
             'subcategory_id' => $androidCategory->getKey(),
         ]);
@@ -802,6 +833,7 @@ class PullData extends Command
                     'slug' => $phone['slug'],
                     'custom_text' => $phone['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -824,7 +856,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -839,7 +872,7 @@ class PullData extends Command
         });
 
         $kyoceraCategory = Category::query()->create([
-            'name' => 'Sell Kyocera Phones',
+            'name' => 'Sell Kyocera Phone',
             'image' => $phoneImage,
             'subcategory_id' => $androidCategory->getKey(),
         ]);
@@ -863,6 +896,7 @@ class PullData extends Command
                     'slug' => $phone['slug'],
                     'custom_text' => $phone['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -884,7 +918,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -899,7 +934,7 @@ class PullData extends Command
         });
 
         $zteCategory = Category::query()->create([
-            'name' => 'Sell ZTE Phones',
+            'name' => 'Sell ZTE Phone',
             'image' => $phoneImage,
             'subcategory_id' => $androidCategory->getKey(),
         ]);
@@ -923,6 +958,7 @@ class PullData extends Command
                     'slug' => $phone['slug'],
                     'custom_text' => $phone['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -945,7 +981,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -960,7 +997,7 @@ class PullData extends Command
         });
 
         $xiaomiCategory = Category::query()->create([
-            'name' => 'Sell Xiaomi Phones',
+            'name' => 'Sell Xiaomi Phone',
             'image' => $phoneImage,
             'subcategory_id' => $androidCategory->getKey(),
         ]);
@@ -984,6 +1021,7 @@ class PullData extends Command
                     'slug' => $phone['slug'],
                     'custom_text' => $phone['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -1006,7 +1044,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -1021,7 +1060,7 @@ class PullData extends Command
         });
 
         $razerCategory = Category::query()->create([
-            'name' => 'Sell Razer Phones',
+            'name' => 'Sell Razer Phone',
             'image' => $phoneImage,
             'subcategory_id' => $androidCategory->getKey(),
         ]);
@@ -1045,6 +1084,7 @@ class PullData extends Command
                     'slug' => $phone['slug'],
                     'custom_text' => $phone['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -1067,7 +1107,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -1082,7 +1123,7 @@ class PullData extends Command
         });
 
         $nokiaCategory = Category::query()->create([
-            'name' => 'Sell Nokia Phones',
+            'name' => 'Sell Nokia Phone',
             'image' => $phoneImage,
             'subcategory_id' => $androidCategory->getKey(),
         ]);
@@ -1106,6 +1147,7 @@ class PullData extends Command
                     'slug' => $phone['slug'],
                     'custom_text' => $phone['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -1128,7 +1170,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -1143,7 +1186,7 @@ class PullData extends Command
         });
 
         $asusCategory = Category::query()->create([
-            'name' => 'Sell Asus Phones',
+            'name' => 'Sell Asus Phone',
             'image' => $phoneImage,
             'subcategory_id' => $androidCategory->getKey(),
         ]);
@@ -1167,6 +1210,7 @@ class PullData extends Command
                     'slug' => $phone['slug'],
                     'custom_text' => $phone['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -1203,6 +1247,7 @@ class PullData extends Command
             'image' => $tabletImage,
         ]);
 
+        //IPAD TABLETS
         $ipads = $ipadsCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
 
             $ipadStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
@@ -1211,7 +1256,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -1220,7 +1266,8 @@ class PullData extends Command
                 $ntwrks = [];
 
                 return $ntwrks[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'network' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -1236,7 +1283,7 @@ class PullData extends Command
         });
 
         $ipadCategory = Category::query()->create([
-            'name' => 'Sell iPad',
+            'name' => 'Sell Apple iPad',
             'image' => $tabletImage,
             'subcategory_id' => $tabletCategory->getKey(),
         ]);
@@ -1269,6 +1316,7 @@ class PullData extends Command
                     'slug' => $tablet['slug'],
                     'custom_text' => $tablet['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $tablet['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $networksStep ? $networksStep->getKey() : 0, $capacityStep ? $capacityStep->getKey() : 0]));
@@ -1282,6 +1330,7 @@ class PullData extends Command
 
         $this->line('iPads tablets was parsed...');
 
+        //SAMSUNG TABLETS
         $samsungTablts = $samsungTabletsCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
 
             $samsungTabletsStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
@@ -1290,7 +1339,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -1299,14 +1349,15 @@ class PullData extends Command
                 $ntwrks = [];
 
                 return $ntwrks[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'network' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
 
             return [
                 'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
-                'title' => $nodeCrawler->filter('.h4')->text(),
+                'title' => 'Samsung '.$nodeCrawler->filter('.h4')->text(),
                 'slug' =>   preg_replace('/^\/(.+?)\/samsung-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
                 'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
                 'capacities' => $capacities,
@@ -1315,7 +1366,7 @@ class PullData extends Command
         });
 
         $samsungTabletCategory = Category::query()->create([
-            'name' => 'Sell Samsung tablet',
+            'name' => 'Sell Samsung Tablet',
             'image' => $tabletImage,
             'subcategory_id' => $tabletCategory->getKey(),
         ]);
@@ -1348,6 +1399,7 @@ class PullData extends Command
                     'slug' => $tablet['slug'],
                     'custom_text' => $tablet['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $tablet['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $networksStep ? $networksStep->getKey() : 0, $capacityStep ? $capacityStep->getKey() : 0]));
@@ -1361,6 +1413,7 @@ class PullData extends Command
 
         $this->line('Samsung tablets was parsed...');
 
+        //MICROSOFT TABLETS
         $microsoftTablets = $microsoftTabletsCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
 
             $microsoftTabletsStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
@@ -1369,7 +1422,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -1378,14 +1432,15 @@ class PullData extends Command
                 $ntwrks = [];
 
                 return $ntwrks[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'network' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
 
             return [
                 'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
-                'title' => $nodeCrawler->filter('.h4')->text(),
+                'title' => 'Microsoft '.$nodeCrawler->filter('.h4')->text(),
                 'slug' =>   preg_replace('/^\/(.+?)\/microsoft-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
                 'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
                 'capacities' => $capacities,
@@ -1427,6 +1482,7 @@ class PullData extends Command
                     'slug' => $tablet['slug'],
                     'custom_text' => $tablet['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $tablet['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $networksStep ? $networksStep->getKey() : 0, $capacityStep ? $capacityStep->getKey() : 0]));
@@ -1449,10 +1505,11 @@ class PullData extends Command
         $iPodsCrawler = $client->request('GET', $iPodsPoint);
 
         $iPodsCategory = Category::query()->create([
-            'name' => 'Sell iPod',
+            'name' => 'Sell Apple iPod',
             'image' => $ipodImage,
         ]);
 
+        //APPLE IPODS
         $iPods = $iPodsCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
 
             $iPodsStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
@@ -1461,7 +1518,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -1494,6 +1552,7 @@ class PullData extends Command
                     'slug' => $device['slug'],
                     'custom_text' => $device['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -1518,6 +1577,7 @@ class PullData extends Command
             'image' => $cameraImage,
         ]);
 
+        //GOPRO ACTION CAMERA
         $gopro = $goproCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
 
             $goproStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
@@ -1526,14 +1586,15 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
 
             return [
                 'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
-                'title' => $nodeCrawler->filter('.h4')->text(),
+                'title' => 'GoPro '.$nodeCrawler->filter('.h4')->text(),
                 'slug' =>   preg_replace('/^\/(.+?)\/microsoft-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
                 'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
                 'capacities' => $capacities,
@@ -1559,6 +1620,7 @@ class PullData extends Command
                     'slug' => $device['slug'],
                     'custom_text' => $device['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -1591,10 +1653,11 @@ class PullData extends Command
         $dsCrawler = $client->request('GET', $dsPoint);
 
         $consoleCategory = Category::query()->create([
-            'name' => 'Sell gaming consoles',
+            'name' => 'Sell Game Console',
             'image' => $consoleImage,
         ]);
 
+        //XBOX CONSOLES
         $xbox = $xboxCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
 
             $xboxStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
@@ -1603,7 +1666,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -1642,6 +1706,7 @@ class PullData extends Command
                     'slug' => $device['slug'],
                     'custom_text' => $device['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -1655,6 +1720,7 @@ class PullData extends Command
 
         $this->line('Xbox consoles was parsed...');
 
+        //PLAYSTATION CONSOLES
         $playstation = $playstationCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
 
             $playstationStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
@@ -1663,7 +1729,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -1702,6 +1769,7 @@ class PullData extends Command
                     'slug' => $device['slug'],
                     'custom_text' => $device['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -1715,6 +1783,7 @@ class PullData extends Command
 
         $this->line('Playstation consoles was parsed...');
 
+        //NINTENDO SWITCH
         $switch = $switchCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
 
             $switchStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
@@ -1723,14 +1792,15 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
 
             return [
                 'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
-                'title' => $nodeCrawler->filter('.h4')->text(),
+                'title' => 'Nintendo '.$nodeCrawler->filter('.h4')->text(),
                 'slug' =>   preg_replace('/^\/(.+?)\/nintendo-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
                 'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
                 'capacities' => $capacities,
@@ -1762,6 +1832,7 @@ class PullData extends Command
                     'slug' => $device['slug'],
                     'custom_text' => $device['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -1775,6 +1846,7 @@ class PullData extends Command
 
         $this->line('Nintendo Switch consoles was parsed...');
 
+        //NINTENDO DS
         $ds = $dsCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
 
             $dsStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
@@ -1783,14 +1855,15 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
 
             return [
                 'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
-                'title' => $nodeCrawler->filter('.h4')->text(),
+                'title' => 'Nintendo '.$nodeCrawler->filter('.h4')->text(),
                 'slug' =>   preg_replace('/^\/(.+?)\/nintendo-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
                 'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
                 'capacities' => $capacities,
@@ -1798,7 +1871,7 @@ class PullData extends Command
         });
 
         $dsCategory = Category::query()->create([
-            'name' => 'Sell Nintendo DS',
+            'name' => 'Sell Nintendo (3DS / 2DS)',
             'image' => $consoleImage,
             'subcategory_id' => $consoleCategory->getKey(),
         ]);
@@ -1822,6 +1895,7 @@ class PullData extends Command
                     'slug' => $device['slug'],
                     'custom_text' => $device['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
@@ -1844,10 +1918,11 @@ class PullData extends Command
         $appleWatchCrawler = $client->request('GET', $appleWatchPoint);
 
         $watchCategory = Category::query()->create([
-            'name' => 'Sell Smart Watch',
+            'name' => 'Sell Smartwatch',
             'image' => $watchImage,
         ]);
 
+        //APPLE WATCH
         $appleWatch = $appleWatchCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
 
             $appleWatchStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
@@ -1856,7 +1931,8 @@ class PullData extends Command
                 $cpies = [];
 
                 return $cpies[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
@@ -1865,14 +1941,15 @@ class PullData extends Command
                 $ntwrks = [];
 
                 return $ntwrks[] = [
-                    'slug' => $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'network' : null,
                     'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
                 ];
             });
 
             return [
                 'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
-                'title' => $nodeCrawler->filter('.h4')->text(),
+                'title' => 'Apple '.$nodeCrawler->filter('.h4')->text(),
                 'slug' =>   preg_replace('/^\/(.+?)\/apple-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
                 'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
                 'capacities' => $capacities,
@@ -1914,6 +1991,7 @@ class PullData extends Command
                     'slug' => $device['slug'],
                     'custom_text' => $device['price'],
                     'is_parsed' => 1,
+                    'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
                 $category->steps()->attach(Step::find([$conditionStep->getKey(), $networksStep ? $networksStep->getKey() : 0, $capacityStep ? $capacityStep->getKey() : 0]));
