@@ -83,7 +83,8 @@
 
             <div class="order-options-block" v-if="!selectedStep">
                 <h4>Your device is valued at</h4>
-                <div class="order-total-block">
+                <img v-if="!priceLoaded" style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src="../../client/images/spinner.gif">
+                <div v-if="priceLoaded" class="order-total-block">
                     <div class="price">${{ summ }}</div>
                     <div class="order-options-links">
                         <button class="btn gray-btn" v-on:click="backStep">Back</button>
@@ -239,6 +240,8 @@
                 name: '',
                 searchDevices: {},
                 faqsIsset: false,
+                priceError: false,
+                priceLoaded: false,
                 selectedStep: null,
                 selectedSteps: [],
                 stepIndex: 0,
@@ -292,6 +295,30 @@
 
             valuate(){
                 this.summ = parseFloat(this.category.custom_text);
+
+                if (!this.selectedStep && this.category.is_parsed) {
+                    let steps = [];
+                    _.each(this.selectedSteps, (key, value) => {
+                        if(key) {
+                            steps.push({
+                                attribute: key.attribute,
+                                slug: key.slug,
+                            });
+                        }
+                    });
+
+                    axios.post(
+                        Router.route('get-price', {steps: JSON.stringify(steps), category_id: this.category.id}),
+                    ).then((data) => {
+                        this.summ = data.data.price;
+
+                        this.priceLoaded = true;
+                    }).catch(({ response: { data: { errors } } }) => {
+                        this.priceError = true;
+                    });
+                } else {
+                    this.priceLoaded = true;
+                }
 
                 _.each(this.selectedSteps, (key, value) => {
                     if(key) {

@@ -54,6 +54,8 @@ class PullPrices extends Command
 
         Schema::enableForeignKeyConstraints();
 
+        DB::connection()->disableQueryLog();
+
         $devices = Category::query()
             ->whereNotNull('custom_text')
             ->whereNotNull('subcategory_id')
@@ -126,6 +128,7 @@ class PullPrices extends Command
             }
 
             $this->line("{$device->getAttribute('name')}....OK");
+            $this->line('Memory now at: ' . memory_get_peak_usage());
         }
 
         $this->line("Work is done!");

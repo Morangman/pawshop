@@ -51,6 +51,8 @@ Route::post('/callback', 'HomeController@callback')->name('callback');
 
 Route::post('/order', 'HomeController@makeOrder')->name('order');
 
+Route::post('/get-price', 'HomeController@getPrice')->name('get-price');
+
 Route::post('/comment', 'HomeController@addComment')->name('comment');
 
 Route::patch('/update-account/{user}', [

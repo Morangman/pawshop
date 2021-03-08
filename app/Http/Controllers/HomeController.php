@@ -24,6 +24,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
@@ -326,6 +327,26 @@ class HomeController extends Controller
             ->get();
 
         return $this->json()->ok($categories);
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getPrice(Request $request): JsonResponse
+    {
+        $steps = json_decode($request->get('steps'), true);
+
+        $price = DB::table('prices')
+            ->where('category_id', $request->get('category_id'))
+            ->where(function($query) use ($steps) {
+            foreach ($steps as $step) {
+                $query->where($step['attribute'], $step['slug']);
+            }
+        })->first();
+
+        return $this->json()->ok(['price' => $price->price]);
     }
 
     /**
