@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use App\Services\Traits\JsonDecodeTrait;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
 class PullPrices extends Command
@@ -89,41 +90,45 @@ class PullPrices extends Command
 
                 $result = [];
 
-                $response = $client
-                    ->request(
-                        'POST',
-                        $endpoint,
-                        [
-                            'form_params' => [
-                                'device_name' => $device->getAttribute('slug'),
-                                'attributes' => $attrs,
-                                'sort' => 'best_match',
-                            ],
-                        ]
-                    )
-                    ->getBody()
-                    ->getContents();
+                try {
+                    $response = $client
+                        ->request(
+                            'POST',
+                            $endpoint,
+                            [
+                                'form_params' => [
+                                    'device_name' => $device->getAttribute('slug'),
+                                    'attributes' => $attrs,
+                                    'sort' => 'best_match',
+                                ],
+                            ]
+                        )
+                        ->getBody()
+                        ->getContents();
 
-                $result = $this->decodeResult($response);
+                    $result = $this->decodeResult($response);
 
-                if ($result && $result['prices']) {
-                    $maxPrice = $this->maxValueInArray($result['prices'], 'price');
+                    if ($result && $result['prices']) {
+                        $maxPrice = $this->maxValueInArray($result['prices'], 'price');
 
-                    foreach ($result['prices'] as $price) {
-                        if ($price['merchant_short_name'] === 'itsworthmore') {
-                            $maxPrice = $price['price'];
+                        foreach ($result['prices'] as $price) {
+                            if ($price['merchant_short_name'] === 'itsworthmore') {
+                                $maxPrice = $price['price'];
+                            }
                         }
+
+                        $data = [
+                            'category_id' => $device->getKey(),
+                            'condition' => isset($attrs['condition']) ? $attrs['condition'] : null,
+                            'network' => isset($attrs['network']) ? $attrs['network'] : null,
+                            'capacity' => isset($attrs['capacity']) ? $attrs['capacity'] : null,
+                            'price' => $maxPrice,
+                        ];
+
+                        DB::table('prices')->insert($data);
                     }
-
-                    $data = [
-                        'category_id' => $device->getKey(),
-                        'condition' => isset($attrs['condition']) ? $attrs['condition'] : null,
-                        'network' => isset($attrs['network']) ? $attrs['network'] : null,
-                        'capacity' => isset($attrs['capacity']) ? $attrs['capacity'] : null,
-                        'price' => $maxPrice,
-                    ];
-
-                    DB::table('prices')->insert($data);
+                } catch (\Exception $e) {
+                    Log::info('Parse prices exception: ' . $e);
                 }
             }
 
