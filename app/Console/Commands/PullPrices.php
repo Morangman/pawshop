@@ -28,8 +28,6 @@ class PullPrices extends Command
      */
     protected $description = 'Parse devices prices by steps from https://www.sellcell.com/';
 
-    public $error = false;
-
     /**
      * Create a new command instance.
      *
@@ -164,8 +162,6 @@ class PullPrices extends Command
                     } catch (\Exception $e) {
                         Log::info('Parse prices exception: ' . $e->getMessage());
 
-                        $this->error = true;
-
                         $this->line("{$device->getAttribute('name')} GET ERROR EXCEPTION");
 
                         DB::table('failed_prices')->insert([
@@ -177,19 +173,6 @@ class PullPrices extends Command
 
                         continue;
                     }
-
-//                    if ($this->error === true) {
-//                        $this->line("{$device->getAttribute('name')} GET ERROR EXCEPTION");
-//
-//                        DB::table('failed_prices')->insert([
-//                            'category_id' => $device->getKey(),
-//                            'device_name' => $device->getAttribute('name'),
-//                            'device_slug' => $device->getAttribute('slug'),
-//                            'attributes' => $attrs,
-//                        ]);
-//
-//                        $this->error = false;
-//                    }
                 }
 
                 $this->line("{$device->getAttribute('name')}....OK");
