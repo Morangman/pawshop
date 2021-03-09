@@ -6,6 +6,7 @@ namespace App\Console;
 
 use App\Console\Commands\PullData;
 use App\Console\Commands\PullPrices;
+use App\Console\Commands\PullFailedPrices;
 use App\Console\Commands\Reminder;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -21,6 +22,7 @@ class Kernel extends ConsoleKernel
         Reminder::class,
         PullData::class,
         PullPrices::class,
+        PullFailedPrices::class,
     ];
 
     /**

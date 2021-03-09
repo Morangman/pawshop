@@ -10,6 +10,7 @@ use Goutte\Client;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\HttpClient;
 
@@ -610,10 +611,40 @@ class PullData extends Command
                 ];
             });
 
+            $slug = preg_replace('/^\/(.+?)\/google-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href'));
+
+            if (Str::contains($slug, 'huawei-google-nexus-6p')) {
+                $slug = 'google-nexus-6p';
+            }
+
+            if (Str::contains($slug, 'motorola-google-nexus-6')) {
+                $slug = 'google-nexus-6';
+            }
+
+            if (Str::contains($slug, 'lg-google-nexus-5x')) {
+                $slug = 'google-nexus-5x';
+            }
+
+            if (Str::contains($slug, 'lg-google-nexus-4')) {
+                $slug = 'google-nexus-4';
+            }
+
+            if (Str::contains($slug, 'lg-google-nexus-5')) {
+                $slug = 'google-nexus-5';
+            }
+
+            if (Str::contains($slug, 'htc-google-nexus-one')) {
+                $slug = 'google-nexus-one';
+            }
+
+            if (Str::contains($slug, 'samsung-google-nexus-s')) {
+                $slug = 'google-nexus-s';
+            }
+
             return [
                 'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
                 'title' => 'Google '.$nodeCrawler->filter('.h4')->text(),
-                'slug' =>   preg_replace('/^\/(.+?)\/google-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
+                'slug' => $slug,
                 'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
                 'capacities' => $capacities,
             ];
@@ -1514,6 +1545,16 @@ class PullData extends Command
 
             $iPodsStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
 
+            $networks = $iPodsStepsCrawler->filter('.network-logos-sprite')->each(function (Crawler $nodeCrawler) {
+                $ntwrks = [];
+
+                return $ntwrks[] = [
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'network' : null,
+                    'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                ];
+            });
+
             $capacities = $iPodsStepsCrawler->filter('.capacity-logos-sprite')->each(function (Crawler $nodeCrawler) {
                 $cpies = [];
 
@@ -1527,13 +1568,23 @@ class PullData extends Command
             return [
                 'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
                 'title' => $nodeCrawler->filter('.h4')->text(),
-                'slug' =>   preg_replace('/^\/(.+?)\/microsoft-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
+                'slug' =>   preg_replace('/^\/(.+?)\/apple-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
                 'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
                 'capacities' => $capacities,
+                'networks' => $networks,
             ];
         });
 
         foreach ($iPods as $device) {
+            $networksStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['networks']))->first();
+
+            if (!$networksStep && $device['networks'] != []) {
+                $networksStep = Step::query()->create([
+                    'name' => 'Please select the device\'s carrier',
+                    'items' => $device['networks'],
+                ]);
+            }
+
             $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['capacities']))->first();
 
             if (!$capacityStep && $device['capacities'] != []) {
@@ -1555,7 +1606,7 @@ class PullData extends Command
                     'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([$conditionStep->getKey(),  $networksStep ? $networksStep->getKey() : 0, $capacityStep ? $capacityStep->getKey() : 0]));
 
                 $media = $category->addMediaFromUrl($device['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1595,7 +1646,7 @@ class PullData extends Command
             return [
                 'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
                 'title' => 'GoPro '.$nodeCrawler->filter('.h4')->text(),
-                'slug' =>   preg_replace('/^\/(.+?)\/microsoft-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
+                'slug' =>   preg_replace('/^\/(.+?)\/gopro-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
                 'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
                 'capacities' => $capacities,
             ];

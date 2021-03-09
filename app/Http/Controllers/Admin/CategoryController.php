@@ -39,7 +39,10 @@ class CategoryController extends Controller
     public function create(): ViewContract
     {
         return View::make('admin.category.create', [
-            'categories' => Category::all(),
+            'categories' => Category::query()
+                ->whereNull('custom_text')
+                ->whereNull('subcategory_id')
+                ->get(),
             'faqs' => Faq::all(),
             'steps' => Step::all(),
         ]);
@@ -87,7 +90,10 @@ class CategoryController extends Controller
             'admin.category.edit',
             [
                 'category' => $category,
-                'categories' => Category::all(),
+                'categories' => Category::query()
+                    ->whereNull('custom_text')
+                    ->whereNull('subcategory_id')
+                    ->get(),
                 'faqs' => Faq::all(),
                 'steps' => Step::all(),
                 'categorysteps' => $category->steps()->get(),
@@ -171,7 +177,9 @@ class CategoryController extends Controller
                 function ($query, $search) {
                     $keyword = "%{$search}%";
 
-                    $query->where('name', 'like', $keyword);
+                    $query->where('name', 'like', $keyword)
+                        ->orWhere('slug', 'like', $keyword)
+                        ->orWhere('id', 'like', $keyword);
                 }
             )
             ->when(

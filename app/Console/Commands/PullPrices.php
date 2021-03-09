@@ -28,6 +28,8 @@ class PullPrices extends Command
      */
     protected $description = 'Parse devices prices by steps from https://www.sellcell.com/';
 
+    public $error = false;
+
     /**
      * Create a new command instance.
      *
@@ -44,16 +46,17 @@ class PullPrices extends Command
      * @return mixed
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Exception
      */
     public function handle()
     {
         $this->line('Preparing for parsing prices...');
 
-        Schema::disableForeignKeyConstraints();
-
-        DB::table('prices')->truncate();
-
-        Schema::enableForeignKeyConstraints();
+//        Schema::disableForeignKeyConstraints();
+//
+//        DB::table('prices')->truncate();
+//
+//        Schema::enableForeignKeyConstraints();
 
         DB::connection()->disableQueryLog();
 
@@ -68,72 +71,131 @@ class PullPrices extends Command
 
         $this->line('Starting parsing prices...');
 
-        foreach ($devices as $device) {
-            $attributes = [];
+        $firstStart = DB::table('prices')->get()->isEmpty();
 
-            foreach ($device->steps()->get()->toArray() as $step) {
-                foreach ($step['items'] as $item){
-                    $attributes[$item['attribute']][] = [
-                        $item['attribute'] => $item['slug']
-                    ];
+        if (!$firstStart) {
+            $this->line('Restart detected...');
+
+            $this->line('Finding the last item...');
+
+            foreach ($devices as $key => $device) {
+                $existCategory = DB::table('prices')->where('category_id', $device->getKey())->exists();
+
+                if (!$existCategory) {
+                    $device = $devices[$key - 1];
+
+                    $this->line("Continue parsing from id: {$device->getKey()}...");
+
+                    DB::table('prices')->where('category_id', $device->getKey())->delete();
+
+                    $firstStart = true;
+
+                    break;
                 }
             }
+        }
 
-            $combinations = $this->array_cartesian_product($attributes);
+        foreach ($devices as $key => $device) {
+            $existCategory = DB::table('prices')->where('category_id', $device->getKey())->exists();
 
-            foreach ($combinations as $key => $combination) {
-                $attrs = [];
+//            if ($key > 1) {
+//                throw new \Exception();
+//            }
 
-                foreach ($combination as $attributes) {
-                    $attrs += $attributes;
-                }
+            if (!$existCategory) {
+                $attributes = [];
 
-                $result = [];
-
-                try {
-                    $response = $client
-                        ->request(
-                            'POST',
-                            $endpoint,
-                            [
-                                'form_params' => [
-                                    'device_name' => $device->getAttribute('slug'),
-                                    'attributes' => $attrs,
-                                    'sort' => 'best_match',
-                                ],
-                            ]
-                        )
-                        ->getBody()
-                        ->getContents();
-
-                    $result = $this->decodeResult($response);
-
-                    if ($result && $result['prices']) {
-                        $maxPrice = $this->maxValueInArray($result['prices'], 'price');
-
-                        foreach ($result['prices'] as $price) {
-                            if ($price['merchant_short_name'] === 'itsworthmore') {
-                                $maxPrice = $price['price'];
-                            }
-                        }
-
-                        $data = [
-                            'category_id' => $device->getKey(),
-                            'condition' => isset($attrs['condition']) ? $attrs['condition'] : null,
-                            'network' => isset($attrs['network']) ? $attrs['network'] : null,
-                            'capacity' => isset($attrs['capacity']) ? $attrs['capacity'] : null,
-                            'price' => $maxPrice,
+                foreach ($device->steps()->get()->toArray() as $step) {
+                    foreach ($step['items'] as $item){
+                        $attributes[$item['attribute']][] = [
+                            $item['attribute'] => $item['slug']
                         ];
-
-                        DB::table('prices')->insert($data);
                     }
-                } catch (\Exception $e) {
-                    Log::info('Parse prices exception: ' . $e);
                 }
-            }
 
-            $this->line("{$device->getAttribute('name')}....OK");
-            $this->line('Memory now at: ' . memory_get_peak_usage());
+                $combinations = $this->array_cartesian_product($attributes);
+
+                foreach ($combinations as $combination) {
+                    $attrs = [];
+
+                    foreach ($combination as $attributes) {
+                        $attrs += $attributes;
+                    }
+
+                    $result = [];
+
+                    try {
+                        $response = $client
+                            ->request(
+                                'POST',
+                                $endpoint,
+                                [
+                                    'form_params' => [
+                                        'device_name' => $device->getAttribute('slug'),
+                                        'attributes' => $attrs,
+                                        'sort' => 'best_match',
+                                    ],
+                                ]
+                            )
+                            ->getBody()
+                            ->getContents();
+
+                        $result = $this->decodeResult($response) ?? null;
+
+                        if ($result && $result['prices']) {
+                            $maxPrice = $this->maxValueInArray($result['prices'], 'price');
+
+                            foreach ($result['prices'] as $price) {
+                                if ($price['merchant_short_name'] === 'itsworthmore') {
+                                    $maxPrice = $price['price'];
+                                }
+                            }
+
+                            $data = [
+                                'category_id' => $device->getKey(),
+                                'condition' => isset($attrs['condition']) ? $attrs['condition'] : null,
+                                'network' => isset($attrs['network']) ? $attrs['network'] : null,
+                                'capacity' => isset($attrs['capacity']) ? $attrs['capacity'] : null,
+                                'price' => $maxPrice,
+                            ];
+
+                            DB::table('prices')->insert($data);
+                        }
+                    } catch (\Exception $e) {
+                        Log::info('Parse prices exception: ' . $e->getMessage());
+
+                        $this->error = true;
+
+                        $this->line("{$device->getAttribute('name')} GET ERROR EXCEPTION");
+
+                        DB::table('failed_prices')->insert([
+                            'category_id' => $device->getKey(),
+                            'device_name' => $device->getAttribute('name'),
+                            'device_slug' => $device->getAttribute('slug'),
+                            'attributes' => json_encode($attrs),
+                        ]);
+
+                        continue;
+                    }
+
+//                    if ($this->error === true) {
+//                        $this->line("{$device->getAttribute('name')} GET ERROR EXCEPTION");
+//
+//                        DB::table('failed_prices')->insert([
+//                            'category_id' => $device->getKey(),
+//                            'device_name' => $device->getAttribute('name'),
+//                            'device_slug' => $device->getAttribute('slug'),
+//                            'attributes' => $attrs,
+//                        ]);
+//
+//                        $this->error = false;
+//                    }
+                }
+
+                $this->line("{$device->getAttribute('name')}....OK");
+
+                $this->line('Memory now at: ' . memory_get_peak_usage());
+            }
         }
 
         $this->line("Work is done!");
