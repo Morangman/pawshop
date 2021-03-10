@@ -67,25 +67,25 @@ class PullData extends Command
                 [
                     'name' => 'LIKE NEW',
                     'attribute' => 'condition',
-                    'item_text' => 'Phone still in factory original packaging. Must come with the box and all accessories sealed/untouched.',
+                    'text' => 'Phone still in factory original packaging. Must come with the box and all accessories sealed/untouched.',
                     'slug' => 'new',
                 ],
                 [
                     'name' => 'GOOD',
                     'attribute' => 'condition',
-                    'item_text' => 'Shows light to moderate signs of wear. Contains few light scratches and/or dents.',
+                    'text' => 'Shows light to moderate signs of wear. Contains few light scratches and/or dents.',
                     'slug' => 'working',
                 ],
                 [
                     'name' => 'POOR',
                     'attribute' => 'condition',
-                    'item_text' => 'Shows moderate to excessive signs of wear. Contains excessive scratching, major dents, and/or mild housing damage such as a slightly bent frame.',
+                    'text' => 'Shows moderate to excessive signs of wear. Contains excessive scratching, major dents, and/or mild housing damage such as a slightly bent frame.',
                     'slug' => 'poor',
                 ],
                 [
                     'name' => 'FAULTY',
                     'attribute' => 'condition',
-                    'item_text' => 'Cracks (regardless of size) or broken parts on either screen or body of the item.',
+                    'text' => 'Cracks (regardless of size) or broken parts on either screen or body of the item.',
                     'slug' => 'broken',
                 ],
             ],
@@ -130,6 +130,37 @@ class PullData extends Command
                     'attribute' => 'network',
                     'slug' => '29',
                     'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/29.png',
+                ],
+            ],
+        ]);
+
+        $accesoriesStep = Step::query()->create([
+            'name' => 'What accessories will be included?',
+            'items' => [
+                [
+                    'name' => 'Original Box',
+                    'price_plus' => '1',
+                ],
+                [
+                    'name' => 'Powercable',
+                    'price_plus' => '1',
+                ],
+            ],
+            'is_checkboxes' => 1,
+        ]);
+
+        $functionalStep = Step::query()->create([
+            'name' => 'Is the phone fully functional?',
+            'items' => [
+                [
+                    'name' => 'Yes',
+                    'text' => 'Switches on and functions 100% as intended.',
+                    'price_plus' => '0',
+                ],
+                [
+                    'name' => 'No',
+                    'text' => 'Does not switch on and/or is not fully functional.',
+                    'price_percent' => '-90',
                 ],
             ],
         ]);
@@ -240,6 +271,7 @@ class PullData extends Command
 
         $iphoneCategory = Category::query()->create([
             'name' => 'Sell iPhone',
+            'slug' => 'sell_iphone',
             'image' => $phoneImage,
         ]);
 
@@ -265,7 +297,13 @@ class PullData extends Command
                     'is_hidden' => $iphone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $carrierStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($iphone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -303,6 +341,7 @@ class PullData extends Command
 
         $samsungCategory = Category::query()->create([
             'name' => 'Sell Samsung Phone',
+            'slug' => 'sell_samsung_phone',
             'image' => $phoneImage,
         ]);
 
@@ -328,7 +367,13 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $carrierStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -341,6 +386,7 @@ class PullData extends Command
 
         $androidCategory = Category::query()->create([
             'name' => 'Sell Android',
+            'slug' => 'sell_android',
             'image' => $phoneImage,
         ]);
 
@@ -371,6 +417,7 @@ class PullData extends Command
         $htcCategory = Category::query()->create([
             'name' => 'Sell HTC Phone',
             'image' => $phoneImage,
+            'slug' => 'sell_htc_phone',
             'subcategory_id' => $androidCategory->getKey(),
         ]);
 
@@ -396,7 +443,13 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $carrierStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -434,6 +487,7 @@ class PullData extends Command
         $motorolaCategory = Category::query()->create([
             'name' => 'Sell MOTOROLA Phone',
             'image' => $phoneImage,
+            'slug' => 'sell_motorola_phone',
             'subcategory_id' => $androidCategory->getKey(),
         ]);
 
@@ -459,7 +513,13 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $carrierStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -497,6 +557,7 @@ class PullData extends Command
         $lgCategory = Category::query()->create([
             'name' => 'Sell LG Phone',
             'image' => $phoneImage,
+            'slug' => 'sell_lg_phone',
             'subcategory_id' => $androidCategory->getKey(),
         ]);
 
@@ -522,7 +583,13 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $carrierStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -560,6 +627,7 @@ class PullData extends Command
         $oneplusCategory = Category::query()->create([
             'name' => 'Sell OnePlus Phone',
             'image' => $phoneImage,
+            'slug' => 'sell_oneplus_phone',
             'subcategory_id' => $androidCategory->getKey(),
         ]);
 
@@ -585,7 +653,13 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $carrierStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -653,6 +727,7 @@ class PullData extends Command
         $googleCategory = Category::query()->create([
             'name' => 'Sell Google Phone',
             'image' => $phoneImage,
+            'slug' => 'sell_google_phone',
             'subcategory_id' => $androidCategory->getKey(),
         ]);
 
@@ -678,7 +753,13 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $carrierStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -716,6 +797,7 @@ class PullData extends Command
         $sonyCategory = Category::query()->create([
             'name' => 'Sell Sony Phone',
             'image' => $phoneImage,
+            'slug' => 'sell_sony_phone',
             'subcategory_id' => $androidCategory->getKey(),
         ]);
 
@@ -741,7 +823,13 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $carrierStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -779,6 +867,7 @@ class PullData extends Command
         $blackBerryCategory = Category::query()->create([
             'name' => 'Sell BlackBerry Phone',
             'image' => $phoneImage,
+            'slug' => 'sell_blackberry_phone',
             'subcategory_id' => $androidCategory->getKey(),
         ]);
 
@@ -804,7 +893,13 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $carrierStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -842,6 +937,7 @@ class PullData extends Command
         $huaweiCategory = Category::query()->create([
             'name' => 'Sell Huawei Phone',
             'image' => $phoneImage,
+            'slug' => 'sell_huawei_phone',
             'subcategory_id' => $androidCategory->getKey(),
         ]);
 
@@ -867,7 +963,13 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $carrierStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -905,6 +1007,7 @@ class PullData extends Command
         $kyoceraCategory = Category::query()->create([
             'name' => 'Sell Kyocera Phone',
             'image' => $phoneImage,
+            'slug' => 'sell_kyocera_phone',
             'subcategory_id' => $androidCategory->getKey(),
         ]);
 
@@ -930,7 +1033,13 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $carrierStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -967,6 +1076,7 @@ class PullData extends Command
         $zteCategory = Category::query()->create([
             'name' => 'Sell ZTE Phone',
             'image' => $phoneImage,
+            'slug' => 'sell_zte_phone',
             'subcategory_id' => $androidCategory->getKey(),
         ]);
 
@@ -992,7 +1102,13 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $carrierStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1030,6 +1146,7 @@ class PullData extends Command
         $xiaomiCategory = Category::query()->create([
             'name' => 'Sell Xiaomi Phone',
             'image' => $phoneImage,
+            'slug' => 'sell_xiaomi_phone',
             'subcategory_id' => $androidCategory->getKey(),
         ]);
 
@@ -1055,7 +1172,13 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $carrierStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1093,6 +1216,7 @@ class PullData extends Command
         $razerCategory = Category::query()->create([
             'name' => 'Sell Razer Phone',
             'image' => $phoneImage,
+            'slug' => 'sell_razer_phone',
             'subcategory_id' => $androidCategory->getKey(),
         ]);
 
@@ -1118,7 +1242,13 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $carrierStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1156,6 +1286,7 @@ class PullData extends Command
         $nokiaCategory = Category::query()->create([
             'name' => 'Sell Nokia Phone',
             'image' => $phoneImage,
+            'slug' => 'sell_nokia_phone',
             'subcategory_id' => $androidCategory->getKey(),
         ]);
 
@@ -1181,7 +1312,13 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $carrierStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1219,6 +1356,7 @@ class PullData extends Command
         $asusCategory = Category::query()->create([
             'name' => 'Sell Asus Phone',
             'image' => $phoneImage,
+            'slug' => 'sell_asus_phone',
             'subcategory_id' => $androidCategory->getKey(),
         ]);
 
@@ -1244,7 +1382,13 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $carrierStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $carrierStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1275,6 +1419,7 @@ class PullData extends Command
 
         $tabletCategory = Category::query()->create([
             'name' => 'Sell Tablet',
+            'slug' => 'sell_tablet',
             'image' => $tabletImage,
         ]);
 
@@ -1316,6 +1461,7 @@ class PullData extends Command
         $ipadCategory = Category::query()->create([
             'name' => 'Sell Apple iPad',
             'image' => $tabletImage,
+            'slug' => 'sell_apple_ipad_tablet',
             'subcategory_id' => $tabletCategory->getKey(),
         ]);
 
@@ -1350,7 +1496,13 @@ class PullData extends Command
                     'is_hidden' => $tablet['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $networksStep ? $networksStep->getKey() : 0, $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $networksStep ? $networksStep->getKey() : 0,
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($tablet['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1399,6 +1551,7 @@ class PullData extends Command
         $samsungTabletCategory = Category::query()->create([
             'name' => 'Sell Samsung Tablet',
             'image' => $tabletImage,
+            'slug' => 'sell_samsung_tablet',
             'subcategory_id' => $tabletCategory->getKey(),
         ]);
 
@@ -1433,7 +1586,13 @@ class PullData extends Command
                     'is_hidden' => $tablet['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $networksStep ? $networksStep->getKey() : 0, $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $networksStep ? $networksStep->getKey() : 0,
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($tablet['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1482,6 +1641,7 @@ class PullData extends Command
         $microsoftTabletCategory = Category::query()->create([
             'name' => 'Sell Microsoft Surface',
             'image' => $tabletImage,
+            'slug' => 'sell_microsoft_tablet',
             'subcategory_id' => $tabletCategory->getKey(),
         ]);
 
@@ -1516,7 +1676,13 @@ class PullData extends Command
                     'is_hidden' => $tablet['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $networksStep ? $networksStep->getKey() : 0, $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $networksStep ? $networksStep->getKey() : 0,
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($tablet['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1537,6 +1703,7 @@ class PullData extends Command
 
         $iPodsCategory = Category::query()->create([
             'name' => 'Sell Apple iPod',
+            'slug' => 'sell_apple_ipod',
             'image' => $ipodImage,
         ]);
 
@@ -1606,7 +1773,13 @@ class PullData extends Command
                     'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(),  $networksStep ? $networksStep->getKey() : 0, $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $networksStep ? $networksStep->getKey() : 0,
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $accesoriesStep->getKey(),
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($device['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1625,6 +1798,7 @@ class PullData extends Command
 
         $goproCategory = Category::query()->create([
             'name' => 'Sell GoPro',
+            'slug' => 'sell_gopro',
             'image' => $cameraImage,
         ]);
 
@@ -1674,7 +1848,11 @@ class PullData extends Command
                     'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $functionalStep->getKey(),
+                ]));
 
                 $media = $category->addMediaFromUrl($device['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1705,6 +1883,7 @@ class PullData extends Command
 
         $consoleCategory = Category::query()->create([
             'name' => 'Sell Game Console',
+            'slug' => 'sell_game_console',
             'image' => $consoleImage,
         ]);
 
@@ -1735,6 +1914,7 @@ class PullData extends Command
         $xboxCategory = Category::query()->create([
             'name' => 'Sell Xbox',
             'image' => $consoleImage,
+            'slug' => 'sell_xbox_console',
             'subcategory_id' => $consoleCategory->getKey(),
         ]);
 
@@ -1760,7 +1940,11 @@ class PullData extends Command
                     'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $functionalStep->getKey(),
+                ]));
 
                 $media = $category->addMediaFromUrl($device['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1798,6 +1982,7 @@ class PullData extends Command
         $playstationCategory = Category::query()->create([
             'name' => 'Sell Playstation',
             'image' => $consoleImage,
+            'slug' => 'sell_playstation_console',
             'subcategory_id' => $consoleCategory->getKey(),
         ]);
 
@@ -1823,7 +2008,11 @@ class PullData extends Command
                     'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($device['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1861,6 +2050,7 @@ class PullData extends Command
         $switchCategory = Category::query()->create([
             'name' => 'Sell Nintendo Switch',
             'image' => $consoleImage,
+            'slug' => 'sell_nintendo_switch_console',
             'subcategory_id' => $consoleCategory->getKey(),
         ]);
 
@@ -1886,7 +2076,11 @@ class PullData extends Command
                     'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($device['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1924,6 +2118,7 @@ class PullData extends Command
         $dsCategory = Category::query()->create([
             'name' => 'Sell Nintendo (3DS / 2DS)',
             'image' => $consoleImage,
+            'slug' => 'sell_nintendo_ds_console',
             'subcategory_id' => $consoleCategory->getKey(),
         ]);
 
@@ -1949,7 +2144,11 @@ class PullData extends Command
                     'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($device['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1970,6 +2169,7 @@ class PullData extends Command
 
         $watchCategory = Category::query()->create([
             'name' => 'Sell Smartwatch',
+            'slug' => 'sell_smartwatch',
             'image' => $watchImage,
         ]);
 
@@ -2011,6 +2211,7 @@ class PullData extends Command
         $appleWatchCategory = Category::query()->create([
             'name' => 'Sell Apple Watch',
             'image' => $watchImage,
+            'slug' => 'sell_apple_smartwatch',
             'subcategory_id' => $watchCategory->getKey(),
         ]);
 
@@ -2045,7 +2246,12 @@ class PullData extends Command
                     'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([$conditionStep->getKey(), $networksStep ? $networksStep->getKey() : 0, $capacityStep ? $capacityStep->getKey() : 0]));
+                $category->steps()->attach(Step::find([
+                    $conditionStep->getKey(),
+                    $networksStep ? $networksStep->getKey() : 0,
+                    $capacityStep ? $capacityStep->getKey() : 0,
+                    $functionalStep->getKey()
+                ]));
 
                 $media = $category->addMediaFromUrl($device['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);

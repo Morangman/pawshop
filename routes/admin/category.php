@@ -22,22 +22,22 @@ Route::post('', [
     'uses' => 'CategoryController@store',
 ]);
 
-Route::get('{category}/edit', [
+Route::get('{slug}/edit', [
     'as' => '.edit',
     'uses' => 'CategoryController@edit',
 ]);
 
-Route::patch('{category}', [
+Route::patch('{slug}', [
     'as' => '.update',
     'uses' => 'CategoryController@update',
 ]);
 
-Route::get('{category}', [
+Route::get('{slug}', [
     'as' => '.get',
     'uses' => 'CategoryController@get',
 ]);
 
-Route::delete('{category}', [
+Route::delete('{slug}', [
     'as' => '.delete',
     'uses' => 'CategoryController@delete',
 ]);

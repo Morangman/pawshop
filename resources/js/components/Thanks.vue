@@ -116,7 +116,7 @@
                                 <div class="order-search-popup" v-if="searchDevices.length">
                                     <ul class="order-search-popup-list">
                                         <li v-for="(device, index) in searchDevices" :key="`device_${index}`">
-                                            <a :href="$r('get-category', { category: device.id })" class="link">
+                                            <a :href="$r('get-category', { slug: device.slug })" class="link">
                                                 <div class="image"><img :src="device.image" alt=""></div>
                                                 <span class="name">{{ device.name }}</span>
                                             </a>
@@ -147,7 +147,7 @@
                                                 <div class="product-name">
                                                     <a class="image" href=""><img alt="" :src="product.device.image"></a>
                                                     <div class="inner">
-                                                        <div class="name"><a :href="$r('get-category', { category:  product.device.id })">{{ product.device.name }}</a></div>
+                                                        <div class="name"><a :href="$r('get-category', { slug:  product.device.slug })">{{ product.device.name }}</a></div>
                                                         <div class="chars" v-if="product.steps">
                                                             <span v-for="(option, key) in product.steps" v-if="option">{{  option ? option.name === 'Yes' || option.name === 'No' ? '' : key === Object.keys(product.steps).pop() ? option.name :  option.name + ', ' : '' }}</span>
                                                         </div>

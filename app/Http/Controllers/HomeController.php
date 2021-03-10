@@ -370,12 +370,14 @@ class HomeController extends Controller
     }
 
     /**
-     * @param \App\Category $category
+     * @param string $slug
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function getByCategory(Category $category): ViewContract
+    public function getByCategory(string $slug): ViewContract
     {
+        $category = Category::query()->where('slug', $slug)->first();
+
         $relatedCategories = Category::query()
             ->where('subcategory_id', '=', $category->getKey())
             ->where('is_hidden', false)

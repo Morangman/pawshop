@@ -40,6 +40,7 @@
             return {
                 model: {
                     name: null,
+                    slug: null,
                     image: null,
                     subcategory_id: null,
                     faq_id: null,

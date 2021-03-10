@@ -73,4 +73,14 @@ class Category extends Model implements HasMedia
     {
         return $this->belongsToMany(Step::class);
     }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }

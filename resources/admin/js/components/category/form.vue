@@ -23,6 +23,24 @@
                     </div>
                     <div class="form-group">
                         <label>
+                            <strong>Slug</strong>
+                        </label>
+                        <input
+                            name="slug"
+                            type="text"
+                            v-model="model.slug"
+                            class="form-control"
+                            :class="{ 'border-danger': errors.slug }"
+                        >
+                        <div v-for="(error, i) in errors.slug"
+                             :key="`slug__error__${i}`"
+                             class="text-danger error"
+                        >
+                            {{ error }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
                             <strong>{{ $t('admin.category.form.image') }}</strong>
                         </label>
                         <b-form-file

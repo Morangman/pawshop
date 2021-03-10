@@ -80,12 +80,14 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param \App\Category $category
+     * @param string $slug
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit(Category $category): ViewContract
+    public function edit(string $slug): ViewContract
     {
+        $category = Category::query()->where('slug', $slug)->first();
+
         return View::make(
             'admin.category.edit',
             [
@@ -103,13 +105,15 @@ class CategoryController extends Controller
 
     /**
      * @param \App\Http\Requests\Admin\Category\UpdateRequest $request
-     * @param \App\Category $category
+     * @param string $slug
      *
      * @return \Illuminate\Http\JsonResponse
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded
      */
-    public function update(UpdateRequest $request, Category $category): JsonResponse
+    public function update(UpdateRequest $request, string $slug): JsonResponse
     {
+        $category = Category::query()->where('slug', $slug)->first();
+
         if ($steps = $request->get('steps')) {
             $stepsIds = [];
             foreach ($steps as $step) {
@@ -134,14 +138,16 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param \App\Category $category
+     * @param string $slug
      *
      * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Exception
      */
-    public function delete(Category $category): JsonResponse
+    public function delete(string $slug): JsonResponse
     {
+        $category = Category::query()->where('slug', $slug)->first();
+
         $category->delete();
 
         Session::flash(
@@ -153,12 +159,14 @@ class CategoryController extends Controller
     }
 
     /**
-     * @param \App\Category $category
+     * @param string $slug
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function get(Category $category): JsonResponse
+    public function get(string $slug): JsonResponse
     {
+        $category = Category::query()->where('slug', $slug)->first();
+
         return $this->json()->ok($category);
     }
 

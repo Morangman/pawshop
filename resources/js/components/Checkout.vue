@@ -307,7 +307,7 @@
                     <div class="cart-total-product" v-for="(order, index) in orders['order']" :key="`device_${index}`">
                         <a href="" class="image"><img :src="order.device.image" alt=""></a>
                         <div class="inner">
-                            <div class="name"><a :href="$r('get-category', { category:  order.device.id })">{{ order.device.name }}</a></div>
+                            <div class="name"><a :href="$r('get-category', { slug:  order.device.slug })">{{ order.device.name }}</a></div>
                             <div class="price">${{ order.total }}</div>
                             <br>
                             <span>×{{ order.ctn }}</span>

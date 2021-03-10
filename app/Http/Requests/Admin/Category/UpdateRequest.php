@@ -26,6 +26,11 @@ class UpdateRequest extends FormRequest
                 'string',
                 'max:255',
             ],
+            'slug' => [
+                'required',
+                'string',
+                'max:255',
+            ]
         ];
     }
 }

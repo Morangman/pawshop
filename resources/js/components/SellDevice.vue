@@ -136,7 +136,7 @@
             <div class="order-search-popup" v-if="searchDevices.length">
                 <ul class="order-search-popup-list">
                     <li v-for="(device, index) in searchDevices" :key="`device_${index}`">
-                        <a :href="$r('get-category', { category: device.id })" class="link">
+                        <a :href="$r('get-category', { slug: device.slug })" class="link">
                             <div class="image"><img :src="device.image" alt=""></div>
                             <span class="name">{{ device.name }}</span>
                         </a>
@@ -151,7 +151,7 @@
         <h4>Or choose the device for sell:</h4>
         <ul class="order-list">
             <li v-for="(category, index) in categories" :key="`device_${index}`">
-                <a :href="$r('get-category', { category: category.id })">
+                <a :href="$r('get-category', { slug: category.slug })">
                     <div class="image"><img :src="category.image" alt="" /></div>
                     <h5>{{ category.name }}</h5>
                     <div v-if="category.custom_text" class="price">Cash in up to ${{ category.custom_text }}</div>

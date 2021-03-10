@@ -33,7 +33,7 @@ Route::get('/account', [
 
 Route::get('/header-search', 'HomeController@headerSearchDevice')->name('header-search');
 
-Route::get('/get-category/{category}', 'HomeController@getByCategory')->name('get-category');
+Route::get('/get-category/{slug}', 'HomeController@getByCategory')->name('get-category');
 
 Route::get('/order/{order}/thanks', 'HomeController@thanks')->name('thanks');
 
