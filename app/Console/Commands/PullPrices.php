@@ -61,6 +61,7 @@ class PullPrices extends Command
         $devices = Category::query()
             ->whereNotNull('custom_text')
             ->whereNotNull('subcategory_id')
+            ->where('is_parsed', 1)
             ->get();
 
         $client = new Client();
