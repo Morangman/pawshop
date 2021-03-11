@@ -228,7 +228,7 @@
                             <ul class="checkbox-list">
                                 <li>
                                     <label class="checkbox-block">
-                                        <input v-model="orderData.exp_service" type="checkbox" name="paid-checkbox">
+                                        <input v-model="orderData.exp_service" v-on:change="valuate" type="checkbox" name="paid-checkbox">
                                         <i></i>
                                         <span>Expedited Service <strong>($20.00)</strong></span>
                                     </label>
@@ -324,7 +324,7 @@
                         </li>
                         <li v-if="orderData.insurance">
                             <span>Shipping insurance</span>
-                            <div class="price free">-1% ( {{ parseFloat((totalSumm * 1)/100).toFixed(2) }} )</div>
+                            <div class="price free">-1% ( {{ insurancePrice }} )</div>
                         </li>
                         <li>
                             <span>Delivery</span>
@@ -401,6 +401,7 @@
                     exp_service: false,
                     insurance: false,
                 },
+                insurancePrice: 0,
                 registerErrors: [],
                 loginErrors: [],
                 accept_terms: false,
@@ -417,6 +418,18 @@
                             this.totalSumm += parseFloat(key.total);
                         }
                     });
+                }
+
+                if (this.orderData.exp_service) {
+                    this.totalSumm -= 20;
+                }
+
+                if (this.orderData.insurance) {
+                    this.insurancePrice = parseFloat((this.totalSumm * 1)/100).toFixed(2);
+
+                    this.totalSumm = this.totalSumm - (this.totalSumm * 1)/100;
+                } else {
+                    this.insurancePrice = 0;
                 }
             },
 
@@ -538,12 +551,6 @@
                     this.orderData.address.state
                 )
                 {
-                    if (this.orderData.exp_service) {
-                        this.totalSumm -= 20;
-                    } else {
-                        this.valuate();
-                    }
-
                     this.stepIndex++;
                 } else {
                     if (!this.orderData.address.name) {
@@ -569,10 +576,14 @@
 
             addInsurance(){
                 this.orderData.insurance = true;
+
+                this.valuate();
             },
 
             deleteInsurance(){
                 this.orderData.insurance = false;
+
+                this.valuate();
             },
 
             validateTerms() {
@@ -580,10 +591,6 @@
 
                 if (this.accept_terms)
                 {
-                    if (this.orderData.insurance) {
-                        this.totalSumm = this.totalSumm - (this.totalSumm * 1)/100;
-                    }
-
                     this.orderData.total_summ = this.totalSumm;
 
                     this.orderData.orders = this.orders;

@@ -85,6 +85,419 @@
                     </div>
                     </div>
                 </b-tab>
+                <b-tab title="Endpoints for parser">
+                    <div class="col-md-12">
+                        <label>
+                            <h4>Endpoints for parser</h4>
+                        </label>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Base path</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.base_path"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>IPhones</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.iphones_point"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Samsung phones</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.samsung_point"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>HTC phones</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.htc_phones"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Motorola phones</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.motorola_phones"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>LG phones</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.lg_phones"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>OnePlus phones</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.onePlus_phones"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Google phones</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.google_phones"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Sony phones</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.sony_phones"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>BlackBerry phones</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.blackBerry_phones"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Huawei phones</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.huawei_phones"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Kyocera phones</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.kyocera_phones"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>ZTE phones</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.zte_phones"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Xiaomi phones</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.xiaomi_phones"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Razer phones</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.razer_phones"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Nokia phones</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.nokia_phones"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Asus phones</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.asus_phones"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>iPads</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.ipads_point"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Samsung tablets</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.samsung_tablets_point"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Microsoft tablets</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.microsoft_tablets_point"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>IPods</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.iPods_point"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>GoPro</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.gopro_point"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Xbox</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.xbox_point"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Playstation</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.playstation_point"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Nintendo Switch</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.switch_point"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Nintendo DS</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.ds_point"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Apple Watch</strong>
+                                    </label>
+                                    <input
+                                        name="phone"
+                                        type="text"
+                                        v-model="model.general_settings.appleWatch_point"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </b-tab>
                 <b-tab title="Terms and Conditions">
                     <label>
                         <h4>Terms and Conditions</h4>
@@ -184,6 +597,33 @@
                         seo_meta: null,
                         seo_keywords: null,
                         seo_image: null,
+                        base_path: null,
+                        iphones_point: null,
+                        samsung_point: null,
+                        htc_phones: null,
+                        motorola_phones: null,
+                        lg_phones: null,
+                        onePlus_phones: null,
+                        google_phones: null,
+                        sony_phones: null,
+                        blackBerry_phones: null,
+                        huawei_phones: null,
+                        kyocera_phones: null,
+                        zte_phones: null,
+                        xiaomi_phones: null,
+                        razer_phones: null,
+                        nokia_phones: null,
+                        asus_phones: null,
+                        ipads_point: null,
+                        samsung_tablets_point: null,
+                        microsoft_tablets_point: null,
+                        iPods_point: null,
+                        gopro_point: null,
+                        xbox_point: null,
+                        playstation_point: null,
+                        switch_point: null,
+                        ds_point: null,
+                        appleWatch_point: null,
                     },
                     terms: null,
                     code_insert: null,

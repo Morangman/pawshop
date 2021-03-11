@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Category;
 use App\Order;
+use App\Setting;
 use App\Step;
 use Illuminate\Console\Command;
 use Goutte\Client;
@@ -169,10 +170,6 @@ class PullData extends Command
 
         $client = new Client(HttpClient::create(['timeout' => 30 * 30 * 24]));
 
-        $basePath = 'https://www.sellcell.com';
-
-        $maxPrice = 5;
-
         $phoneImage = '/client/images/phone.png';
         $tabletImage = '/client/images/tablet.png';
         $ipodImage = '/client/images/ipod.png';
@@ -180,37 +177,43 @@ class PullData extends Command
         $consoleImage = '/client/images/console.png';
         $watchImage = '/client/images/watch.png';
 
-        $iphonesPoint = 'https://www.sellcell.com/sell-iphone/';
+        $maxPrice = 5;
 
-        $samsungPoint = 'https://www.sellcell.com/sell/samsung-phone/';
+        $settings = Setting::latest('updated_at')->first();
 
-        $htcPhones = 'https://www.sellcell.com/sell/htc-phone/';
+        $basePath = $settings->getAttribute('general_settings')['base_path'];
 
-        $motorolaPhones = 'https://www.sellcell.com/sell/motorola-phone/';
+        $iphonesPoint = $settings->getAttribute('general_settings')['iphones_point'];
 
-        $lgPhones = 'https://www.sellcell.com/sell/lg-phone/';
+        $samsungPoint = $settings->getAttribute('general_settings')['samsung_point'];
 
-        $onePlusPhones = 'https://www.sellcell.com/sell/oneplus-phone/';
+        $htcPhones = $settings->getAttribute('general_settings')['htc_phones'];
 
-        $googlePhones = 'https://www.sellcell.com/sell/google-phone/';
+        $motorolaPhones = $settings->getAttribute('general_settings')['motorola_phones'];
 
-        $sonyPhones = 'https://www.sellcell.com/sell/sony-phone/';
+        $lgPhones = $settings->getAttribute('general_settings')['lg_phones'];
 
-        $blackBerryPhones = 'https://www.sellcell.com/blackberry/';
+        $onePlusPhones = $settings->getAttribute('general_settings')['onePlus_phones'];
 
-        $huaweiPhones = 'https://www.sellcell.com/huawei/';
+        $googlePhones = $settings->getAttribute('general_settings')['google_phones'];
 
-        $kyoceraPhones = 'https://www.sellcell.com/kyocera/';
+        $sonyPhones = $settings->getAttribute('general_settings')['sony_phones'];
 
-        $ztePhones = 'https://www.sellcell.com/zte/';
+        $blackBerryPhones = $settings->getAttribute('general_settings')['blackBerry_phones'];
 
-        $xiaomiPhones = 'https://www.sellcell.com/xiaomi/';
+        $huaweiPhones = $settings->getAttribute('general_settings')['huawei_phones'];
 
-        $razerPhones = 'https://www.sellcell.com/razer/';
+        $kyoceraPhones = $settings->getAttribute('general_settings')['kyocera_phones'];
 
-        $nokiaPhones = 'https://www.sellcell.com/nokia/';
+        $ztePhones = $settings->getAttribute('general_settings')['zte_phones'];
 
-        $asusPhones = 'https://www.sellcell.com/asus/';
+        $xiaomiPhones = $settings->getAttribute('general_settings')['xiaomi_phones'];
+
+        $razerPhones = $settings->getAttribute('general_settings')['razer_phones'];
+
+        $nokiaPhones = $settings->getAttribute('general_settings')['nokia_phones'];
+
+        $asusPhones = $settings->getAttribute('general_settings')['asus_phones'];
 
 
         $iphonesCrawler= $client->request('GET', $iphonesPoint);
@@ -1405,11 +1408,11 @@ class PullData extends Command
 
         $this->line('Starting parsing tablets...');
 
-        $ipadsPoint = 'https://www.sellcell.com/sell-ipad/';
+        $ipadsPoint = $settings->getAttribute('general_settings')['ipads_point'];
 
-        $samsungTabletsPoint = 'https://www.sellcell.com/sell/samsung-tablet/';
+        $samsungTabletsPoint = $settings->getAttribute('general_settings')['samsung_tablets_point'];
 
-        $microsoftTabletsPoint = 'https://www.sellcell.com/sell/microsoft-surface/';
+        $microsoftTabletsPoint = $settings->getAttribute('general_settings')['microsoft_tablets_point'];
 
         $ipadsCrawler = $client->request('GET', $ipadsPoint);
 
@@ -1697,7 +1700,7 @@ class PullData extends Command
 
         $this->line('Starting parsing iPods...');
 
-        $iPodsPoint = 'https://www.sellcell.com/sell/apple-ipod/';
+        $iPodsPoint = $settings->getAttribute('general_settings')['iPods_point'];
 
         $iPodsCrawler = $client->request('GET', $iPodsPoint);
 
@@ -1792,7 +1795,7 @@ class PullData extends Command
 
         $this->line('Starting parsing GoPro...');
 
-        $goproPoint = 'https://www.sellcell.com/sell/gopro/';
+        $goproPoint = $settings->getAttribute('general_settings')['gopro_point'];
 
         $goproCrawler = $client->request('GET', $goproPoint);
 
@@ -1865,13 +1868,13 @@ class PullData extends Command
 
         $this->line('Starting parsing gaming consoles...');
 
-        $xboxPoint = 'https://www.sellcell.com/sell/microsoft-xbox/';
+        $xboxPoint = $settings->getAttribute('general_settings')['xbox_point'];
 
-        $playstationPoint = 'https://www.sellcell.com/sell/sony-playstation/';
+        $playstationPoint = $settings->getAttribute('general_settings')['playstation_point'];
 
-        $switchPoint = 'https://www.sellcell.com/sell/nintendo-switch/';
+        $switchPoint = $settings->getAttribute('general_settings')['switch_point'];
 
-        $dsPoint = 'https://www.sellcell.com/sell/nintendo-ds/';
+        $dsPoint = $settings->getAttribute('general_settings')['ds_point'];
 
         $xboxCrawler = $client->request('GET', $xboxPoint);
 
@@ -2163,7 +2166,7 @@ class PullData extends Command
 
         $this->line('Starting parsing apple watch...');
 
-        $appleWatchPoint = 'https://www.sellcell.com/sell/apple-watch/';
+        $appleWatchPoint = $settings->getAttribute('general_settings')['appleWatch_point'];
 
         $appleWatchCrawler = $client->request('GET', $appleWatchPoint);
 
