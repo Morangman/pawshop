@@ -49,7 +49,7 @@
                 </ul>
                 <ul>
                     @foreach($categories as $category)
-                        <li><a href="{{ URL::route('get-category', ['category' => $category->getKey()]) }}">{{ $category->getAttribute('name') }}</a></li>
+                        <li><a href="{{ URL::route('get-category', ['slug' => $category->getAttribute('slug')]) }}">{{ $category->getAttribute('name') }}</a></li>
                     @endforeach
                 </ul>
             </div>

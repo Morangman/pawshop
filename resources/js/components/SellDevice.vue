@@ -4,7 +4,7 @@
     <div class="description">Find the product you'd like to trade-in for cash</div>
     <ul class="order-steps-list" v-if="steps.length">
         <li v-for="(step, index) in steps" :class="stepIndex === index ? 'active-step' : ''">
-            <a href="javascript:void(0)" v-on:click="setStep(index)"><i>{{ index + 1 }}</i> <span>{{ index + 1 }}</span></a>
+            <a href="javascript:void(0)"><i>{{ index + 1 }}</i> <span>{{ index + 1 }}</span></a>
         </li>
         <li>
             <a href="javascript:void(0)"><i>{{ steps.length + 1 }}</i> <span>Finish </span></a>
@@ -18,14 +18,15 @@
                 <div class="name"><span>{{ category.name }}</span></div>
             </div>
             <ul class="selected-list" v-if="selectedSteps.length">
-                <li v-for="option in selectedSteps" v-if="option">{{ option ? option.name : '' }}</li>
+                <li v-for="option in selectedSteps" v-if="option">{{ option ? option.value : '' }}</li>
+                <li v-for="option in selectedAccesories" v-if="option && selectedAccesories.length">{{ option ? option.value : '' }}</li>
             </ul>
         </div>
         <div class="order-options-detail">
 
             <!-- Step 1 -->
             <div id="step" class="order-options-block" v-if="selectedStep">
-                <h4>{{ selectedStep.name }}</h4>
+                <h4>{{ selectedStep.title }}</h4>
                 <div class="helping-block" v-if="selectedStep.tip">
                     <a href="#helping-popup" class="popup-open" data-effect="mfp-zoom-in">
                         <img src="../../client/images/icon_help.svg" alt="">
@@ -34,20 +35,20 @@
                 </div>
                 <div class="order-options-radios">
                     <div class="options-radio" v-for="(option, index) in selectedStep.items" :key="`step${option.id}_${index}`">
-                        <label class="radiobox-block" v-if="!selectedStep.is_checkboxes">
-                            <input v-model="selectedSteps[selectedStep.id]" v-on:click="selectOption(option, index)" :checked="!!selectedStep.items[index].checked" :value="option" type="radio" :name="`step-${selectedStep.id}-radios`">
+                        <label class="radiobox-block" v-if="!selectedStep.is_checkbox">
+                            <input v-model="selectedSteps[option.step_name.id]" v-on:click="selectOption(option, index)" :checked="!!selectedStep.items[index].checked" :value="option" type="radio" :name="`step-${selectedStep.id}-radios`">
                             <i></i>
                             <span>
-                                <strong>{{ option.name }}</strong>
-                                <small>{{ option.text }}</small>
+                                <strong>{{ option.value }}</strong>
+                                <small>{{ option.decryption }}</small>
                             </span>
                         </label>
-                        <label class="checkbox-block" v-if="selectedStep.is_checkboxes">
-                            <input type="checkbox" v-model="selectedSteps" v-bind:value="option"  :name="`step-${selectedStep.id}-checkbox`">
+                        <label class="checkbox-block" v-if="selectedStep.is_checkbox">
+                            <input type="checkbox" v-model="selectedAccesories" v-bind:value="option"  :name="`step-${selectedStep.id}-checkbox`">
                             <i></i>
                             <span>
-                                <strong>{{ option.name }}</strong>
-                                <small>{{ option.text }}</small>
+                                <strong>{{ option.value }}</strong>
+                                <small>{{ option.decryption }}</small>
                             </span>
                         </label>
                     </div>
@@ -65,7 +66,7 @@
                 </div>
                 <div class="order-options-links">
                     <button v-on:click="backStep" class="btn gray-btn step-button">Back</button>
-                    <button v-on:click="nextStep" class="btn red-btn step-button">Next step</button>
+                    <button v-on:click="nextStep" v-if="stepSelected || selectedStep.is_checkbox" class="btn red-btn step-button">Next step</button>
                 </div>
 
                 <div v-if="selectedStep.tip" id="helping-popup" class="popup-modal mfp-hide mfp-with-anim">
@@ -242,8 +243,10 @@
                 faqsIsset: false,
                 priceError: false,
                 priceLoaded: false,
+                stepSelected: false,
                 selectedStep: null,
                 selectedSteps: [],
+                selectedAccesories: [],
                 stepIndex: 0,
                 options: [],
                 summ: parseFloat(this.category.custom_text)
@@ -281,16 +284,8 @@
                 this.selectedStep = this.steps[this.stepIndex];
 
                 this.valuate();
-            },
 
-            setStep(index) {
-                this.stepIndex = index;
-
-                this.selectedStep = this.steps[index];
-
-                this.valuate();
-
-                this.$forceUpdate();
+                this.stepSelected = false;
             },
 
             valuate(){
@@ -298,12 +293,15 @@
 
                 if (!this.selectedStep && this.category.is_parsed) {
                     let steps = [];
-                    _.each(this.selectedSteps, (key, value) => {
-                        if(key) {
-                            steps.push({
-                                attribute: key.attribute,
-                                slug: key.slug,
-                            });
+                    _.each(this.selectedSteps, (value, key) => {
+                        if(value) {
+                            steps.push(value);
+                        }
+                    });
+
+                    _.each(this.selectedAccesories, (value, key) => {
+                        if(value) {
+                            steps.push(value);
                         }
                     });
 
@@ -336,6 +334,8 @@
             selectOption(option, index) {
                 _.set(this.selectedStep.items[index], 'checked',true);
 
+                this.stepSelected = true;
+
                 this.$forceUpdate();
             },
 
@@ -351,7 +351,7 @@
                     storedNames.order.push({
                         id: this.category.id,
                         device: this.category,
-                        steps: this.selectedSteps,
+                        steps: this.selectedSteps.concat(this.selectedAccesories),
                         summ: this.summ,
                         total: this.summ,
                         ctn: 1
@@ -361,7 +361,7 @@
                     orders.order.push({
                         id: this.category.id,
                         device: this.category,
-                        steps: this.selectedSteps,
+                        steps: this.selectedSteps.concat(this.selectedAccesories),
                         summ: this.summ,
                         total: this.summ,
                         ctn: 1

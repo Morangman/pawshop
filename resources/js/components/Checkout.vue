@@ -320,11 +320,11 @@
                         </li>
                         <li v-if="orderData.exp_service">
                             <span>Expedited Service</span>
-                            <div class="price free">-20$</div>
+                            <div class="price free">-$20</div>
                         </li>
                         <li v-if="orderData.insurance">
                             <span>Shipping insurance</span>
-                            <div class="price free">-1% ( {{ insurancePrice }} )</div>
+                            <div class="price free">-${{ insurancePrice }}</div>
                         </li>
                         <li>
                             <span>Delivery</span>

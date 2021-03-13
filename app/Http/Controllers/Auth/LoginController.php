@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Auth;
 use App\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\SettingTrait;
+use App\Order;
 use App\User;
 use Auth;
 use Carbon\Carbon;
@@ -17,6 +18,7 @@ use Illuminate\Validation\ValidationException;
 use Lang;
 use Laravel\Socialite\Facades\Socialite;
 use View;
+use stdClass;
 
 /**
  * Class LoginController
@@ -47,6 +49,33 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/';
 
+    protected function authenticated(Request $request, $user)
+    {
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
+
+        if ( $user->hasRole('admin') || $user->hasRole('manager')) {// do your magic here
+            return redirect()->route('admin.order.index');
+        }
+
+        return \Illuminate\Support\Facades\View::make('account', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'category' => new stdClass(),
+            'steps' => [],
+            'user' => \Illuminate\Support\Facades\Auth::user(),
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
+            'states' => Lang::get('states'),
+            'statuses' => Lang::get('admin/order.order_statuses'),
+            'orders' => Order::query()->where('user_id', Auth::id())->get() ?? [],
+            'tab' => ''
+        ]);
+    }
+
     /**
      * Redirect the user to the Google authentication page.
      *
@@ -70,9 +99,9 @@ class LoginController extends Controller
     /**
      * Obtain the user information from Google.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
-    public function handleProviderGoogleCallback()
+    public function handleProviderGoogleCallback(): ViewContract
     {
         $categories = Category::query()
             ->where('is_hidden', false)
@@ -109,15 +138,27 @@ class LoginController extends Controller
             Auth::login($createdUser);
         }
 
-        return redirect()->to('/');
+        return \Illuminate\Support\Facades\View::make('account', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'category' => new stdClass(),
+            'steps' => [],
+            'user' => \Illuminate\Support\Facades\Auth::user(),
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
+            'states' => Lang::get('states'),
+            'statuses' => Lang::get('admin/order.order_statuses'),
+            'orders' => Order::query()->where('user_id', Auth::id())->get() ?? [],
+            'tab' => ''
+        ]);
     }
 
     /**
      * Obtain the user information from Facebook.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
-    public function handleProviderFacebookCallback()
+    public function handleProviderFacebookCallback(): ViewContract
     {
         $categories = Category::query()
             ->where('is_hidden', false)
@@ -154,9 +195,20 @@ class LoginController extends Controller
             Auth::login($createdUser);
         }
 
-        return redirect()->to('/');
+        return \Illuminate\Support\Facades\View::make('account', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'category' => new stdClass(),
+            'steps' => [],
+            'user' => \Illuminate\Support\Facades\Auth::user(),
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
+            'states' => Lang::get('states'),
+            'statuses' => Lang::get('admin/order.order_statuses'),
+            'orders' => Order::query()->where('user_id', Auth::id())->get() ?? [],
+            'tab' => ''
+        ]);
     }
-
 
     /**
      * @return \Illuminate\Contracts\View\View

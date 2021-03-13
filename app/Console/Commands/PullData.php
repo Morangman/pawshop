@@ -3,9 +3,11 @@
 namespace App\Console\Commands;
 
 use App\Category;
+use App\CategoryStep;
 use App\Order;
 use App\Setting;
 use App\Step;
+use App\StepName;
 use Illuminate\Console\Command;
 use Goutte\Client;
 use GuzzleHttp\Client as GuzzleClient;
@@ -30,6 +32,24 @@ class PullData extends Command
      * @var string
      */
     protected $description = 'Parse devices from https://www.sellcell.com/';
+
+    public $conditions = [];
+    public $carriers = [];
+    public $phoneAccessories = [];
+    public $consoleAccessories = [];
+    public $smartwatchAccessories = [];
+    public $smartwatchBands = [];
+    public $functionals = [];
+    public $controller = [];
+    public $conditionName;
+    public $carrierName;
+    public $phoneAccessoriesName;
+    public $consoleAccessoriesName;
+    public $smartwatchAccessoriesName;
+    public $functionalName;
+    public $capacityName;
+    public $controllerName;
+    public $bandTypeName;
 
     /**
      * Create a new command instance.
@@ -56,115 +76,335 @@ class PullData extends Command
 
         Schema::disableForeignKeyConstraints();
 
-        DB::table('category_step')->truncate();
+        DB::table('step_names')->truncate();
         DB::table('steps')->truncate();
+        DB::table('category_step')->truncate();
+        DB::table('prices')->truncate();
         DB::table('categories')->truncate();
+        DB::table('premium_price')->truncate();
 
         Schema::enableForeignKeyConstraints();
 
-        $conditionStep = Step::query()->create([
-            'name' => 'What is the condition of the device?',
-            'items' => [
-                [
-                    'name' => 'LIKE NEW',
-                    'attribute' => 'condition',
-                    'text' => 'Phone still in factory original packaging. Must come with the box and all accessories sealed/untouched.',
-                    'slug' => 'new',
-                ],
-                [
-                    'name' => 'GOOD',
-                    'attribute' => 'condition',
-                    'text' => 'Shows light to moderate signs of wear. Contains few light scratches and/or dents.',
-                    'slug' => 'working',
-                ],
-                [
-                    'name' => 'POOR',
-                    'attribute' => 'condition',
-                    'text' => 'Shows moderate to excessive signs of wear. Contains excessive scratching, major dents, and/or mild housing damage such as a slightly bent frame.',
-                    'slug' => 'poor',
-                ],
-                [
-                    'name' => 'FAULTY',
-                    'attribute' => 'condition',
-                    'text' => 'Cracks (regardless of size) or broken parts on either screen or body of the item.',
-                    'slug' => 'broken',
-                ],
-            ],
+        $this->conditionName = StepName::query()->create([
+            'name' => 'Condition',
+            'title' => 'What is the condition of the device?',
             'is_condition' => 1,
+            'is_functional' => 0,
+            'is_checkbox' => 0,
         ]);
 
-        $carrierStep = Step::query()->create([
-            'name' => 'Please select the device\'s carrier',
-            'items' => [
-                [
-                    'name' => 'Verizon',
-                    'attribute' => 'network',
-                    'slug' => '59',
-                    'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/59.png',
-                ],
-                [
-                    'name' => 'AT&T',
-                    'attribute' => 'network',
-                    'slug' => '48',
-                    'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/48.png',
-                ],
-                [
-                    'name' => 'T-Mobile',
-                    'attribute' => 'network',
-                    'slug' => '30',
-                    'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/30.png',
-                ],
-                [
-                    'name' => 'Sprint',
-                    'attribute' => 'network',
-                    'slug' => '49',
-                    'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/49.png',
-                ],
-                [
-                    'name' => 'Other',
-                    'attribute' => 'network',
-                    'slug' => '104',
-                    'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/104.png',
-                ],
-                [
-                    'name' => 'Unlocked',
-                    'attribute' => 'network',
-                    'slug' => '29',
-                    'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/29.png',
-                ],
+        $conditionsArr = [
+            [
+                'name' => 'Brand New',
+                'attribute' => 'condition',
+                'text' => 'Phone still in factory original packaging. Must come with the box and all accessories sealed/untouched.',
+                'slug' => 'new',
             ],
+            [
+                'name' => 'Flawless',
+                'attribute' => 'condition',
+                'text' => 'Has absolutely no scratches, scuffs or other marks. Looks brand new.',
+                'slug' => 'new',
+            ],
+            [
+                'name' => 'Good',
+                'attribute' => 'condition',
+                'text' => 'Shows light to moderate signs of wear. Contains few light scratches and/or dents.',
+                'slug' => 'working',
+            ],
+            [
+                'name' => 'Fair',
+                'attribute' => 'condition',
+                'text' => 'Shows moderate to excessive signs of wear. Contains excessive scratching, major dents, and/or mild housing damage such as a slightly bent frame.',
+                'slug' => 'poor',
+            ],
+            [
+                'name' => 'Broken',
+                'attribute' => 'condition',
+                'text' => 'Cracks (regardless of size) or broken parts on either screen or body of the item.',
+                'slug' => 'broken',
+            ],
+        ];
+
+        foreach ($conditionsArr as $condition) {
+            Step::query()->create([
+                'name_id' => $this->conditionName->getKey(),
+                'slug' => isset($condition['slug']) ? $condition['slug'] : null,
+                'attribute' => $condition['attribute'],
+                'value' => $condition['name'],
+                'decryption' => $condition['text'],
+            ]);
+        }
+
+        $this->controllerName = StepName::query()->create([
+            'name' => 'Controller',
+            'title' => 'Is a controller included?',
+            'is_condition' => 0,
+            'is_functional' => 0,
+            'is_checkbox' => 0,
         ]);
 
-        $accesoriesStep = Step::query()->create([
-            'name' => 'What accessories will be included?',
-            'items' => [
-                [
-                    'name' => 'Original Box',
-                    'price_plus' => '1',
-                ],
-                [
-                    'name' => 'Powercable',
-                    'price_plus' => '1',
-                ],
+        $controllerVariations = [
+            [
+                'name' => 'Yes',
             ],
-            'is_checkboxes' => 1,
+            [
+                'name' => 'No',
+            ],
+        ];
+
+        foreach ($controllerVariations as $controllerVariant) {
+            Step::query()->create([
+                'name_id' => $this->controllerName->getKey(),
+                'slug' => null,
+                'attribute' => null,
+                'value' => $controllerVariant['name'],
+                'decryption' => null,
+            ]);
+        }
+
+        $this->consoleAccessoriesName = StepName::query()->create([
+            'name' => 'Accessories for gaming console',
+            'title' => 'What accessories will be included?',
+            'is_condition' => 0,
+            'is_functional' => 0,
+            'is_checkbox' => 1,
         ]);
 
-        $functionalStep = Step::query()->create([
-            'name' => 'Is the phone fully functional?',
-            'items' => [
-                [
-                    'name' => 'Yes',
-                    'text' => 'Switches on and functions 100% as intended.',
-                    'price_plus' => '0',
-                ],
-                [
-                    'name' => 'No',
-                    'text' => 'Does not switch on and/or is not fully functional.',
-                    'price_percent' => '-90',
-                ],
+        $consoleAccessoriesArr = [
+            [
+                'name' => 'Original Box',
+                'price_plus' => '1',
             ],
+            [
+                'name' => 'HDMI/Power Cord',
+                'price_plus' => '1',
+            ],
+        ];
+
+        foreach ($consoleAccessoriesArr as $consoleAccessory) {
+            Step::query()->create([
+                'name_id' => $this->consoleAccessoriesName->getKey(),
+                'slug' => null,
+                'attribute' => null,
+                'value' => $consoleAccessory['name'],
+                'decryption' => null,
+            ]);
+        }
+
+        $this->smartwatchAccessoriesName = StepName::query()->create([
+            'name' => 'Accessories for smartwatch',
+            'title' => 'What accessories will be included?',
+            'is_condition' => 0,
+            'is_functional' => 0,
+            'is_checkbox' => 1,
         ]);
+
+        $smartwatchAccessoriesArr = [
+            [
+                'name' => 'Original Box',
+                'price_plus' => '1',
+            ],
+            [
+                'name' => 'Charging Cable + Adapter',
+                'price_plus' => '1',
+            ],
+        ];
+
+        foreach ($smartwatchAccessoriesArr as $smartwatchAccessory) {
+            Step::query()->create([
+                'name_id' => $this->smartwatchAccessoriesName->getKey(),
+                'slug' => null,
+                'attribute' => null,
+                'value' => $smartwatchAccessory['name'],
+                'decryption' => null,
+            ]);
+        }
+
+        $this->bandTypeName = StepName::query()->create([
+            'name' => 'Smartwatch band type',
+            'title' => 'Select your band type:',
+            'is_condition' => 0,
+            'is_functional' => 0,
+            'is_checkbox' => 0,
+        ]);
+
+        $bandTypesArr = [
+            [
+                'name' => 'Solo Loop',
+            ],
+            [
+                'name' => 'Sport Band',
+            ],
+            [
+                'name' => 'Sport Loop',
+            ],
+            [
+                'name' => 'Braided Solo Loop',
+            ],
+            [
+                'name' => 'Leather Link',
+            ],
+            [
+                'name' => 'Milanese Loop',
+            ],
+            [
+                'name' => 'Modern Buckle',
+            ],
+            [
+                'name' => 'Link Bracelet',
+            ],
+        ];
+
+        foreach ($bandTypesArr as $band) {
+            Step::query()->create([
+                'name_id' => $this->bandTypeName->getKey(),
+                'slug' => null,
+                'attribute' => null,
+                'value' => $band['name'],
+                'decryption' => null,
+            ]);
+        }
+
+        $this->carrierName = StepName::query()->create([
+            'name' => 'Carrier',
+            'title' => 'Please select the device\'s carrier',
+            'is_condition' => 0,
+            'is_functional' => 0,
+            'is_checkbox' => 0,
+        ]);
+
+        $carrierArr = [
+            [
+                'name' => 'Verizon',
+                'attribute' => 'network',
+                'slug' => '59',
+                'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/59.png',
+            ],
+            [
+                'name' => 'AT&T',
+                'attribute' => 'network',
+                'slug' => '48',
+                'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/48.png',
+            ],
+            [
+                'name' => 'T-Mobile',
+                'attribute' => 'network',
+                'slug' => '30',
+                'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/30.png',
+            ],
+            [
+                'name' => 'Sprint',
+                'attribute' => 'network',
+                'slug' => '49',
+                'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/49.png',
+            ],
+            [
+                'name' => 'Other',
+                'attribute' => 'network',
+                'slug' => '104',
+                'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/104.png',
+            ],
+            [
+                'name' => 'Unlocked',
+                'attribute' => 'network',
+                'slug' => '29',
+                'image' => 'https://www.sellcell.com/assets/images/comparison/network-logos/large/29.png',
+            ],
+        ];
+
+        foreach ($carrierArr as $carrier) {
+            Step::query()->create([
+                'name_id' => $this->carrierName->getKey(),
+                'slug' => isset($carrier['slug']) ? $carrier['slug'] : null,
+                'attribute' => $carrier['attribute'],
+                'value' => $carrier['name'],
+                'decryption' => null,
+            ]);
+        }
+
+        $this->phoneAccessoriesName = StepName::query()->create([
+            'name' => 'Accessories for phones',
+            'title' => 'What accessories will be included?',
+            'is_condition' => 0,
+            'is_functional' => 0,
+            'is_checkbox' => 1,
+        ]);
+
+        $accessoriesArr = [
+            [
+                'name' => 'Original Box',
+                'price_plus' => '1',
+            ],
+            [
+                'name' => 'Powercable',
+                'price_plus' => '1',
+            ],
+            [
+                'name' => 'Adapter',
+                'price_plus' => '1',
+            ],
+            [
+                'name' => 'New Original Headsets',
+                'price_plus' => '1',
+            ],
+        ];
+
+        foreach ($accessoriesArr as $accessories) {
+            Step::query()->create([
+                'name_id' => $this->phoneAccessoriesName->getKey(),
+                'slug' => null,
+                'attribute' => null,
+                'value' => $accessories['name'],
+                'decryption' => null,
+            ]);
+        }
+
+        $this->functionalName = StepName::query()->create([
+            'name' => 'Functional',
+            'title' => 'Is the device fully functional?',
+            'is_condition' => 0,
+            'is_functional' => 1,
+            'is_checkbox' => 0,
+        ]);
+
+        $functionalArr = [
+            [
+                'name' => 'Yes',
+                'text' => 'Switches on and functions 100% as intended.',
+            ],
+            [
+                'name' => 'No',
+                'text' => 'Does not switch on and/or is not fully functional.',
+            ],
+        ];
+
+        foreach ($functionalArr as $functional) {
+            Step::query()->create([
+                'name_id' => $this->functionalName->getKey(),
+                'slug' => null,
+                'attribute' => null,
+                'value' => $functional['name'],
+                'decryption' => $functional['text'],
+            ]);
+        }
+
+        $this->capacityName = StepName::query()->create([
+            'name' => 'Capacity',
+            'title' => 'What is the device\'s storage capacity?',
+            'is_condition' => 0,
+            'is_functional' => 0,
+            'is_checkbox' => 0,
+        ]);
+
+        $this->conditions = Step::query()->where('name_id', $this->conditionName->getKey())->get();
+        $this->carriers = Step::query()->where('name_id', $this->carrierName->getKey())->get();
+        $this->phoneAccessories = Step::query()->where('name_id', $this->phoneAccessoriesName->getKey())->get();
+        $this->functionals = Step::query()->where('name_id', $this->functionalName->getKey())->get();
+        $this->controller = Step::query()->where('name_id', $this->controllerName->getKey())->get();
+        $this->consoleAccessories = Step::query()->where('name_id', $this->consoleAccessoriesName->getKey())->get();
+        $this->smartwatchAccessories = Step::query()->where('name_id', $this->smartwatchAccessoriesName->getKey())->get();
+        $this->smartwatchBands = Step::query()->where('name_id', $this->bandTypeName->getKey())->get();
 
         $this->line('Start parsing devices...');
 
@@ -279,13 +519,24 @@ class PullData extends Command
         ]);
 
         foreach ($iphones as $iphone) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($iphone['capacities']))->first();
 
-            if (!$capacityStep && $iphone['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $iphone['capacities'],
-                ]);
+            if ($iphone['capacities'] != []) {
+                foreach ($iphone['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
+
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $iphone['title'])->exists();
@@ -300,13 +551,7 @@ class PullData extends Command
                     'is_hidden' => $iphone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $carrierStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $iphone['capacities']);
 
                 $media = $category->addMediaFromUrl($iphone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -349,13 +594,23 @@ class PullData extends Command
         ]);
 
         foreach ($samsungPhones as $phone) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($phone['capacities']))->first();
+            if ($phone['capacities'] != []) {
+                foreach ($phone['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $phone['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $phone['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $phone['title'])->exists();
@@ -370,13 +625,7 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $carrierStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $phone['capacities']);
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -425,13 +674,23 @@ class PullData extends Command
         ]);
 
         foreach ($htc as $phone) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($phone['capacities']))->first();
+            if ($phone['capacities'] != []) {
+                foreach ($phone['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $phone['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $phone['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $phone['title'])->exists();
@@ -446,13 +705,7 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $carrierStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $phone['capacities']);
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -495,13 +748,23 @@ class PullData extends Command
         ]);
 
         foreach ($motorola as $phone) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($phone['capacities']))->first();
+            if ($phone['capacities'] != []) {
+                foreach ($phone['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $phone['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $phone['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $phone['title'])->exists();
@@ -516,13 +779,7 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $carrierStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $phone['capacities']);
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -565,13 +822,23 @@ class PullData extends Command
         ]);
 
         foreach ($lg as $phone) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($phone['capacities']))->first();
+            if ($phone['capacities'] != []) {
+                foreach ($phone['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $phone['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $phone['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $phone['title'])->exists();
@@ -586,13 +853,7 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $carrierStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $phone['capacities']);
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -635,13 +896,23 @@ class PullData extends Command
         ]);
 
         foreach ($onePlus as $phone) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($phone['capacities']))->first();
+            if ($phone['capacities'] != []) {
+                foreach ($phone['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $phone['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $phone['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $phone['title'])->exists();
@@ -656,13 +927,7 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $carrierStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $phone['capacities']);
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -735,13 +1000,23 @@ class PullData extends Command
         ]);
 
         foreach ($google as $phone) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($phone['capacities']))->first();
+            if ($phone['capacities'] != []) {
+                foreach ($phone['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $phone['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $phone['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $phone['title'])->exists();
@@ -756,13 +1031,7 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $carrierStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $phone['capacities']);
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -805,13 +1074,23 @@ class PullData extends Command
         ]);
 
         foreach ($sony as $phone) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($phone['capacities']))->first();
+            if ($phone['capacities'] != []) {
+                foreach ($phone['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $phone['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $phone['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $phone['title'])->exists();
@@ -826,13 +1105,7 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $carrierStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $phone['capacities']);
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -875,13 +1148,23 @@ class PullData extends Command
         ]);
 
         foreach ($blackBerry as $phone) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($phone['capacities']))->first();
+            if ($phone['capacities'] != []) {
+                foreach ($phone['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $phone['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $phone['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $phone['title'])->exists();
@@ -896,13 +1179,7 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $carrierStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $phone['capacities']);
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -945,13 +1222,23 @@ class PullData extends Command
         ]);
 
         foreach ($huawei as $phone) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($phone['capacities']))->first();
+            if ($phone['capacities'] != []) {
+                foreach ($phone['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $phone['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $phone['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $phone['title'])->exists();
@@ -966,13 +1253,7 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $carrierStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $phone['capacities']);
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1015,13 +1296,23 @@ class PullData extends Command
         ]);
 
         foreach ($kyocera as $phone) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($phone['capacities']))->first();
+            if ($phone['capacities'] != []) {
+                foreach ($phone['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $phone['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $phone['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $phone['title'])->exists();
@@ -1036,13 +1327,7 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $carrierStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $phone['capacities']);
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1084,13 +1369,23 @@ class PullData extends Command
         ]);
 
         foreach ($zte as $phone) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($phone['capacities']))->first();
+            if ($phone['capacities'] != []) {
+                foreach ($phone['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $phone['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $phone['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $phone['title'])->exists();
@@ -1105,13 +1400,7 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $carrierStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $phone['capacities']);
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1154,13 +1443,23 @@ class PullData extends Command
         ]);
 
         foreach ($xiaomi as $phone) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($phone['capacities']))->first();
+            if ($phone['capacities'] != []) {
+                foreach ($phone['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $phone['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $phone['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $phone['title'])->exists();
@@ -1175,13 +1474,7 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $carrierStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $phone['capacities']);
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1224,13 +1517,23 @@ class PullData extends Command
         ]);
 
         foreach ($razer as $phone) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($phone['capacities']))->first();
+            if ($phone['capacities'] != []) {
+                foreach ($phone['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $phone['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $phone['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $phone['title'])->exists();
@@ -1245,13 +1548,7 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $carrierStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $phone['capacities']);
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1294,13 +1591,23 @@ class PullData extends Command
         ]);
 
         foreach ($nokia as $phone) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($phone['capacities']))->first();
+            if ($phone['capacities'] != []) {
+                foreach ($phone['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $phone['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $phone['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $phone['title'])->exists();
@@ -1315,13 +1622,7 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $carrierStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $phone['capacities']);
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1364,13 +1665,23 @@ class PullData extends Command
         ]);
 
         foreach ($asus as $phone) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($phone['capacities']))->first();
+            if ($phone['capacities'] != []) {
+                foreach ($phone['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $phone['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $phone['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $phone['title'])->exists();
@@ -1385,13 +1696,7 @@ class PullData extends Command
                     'is_hidden' => $phone['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $carrierStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $phone['capacities']);
 
                 $media = $category->addMediaFromUrl($phone['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1469,22 +1774,42 @@ class PullData extends Command
         ]);
 
         foreach ($ipads as $tablet) {
-            $networksStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($tablet['networks']))->first();
+            if ($tablet['networks'] != []) {
+                foreach ($tablet['networks'] as $network) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->carrierName->getKey())
+                        ->where('slug', $network['slug'])
+                        ->exists();
 
-            if (!$networksStep && $tablet['networks'] != []) {
-                $networksStep = Step::query()->create([
-                    'name' => 'Please select the device\'s carrier',
-                    'items' => $tablet['networks'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->carrierName->getKey(),
+                            'slug' => $network['slug'],
+                            'attribute' => $network['attribute'],
+                            'value' => $network['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($tablet['capacities']))->first();
+            if ($tablet['capacities'] != []) {
+                foreach ($tablet['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $tablet['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $tablet['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $tablet['title'])->exists();
@@ -1499,13 +1824,7 @@ class PullData extends Command
                     'is_hidden' => $tablet['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $networksStep ? $networksStep->getKey() : 0,
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $tablet['capacities'], $tablet['networks']);
 
                 $media = $category->addMediaFromUrl($tablet['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1559,22 +1878,42 @@ class PullData extends Command
         ]);
 
         foreach ($samsungTablts as $tablet) {
-            $networksStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($tablet['networks']))->first();
+            if ($tablet['networks'] != []) {
+                foreach ($tablet['networks'] as $network) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->carrierName->getKey())
+                        ->where('slug', $network['slug'])
+                        ->exists();
 
-            if (!$networksStep && $tablet['networks'] != []) {
-                $networksStep = Step::query()->create([
-                    'name' => 'Please select the device\'s carrier',
-                    'items' => $tablet['networks'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->carrierName->getKey(),
+                            'slug' => $network['slug'],
+                            'attribute' => $network['attribute'],
+                            'value' => $network['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($tablet['capacities']))->first();
+            if ($tablet['capacities'] != []) {
+                foreach ($tablet['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $tablet['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $tablet['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $tablet['title'])->exists();
@@ -1589,13 +1928,7 @@ class PullData extends Command
                     'is_hidden' => $tablet['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $networksStep ? $networksStep->getKey() : 0,
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $tablet['capacities'], $tablet['networks']);
 
                 $media = $category->addMediaFromUrl($tablet['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1649,22 +1982,42 @@ class PullData extends Command
         ]);
 
         foreach ($microsoftTablets as $tablet) {
-            $networksStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($tablet['networks']))->first();
+            if ($tablet['networks'] != []) {
+                foreach ($tablet['networks'] as $network) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->carrierName->getKey())
+                        ->where('slug', $network['slug'])
+                        ->exists();
 
-            if (!$networksStep && $tablet['networks'] != []) {
-                $networksStep = Step::query()->create([
-                    'name' => 'Please select the device\'s carrier',
-                    'items' => $tablet['networks'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->carrierName->getKey(),
+                            'slug' => $network['slug'],
+                            'attribute' => $network['attribute'],
+                            'value' => $network['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($tablet['capacities']))->first();
+            if ($tablet['capacities'] != []) {
+                foreach ($tablet['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $tablet['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $tablet['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $tablet['title'])->exists();
@@ -1679,13 +2032,7 @@ class PullData extends Command
                     'is_hidden' => $tablet['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $networksStep ? $networksStep->getKey() : 0,
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $tablet['capacities'], $tablet['networks']);
 
                 $media = $category->addMediaFromUrl($tablet['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1746,22 +2093,42 @@ class PullData extends Command
         });
 
         foreach ($iPods as $device) {
-            $networksStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['networks']))->first();
+            if ($device['networks'] != []) {
+                foreach ($device['networks'] as $network) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->carrierName->getKey())
+                        ->where('slug', $network['slug'])
+                        ->exists();
 
-            if (!$networksStep && $device['networks'] != []) {
-                $networksStep = Step::query()->create([
-                    'name' => 'Please select the device\'s carrier',
-                    'items' => $device['networks'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->carrierName->getKey(),
+                            'slug' => $network['slug'],
+                            'attribute' => $network['attribute'],
+                            'value' => $network['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['capacities']))->first();
+            if ($device['capacities'] != []) {
+                foreach ($device['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $device['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $device['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $device['title'])->exists();
@@ -1776,13 +2143,7 @@ class PullData extends Command
                     'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $networksStep ? $networksStep->getKey() : 0,
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $accesoriesStep->getKey(),
-                    $functionalStep->getKey()
-                ]));
+                $this->savePhoneSteps($category->getKey(), $device['capacities'], $device['networks']);
 
                 $media = $category->addMediaFromUrl($device['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1830,13 +2191,23 @@ class PullData extends Command
         });
 
         foreach ($gopro as $device) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['capacities']))->first();
+            if ($device['capacities'] != []) {
+                foreach ($device['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $device['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $device['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $device['title'])->exists();
@@ -1851,11 +2222,7 @@ class PullData extends Command
                     'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $functionalStep->getKey(),
-                ]));
+                $this->saveGoProSteps($category->getKey(), $device['capacities']);
 
                 $media = $category->addMediaFromUrl($device['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1922,13 +2289,23 @@ class PullData extends Command
         ]);
 
         foreach ($xbox as $device) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['capacities']))->first();
+            if ($device['capacities'] != []) {
+                foreach ($device['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $device['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $device['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $device['title'])->exists();
@@ -1943,11 +2320,7 @@ class PullData extends Command
                     'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $functionalStep->getKey(),
-                ]));
+                $this->saveConsoleSteps($category->getKey(), $device['capacities'], false);
 
                 $media = $category->addMediaFromUrl($device['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1990,13 +2363,23 @@ class PullData extends Command
         ]);
 
         foreach ($playstation as $device) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['capacities']))->first();
+            if ($device['capacities'] != []) {
+                foreach ($device['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $device['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $device['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $device['title'])->exists();
@@ -2011,11 +2394,7 @@ class PullData extends Command
                     'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $functionalStep->getKey()
-                ]));
+                $this->saveConsoleSteps($category->getKey(), $device['capacities'], false);
 
                 $media = $category->addMediaFromUrl($device['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -2058,13 +2437,23 @@ class PullData extends Command
         ]);
 
         foreach ($switch as $device) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['capacities']))->first();
+            if ($device['capacities'] != []) {
+                foreach ($device['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $device['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $device['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $device['title'])->exists();
@@ -2079,11 +2468,7 @@ class PullData extends Command
                     'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $functionalStep->getKey()
-                ]));
+                $this->saveConsoleSteps($category->getKey(), $device['capacities'], true);
 
                 $media = $category->addMediaFromUrl($device['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -2126,13 +2511,23 @@ class PullData extends Command
         ]);
 
         foreach ($ds as $device) {
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['capacities']))->first();
+            if ($device['capacities'] != []) {
+                foreach ($device['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
 
-            if (!$capacityStep && $device['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $device['capacities'],
-                ]);
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
             }
 
             $isExist = Category::query()->where('name', $device['title'])->exists();
@@ -2147,11 +2542,7 @@ class PullData extends Command
                     'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $functionalStep->getKey()
-                ]));
+                $this->saveConsoleSteps($category->getKey(), $device['capacities'], true);
 
                 $media = $category->addMediaFromUrl($device['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -2177,39 +2568,48 @@ class PullData extends Command
         ]);
 
         //APPLE WATCH
-        $appleWatch = $appleWatchCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
+        $appleWatch = $appleWatchCrawler->filter('.devices')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
 
-            $appleWatchStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
+            $category = $nodeCrawler->filter('h3')->text();
 
-            $capacities = $appleWatchStepsCrawler->filter('.capacity-logos-sprite')->each(function (Crawler $nodeCrawler) {
-                $cpies = [];
+            $items = $nodeCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client, $category) {
+                $appleWatchStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
 
-                return $cpies[] = [
-                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
-                    'attribute' => $slug ? 'capacity' : null,
-                    'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
-                ];
-            });
+                $capacities = $appleWatchStepsCrawler->filter('.capacity-logos-sprite')->each(function (Crawler $nodeCrawler) {
+                    $cpies = [];
 
-            $networks = $appleWatchStepsCrawler->filter('.network-logos-sprite')->each(function (Crawler $nodeCrawler) {
-                $ntwrks = [];
+                    return $cpies[] = [
+                        'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                        'attribute' => $slug ? 'capacity' : null,
+                        'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                    ];
+                });
 
-                return $ntwrks[] = [
-                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
-                    'attribute' => $slug ? 'network' : null,
-                    'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                $networks = $appleWatchStepsCrawler->filter('.network-logos-sprite')->each(function (Crawler $nodeCrawler) {
+                    $ntwrks = [];
+
+                    return $ntwrks[] = [
+                        'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                        'attribute' => $slug ? 'network' : null,
+                        'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                    ];
+                });
+
+                return [
+                    'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
+                    'title' => 'Apple '.$nodeCrawler->filter('.h4')->text(),
+                    'slug' =>   preg_replace('/^\/(.+?)\/apple-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
+                    'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
+                    'capacities' => $capacities,
+                    'networks' => $networks,
                 ];
             });
 
             return [
-                'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
-                'title' => 'Apple '.$nodeCrawler->filter('.h4')->text(),
-                'slug' =>   preg_replace('/^\/(.+?)\/apple-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
-                'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
-                'capacities' => $capacities,
-                'networks' => $networks,
+                $category => $items
             ];
         });
+
 
         $appleWatchCategory = Category::query()->create([
             'name' => 'Sell Apple Watch',
@@ -2219,52 +2619,385 @@ class PullData extends Command
         ]);
 
         foreach ($appleWatch as $device) {
-            $networksStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['networks']))->first();
-
-            if (!$networksStep && $device['networks'] != []) {
-                $networksStep = Step::query()->create([
-                    'name' => 'Please select the device\'s carrier',
-                    'items' => $device['networks'],
-                ]);
-            }
-
-            $capacityStep = Step::query()->whereRaw('items = cast(? as json)', json_encode($device['capacities']))->first();
-
-            if (!$capacityStep && $device['capacities'] != []) {
-                $capacityStep = Step::query()->create([
-                    'name' => 'What is the device\'s storage capacity?',
-                    'items' => $device['capacities'],
-                ]);
-            }
-
-            $isExist = Category::query()->where('name', $device['title'])->exists();
-
-            if (!$isExist) {
-                $category = Category::query()->create([
+            foreach ($device as $key => $items) {
+                $appleWatchSubCategory = Category::query()->create([
+                    'name' => $key,
+                    'image' => $watchImage,
+                    'slug' => strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '_', $key))),
                     'subcategory_id' => $appleWatchCategory->getKey(),
-                    'name' => $device['title'],
-                    'slug' => $device['slug'],
-                    'custom_text' => $device['price'],
-                    'is_parsed' => 1,
-                    'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $category->steps()->attach(Step::find([
-                    $conditionStep->getKey(),
-                    $networksStep ? $networksStep->getKey() : 0,
-                    $capacityStep ? $capacityStep->getKey() : 0,
-                    $functionalStep->getKey()
-                ]));
+                foreach ($items as $item) {
+                    if ($item['networks'] != []) {
+                        foreach ($item['networks'] as $network) {
+                            $isItemExist = Step::query()
+                                ->where('name_id', $this->carrierName->getKey())
+                                ->where('slug', $network['slug'])
+                                ->exists();
 
-                $media = $category->addMediaFromUrl($device['image'])
-                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+                            if (!$isItemExist) {
+                                Step::query()->create([
+                                    'name_id' => $this->carrierName->getKey(),
+                                    'slug' => $network['slug'],
+                                    'attribute' => $network['attribute'],
+                                    'value' => $network['name'],
+                                    'decryption' => null,
+                                ]);
+                            }
+                        }
+                    }
 
-                $category->update(['image' => $media->getFullUrl()]);
+                    if ($item['capacities'] != []) {
+                        foreach ($item['capacities'] as $capacity) {
+                            $isItemExist = Step::query()
+                                ->where('name_id', $this->capacityName->getKey())
+                                ->where('slug', $capacity['slug'])
+                                ->exists();
+
+                            if (!$isItemExist) {
+                                Step::query()->create([
+                                    'name_id' => $this->capacityName->getKey(),
+                                    'slug' => $capacity['slug'],
+                                    'attribute' => $capacity['attribute'],
+                                    'value' => $capacity['name'],
+                                    'decryption' => null,
+                                ]);
+                            }
+                        }
+                    }
+
+                    $isExist = Category::query()->where('name', $item['title'])->exists();
+
+                    if (!$isExist) {
+                        $category = Category::query()->create([
+                            'subcategory_id' => $appleWatchSubCategory->getKey(),
+                            'name' => $item['title'],
+                            'slug' => $item['slug'],
+                            'custom_text' => $item['price'],
+                            'is_parsed' => 1,
+                            'is_hidden' => $item['price'] < $maxPrice ? 1 : 0,
+                        ]);
+
+                        $this->saveSmartwatchSteps($category->getKey(), $item['capacities'], $item['networks']);
+
+                        $media = $category->addMediaFromUrl($item['image'])
+                            ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                        $category->update(['image' => $media->getFullUrl()]);
+                    }
+                }
             }
         }
 
         $this->line('Apple watch was parsed...');
 
         $this->line('Work is done!');
+    }
+
+    /**
+     * @param int $categoryId
+     * @param array $capacities
+     * @param array $networks
+     *
+     * @return void
+     */
+    private function savePhoneSteps(int $categoryId, array $capacities = [], array $networks = [])
+    {
+        foreach ($this->conditions as $c) {
+            if ($c->getAttribute('value') === 'Brand New') {
+                DB::table('premium_price')->insert([
+                    'category_id' => $categoryId,
+                    'step_id' => $c->getKey(),
+                    'price_percent' => 10,
+                ]);
+            }
+
+            CategoryStep::query()->create([
+                'category_id' => $categoryId,
+                'step_id' => $c->getKey(),
+                'sort_order' => 1,
+            ]);
+        }
+
+        if ($networks) {
+            foreach ($networks as $nt) {
+                $netwk = Step::query()
+                    ->where('name_id', $this->carrierName->getKey())
+                    ->where('slug', $nt['slug'])
+                    ->first();
+
+                CategoryStep::query()->create([
+                    'category_id' => $categoryId,
+                    'step_id' => $netwk->getKey(),
+                    'sort_order' => 2,
+                ]);
+            }
+        } else {
+            foreach ($this->carriers as $cr) {
+                CategoryStep::query()->create([
+                    'category_id' => $categoryId,
+                    'step_id' => $cr->getKey(),
+                    'sort_order' => 2,
+                ]);
+            }
+        }
+
+        if ($capacities) {
+            foreach ($capacities as $cp) {
+                $cpst = Step::query()
+                    ->where('name_id', $this->capacityName->getKey())
+                    ->where('slug', $cp['slug'])
+                    ->first();
+
+                CategoryStep::query()->create([
+                    'category_id' => $categoryId,
+                    'step_id' => $cpst->getKey(),
+                    'sort_order' => 3,
+                ]);
+            }
+        }
+
+        foreach ($this->phoneAccessories as $ac) {
+            DB::table('premium_price')->insert([
+                'category_id' => $categoryId,
+                'step_id' => $ac->getKey(),
+                'price_plus' => 1,
+            ]);
+
+            CategoryStep::query()->create([
+                'category_id' => $categoryId,
+                'step_id' => $ac->getKey(),
+                'sort_order' => 4,
+            ]);
+        }
+
+        foreach ($this->functionals as $func) {
+            CategoryStep::query()->create([
+                'category_id' => $categoryId,
+                'step_id' => $func->getKey(),
+                'sort_order' => 5,
+            ]);
+        }
+    }
+
+    /**
+     * @param int $categoryId
+     * @param array $capacities
+     *
+     * @return void
+     */
+    private function saveGoProSteps(int $categoryId, array $capacities = [])
+    {
+        foreach ($this->conditions as $c) {
+            if ($c->getAttribute('value') === 'Brand New') {
+                DB::table('premium_price')->insert([
+                    'category_id' => $categoryId,
+                    'step_id' => $c->getKey(),
+                    'price_percent' => 10,
+                ]);
+            }
+
+            CategoryStep::query()->create([
+                'category_id' => $categoryId,
+                'step_id' => $c->getKey(),
+                'sort_order' => 1,
+            ]);
+        }
+
+        if ($capacities) {
+            foreach ($capacities as $cp) {
+                $cpst = Step::query()
+                    ->where('name_id', $this->capacityName->getKey())
+                    ->where('slug', $cp['slug'])
+                    ->first();
+
+                CategoryStep::query()->create([
+                    'category_id' => $categoryId,
+                    'step_id' => $cpst->getKey(),
+                    'sort_order' => 2,
+                ]);
+            }
+        }
+
+        foreach ($this->functionals as $func) {
+            CategoryStep::query()->create([
+                'category_id' => $categoryId,
+                'step_id' => $func->getKey(),
+                'sort_order' => 3,
+            ]);
+        }
+    }
+
+    /**
+     * @param int $categoryId
+     * @param array $capacities
+     * @param bool $switch
+     *
+     * @return void
+     */
+    private function saveConsoleSteps(int $categoryId, array $capacities = [], bool $switch = false)
+    {
+        foreach ($this->conditions as $c) {
+            if ($c->getAttribute('value') === 'Brand New') {
+                DB::table('premium_price')->insert([
+                    'category_id' => $categoryId,
+                    'step_id' => $c->getKey(),
+                    'price_percent' => 10,
+                ]);
+            }
+
+            CategoryStep::query()->create([
+                'category_id' => $categoryId,
+                'step_id' => $c->getKey(),
+                'sort_order' => 1,
+            ]);
+        }
+
+        if ($capacities) {
+            foreach ($capacities as $cp) {
+                $cpst = Step::query()
+                    ->where('name_id', $this->capacityName->getKey())
+                    ->where('slug', $cp['slug'])
+                    ->first();
+
+                CategoryStep::query()->create([
+                    'category_id' => $categoryId,
+                    'step_id' => $cpst->getKey(),
+                    'sort_order' => 2,
+                ]);
+            }
+        }
+
+        if (!$switch) {
+            foreach ($this->controller as $contrl) {
+                if ($contrl->getAttribute('value') === 'Yes') {
+                    DB::table('premium_price')->insert([
+                        'category_id' => $categoryId,
+                        'step_id' => $contrl->getKey(),
+                        'price_plus' => 30,
+                    ]);
+                }
+
+                CategoryStep::query()->create([
+                    'category_id' => $categoryId,
+                    'step_id' => $contrl->getKey(),
+                    'sort_order' => 3,
+                ]);
+            }
+        }
+
+        foreach ($this->consoleAccessories as $ac) {
+            DB::table('premium_price')->insert([
+                'category_id' => $categoryId,
+                'step_id' => $ac->getKey(),
+                'price_plus' => 1,
+            ]);
+
+            CategoryStep::query()->create([
+                'category_id' => $categoryId,
+                'step_id' => $ac->getKey(),
+                'sort_order' => 4,
+            ]);
+        }
+
+        foreach ($this->functionals as $func) {
+            CategoryStep::query()->create([
+                'category_id' => $categoryId,
+                'step_id' => $func->getKey(),
+                'sort_order' => 5,
+            ]);
+        }
+    }
+
+    /**
+     * @param int $categoryId
+     * @param array $capacities
+     * @param array $networks
+     *
+     * @return void
+     */
+    private function saveSmartwatchSteps(int $categoryId, array $capacities = [], array $networks = [])
+    {
+        foreach ($this->conditions as $c) {
+            if ($c->getAttribute('value') === 'Brand New') {
+                DB::table('premium_price')->insert([
+                    'category_id' => $categoryId,
+                    'step_id' => $c->getKey(),
+                    'price_percent' => 10,
+                ]);
+            }
+
+            CategoryStep::query()->create([
+                'category_id' => $categoryId,
+                'step_id' => $c->getKey(),
+                'sort_order' => 1,
+            ]);
+        }
+
+        if ($networks) {
+            foreach ($networks as $nt) {
+                $netwk = Step::query()
+                    ->where('name_id', $this->carrierName->getKey())
+                    ->where('slug', $nt['slug'])
+                    ->first();
+
+                CategoryStep::query()->create([
+                    'category_id' => $categoryId,
+                    'step_id' => $netwk->getKey(),
+                    'sort_order' => 2,
+                ]);
+            }
+        }
+
+        if ($capacities) {
+            foreach ($capacities as $cp) {
+                $cpst = Step::query()
+                    ->where('name_id', $this->capacityName->getKey())
+                    ->where('slug', $cp['slug'])
+                    ->first();
+
+                CategoryStep::query()->create([
+                    'category_id' => $categoryId,
+                    'step_id' => $cpst->getKey(),
+                    'sort_order' => 3,
+                ]);
+            }
+        }
+
+        foreach ($this->smartwatchAccessories as $ac) {
+            DB::table('premium_price')->insert([
+                'category_id' => $categoryId,
+                'step_id' => $ac->getKey(),
+                'price_plus' => 1,
+            ]);
+
+            CategoryStep::query()->create([
+                'category_id' => $categoryId,
+                'step_id' => $ac->getKey(),
+                'sort_order' => 4,
+            ]);
+        }
+
+        foreach ($this->smartwatchBands as $band) {
+            DB::table('premium_price')->insert([
+                'category_id' => $categoryId,
+                'step_id' => $band->getKey(),
+                'price_plus' => 35,
+            ]);
+
+            CategoryStep::query()->create([
+                'category_id' => $categoryId,
+                'step_id' => $band->getKey(),
+                'sort_order' => 5,
+            ]);
+        }
+
+        foreach ($this->functionals as $func) {
+            CategoryStep::query()->create([
+                'category_id' => $categoryId,
+                'step_id' => $func->getKey(),
+                'sort_order' => 6,
+            ]);
+        }
     }
 }

@@ -15,8 +15,10 @@ use App\Http\Requests\Client\Order\StoreRequest as ClientOrderStoreRequest;
 use App\Notifications\CommentNotification;
 use App\Notifications\ContactNotification;
 use App\Order;
+use App\Price;
 use App\Services\FedexService;
 use App\Setting;
+use App\Step;
 use App\Tip;
 use App\User;
 use Illuminate\Contracts\View\View as ViewContract;
@@ -338,15 +340,36 @@ class HomeController extends Controller
     {
         $steps = json_decode($request->get('steps'), true);
 
-        $price = DB::table('prices')
-            ->where('category_id', $request->get('category_id'))
-            ->where(function($query) use ($steps) {
-            foreach ($steps as $step) {
-                $query->where($step['attribute'], $step['slug']);
-            }
-        })->first();
+        $ids = [];
 
-        return $this->json()->ok(['price' => $price->price]);
+        foreach ($steps as $step) {
+            if (isset($step['slug']) && isset($step['attribute'])) {
+                $id = $step['id'];
+                if ($step['value'] === 'Flawless') {
+                    $id = Step::query()->where('value', 'Brand New')->first()->getKey();
+                }
+                $ids[] = $id;
+            }
+        }
+
+//        $price = Price::query()
+//            ->where('category_id', $request->get('category_id'))
+//            ->whereRaw('steps_ids = cast(? as json)', json_encode($ids))
+//            ->first();
+
+        $resultPrice = 0;
+
+        $prices = Price::query()->where('category_id', $request->get('category_id'))->get();
+
+        foreach ($prices as $price) {
+            $similar = array_intersect($ids, $price->getAttribute('steps_ids'));
+
+            if (sizeof($ids) === sizeof($similar)) {
+                $resultPrice = $price->getAttribute('price');
+            }
+        }
+
+        return $this->json()->ok(['price' => $resultPrice]);
     }
 
     /**
@@ -391,17 +414,37 @@ class HomeController extends Controller
 
         $faqs = Faq::query()->whereKey($category->getAttribute('faq_id'))->first();
 
-        if ($steps = $category->steps()->get()->toArray()) {
+        $stepsArr = [];
+
+        if ($steps = $category->steps()->get()) {
             foreach ($steps as $key => $step) {
-                if (isset($step['tip_id'])) {
-                    $steps[$key]['tip'] = Tip::query()->whereKey($step['tip_id'])->first()->toArray() ?? [];
+                $stepsArr[$step->stepName->id]['items'][] = $step->toArray();
+                $stepsArr[$step->stepName->id]['is_condition'] = $step->stepName->is_condition;
+                $stepsArr[$step->stepName->id]['is_checkbox'] = $step->stepName->is_checkbox;
+                $stepsArr[$step->stepName->id]['is_functional'] = $step->stepName->is_functional;
+                $stepsArr[$step->stepName->id]['title'] = $step->stepName->title;
+                if ($step->stepName->tip_id) {
+                    $stepsArr[$step->stepName->id]['tip'] = Tip::query()->whereKey($step->stepName->tip_id)->first()->toArray() ?? [];
                 }
             }
         }
 
+        $resultArr = [];
+
+        foreach ($stepsArr as $stepArr) {
+            $resultArr[] = [
+                'title' => $stepArr['title'],
+                'items' => $stepArr['items'],
+                'is_condition' => $stepArr['is_condition'],
+                'is_checkbox' => $stepArr['is_checkbox'],
+                'is_functional' => $stepArr['is_functional'],
+                'tip' => isset($stepArr['tip']) ? $stepArr['tip'] : null,
+            ];
+        }
+
         return View::make('home', [
             'category' => $category,
-            'steps' => $steps ?? [],
+            'steps' => $resultArr ?? [],
             'categories' => $categories,
             'settings' => $this->getSettings() ?? [],
             'relatedCategories' => $relatedCategories,

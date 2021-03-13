@@ -71,7 +71,7 @@ class Category extends Model implements HasMedia
      */
     public function steps(): BelongsToMany
     {
-        return $this->belongsToMany(Step::class);
+        return $this->belongsToMany(Step::class, CategoryStep::class)->withPivot('sort_order');
     }
 
     /**

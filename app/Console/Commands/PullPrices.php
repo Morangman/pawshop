@@ -3,9 +3,11 @@
 namespace App\Console\Commands;
 
 use App\Category;
+use App\Step;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use App\Services\Traits\JsonDecodeTrait;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -104,12 +106,10 @@ class PullPrices extends Command
             if (!$existCategory) {
                 $attributes = [];
 
-                foreach ($device->steps()->get()->toArray() as $step) {
-                    foreach ($step['items'] as $item){
-                        $attributes[$item['attribute']][] = [
-                            $item['attribute'] => $item['slug']
-                        ];
-                    }
+                foreach ($device->steps()->whereNotNull('slug')->get()->toArray() as $step) {
+                    $attributes[$step['attribute']][] = [
+                        $step['attribute'] => $step['slug']
+                    ];
                 }
 
                 $combinations = $this->array_cartesian_product($attributes);
@@ -150,12 +150,19 @@ class PullPrices extends Command
                                 }
                             }
 
+                            $ids = [];
+
+                            foreach ($attrs as $key => $attr) {
+                                $stepId = Step::query()->where('slug', $attr)->where('attribute', $key)->first()->getKey();
+
+                                $ids[] = $stepId;
+                            }
+
                             $data = [
                                 'category_id' => $device->getKey(),
-                                'condition' => isset($attrs['condition']) ? $attrs['condition'] : null,
-                                'network' => isset($attrs['network']) ? $attrs['network'] : null,
-                                'capacity' => isset($attrs['capacity']) ? $attrs['capacity'] : null,
+                                'steps_ids' => json_encode($ids),
                                 'price' => $maxPrice,
+                                'is_parsed' => 1,
                             ];
 
                             DB::table('prices')->insert($data);

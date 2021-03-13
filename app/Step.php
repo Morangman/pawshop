@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class Step
@@ -23,29 +23,34 @@ class Step extends Model
      * @var array
      */
     protected $fillable = [
-        'tip_id',
-        'name',
-        'items',
-        'is_condition',
-        'is_checkboxes',
+        'name_id',
+        'slug',
+        'attribute',
+        'value',
+        'decryption',
     ];
 
     /**
      * @var array
      */
     protected $casts = [
-        'tip_id' => 'int',
-        'name' => 'string',
-        'items' => 'array',
-        'is_condition' => 'bool',
-        'is_checkboxes' => 'bool',
+        'name_id' => 'int',
+        'slug' => 'string',
+        'attribute' => 'string',
+        'value' => 'string',
+        'decryption' => 'string',
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function categories(): BelongsToMany
+    public function stepName(): BelongsTo
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsTo(
+            StepName::class,
+            'name_id',
+            'id',
+            'stepName'
+        );
     }
 }
