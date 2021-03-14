@@ -19,6 +19,7 @@ use App\Price;
 use App\Services\FedexService;
 use App\Setting;
 use App\Step;
+use App\StepName;
 use App\Tip;
 use App\User;
 use Illuminate\Contracts\View\View as ViewContract;
@@ -342,7 +343,36 @@ class HomeController extends Controller
 
         $ids = [];
 
+        $addToPrice = 0;
+
+        $addPercent = 0;
+
+        $isBroken = false;
+
         foreach ($steps as $step) {
+            $premiumPrice = DB::table('premium_price')
+                ->where('step_id', $step['id'])
+                ->where('category_id', $request->get('category_id'))
+                ->first();
+
+            if ($premiumPrice) {
+                if ($pricePlus = $premiumPrice->price_plus) {
+                    $addToPrice += $pricePlus;
+                }
+
+                if ($percentPlus = $premiumPrice->price_percent) {
+                    $addPercent += $percentPlus;
+                }
+            }
+
+            $stepCategory = StepName::query()->whereKey($step['name_id'])->first();
+
+            if ($stepCategory->getAttribute('is_functional')) {
+                if ($step['value'] === 'No') {
+                    $isBroken = true;
+                }
+            }
+
             if (isset($step['slug']) && isset($step['attribute'])) {
                 $id = $step['id'];
                 if ($step['value'] === 'Flawless') {
@@ -352,24 +382,31 @@ class HomeController extends Controller
             }
         }
 
-//        $price = Price::query()
-//            ->where('category_id', $request->get('category_id'))
-//            ->whereRaw('steps_ids = cast(? as json)', json_encode($ids))
-//            ->first();
-
         $resultPrice = 0;
 
         $prices = Price::query()->where('category_id', $request->get('category_id'))->get();
 
         foreach ($prices as $price) {
-            $similar = array_intersect($ids, $price->getAttribute('steps_ids'));
+            if ( $price->getAttribute('is_parsed')) {
+                $similar = array_intersect($ids, $price->getAttribute('steps_ids'));
 
-            if (sizeof($ids) === sizeof($similar)) {
-                $resultPrice = $price->getAttribute('price');
+                if (sizeof($ids) === sizeof($similar)) {
+                    $resultPrice = $price->getAttribute('price');
+                }
             }
         }
 
-        return $this->json()->ok(['price' => $resultPrice]);
+        if ($addPercent) {
+            $priceAddPercent = ((float) $resultPrice * $addPercent) / 100;
+
+            $resultPrice = number_format((float) $resultPrice + $priceAddPercent, 2, '.', '');
+        }
+
+        if ($addToPrice) {
+            $resultPrice = number_format((float) $resultPrice + $addToPrice, 2, '.', '');
+        }
+
+        return $this->json()->ok(['price' => $isBroken ? 5 : $resultPrice]);
     }
 
     /**

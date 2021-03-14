@@ -291,16 +291,20 @@
             valuate(){
                 this.summ = parseFloat(this.category.custom_text);
 
-                if (!this.selectedStep && this.category.is_parsed) {
+                if (!this.selectedStep) {
                     let steps = [];
                     _.each(this.selectedSteps, (value, key) => {
                         if(value) {
+                            value.value = value.value.replace('&', '');
+
                             steps.push(value);
                         }
                     });
 
                     _.each(this.selectedAccesories, (value, key) => {
                         if(value) {
+                            value.value = value.value.replace('&', '');
+
                             steps.push(value);
                         }
                     });

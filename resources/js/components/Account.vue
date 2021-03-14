@@ -161,7 +161,7 @@
                                                     <div class="inner">
                                                         <div class="name"><a :href="$r('get-category', { slug:  order.device.slug })">{{ order.device.name }}</a></div>
                                                         <div class="chars" v-if="order.steps">
-                                                            <span v-for="(option, key) in order.steps" v-if="option">{{  option ? option.name === 'Yes' || option.name === 'No' ? '' : key === Object.keys(order.steps).pop() ? option.name :  option.name + ', ' : '' }}</span>
+                                                            <span v-for="(option, key) in order.steps" v-if="option">{{  option ? option.value === 'Yes' || option.value === 'No' ? '' : key === Object.keys(order.steps).pop() ? option.value :  option.value + ', ' : '' }}</span>
                                                         </div>
                                                     </div>
                                                 </div>

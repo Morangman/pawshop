@@ -1824,7 +1824,7 @@ class PullData extends Command
                     'is_hidden' => $tablet['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $this->savePhoneSteps($category->getKey(), $tablet['capacities'], $tablet['networks']);
+                $this->saveDeviceSteps($category->getKey(), $tablet['capacities'], $tablet['networks']);
 
                 $media = $category->addMediaFromUrl($tablet['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -1928,7 +1928,7 @@ class PullData extends Command
                     'is_hidden' => $tablet['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $this->savePhoneSteps($category->getKey(), $tablet['capacities'], $tablet['networks']);
+                $this->saveDeviceSteps($category->getKey(), $tablet['capacities'], $tablet['networks']);
 
                 $media = $category->addMediaFromUrl($tablet['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -2032,7 +2032,7 @@ class PullData extends Command
                     'is_hidden' => $tablet['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $this->savePhoneSteps($category->getKey(), $tablet['capacities'], $tablet['networks']);
+                $this->saveDeviceSteps($category->getKey(), $tablet['capacities'], $tablet['networks']);
 
                 $media = $category->addMediaFromUrl($tablet['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -2143,7 +2143,7 @@ class PullData extends Command
                     'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
                 ]);
 
-                $this->savePhoneSteps($category->getKey(), $device['capacities'], $device['networks']);
+                $this->saveDeviceSteps($category->getKey(), $device['capacities'], $device['networks']);
 
                 $media = $category->addMediaFromUrl($device['image'])
                     ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
@@ -2737,6 +2737,84 @@ class PullData extends Command
                 CategoryStep::query()->create([
                     'category_id' => $categoryId,
                     'step_id' => $cr->getKey(),
+                    'sort_order' => 2,
+                ]);
+            }
+        }
+
+        if ($capacities) {
+            foreach ($capacities as $cp) {
+                $cpst = Step::query()
+                    ->where('name_id', $this->capacityName->getKey())
+                    ->where('slug', $cp['slug'])
+                    ->first();
+
+                CategoryStep::query()->create([
+                    'category_id' => $categoryId,
+                    'step_id' => $cpst->getKey(),
+                    'sort_order' => 3,
+                ]);
+            }
+        }
+
+        foreach ($this->phoneAccessories as $ac) {
+            DB::table('premium_price')->insert([
+                'category_id' => $categoryId,
+                'step_id' => $ac->getKey(),
+                'price_plus' => 1,
+            ]);
+
+            CategoryStep::query()->create([
+                'category_id' => $categoryId,
+                'step_id' => $ac->getKey(),
+                'sort_order' => 4,
+            ]);
+        }
+
+        foreach ($this->functionals as $func) {
+            CategoryStep::query()->create([
+                'category_id' => $categoryId,
+                'step_id' => $func->getKey(),
+                'sort_order' => 5,
+            ]);
+        }
+    }
+
+    /**
+     * @param int $categoryId
+     * @param array $capacities
+     * @param array $networks
+     *
+     * @return void
+     */
+    private function saveDeviceSteps(int $categoryId, array $capacities = [], array $networks = [])
+    {
+        foreach ($this->conditions as $c) {
+            if ($c->getAttribute('value') === 'Brand New') {
+                DB::table('premium_price')->insert([
+                    'category_id' => $categoryId,
+                    'step_id' => $c->getKey(),
+                    'price_percent' => 10,
+                ]);
+            }
+
+            CategoryStep::query()->create([
+                'category_id' => $categoryId,
+                'step_id' => $c->getKey(),
+                'sort_order' => 1,
+            ]);
+        }
+
+        if ($networks) {
+            foreach ($networks as $nt) {
+                $netwk = Step::query()
+                    ->where('name_id', $this->carrierName->getKey())
+                    ->where('slug', $nt['slug'])
+                    ->first();
+
+                CategoryStep::query()->create([
+                    'category_id' => $categoryId,
+                    'step_id' => $netwk->getKey(),
                     'sort_order' => 2,
                 ]);
             }

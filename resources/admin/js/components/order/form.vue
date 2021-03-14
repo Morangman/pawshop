@@ -249,7 +249,7 @@
                                     </div>
                                 </div>
 
-                                <p><span v-for="(step, key) in product.steps">{{ key === Object.keys(product.steps).pop() ? step.name :  step.name + ', ' }}</span></p>
+                                <p><span v-for="(step, key) in product.steps">{{ key === Object.keys(product.steps).pop() ? step.value :  step.value + ', ' }}</span></p>
                         </div>
                         <div v-for="(error, i) in errors.orders"
                              :key="`orders_product__error__${i}`"
