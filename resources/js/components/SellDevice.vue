@@ -275,6 +275,8 @@
 
                 this.valuate();
 
+                this.stepSelected = true;
+
                 this.$forceUpdate();
             },
 
@@ -286,6 +288,12 @@
                 this.valuate();
 
                 this.stepSelected = false;
+
+                _.each(this.selectedStep['items'], (value, key) => {
+                    if (this.selectedSteps[value.name_id]) {
+                        this.stepSelected = true;
+                    }
+                });
 
                 window.scrollTo({ top:window.pageXOffset + 100, behavior: 'smooth'});
             },
