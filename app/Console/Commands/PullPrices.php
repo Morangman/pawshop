@@ -24,6 +24,27 @@ class PullPrices extends Command
     protected $signature = 'pull:prices';
 
     /**
+     * If the price is more than this value, we make a markup.
+     *
+     * @var int
+     */
+    public $priceMoreThen = 50;
+
+    /**
+     * Markup for price.
+     *
+     * @var int
+     */
+    public $markup = 5;
+
+    /**
+     * Step id.
+     *
+     * @var int
+     */
+    public $stepId = 0;
+
+    /**
      * The console command description.
      *
      * @var string
@@ -158,6 +179,10 @@ class PullPrices extends Command
                                 $ids[] = $stepId;
                             }
 
+                            if ($maxPrice > $this->priceMoreThen) {
+                                $maxPrice += $this->markup;
+                            }
+
                             $data = [
                                 'category_id' => $device->getKey(),
                                 'steps_ids' => json_encode($ids),
@@ -182,6 +207,56 @@ class PullPrices extends Command
                         continue;
                     }
                 }
+
+                $maxPriceByCategory = DB::table('prices')->where('category_id', $device->getKey())->max('price');
+
+                $premiumPrices = DB::table('premium_price')->where('category_id', $device->getKey())->get();
+
+                $addToPrice = 0;
+
+                $addPercent = 0;
+
+                $max = 0;
+
+                foreach ($premiumPrices as $premiumPrice) {
+                    $step = Step::query()->whereKey($premiumPrice->step_id)->first();
+
+                    $isCheckbox = $step->stepName->is_checkbox;
+
+                    if ($pricePlus = $premiumPrice->price_plus) {
+                        if ($isCheckbox) {
+                            $addToPrice += $pricePlus;
+                        } else {
+                            if ($this->stepId !== $step->stepName->id) {
+                                if ($max < (float) $premiumPrice->price_plus) {
+                                    $max = (float) $premiumPrice->price_plus;
+
+                                    $addToPrice += $max;
+                                }
+                            } else {
+                                $max = 0;
+                            }
+                        }
+                    }
+
+                    if ($percentPlus = $premiumPrice->price_percent) {
+                        $addPercent += $percentPlus;
+                    }
+
+                    $this->stepId = $step->stepName->id;
+                }
+
+                if ($addPercent) {
+                    $priceAddPercent = ((float) $maxPriceByCategory * $addPercent) / 100;
+
+                    $maxPriceByCategory = number_format((float) $maxPriceByCategory + $priceAddPercent, 2, '.', '');
+                }
+
+                if ($addToPrice) {
+                    $maxPriceByCategory = number_format((float) $maxPriceByCategory + $addToPrice, 2, '.', '');
+                }
+
+                $device->update(['custom_text' => $maxPriceByCategory]);
 
                 $this->line("{$device->getAttribute('name')}....OK");
 

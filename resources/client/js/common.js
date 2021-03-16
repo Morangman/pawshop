@@ -82,12 +82,6 @@ $(document).ready(function() {
 	    });
 	}
 
-	// Выравнивание
-	$(".step-button").click(function(){
-        document.getElementById("step").scrollIntoView(true);
-        window.scrollBy(0, -70);
-	});
-
 	/*Табы повреждений*/
 	$(".condition-popup-tabs a").click(function(e){
 		e.preventDefault();

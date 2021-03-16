@@ -66,7 +66,9 @@
         width: 100%;
         text-align: left;
         outline: none;
-        color: #0b3057;
+        color: #636363;
+        font-weight: 300;
+        font-size: 15px;
         font-family: 'GothamPro', Arial, Tahoma, sans-serif;
     }
 
@@ -138,5 +140,11 @@
 
     .selectHide {
         display: none;
+    }
+
+    @media (max-width: 480px) {
+        .custom-select {
+            font-size: 13px;
+        }
     }
 </style>

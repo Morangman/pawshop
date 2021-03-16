@@ -182,7 +182,7 @@
                                     </div>
                                 </div>
                                 <div class="input-block width-50">
-                                    <input v-model="orderData.address.phone" :class="addressError.phone ? 'input-error' : ''" name="tel" autocomplete="on" type="tel" placeholder="Phone*">
+                                    <input v-model="orderData.address.phone" @input="acceptNumber" :class="addressError.phone ? 'input-error' : ''" name="tel" autocomplete="on" type="tel" placeholder="Phone*">
                                     <div v-if="addressError.phone" class="invalid-feedback">
                                         <strong>Please provide a valid phone number.</strong>
                                     </div>
@@ -216,14 +216,14 @@
                                     </div>
                                 </div>
                                 <div class="input-block width-25">
-                                    <input v-model="orderData.address.postal_code" :class="addressError.postal_code ? 'input-error' : ''" name="postal-code" autocomplete="on" type="text" placeholder="Postal Code*">
+                                    <input v-model="orderData.address.postal_code"  @input="acceptZip" :class="addressError.postal_code ? 'input-error' : ''" name="postal-code" autocomplete="on" type="text" placeholder="Postal Code*">
                                     <div v-if="addressError.postal_code" class="invalid-feedback">
                                         <strong>Please provide a valid 5 digit zip code.</strong>
                                     </div>
                                 </div>
                             </form>
                         </div>
-                        <div class="checkout-simple-block">
+                        <div class="checkout-simple-block" v-if="totalSumm > 100">
                             <h4>Get paid faster <small>(optional)</small></h4>
                             <ul class="checkbox-list">
                                 <li>
@@ -534,6 +534,19 @@
                 }
             },
 
+            acceptNumber() {
+                var x = this.orderData.address.phone.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+                this.orderData.address.phone = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+            },
+
+            acceptZip() {
+                this.orderData.address.postal_code = this.orderData.address.postal_code.replace(/\D/g, '');
+
+                if (this.orderData.address.postal_code.replace(/[^0-9]/g,"").length > 5) {
+                    this.orderData.address.postal_code = this.orderData.address.postal_code.slice(0, -1);
+                }
+            },
+
             validateAddress(){
                 this.addressError.name = false;
                 this.addressError.phone = false;
@@ -542,35 +555,28 @@
                 this.addressError.city = false;
                 this.addressError.state = false;
 
+                !this.orderData.address.name ? this.addressError.name = true : this.addressError.name = false;
+
+                !this.orderData.address.phone || this.orderData.address.phone.replace(/[^0-9]/g,"").length < 10 ? this.addressError.phone = true : this.addressError.phone = false;
+
+                !this.orderData.address.postal_code || this.orderData.address.postal_code.replace(/[^0-9]/g,"").length < 5 ? this.addressError.postal_code = true : this.addressError.postal_code = false;
+
+                !this.orderData.address.address1 ? this.addressError.address1 = true : this.addressError.address1 = false;
+
+                !this.orderData.address.city ? this.addressError.city = true : this.addressError.city = false;
+
+                !this.orderData.address.state ? this.addressError.state = true : this.addressError.state = false;
+
                 if (
-                    this.orderData.address.name &&
-                    this.orderData.address.phone &&
-                    this.orderData.address.postal_code &&
-                    this.orderData.address.address1 &&
-                    this.orderData.address.city &&
-                    this.orderData.address.state
+                    !this.addressError.name &&
+                    !this.addressError.phone &&
+                    !this.addressError.postal_code &&
+                    !this.addressError.address1 &&
+                    !this.addressError.city &&
+                    !this.addressError.state
                 )
                 {
                     this.stepIndex++;
-                } else {
-                    if (!this.orderData.address.name) {
-                        this.addressError.name = true;
-                    }
-                    if (!this.orderData.address.phone) {
-                        this.addressError.phone = true;
-                    }
-                    if (!this.orderData.address.postal_code) {
-                        this.addressError.postal_code = true;
-                    }
-                    if (!this.orderData.address.address1) {
-                        this.addressError.address1 = true;
-                    }
-                    if (!this.orderData.address.city) {
-                        this.addressError.city = true;
-                    }
-                    if (!this.orderData.address.state) {
-                        this.addressError.state = true;
-                    }
                 }
             },
 

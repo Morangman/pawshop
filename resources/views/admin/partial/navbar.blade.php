@@ -1,5 +1,12 @@
 <div class="navbar navbar-expand-md navbar-dark navbar-slide-top fixed-top">
     <div class="navbar-brand">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a href="#" class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block">
+                    <i class="icon-paragraph-justify3"></i>
+                </a>
+            </li>
+        </ul>
     </div>
     <div class="d-md-none">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile">
@@ -10,13 +17,6 @@
         </button>
     </div>
     <div class="collapse navbar-collapse" id="navbar-mobile">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a href="#" class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block">
-                    <i class="icon-paragraph-justify3"></i>
-                </a>
-            </li>
-        </ul>
         <span class="ml-md-3 mr-md-auto hidden"></span>
         <ul class="navbar-nav">
             @if($user = Auth::user())

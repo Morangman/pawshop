@@ -59,8 +59,8 @@
                         <div class="ready-section-row">
                             <div class="ready-section-item">
                                 <h2>Device Preparation</h2>
-                                <p>Required: I have reset my device or I have turned off “Find My iPhone” or “Android Activation Lock“</p>
-                                <p>Optional: Removed any SIM or SD cards</p>
+                                <p><span>&#9679;</span> Required: I have reset my device or I have turned off “Find My iPhone” or “Android Activation Lock“</p>
+                                <p><span>&#9679;</span> Optional: Removed any SIM or SD cards</p>
                             </div>
                             <div class="ready-section-item_arrow">
                                 <img src="../../client/images/down-arrow.svg" class="ready-section-image_arrow-top">
@@ -68,10 +68,10 @@
                             </div>
                             <div class="ready-section-item">
                                 <h2>Packaging</h2>
-                                <p>I have a box to ship my device in</p>
-                                <p>I have used safe packaging materials to secure my phone</p>
-                                <p>I have taped the box shut</p>
-                                <p>The shipping label is flat and the barcode is visible</p>
+                                <p><span>&#9679;</span> I have a box to ship my device in</p>
+                                <p><span>&#9679;</span> I have used safe packaging materials to secure my phone</p>
+                                <p><span>&#9679;</span> I have taped the box shut</p>
+                                <p><span>&#9679;</span> The shipping label is flat and the barcode is visible</p>
                             </div>
                         </div>
                         <div class="ready-section-check">
@@ -93,13 +93,11 @@
                         <div class="contact-section">
                             <p class="offer-section_title">CONTACT INFORMATION</p>
                             <div class="contact-section_card">
-                                <p>{{ order.address.name }},</p>
-                                <p>{{ order.address.address1 }},</p>
-                                <p v-if="order.address.address2">{{ order.address.address2 }},</p>
-                                <p>{{ order.address.postal_code }},</p>
-                                <p>{{ states[order.address.state] }},</p>
-                                <p>{{ order.address.city }},</p>
-                                <p>{{ order.address.phone }},</p>
+                                <p>{{ order.address.name }}</p>
+                                <p>{{ order.address.address1 }}</p>
+                                <p v-if="order.address.address2">{{ order.address.address2 }}</p>
+                                <p>{{ order.address.city }}, {{ states[order.address.state] }}, {{ order.address.postal_code }}</p>
+                                <p>{{ order.address.phone }}</p>
                                 <p>{{ order.user_email }}</p>
                             </div>
                         </div>

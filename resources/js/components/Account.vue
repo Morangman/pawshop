@@ -18,12 +18,13 @@
                                                 type="text"
                                                 v-model="model.name"
                                                 class="form-control"
+                                                :class="errors.name ? 'input-error' : ''"
                                             >
                                             <div v-for="(error, i) in errors.name"
                                                  :key="`name__error__${i}`"
-                                                 class="text-danger error"
+                                                 class="invalid-feedback"
                                             >
-                                                {{ error }}
+                                                <strong>{{ error }}</strong>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -35,12 +36,13 @@
                                                 type="email"
                                                 v-model="model.email"
                                                 class="form-control"
+                                                :class="errors.email ? 'input-error' : ''"
                                             >
                                             <div v-for="(error, i) in errors.email"
                                                  :key="`email__error__${i}`"
-                                                 class="text-danger error"
+                                                 class="invalid-feedback"
                                             >
-                                                {{ error }}
+                                                <strong>{{ error }}</strong>
                                             </div>
                                         </div>
                                     </div>
@@ -58,12 +60,63 @@
                                                 type="tel"
                                                 v-model="model.phone"
                                                 class="form-control"
+                                                :class="errors.phone ? 'input-error' : ''"
                                             >
                                             <div v-for="(error, i) in errors.phone"
                                                  :key="`phone__error__${i}`"
-                                                 class="text-danger error"
+                                                 class="invalid-feedback"
                                             >
-                                                {{ error }}
+                                                <strong>{{ error }}</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="custom-row">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label>
+                                                    <p>Password</p>
+                                                </label>
+                                                <input
+                                                    name="password"
+                                                    type="text"
+                                                    v-model="model.password"
+                                                    class="form-control"
+                                                    :class="errors.password ? 'input-error' : ''"
+                                                >
+                                                <div v-for="(error, i) in errors.password"
+                                                     :key="`password__error__${i}`"
+                                                     class="invalid-feedback"
+                                                >
+                                                    <strong>{{ error }}</strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <label>
+                                                    <p>Old password</p>
+                                                </label>
+                                                <input
+                                                    name="old_password"
+                                                    type="email"
+                                                    v-model="model.old_password"
+                                                    class="form-control"
+                                                    :class="errors.old_password ? 'input-error' : ''"
+                                                >
+                                                <div v-for="(error, i) in errors.old_password"
+                                                     :key="`old_password__error__${i}`"
+                                                     class="invalid-feedback"
+                                                >
+                                                    <strong>{{ error }}</strong>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

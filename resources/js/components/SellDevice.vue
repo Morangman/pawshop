@@ -2,7 +2,7 @@
 <div>
     <h1>Start Selling</h1>
     <div class="description">Find the product you'd like to trade-in for cash</div>
-    <ul class="order-steps-list" v-if="steps.length">
+    <ul id="scrolled" class="order-steps-list" v-if="steps.length">
         <li v-for="(step, index) in steps" :class="stepIndex === index ? 'active-step' : ''">
             <a href="javascript:void(0)"><i>{{ index + 1 }}</i> <span>{{ index + 1 }}</span></a>
         </li>
@@ -17,7 +17,7 @@
                 <img :src="category.image" alt="">
                 <div class="name"><span>{{ category.name }}</span></div>
             </div>
-            <ul class="selected-list" v-if="selectedSteps.length">
+            <ul id="options" class="selected-list" v-if="selectedSteps.length">
                 <li v-for="option in selectedSteps" v-if="option">{{ option ? option.value : '' }}</li>
                 <li v-for="option in selectedAccesories" v-if="option && selectedAccesories.length">{{ option ? option.value : '' }}</li>
             </ul>
@@ -286,6 +286,8 @@
                 this.valuate();
 
                 this.stepSelected = false;
+
+                window.scrollTo({ top:window.pageXOffset + 100, behavior: 'smooth'});
             },
 
             valuate(){

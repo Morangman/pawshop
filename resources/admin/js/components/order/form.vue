@@ -7,10 +7,6 @@
                         {{ $t('admin.order.form.suspect_ip') + ' ' + suspect.length + ' ' + $t('common.word.times') }}
                     </strong>
                     <div class="form-group">
-                        <div id="barcode">
-                            <span v-html="bcode"></span>
-                            <p>{{ model.address.name + ', ' +  model.address.city + ', ' +  model.address.address1 }}</p>
-                        </div>
                         <a
                             type="submit"
                             class="btn btn-primary"

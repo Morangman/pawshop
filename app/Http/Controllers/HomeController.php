@@ -22,17 +22,18 @@ use App\Step;
 use App\StepName;
 use App\Tip;
 use App\User;
+use http\Client\Response;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Lang;
-use Milon\Barcode\DNS1D;
 use Session;
 use stdClass;
 
@@ -280,6 +281,20 @@ class HomeController extends Controller
             ]
         );
 
+        if ($oldPassword = $request->get('old_password')) {
+            if (Hash::check($oldPassword, $user->getAttribute('password'))) {
+                $userData['password'] = $request->get('password');
+            } else {
+                return $this->json()->internalServerError([
+                    'errors' => [
+                        'old_password' => [
+                            Lang::get('passwords.old')
+                        ]
+                    ],
+                ]);
+            }
+        }
+
         $user->update($userData);
 
         return $this->json()->noContent();
@@ -406,7 +421,15 @@ class HomeController extends Controller
             $resultPrice = number_format((float) $resultPrice + $addToPrice, 2, '.', '');
         }
 
-        return $this->json()->ok(['price' => $isBroken ? 5 : $resultPrice]);
+        if ($isBroken) {
+            if ($category = Category::query()->whereKey($request->get('category_id'))->first()) {
+                if ($resultPrice >= 5) {
+                    $resultPrice = 5;
+                }
+            }
+        }
+
+        return $this->json()->ok(['price' => $resultPrice]);
     }
 
     /**

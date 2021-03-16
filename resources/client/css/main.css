@@ -3035,6 +3035,11 @@ h2 {
     border: 1px solid #cc0033!important;
 }
 
+.custom-row {
+    width: 100%;
+    display: flex;
+}
+
 @media screen and (max-width: 700px){
     .box{
         width: 100%;
@@ -3332,6 +3337,9 @@ h2 {
   h1 {
     font-size: 45px;
   }
+    .custom-row {
+        flex-direction: column;
+    }
 
     #popup1{
         height: 1000px;
