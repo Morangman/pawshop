@@ -82,8 +82,10 @@ class FedexService
             ->setServiceId('ship');
 
         $shipperAddress = new ComplexType\Address();
+        $address1 = $order->getAttribute('address')['address1'];
+        $address2 = isset($order->getAttribute('address')['address2']) ? $order->getAttribute('address')['address2'] : null;
         $shipperAddress
-            ->setStreetLines([$order->getAttribute('address')['address1'], $order->getAttribute('address')['address2']])
+            ->setStreetLines([$address1, $address2 ? $address2 : $address1])
             ->setCity($order->getAttribute('address')['city'])
             ->setStateOrProvinceCode(str_replace('string:', '', $order->getAttribute('address')['state']))
             ->setPostalCode($order->getAttribute('address')['postal_code'])
