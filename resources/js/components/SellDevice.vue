@@ -26,7 +26,7 @@
 
             <!-- Step 1 -->
             <div id="step" class="order-options-block" v-if="selectedStep">
-                <h4>{{ selectedStep.title }}</h4>
+                <h4 id="step-title">{{ selectedStep.title }}</h4>
                 <div class="helping-block" v-if="selectedStep.tip">
                     <a href="#helping-popup" class="popup-open" data-effect="mfp-zoom-in">
                         <img src="../../client/images/icon_help.svg" alt="">
@@ -65,8 +65,8 @@
                     </div>
                 </div>
                 <div class="order-options-links">
-                    <button v-on:click="backStep" class="btn gray-btn step-button">Back</button>
-                    <button v-on:click="nextStep" v-if="stepSelected || selectedStep.is_checkbox" class="btn red-btn step-button">Next step</button>
+                    <div><button v-on:click="backStep" class="btn gray-btn step-button">Back</button></div>
+                    <div><button v-on:click="nextStep" v-if="stepSelected || selectedStep.is_checkbox" class="btn red-btn step-button">Next step</button></div>
                 </div>
 
                 <div v-if="selectedStep.tip" id="helping-popup" class="popup-modal mfp-hide mfp-with-anim">
@@ -345,7 +345,9 @@
                     });
                 }
 
-                window.scrollTo({ top:window.pageXOffset + 100, behavior: 'smooth'});
+                let offset = 125; // sticky nav height
+                let el = document.querySelector('#step-title'); // element you are scrolling to
+                window.scroll({ top: (el.offsetTop - offset), left: 0, behavior: 'smooth' });
             },
 
             valuate(){

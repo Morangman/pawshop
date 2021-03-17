@@ -2157,10 +2157,6 @@ h2 {
   margin-left: auto;
 }
 
-.order-total-block .red-btn {
-  min-width: 187px;
-}
-
 #condition-popup {
   max-width: 740px;
 }
@@ -3337,6 +3333,10 @@ h2 {
   h1 {
     font-size: 45px;
   }
+    #scrolled {
+        display: none;
+    }
+
     .custom-row {
         flex-direction: column;
     }
@@ -4188,7 +4188,7 @@ h2 {
     -ms-flex-positive: 1;
     flex-grow: 1;
     margin: 0 5px;
-    min-width: 100px;
+    width: 50%;
   }
 
   .order-options-links .btn:last-child {

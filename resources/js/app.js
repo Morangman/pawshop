@@ -41,24 +41,6 @@ Vue.component('checkout', require('./components/Checkout.vue').default);
 
 Vue.component('thanks', require('./components/Thanks.vue').default);
 
-var VueScrollTo = require('vue-scrollto');
-
-Vue.use(VueScrollTo);
-
-Vue.use(VueScrollTo, {
-    container: "body",
-    duration: 500,
-    easing: "ease",
-    offset: 0,
-    force: true,
-    cancelable: true,
-    onStart: false,
-    onDone: false,
-    onCancel: false,
-    x: false,
-    y: true
-})
-
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
