@@ -356,6 +356,8 @@ class HomeController extends Controller
     {
         $steps = json_decode($request->get('steps'), true);
 
+        $category = Category::query()->whereKey($request->get('category_id'))->first();
+
         $ids = [];
 
         $addToPrice = 0;
@@ -369,6 +371,21 @@ class HomeController extends Controller
                 ->where('step_id', $step['id'])
                 ->where('category_id', $request->get('category_id'))
                 ->first();
+
+            if ($step['value'] === 'Brand New') {
+                if ($category) {
+                    foreach ($category->steps()->get() as $stepItem) {
+                        if ($stepItem->stepName->is_checkbox) {
+                            $premiumPriceForAccesory = DB::table('premium_price')
+                                ->where('step_id', $stepItem->getKey())
+                                ->where('category_id', $request->get('category_id'))
+                                ->first();
+
+                            $addToPrice += $premiumPriceForAccesory->price_plus;
+                        }
+                    }
+                }
+            }
 
             if ($premiumPrice) {
                 if ($pricePlus = $premiumPrice->price_plus) {
@@ -422,7 +439,7 @@ class HomeController extends Controller
         }
 
         if ($isBroken) {
-            if ($category = Category::query()->whereKey($request->get('category_id'))->first()) {
+            if ($category) {
                 if ($resultPrice >= 5) {
                     $resultPrice = 5;
                 }

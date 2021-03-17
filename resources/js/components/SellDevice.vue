@@ -268,9 +268,33 @@
 
             backStep(){
                 if (this.stepIndex > 0) {
+                    let isNew = false;
+
+                    _.each(this.selectedSteps, (value, key) => {
+                        if (value) {
+                            if (value.value === "Brand New") {
+                                isNew = true;
+
+                                this.selectedAccesories = [];
+                            }
+                        }
+                    });
+
                     this.stepIndex--;
 
-                    this.selectedStep = this.steps[this.stepIndex];
+                    let selectedStepValue = this.steps[this.stepIndex];
+
+                    if (selectedStepValue) {
+                        if (isNew && selectedStepValue.is_checkbox) {
+                            this.stepIndex--;
+
+                            this.selectedStep = this.steps[this.stepIndex];
+                        } else {
+                            this.selectedStep = selectedStepValue;
+                        }
+                    } else {
+                        this.selectedStep = null;
+                    }
                 }
 
                 this.valuate();
@@ -281,19 +305,45 @@
             },
 
             nextStep() {
+                let isNew = false;
+
+                _.each(this.selectedSteps, (value, key) => {
+                    if (value) {
+                        if (value.value === "Brand New") {
+                            isNew = true;
+
+                            this.selectedAccesories = [];
+                        }
+                    }
+                });
+
                 this.stepIndex++;
 
-                this.selectedStep = this.steps[this.stepIndex];
+                let selectedStepValue = this.steps[this.stepIndex];
+
+                if (selectedStepValue) {
+                    if (isNew && selectedStepValue.is_checkbox) {
+                        this.stepIndex++;
+
+                        this.selectedStep = this.steps[this.stepIndex];
+                    } else {
+                        this.selectedStep = selectedStepValue;
+                    }
+                } else {
+                    this.selectedStep = null;
+                }
 
                 this.valuate();
 
                 this.stepSelected = false;
 
-                _.each(this.selectedStep['items'], (value, key) => {
-                    if (this.selectedSteps[value.name_id]) {
-                        this.stepSelected = true;
-                    }
-                });
+                if (this.selectedStep) {
+                    _.each(this.selectedStep['items'], (value, key) => {
+                        if (this.selectedSteps[value.name_id]) {
+                            this.stepSelected = true;
+                        }
+                    });
+                }
 
                 window.scrollTo({ top:window.pageXOffset + 100, behavior: 'smooth'});
             },
