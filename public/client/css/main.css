@@ -3804,6 +3804,7 @@ h2 {
   h1 {
     font-size: 35px;
     margin-bottom: 24px;
+      text-align: center;
   }
 
   h2 {
@@ -3862,6 +3863,7 @@ h2 {
 
   .order-section .description {
     margin-bottom: 7px;
+      text-align: center;
   }
 
   .order-content {

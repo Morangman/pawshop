@@ -351,6 +351,8 @@
             },
 
             valuate(){
+                this.priceLoaded = false;
+
                 this.summ = parseFloat(this.category.custom_text);
 
                 if (!this.selectedStep) {
@@ -376,12 +378,10 @@
                     ).then((data) => {
                         this.summ = data.data.price;
 
-                        this.priceLoaded = true;
+                        setTimeout(() => this.priceLoaded = true, 1000);
                     }).catch(({ response: { data: { errors } } }) => {
                         this.priceError = true;
                     });
-                } else {
-                    this.priceLoaded = true;
                 }
 
                 _.each(this.selectedSteps, (key, value) => {
