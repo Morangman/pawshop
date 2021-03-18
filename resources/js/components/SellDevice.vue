@@ -35,7 +35,7 @@
                 </div>
                 <div class="order-options-radios">
                     <div class="options-radio" v-for="(option, index) in selectedStep.items" :key="`step${option.id}_${index}`">
-                        <label class="radiobox-block" v-if="!selectedStep.is_checkbox">
+                        <label class="radiobox-block" :class="selectedSteps[option.step_name.id] ? selectedSteps[option.step_name.id].id === option.id ? 'radio-bordered' : '' : ''" v-if="!selectedStep.is_checkbox">
                             <input v-model="selectedSteps[option.step_name.id]" v-on:click="selectOption(option, index)" :checked="!!selectedStep.items[index].checked" :value="option" type="radio" :name="`step-${selectedStep.id}-radios`">
                             <i></i>
                             <span>

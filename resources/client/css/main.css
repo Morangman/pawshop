@@ -1785,8 +1785,8 @@ h2 {
   z-index: 4;
 }
 
-.options-radio .radiobox-block:hover {
-  border-color: #D83B53;
+.radio-bordered {
+    border-color: #D83B53!important;
 }
 
 .options-radio .radiobox-block input {
