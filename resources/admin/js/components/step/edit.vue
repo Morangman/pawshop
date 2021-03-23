@@ -2,6 +2,7 @@
     <step-form
         v-if="model"
         :model.sync="model"
+        :steps.sync="steps"
         :tips.sync="tips"
         :errors.sync="errors"
         @submit="update"
@@ -22,6 +23,10 @@
         props: {
             step: {
                 type: Object,
+                required: true,
+            },
+            steps: {
+                type: Array,
                 required: true,
             },
             tips: {
@@ -48,7 +53,7 @@
                 this.collectFormData(data);
 
                 axios.post(
-                    Router.route('admin.step.update', { step: this.step.id }),
+                    Router.route('admin.step.update', { stepName: this.step.id }),
                     this.formData,
                     {
                         headers: {
@@ -56,7 +61,7 @@
                         },
                     },
                 ).then(() => {
-                    location.href = Router.route('admin.step.edit', { step: this.step.id });
+                    location.href = Router.route('admin.step.edit', { stepName: this.step.id });
                 }).catch(({ response: { data: { errors } } }) => {
                     this.errors = errors;
                     this.scrollToError();
@@ -65,7 +70,7 @@
 
             deleteStep() {
                 axios.delete(
-                    Router.route('admin.step.delete', { step: this.step.id }),
+                    Router.route('admin.step.delete', { stepName: this.step.id }),
                 ).then(() => {
                     location.href = Router.route('admin.step.index');
                 }).catch(({ response: { data: { errors } } }) => {

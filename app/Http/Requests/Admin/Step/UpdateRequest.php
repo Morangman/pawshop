@@ -26,7 +26,12 @@ class UpdateRequest extends FormRequest
                 'string',
                 'max:255',
             ],
-            'items' => [
+            'title' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+            'steps' => [
                 'required',
                 'array',
             ],

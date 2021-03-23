@@ -3,6 +3,7 @@
         v-if="model"
         :model.sync="model"
         :categories.sync="categories"
+        :prices.sync="prices"
         :faqs.sync="faqs"
         :steps.sync="steps"
         :categorysteps.sync="categorysteps"
@@ -32,6 +33,10 @@
                 required: true,
             },
             steps: {
+                type: Array,
+                required: false,
+            },
+            prices: {
                 type: Array,
                 required: false,
             },

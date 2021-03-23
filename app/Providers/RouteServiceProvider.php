@@ -8,6 +8,7 @@ use App\Faq;
 use App\Order;
 use App\Setting;
 use App\Step;
+use App\StepName;
 use App\Task;
 use App\Tip;
 use App\User;
@@ -93,6 +94,7 @@ class RouteServiceProvider extends ServiceProvider
             'category' => Category::class,
             'tip' => Tip::class,
             'step' => Step::class,
+            'stepName' => StepName::class,
             'media' => Media::class,
             'order' => Order::class,
             'comment' => Comment::class,

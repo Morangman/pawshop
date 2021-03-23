@@ -142,11 +142,23 @@
                                                                        v-model="categorysteps[index]"
                                                                        option-value="id"
                                                                        :custom-text="name"
-                                                                       placeholder="select item">
+                                                                        placeholder="select item">
                                                     </model-list-select>
+
                                                     <div class="mt-3">
-                                                        <p>Selected:</p> <a :href="$r('admin.step.edit', { step: categorysteps[index].id })">{{ categorysteps[index].name }}</a>
+                                                        <p>Selected:</p> <a :href="$r('admin.step.edit', { stepName: item.id })">{{ item.title }}</a>
                                                     </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <multiselect
+                                                        v-model="item.items"
+                                                        :options="item.items_variations"
+                                                        :multiple="true"
+                                                        class="multiselect1"
+                                                        :close-on-select="true"
+                                                        placeholder="Select step"
+                                                        label="value" track-by="value">
+                                                    </multiselect>
                                                 </div>
                                             </div>
                                         </div>
@@ -168,6 +180,23 @@
                         {{ error }}
                     </div>
 
+                    <div class="form-group">
+                        <strong>
+                            <h1>Price variations</h1>
+                        </strong>
+                        <div class="change-blocks-wrapper__item" v-for="(price, index) in priceVariations">
+                            <div class="form-group row">
+                                <p v-for="step in price.steps">{{ step.value }}</p>
+                                <input
+                                    name="slug"
+                                    type="text"
+                                    v-model="price.price"
+                                    class="form-control"
+                                    :class="{ 'border-danger': errors.slug }"
+                                >
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="text-right">
@@ -210,6 +239,10 @@
                 type: Array,
                 required: false,
             },
+            prices: {
+                type: Array,
+                required: false,
+            },
             categorysteps: {
                 type: Array,
                 required: false,
@@ -233,14 +266,26 @@
         data() {
             return {
                 categoryPreviewImage: null,
+                stepsByCategory: [],
+                priceVariations: [],
             };
         },
 
+        watch: {
+            stepsByCategory: {
+                handler() {
+                    this.debouncedRefresh();
+                },
+                deep: true,
+            },
+        },
 
         methods: {
-            submit() {
-                this.model.steps = this.categorysteps;
+            debouncedRefresh() {
+                this.$forceUpdate();
+            },
 
+            submit() {
                 this.$emit('submit', this.model);
             },
 
@@ -292,12 +337,16 @@
             if (this.model.id) {
                 this.model.is_hidden = Number(this.model.is_hidden);
 
-                this.model.steps = this.categorysteps ? this.categorysteps : [];
+                this.stepsByCategory = this.categorysteps;
             } else {
                 this.categorysteps = [];
             }
 
             this.categoryPreviewImage = this.model.image;
+
+            this.priceVariations = this.prices;
         },
     };
 </script>
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

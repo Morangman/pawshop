@@ -22,22 +22,22 @@ Route::post('', [
     'uses' => 'StepController@store',
 ]);
 
-Route::get('{step}/edit', [
+Route::get('{stepName}/edit', [
     'as' => '.edit',
     'uses' => 'StepController@edit',
 ]);
 
-Route::patch('{step}', [
+Route::patch('{stepName}', [
     'as' => '.update',
     'uses' => 'StepController@update',
 ]);
 
-Route::get('{step}', [
+Route::get('{stepName}', [
     'as' => '.get',
     'uses' => 'StepController@get',
 ]);
 
-Route::delete('{step}', [
+Route::delete('{stepName}', [
     'as' => '.delete',
     'uses' => 'StepController@delete',
 ]);

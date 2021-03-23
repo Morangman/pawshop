@@ -24,6 +24,25 @@
 
                     <div class="form-group">
                         <label>
+                            <strong>{{ $t('admin.step.form.title') }}</strong>
+                        </label>
+                        <input
+                            name="name"
+                            type="text"
+                            v-model="model.title"
+                            class="form-control"
+                            :class="{ 'border-danger': errors.title }"
+                        >
+                        <div v-for="(error, i) in errors.title"
+                             :key="`title_error__${i}`"
+                             class="text-danger error"
+                        >
+                            {{ error }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
                             <strong>{{ $t('admin.step.form.tip') }}</strong>
                         </label>
 
@@ -55,16 +74,34 @@
 
                     <div class="form-group">
                         <label>
-                            <strong>{{ $t('admin.step.form.is_checkboxes') }}</strong>
+                            <strong>{{ $t('admin.step.form.is_functional') }}</strong>
                         </label>
                         <b-form-checkbox
-                            v-model="model.is_checkboxes"
+                            v-model="model.is_functional"
                             value="1"
                             unchecked-value="0"
                         >
                         </b-form-checkbox>
-                        <div v-for="(error, i) in errors.is_checkboxes"
-                             :key="`is_checkboxes__error__${i}`"
+                        <div v-for="(error, i) in errors.is_functional"
+                             :key="`is_functional__error__${i}`"
+                             class="text-danger error"
+                        >
+                            {{ error }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <strong>{{ $t('admin.step.form.is_checkboxes') }}</strong>
+                        </label>
+                        <b-form-checkbox
+                            v-model="model.is_checkbox"
+                            value="1"
+                            unchecked-value="0"
+                        >
+                        </b-form-checkbox>
+                        <div v-for="(error, i) in errors.is_checkbox"
+                             :key="`is_checkbox__error__${i}`"
                              class="text-danger error"
                         >
                             {{ error }}
@@ -76,11 +113,11 @@
                             <h1>{{ $t('admin.step.form.items') }}</h1>
                         </strong>
                         <div class="form-group">
-                            <div class="change-blocks-wrapper__item" v-for="(item, index) in model.items">
+                            <div class="change-blocks-wrapper__item" v-for="(item, index) in model.steps">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="text-right">
-                                            <a v-if="!item.id" href="javascript:void(0)" class="text-danger" v-on:click="deleteStepItem(index)">
+                                            <a href="javascript:void(0)" class="text-danger" v-on:click="deleteStepItem(item, index)">
                                                 {{ $t('common.word.remove') }}
                                             </a>
                                         </div>
@@ -94,7 +131,7 @@
                                                     </label>
                                                     <input
                                                         name="text"
-                                                        v-model="item.name"
+                                                        v-model="item.value"
                                                         type="text"
                                                         class="form-control"
                                                     >
@@ -111,42 +148,8 @@
                                                     </label>
                                                     <input
                                                         name="text"
-                                                        v-model="item.text"
+                                                        v-model="item.decryption"
                                                         type="text"
-                                                        class="form-control"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mt-3">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label>
-                                                        <strong>{{ $t('admin.step.form.price_plus') }}</strong>
-                                                    </label>
-                                                    <input
-                                                        name="price_plus"
-                                                        v-model="item.price_plus"
-                                                        type="number"
-                                                        class="form-control"
-                                                    >
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mt-3">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label>
-                                                        <strong>{{ $t('admin.step.form.price_percent') }}</strong>
-                                                    </label>
-                                                    <input
-                                                        name="price_plus"
-                                                        v-model="item.price_percent"
-                                                        type="number"
                                                         class="form-control"
                                                     >
                                                 </div>
@@ -162,8 +165,8 @@
                                 >{{ $t('common.word.add') }}</button>
                             </div>
                         </div>
-                        <div v-for="(error, i) in errors.items"
-                             :key="`items__error__${i}`"
+                        <div v-for="(error, i) in errors.steps"
+                             :key="`steps__error__${i}`"
                              class="text-danger error"
                         >
                             {{ error }}
@@ -208,6 +211,10 @@
                 type: Array,
                 required: false,
             },
+            steps: {
+                type: Array,
+                required: false,
+            },
             errors: {
                 type: Object,
                 required: true,
@@ -226,16 +233,39 @@
             },
 
             addStepItem() {
-                this.model.items.push({
-                    name: null,
-                    text: null,
-                    price_plus: 0,
-                    price_percent: 0,
+                this.model.steps.push({
+                    value: null,
+                    decryption: null,
                 });
+
+                this.$forceUpdate();
             },
 
-            deleteStepItem(index) {
-                this.model.items.splice(index, 1);
+            deleteStepItem(item, index) {
+                if (item.id) {
+                    window.swal({
+                        title: this.$t('common.phrase.confirm.title'),
+                        text: this.$t('common.phrase.confirm.body'),
+                        icon: 'warning',
+                        buttons: [this.$t('common.word.cancel'), this.$t('common.word.confirm')],
+                    }).then((result) => {
+                        if (!result) {
+                            return
+                        }
+
+                        axios.delete(Router.route('admin.step-item.delete-item', {step: item.id}))
+                            .then(() => {
+                                location.href = Router.route('admin.step.edit', {stepName: this.model.id});
+                            })
+                            .catch(({response: {data: {errors}}}) => {
+                                notify.error(_.head(errors));
+                            });
+                    });
+                } else {
+                    this.model.steps.splice(index, 1);
+                }
+
+                this.$forceUpdate();
             },
 
             deleteStep() {
@@ -252,7 +282,10 @@
         created() {
             if (this.model.id) {
                 this.model.is_condition = Number(this.model.is_condition);
-                this.model.is_checkboxes = Number(this.model.is_checkboxes);
+                this.model.is_checkbox = Number(this.model.is_checkbox);
+                this.model.is_functional = Number(this.model.is_functional);
+
+                this.model.steps = this.steps;
             }
         },
     };

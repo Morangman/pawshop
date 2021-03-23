@@ -10,10 +10,12 @@ return [
     ],
     'form' => [
         'name' => 'Name*',
+        'title' => 'Title*',
         'items' => 'Items*',
         'item_text' => 'Item text',
         'is_condition' => 'This is condition?',
         'is_checkboxes' => 'This is checkboxes?',
+        'is_functional' => 'This is functional?',
         'price_plus' => 'Price for item (Device price + or - this price)',
         'price_percent' => 'Percentage of the price (Device price + or - this percent)',
         'tip' => 'Select tip',
