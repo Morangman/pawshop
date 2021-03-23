@@ -8,6 +8,7 @@ use App\Step;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Step\StoreRequest;
 use App\Http\Requests\Admin\Step\UpdateRequest;
+use App\StepName;
 use App\Tip;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
@@ -49,7 +50,15 @@ class StepController extends Controller
      */
     public function store(StoreRequest $request): JsonResponse
     {
-        Step::create($request->all());
+        $stepName = StepName::create($request->all());
+
+        foreach ($request->get('steps') as $step) {
+            Step::query()->create([
+                'name_id' => $stepName->getKey(),
+                'value' => $step['value'],
+                'decryption' => isset($step['decryption']) ? $step['decryption'] : null,
+            ]);
+        }
 
         Session::flash(
             'success',
@@ -60,31 +69,44 @@ class StepController extends Controller
     }
 
     /**
-     * @param \App\Step $step
+     * @param \App\StepName $stepName
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit(Step $step): ViewContract
+    public function edit(StepName $stepName): ViewContract
     {
         return View::make(
             'admin.step.edit',
             [
-                'step' => $step,
+                'step' => $stepName,
                 'tips' => Tip::all(),
+                'steps' => Step::query()->where('name_id', $stepName->getKey())->get(),
             ]
         );
     }
 
     /**
      * @param \App\Http\Requests\Admin\Step\UpdateRequest $request
-     * @param \App\Step $step
+     * @param \App\StepName $stepName
      *
      * @return \Illuminate\Http\JsonResponse
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded
      */
-    public function update(UpdateRequest $request, Step $step): JsonResponse
+    public function update(UpdateRequest $request, StepName $stepName): JsonResponse
     {
-        $step->update($request->all());
+        $stepName->update($request->all());
+
+        foreach ($request->get('steps') as $step) {
+            if (isset($step['id'])) {
+                Step::query()->whereKey($step['id'])->update($step);
+            } else {
+                Step::query()->create([
+                    'name_id' => $stepName->getKey(),
+                    'value' => $step['value'],
+                    'decryption' => isset($step['decryption']) ? $step['decryption'] : null,
+                ]);
+            }
+        }
 
         Session::flash(
             'success',
@@ -95,15 +117,15 @@ class StepController extends Controller
     }
 
     /**
-     * @param \App\Step $step
+     * @param \App\StepName $stepName
      *
      * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Exception
      */
-    public function delete(Step $step): JsonResponse
+    public function delete(StepName $stepName): JsonResponse
     {
-        $step->delete();
+        $stepName->delete();
 
         Session::flash(
             'success',
@@ -117,10 +139,29 @@ class StepController extends Controller
      * @param \App\Step $step
      *
      * @return \Illuminate\Http\JsonResponse
+     *
+     * @throws \Exception
      */
-    public function get(Step $step): JsonResponse
+    public function deleteItem(Step $step): JsonResponse
     {
-        return $this->json()->ok($step);
+        $step->delete();
+
+        Session::flash(
+            'success',
+            Lang::get('admin/step.messages.delete')
+        );
+
+        return $this->json()->noContent();
+    }
+
+    /**
+     * @param \App\StepName $stepName
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get(StepName $stepName): JsonResponse
+    {
+        return $this->json()->ok($stepName);
     }
 
     /**
@@ -132,7 +173,7 @@ class StepController extends Controller
      */
     public function getAll(Request $request): JsonResponse
     {
-        $steps = Step::query()
+        $steps = StepName::query()
             ->when(
                 $request->get('search'),
                 function ($query, $search) {

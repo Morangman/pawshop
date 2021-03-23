@@ -90,15 +90,15 @@
                     <tbody>
                         <template v-if="!isLoading">
                             <tr v-for="(step, i) in steps" :key="`step_${i}`">
-                                    <td><a :href="$r('admin.step.edit', { step: step.id })">{{ step.id }}</a></td>
+                                    <td><a :href="$r('admin.step.edit', { stepName: step.id })">{{ step.id }}</a></td>
                                     <td v-html="highlightSearchResult(step.name, filters.search)"></td>
                                     <td>{{ step.created_at }}</td>
                                     <td>
-                                        <a :href="$r('admin.step.edit', { step: step.id })">
+                                        <a :href="$r('admin.step.edit', { stepName: step.id })">
                                             <i class="icon-pencil"></i>
                                         </a>
                                         <delete-confirmation
-                                            :route-path="$r('admin.step.delete', { step: step.id })"
+                                            :route-path="$r('admin.step.delete', { stepName: step.id })"
                                             :redirect-path="$r('admin.step.index')"
                                             :title="$t('common.word.delete')"
                                         />

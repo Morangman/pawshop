@@ -25641,7 +25641,8 @@ __webpack_require__.r(__webpack_exports__);
       "reset": "Your password has been reset!",
       "sent": "We have e-mailed your password reset link!",
       "token": "This password reset token is invalid.",
-      "user": "We can't find a user with that e-mail address."
+      "user": "We can't find a user with that e-mail address.",
+      "old": "Old password does not match!"
     },
     "admin": {
       "category": {
@@ -25699,10 +25700,12 @@ __webpack_require__.r(__webpack_exports__);
         },
         "form": {
           "name": "Name*",
+          "title": "Title*",
           "items": "Items*",
           "item_text": "Item text",
           "is_condition": "This is condition?",
           "is_checkboxes": "This is checkboxes?",
+          "is_functional": "This is functional?",
           "price_plus": "Price for item (Device price + or - this price)",
           "price_percent": "Percentage of the price (Device price + or - this percent)",
           "tip": "Select tip"

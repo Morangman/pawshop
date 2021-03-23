@@ -11,9 +11,12 @@ use App\Http\Requests\Admin\Category\StoreRequest;
 use App\Http\Requests\Admin\Category\UpdateRequest;
 use App\Setting;
 use App\Step;
+use App\StepName;
+use App\Tip;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
@@ -88,6 +91,56 @@ class CategoryController extends Controller
     {
         $category = Category::query()->where('slug', $slug)->first();
 
+        $stepsArr = [];
+
+        $priceVariations = [];
+
+        $pricesByCategory = DB::table('prices')->where('category_id', $category->getKey())->get();
+
+        foreach ($pricesByCategory as $price) {
+            $priceVariations[] = [
+                'steps' => Step::query()->whereIn('id', json_decode($price->steps_ids))->get()->toArray(),
+                'price' => $price->price
+            ];
+        }
+
+        if ($steps = $category->steps()->get()) {
+            foreach ($steps as $key => $step) {
+                $stepsArr[$step->stepName->id]['id'] = $step->stepName->id;
+                $stepsArr[$step->stepName->id]['items'][] = $step->toArray();
+                $stepsArr[$step->stepName->id]['is_condition'] = $step->stepName->is_condition;
+                $stepsArr[$step->stepName->id]['is_checkbox'] = $step->stepName->is_checkbox;
+                $stepsArr[$step->stepName->id]['is_functional'] = $step->stepName->is_functional;
+                $stepsArr[$step->stepName->id]['title'] = $step->stepName->title;
+            }
+        }
+
+        $resultArr = [];
+
+        foreach ($stepsArr as $stepArr) {
+            $resultArr[] = [
+                'id' => $stepArr['id'],
+                'title' => $stepArr['title'],
+                'items' => $stepArr['items'],
+                'items_variations' => $stepArr['items'],
+                'is_condition' => $stepArr['is_condition'],
+                'is_checkbox' => $stepArr['is_checkbox'],
+                'is_functional' => $stepArr['is_functional'],
+            ];
+        }
+
+        $stepsByName = [];
+
+        foreach (StepName::all() as $stepName) {
+            $stepsByName[] = array_merge(
+                $stepName->toArray(),
+                [
+                    'items' => Step::query()->where('name_id', $stepName->getKey())->get()->toArray(),
+                    'items_variations' => Step::query()->where('name_id', $stepName->getKey())->get()->toArray(),
+                ]
+            );
+        }
+
         return View::make(
             'admin.category.edit',
             [
@@ -97,8 +150,9 @@ class CategoryController extends Controller
                     ->whereNull('subcategory_id')
                     ->get(),
                 'faqs' => Faq::all(),
-                'steps' => Step::all(),
-                'categorysteps' => $category->steps()->get(),
+                'steps' => $stepsByName,
+                'categorysteps' => $resultArr,
+                'prices' => $priceVariations,
             ]
         );
     }

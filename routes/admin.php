@@ -49,6 +49,15 @@ Route::group(
 
 Route::group(
     [
+        'as' => '.step-item',
+        'prefix' => 'step-item',
+        'middleware' => ['anyrole:admin|manager']
+    ],
+    __DIR__.'/admin/step-item.php'
+);
+
+Route::group(
+    [
         'as' => '.tip',
         'prefix' => 'tip',
         'middleware' => ['anyrole:admin|manager']

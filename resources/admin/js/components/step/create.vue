@@ -31,7 +31,7 @@
                 model: {
                     name: null,
                     tip_id: null,
-                    items: [],
+                    steps: [],
                 },
                 errors: {},
                 formData: null,
