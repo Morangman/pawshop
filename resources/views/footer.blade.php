@@ -32,7 +32,7 @@
             <div class="footer-copyright">
                 <a class="main-logo" href="">
                     <img src="{{ asset('client/images/footer_logo.png') }}" alt="" />
-                    <span>Rapid iPhone <i>Repair</i></span>
+                    <span>Rapid <i>Recycle</i></span>
                 </a>
                 <div class="copyright">&copy; 2021-2022. All rights reserved.</div>
             </div>
@@ -43,9 +43,7 @@
                 </ul>
                 <ul>
                     <li class="title">Store Locations</li>
-                    <li class="location"><img src="{{ asset('client/images/marker_white.png') }}" alt="" /><a href="">1515 N Gilbert Rd, #D108, Gilbert, AZ 85234</a></li>
-                    <li class="location"><img src="{{ asset('client/images/marker_white.png') }}" alt="" /><a href="">1730 E Warner Rd, Suite 7, Tempe, AZ 85284</a></li>
-                    <li class="location"><img src="{{ asset('client/images/marker_white.png') }}" alt="" /><a href="">1730 E Warner Rd, Suite 7, Tempe, AZ 85284</a></li>
+                    <li class="location"><img src="{{ asset('client/images/marker_white.png') }}" alt="" /><a href="https://www.google.com/maps/place/33.335524625196314, -111.91218306985526" target="_blank">1730 E Warner Rd, Suite 7, Tempe, AZ 85284</a></li>
                 </ul>
                 <ul>
                     @foreach($categories as $category)

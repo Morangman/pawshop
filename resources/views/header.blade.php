@@ -8,7 +8,7 @@
             </div>
             <a class="main-logo" href="/">
                 <img src="{{ asset('client/images/mail_logo.png') }}" alt="" />
-                <span>Rapid iPhone <i>Repair</i></span>
+                <span>Rapid <i>Recycle</i></span>
             </a>
             <div class="header-flex">
                 <ul class="header-menu">

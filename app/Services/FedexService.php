@@ -105,16 +105,16 @@ class FedexService
 
         $recipientAddress = new ComplexType\Address();
         $recipientAddress
-            ->setStreetLines(['Address Line 1'])
-            ->setCity('Herndon')
-            ->setStateOrProvinceCode('VA')
-            ->setPostalCode('20171')
+            ->setStreetLines(['1730 E Warner Rd, Suite 7'])
+            ->setCity('Tempe')
+            ->setStateOrProvinceCode('AZ')
+            ->setPostalCode('85284')
             ->setCountryCode('US');
 
         $recipientContact = new ComplexType\Contact();
         $recipientContact
             ->setPersonName('Contact Name')
-            ->setPhoneNumber('1234567890');
+            ->setPhoneNumber('14803168679');
 
         $recipient = new ComplexType\Party();
         $recipient
