@@ -63,7 +63,7 @@ class UpdateRequest extends FormRequest
             ],
             'address.address2' => [
                 'string',
-                'required',
+                'nullable',
             ],
             'address.postal_code' => [
                 'string',

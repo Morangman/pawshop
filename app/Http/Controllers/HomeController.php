@@ -319,7 +319,13 @@ class HomeController extends Controller
         } else {
             Storage::disk('media')->put("pdf/fedex/{$order->getKey()}/label.pdf", $pdf);
 
-            return $this->json()->ok(['url' => Config::get('app.url')."/media/pdf/fedex/{$order->getKey()}/label.pdf"]);
+            $pdfUrl = Config::get('app.url')."/media/pdf/fedex/{$order->getKey()}/label.pdf";
+
+            $paymentData = $order->getAttribute('payment');
+
+            $order->update(['payment' => array_merge($paymentData, ['fedexLabel' => $pdfUrl])]);
+
+            return $this->json()->ok(['url' => $pdfUrl]);
         }
     }
 
@@ -465,7 +471,13 @@ class HomeController extends Controller
         } else {
             Storage::disk('media')->put("pdf/fedex/{$order->getKey()}/label.pdf", $pdf);
 
-            return $this->json()->ok(['url' => Config::get('app.url')."/media/pdf/fedex/{$order->getKey()}/label.pdf"]);
+            $pdfUrl = Config::get('app.url')."/media/pdf/fedex/{$order->getKey()}/label.pdf";
+
+            $paymentData = $order->getAttribute('payment');
+
+            $order->update(['payment' => array_merge($paymentData, ['fedexLabel' => $pdfUrl])]);
+
+            return $this->json()->ok(['url' => $pdfUrl]);
         }
     }
 

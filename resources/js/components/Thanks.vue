@@ -333,7 +333,7 @@
         },
 
         created(){
-
+            this.fedexPdfUrl = this.order.payment.fedexLabel;
         }
     }
 </script>

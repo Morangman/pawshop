@@ -132,13 +132,13 @@ class FedexService
             ->setSequenceNumber(1)
             ->setItemDescription('Product description')
             ->setDimensions(new ComplexType\Dimensions(array(
-                'Width' => 10,
-                'Height' => 10,
-                'Length' => 25,
+                'Width' => 1,
+                'Height' => 1,
+                'Length' => 1,
                 'Units' => SimpleType\LinearUnits::_IN
             )))
             ->setWeight(new ComplexType\Weight(array(
-                'Value' => 2,
+                'Value' => 1,
                 'Units' => SimpleType\WeightUnits::_LB
             )));
 
@@ -172,17 +172,15 @@ class FedexService
         $processShipmentRequest->setRequestedShipment($requestedShipment);
 
         $shipService = new ShipService\Request();
-        //$shipService->getSoapClient()->__setLocation('https://ws.fedex.com:443/web-services/ship');
+        if (env('FEDEX_KEY_IS_PROD', 0)) {
+            $shipService->getSoapClient()->__setLocation(ShipService\Request::PRODUCTION_URL); //use production URL
+        }
+
         $result = $shipService->getProcessShipmentReply($processShipmentRequest);
 
         $arrayResult = $result->toArray();
 
-        //var_dump($result->toArray());
         // Save .pdf label
-        //file_put_contents('/path/to/label.pdf', $result->CompletedShipmentDetail->CompletedPackageDetails[0]->Label->Parts[0]->Image);
-
-        //Storage::put('public/pdf/invoice.pdf', $result->CompletedShipmentDetail->CompletedPackageDetails[0]->Label->Parts[0]->Image);
-
         Storage::put('public/pdf/info.json', json_encode($result->toArray(), JSON_PRETTY_PRINT));
 
         if ($arrayResult['HighestSeverity'] === 'SUCCESS' || $arrayResult['HighestSeverity'] === 'NOTE') {
