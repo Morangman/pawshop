@@ -42,7 +42,7 @@
                     <li><a href="{{ URL::route('support') }}" data-title="Mobile Service">Support</a></li>
                 </ul>
                 <ul>
-                    <li class="title">Store Locations</li>
+                    <li class="title">Our Address</li>
                     <li class="location"><img src="{{ asset('client/images/marker_white.png') }}" alt="" /><a href="https://www.google.com/maps/place/33.335524625196314, -111.91218306985526" target="_blank">1730 E Warner Rd, Suite 7, Tempe, AZ 85284</a></li>
                 </ul>
                 <ul>
