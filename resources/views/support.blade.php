@@ -9,26 +9,26 @@
                 <h1>Have Questions?</h1>
                 <div class="description">We're here to help!</div>
                 <div class="sprt-section">
-                    <h2>ItsWorthMore.com Support</h2>
+                    <h2>rapid-recycle.com Support</h2>
                     <p>Have questions? Use this page to get answers.</p>
                     <p>Can't find the answers you want? Use the contact us form at the bottom of the page and we'll get back to you <span>REALLY FAST</span>, at max, within a business day.</p>
                 </div>
                 <div class="faqs-content">
-                    <h2>About ItsWorthMore.com</h2>
+                    <h2>About rapid-recycle.com</h2>
                     <div class="faqs-block">
                         <div class="faqs-question">
                             What's it all about?
                         </div>
                         <div class="faqs-answer">
-                            ItsWorthMore.com is a service that buys your used electronics online. We provide our customers with an easy way to sell their unwanted electronics without the hassle and risks associated with auctions.
+                            rapid-recycle.com is a service that buys your used electronics online. We provide our customers with an easy way to sell their unwanted electronics without the hassle and risks associated with auctions.
                         </div>
                     </div>
                     <div class="faqs-block">
                         <div class="faqs-question">
-                            Why Should I trust ItsWorthMore.com?
+                            Why Should I trust rapid-recycle.com?
                         </div>
                         <div class="faqs-answer">
-                            We understand that you might feel uneasy about sending us your item(s). However, here at ItsWorthMore, nothing matters more to us than providing a phenomenal experience while creating customer value and building a relationship of trust with our customers. Rest assured that ItsWorthMore understands and acknowledges the trust our customers put into our business. We continuously strive to ensure that we deliver to our customers securely and in a timely manner. These actions are taken understanding the time invested into the development, organization and entrepreneurship of this website is focused to ensure it is both user friendly and offers top dollar for your electronics, it would be a bad business decision on our part not to honor our promise and your trust.
+                            We understand that you might feel uneasy about sending us your item(s). However, here at Rapid Recycle, nothing matters more to us than providing a phenomenal experience while creating customer value and building a relationship of trust with our customers. Rest assured that Rapid Recycle understands and acknowledges the trust our customers put into our business. We continuously strive to ensure that we deliver to our customers securely and in a timely manner. These actions are taken understanding the time invested into the development, organization and entrepreneurship of this website is focused to ensure it is both user friendly and offers top dollar for your electronics, it would be a bad business decision on our part not to honor our promise and your trust.
                             <br>
                             <br>
                             To help increase your comfort level, we suggest reviewing the following resources.
@@ -46,7 +46,7 @@
                             How are the electronics evaluated?
                         </div>
                         <div class="faqs-answer">
-                            The electronics are evaluated via multiple steps. The first is making sure that the model you have selected is accurate compared to the device delivered. We assess the physical condition of the item(s) to see if the category you selected matches its description. We look for scratches, dents, etc. We also look to see if the item(s) is real or counterfeit, as well as if there was any tampering to the device. Your item(s) is then checked for water damage and the battery life is also tested. Lastly, we look to make sure that all passwords are removed so we can reset the phone and wipe out all personal information. If your assessment was accurate, we will send you the money in the method selected. If not, we will offer you a new price, which you can accept, or ask for your item(s) back. Rest assured, at ItsWorthMore, we will always give you the most value for your item.
+                            The electronics are evaluated via multiple steps. The first is making sure that the model you have selected is accurate compared to the device delivered. We assess the physical condition of the item(s) to see if the category you selected matches its description. We look for scratches, dents, etc. We also look to see if the item(s) is real or counterfeit, as well as if there was any tampering to the device. Your item(s) is then checked for water damage and the battery life is also tested. Lastly, we look to make sure that all passwords are removed so we can reset the phone and wipe out all personal information. If your assessment was accurate, we will send you the money in the method selected. If not, we will offer you a new price, which you can accept, or ask for your item(s) back. Rest assured, at Rapid Recycle, we will always give you the most value for your item.
                         </div>
                     </div>
                     <div class="faqs-block">
@@ -108,7 +108,7 @@
                     </div>
                 </div>
                 <div class="faqs-content">
-                    <h2>Selling to ItsWorthMore.com</h2>
+                    <h2>Selling to rapid-recycle.com</h2>
                     <div class="faqs-block">
                         <div class="faqs-question">
                             What if I'm not sure about the condition of my product?
@@ -122,7 +122,7 @@
                     </div>
                     <div class="faqs-block">
                         <div class="faqs-question">
-                            Does ItsWorthMore.com accept items from outside of the United States?
+                            Does rapid-recycle.com accept items from outside of the United States?
                         </div>
                         <div class="faqs-answer">
                             No. At the present, we do not accept shipments from outside of the United States.
@@ -173,7 +173,7 @@
                     <h2>Shipping an item</h2>
                     <div class="faqs-block">
                         <div class="faqs-question">
-                            How do I ship an item to ItsWorthMore.com?
+                            How do I ship an item to rapid-recycle.com?
                         </div>
                         <div class="faqs-answer">
                             Once you accept an offer and during the checkout process, you’ll be prompted to select your shipping carrier: FedEx or UPS. Please print out the shipping label and follow the instructions on the label. Once your package is ready to ship, please drop it off at the nearest FedEx or UPS location.
@@ -200,12 +200,12 @@
                             Is my package Insured?
                         </div>
                         <div class="faqs-answer">
-                            All items are insured against theft and accidental damage whilst in transit from your FedEx or UPS drop-off for up to $100. If you'd like to fully insure your package, you can purchase our shipping insurance to cover the full value of your offer, during checkout, for a fee. Please note that ItsWorthMore will not be held liable for any damages incurred due to inadequate packaging.
+                            All items are insured against theft and accidental damage whilst in transit from your FedEx or UPS drop-off for up to $100. If you'd like to fully insure your package, you can purchase our shipping insurance to cover the full value of your offer, during checkout, for a fee. Please note that Rapid Recycle will not be held liable for any damages incurred due to inadequate packaging.
                         </div>
                     </div>
                     <div class="faqs-block">
                         <div class="faqs-question">
-                            Does ItsWorthMore.com accept items from outside of the United States?
+                            Does rapid-recycle.com accept items from outside of the United States?
                         </div>
                         <div class="faqs-answer">
                             No. At present, we do not accept shipments from outside of the United States.
@@ -229,7 +229,7 @@
                     </div>
                 </div>
                 <div class="faqs-content">
-                    <h2>Your ItsWorthMore.com account</h2>
+                    <h2>Your rapid-recycle.com account</h2>
                     <div class="faqs-block">
                         <div class="faqs-question">
                             Why should I sign up for an account?
@@ -243,7 +243,7 @@
                             I haven't received a Confirmation Email. What Should I do?
                         </div>
                         <div class="faqs-answer">
-                            Please ensure that you have entered a valid email address, and that the confirmation email has not been sent to your Junk or Spam Mail Folder. Some email programs may mistakenly misroute your confirmation email. We recommend adding ItsWorthMore.com to your list of Safe Senders to ensure proper email delivery.
+                            Please ensure that you have entered a valid email address, and that the confirmation email has not been sent to your Junk or Spam Mail Folder. Some email programs may mistakenly misroute your confirmation email. We recommend adding rapid-recycle.com to your list of Safe Senders to ensure proper email delivery.
                         </div>
                     </div>
                     <div class="faqs-block">
