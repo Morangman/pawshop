@@ -181,7 +181,7 @@ class FedexService
         $arrayResult = $result->toArray();
 
         // Save .pdf label
-        Storage::put('public/pdf/info.json', json_encode($result->toArray(), JSON_PRETTY_PRINT));
+        //Storage::put('public/pdf/info.json', json_encode($result->toArray(), JSON_PRETTY_PRINT));
 
         if ($arrayResult['HighestSeverity'] === 'SUCCESS' || $arrayResult['HighestSeverity'] === 'NOTE') {
             //var_dump($result->CompletedShipmentDetail->CompletedPackageDetails[0]->Label->Parts[0]->Image);
