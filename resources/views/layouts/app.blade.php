@@ -14,8 +14,6 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('client/images/favicon/favicon.ico') }}">
     <link rel="icon" type="image/png" href="{{ asset('client/images/favicon/favicon.png') }}">
 
-    <meta property="og:image" content="https://rapid-recycle.com/media/8095/small-im.png">
-    <meta name="image" property="image" content="https://rapid-recycle.com/media/8095/small-im.png">
     <meta name="image" property="image" content="{{ isset($settings->getAttribute('general_settings')['seo_image']) ? $settings->getAttribute('general_settings')['seo_image'] : '' }}">
 
     <meta name="theme-color" content="#399fdb">
