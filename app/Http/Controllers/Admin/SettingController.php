@@ -77,6 +77,12 @@ class SettingController extends Controller
      */
     public function update(UpdateRequest $request, Setting $setting): JsonResponse
     {
+        if((bool) $request->get('is_seo_image_deleted') === true){
+            if($firstMedia = $setting->getMedia(Setting::MEDIA_COLLECTION_SETTING)){
+                $setting->deleteMedia($firstMedia->first());
+            }
+        }
+        
         $settingData = $request->except(
                 [
                     'code_insert',
