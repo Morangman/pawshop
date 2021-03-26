@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\ResetPasswordMail;
 use Illuminate\Support\Facades\Hash;
 use McMatters\LaravelRoles\Traits\HasPermission;
 use McMatters\LaravelRoles\Traits\HasRole;
@@ -134,10 +132,5 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token): void
     {
         //$this->notify(new ResetPasswordNotification($token));
-        Mail::to($this->get('email'))
-            ->send(new ResetPasswordMail(
-                $token,
-                $this->get('email')
-            ));
     }
 }

@@ -10,10 +10,15 @@ use App\Http\Requests\Auth\ForgotPasswordRequest;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ResetPasswordMail;
+use Illuminate\Http\RedirectResponse;
 use Redirect;
 use View;
+use URL;
+use Session;
+use Lang;
 
 class ForgotPasswordController extends Controller
 {
@@ -50,11 +55,11 @@ class ForgotPasswordController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\Auth\ForgotPasswordRequest $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    public function sendResetLinkEmail(ForgotPasswordRequest $request)
+    public function sendResetLinkEmail(Request $request)
     {
         $categories = Category::query()
             ->where('is_hidden', false)
@@ -67,6 +72,13 @@ class ForgotPasswordController extends Controller
         // );
 
         $user = User::query()->where('email', $request->only('email'))->first();
+
+        if (!$user) {
+            Session::flash('error', Lang::get('auth.failed'));
+
+            return new RedirectResponse(URL::route('web.password.request'), 302);
+        }
+
         $token = Password::getRepository()->create($user);
 
         Mail::to($user->getAttribute('email'))
@@ -76,13 +88,12 @@ class ForgotPasswordController extends Controller
             ));
 
         if (Mail::failures()) {
-            return $this->sendResetLinkFailedResponse($request, $response);
+            Session::flash('error', Lang::get('auth.failed'));
+
+            return new RedirectResponse(URL::route('web.password.request'), 302);
         }
 
-        return View::make('auth.reset_success', [
-                'settings' => $this->getSettings() ?? [],
-                'categories' => $categories
-            ]);
+        return new RedirectResponse(URL::route('web.reset.success'), 302);
     }
 
     /**

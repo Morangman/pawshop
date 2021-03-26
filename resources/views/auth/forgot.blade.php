@@ -15,6 +15,11 @@
                                         <h4>{{ Lang::get('login.title') }}</h4> </br>
                                         @include('partial.alerts.block')
                                         <div class="input-block">
+                                            @if(Session::has('error'))
+                                                <div class="invalid-feedback">
+                                                    <strong>{{ Session::get('error') }}</strong>
+                                                </div>
+                                            @endif
                                             <input
                                                 type="email"
                                                 class="input-text with-border{{ $errors->has('email') ? ' is-invalid' : '' }}"
