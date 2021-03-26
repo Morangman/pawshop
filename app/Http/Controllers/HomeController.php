@@ -234,13 +234,6 @@ class HomeController extends Controller
             ->whereNull('subcategory_id')
             ->get();
 
-            try {
-                Mail::to($order->getAttribute('user_email'))
-                    ->send(new OrderConfirmationMail(
-                        $order->toArray()
-                    ));
-            } catch (\Exception $e) {}
-
         return View::make('thanks', [
             'settings' => $this->getSettings() ?? [],
             'categories' => $categories,
