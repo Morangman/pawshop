@@ -33,6 +33,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
+use App\Mail\OrderConfirmationMail;
+use Illuminate\Support\Facades\Mail;
 use Lang;
 use Session;
 use stdClass;
@@ -181,6 +183,13 @@ class HomeController extends Controller
 
         $order = Order::create($orderData);
 
+        try {
+            Mail::to($order->getAttribute('user_email'))
+                ->send(new OrderConfirmationMail(
+                    $order->toArray()
+                ));
+        } catch (\Exception $e) {}
+
         return $this->json()->ok(['order_id' => $order->getKey()]);
     }
 
@@ -224,6 +233,13 @@ class HomeController extends Controller
             ->whereNull('custom_text')
             ->whereNull('subcategory_id')
             ->get();
+
+            try {
+                Mail::to($order->getAttribute('user_email'))
+                    ->send(new OrderConfirmationMail(
+                        $order->toArray()
+                    ));
+            } catch (\Exception $e) {}
 
         return View::make('thanks', [
             'settings' => $this->getSettings() ?? [],
