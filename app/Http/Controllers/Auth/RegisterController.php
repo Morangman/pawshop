@@ -58,11 +58,6 @@ class RegisterController extends Controller
 
         $user->attachRole('user');
 
-        // Notification::send(
-        //     $user,
-        //     new RegisterConfirmationNotification($user->getAttribute('register_code'))
-        // );
-
         Mail::to($user->getAttribute('email'))
             ->send(new VerificationMail(
                 $user->getAttribute('register_code'),

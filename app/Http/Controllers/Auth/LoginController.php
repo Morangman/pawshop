@@ -13,6 +13,8 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Mail\VerificationMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Lang;
@@ -135,6 +137,12 @@ class LoginController extends Controller
 
             $createdUser->attachRole('user');
 
+            Mail::to($createdUser->getAttribute('email'))
+                ->send(new VerificationMail(
+                    (string) $createdUser->getAttribute('register_code'),
+                    $createdUser->getAttribute('email')
+                ));
+
             Auth::login($createdUser);
         }
 
@@ -191,6 +199,12 @@ class LoginController extends Controller
             ]);
 
             $createdUser->attachRole('user');
+
+            Mail::to($createdUser->getAttribute('email'))
+                ->send(new VerificationMail(
+                    (string) $createdUser->getAttribute('register_code'),
+                    $createdUser->getAttribute('email')
+                ));
 
             Auth::login($createdUser);
         }
