@@ -73,7 +73,7 @@
     <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
       <tbody>
         <tr>
-          <td class="o_hide" align="center" style="display: none;font-size: 0;max-height: 0;width: 0;line-height: 0;overflow: hidden;mso-hide: all;visibility: hidden;">Email Summary (Hidden)</td>
+          <td class="o_hide" align="center" style="display: none;font-size: 0;max-height: 0;width: 0;line-height: 0;overflow: hidden;mso-hide: all;visibility: hidden;"></td>
         </tr>
       </tbody>
     </table>
@@ -87,7 +87,7 @@
               <tbody>
                 <tr>
                   <td class="o_bg-dark o_px o_py-md o_br-t o_sans o_text" align="center" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;background-color: #242b3d;border-radius: 4px 4px 0px 0px;padding-left: 16px;padding-right: 16px;padding-top: 24px;padding-bottom: 24px;">
-                    <p style="margin-top: 0px;margin-bottom: 0px;"><a class="o_text-white" href="https://example.com/" style="text-decoration: none;outline: none;color: #ffffff;"><img src="images/logo_white.png" width="136" height="36" alt="SimpleApp" style="max-width: 136px;-ms-interpolation-mode: bicubic;vertical-align: middle;border: 0;line-height: 100%;height: auto;outline: none;text-decoration: none;"></a></p>
+                    <p style="margin-top: 0px;margin-bottom: 0px;"><a class="o_text-white" href="{{ URL::route('home') }}" style="text-decoration: none;outline: none;color: #ffffff;"><img src="{{ URL::asset('client/images/white-main-logo.png') }}" width="136" height="27" alt="RapidRecycle" style="max-width: 136px;-ms-interpolation-mode: bicubic;vertical-align: middle;border: 0;line-height: 100%;height: auto;outline: none;text-decoration: none;"></a></p>
                   </td>
                 </tr>
               </tbody>
@@ -114,7 +114,7 @@
                           <tr>
                             <td class="o_bb-primary" height="40" width="32" style="border-bottom: 1px solid #126de5;">&nbsp; </td>
                             <td rowspan="2" class="o_sans o_text o_text-secondary o_px o_py" align="center" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;color: #424651;padding-left: 16px;padding-right: 16px;padding-top: 16px;padding-bottom: 16px;">
-                              <img src="images/email-48-primary.png" width="48" height="48" alt="" style="max-width: 48px;-ms-interpolation-mode: bicubic;vertical-align: middle;border: 0;line-height: 100%;height: auto;outline: none;text-decoration: none;">
+                              <img src="{{ URL::asset('client/images/mail/email-48-primary.png') }}" width="48" height="48" alt="" style="max-width: 48px;-ms-interpolation-mode: bicubic;vertical-align: middle;border: 0;line-height: 100%;height: auto;outline: none;text-decoration: none;">
                             </td>
                             <td class="o_bb-primary" height="40" width="32" style="border-bottom: 1px solid #126de5;">&nbsp; </td>
                           </tr>
@@ -174,7 +174,7 @@
                       <tbody>
                         <tr>
                           <td width="284" class="o_bg-ultra_light o_br o_text-xs o_sans o_px-xs o_py" align="center" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;background-color: #ebf5fa;border-radius: 4px;padding-left: 8px;padding-right: 8px;padding-top: 16px;padding-bottom: 16px;">
-                            <p class="o_text-dark" style="color: #242b3d;margin-top: 0px;margin-bottom: 0px;"><strong>robertallen@company.com</strong></p>
+                            <p class="o_text-dark" style="color: #242b3d;margin-top: 0px;margin-bottom: 0px;"><strong>{{ $email }}</strong></p>
                           </td>
                         </tr>
                       </tbody>
@@ -202,7 +202,7 @@
                       <tbody>
                         <tr>
                           <td width="300" class="o_btn o_bg-primary o_br o_heading o_text" align="center" style="font-family: Helvetica, Arial, sans-serif;font-weight: bold;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;mso-padding-alt: 12px 24px;background-color: #126de5;border-radius: 4px;">
-                            <a class="o_text-white" href="https://example.com/" style="text-decoration: none;outline: none;color: #ffffff;display: block;padding: 12px 24px;mso-text-raise: 3px;">Verify My E-mail Address</a>
+                            <a class="o_text-white" href="{{ URL::route('web.email.verify', ['code' => $code,'email' => $email ]) }}" style="text-decoration: none;outline: none;color: #ffffff;display: block;padding: 12px 24px;mso-text-raise: 3px;">Verify My E-mail Address</a>
                           </td>
                         </tr>
                       </tbody>
@@ -288,16 +288,14 @@
                   <td class="o_bg-white o_px-md o_py-lg o_bt-light o_br-b" align="center" style="background-color: #ffffff;border-top: 1px solid #d3dce0;border-radius: 0px 0px 4px 4px;padding-left: 24px;padding-right: 24px;padding-top: 32px;padding-bottom: 32px;">
                     <!--[if mso]><table width="584" cellspacing="0" cellpadding="0" border="0" role="presentation"><tbody><tr><td align="center"><![endif]-->
                     <div class="o_col-6s o_sans o_text-xs o_text-light" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;max-width: 584px;color: #82899a;">
-                      <p class="o_mb" style="margin-top: 0px;margin-bottom: 16px;"><a class="o_text-primary" href="https://example.com/" style="text-decoration: none;outline: none;color: #126de5;"><img src="images/logo_icon-light.png" width="36" height="36" alt="SimpleApp" style="max-width: 36px;-ms-interpolation-mode: bicubic;vertical-align: middle;border: 0;line-height: 100%;height: auto;outline: none;text-decoration: none;"></a></p>
-                      <p class="o_mb" style="margin-top: 0px;margin-bottom: 16px;">©2018 SimpleApp Inc</p>
+                      <p class="o_mb" style="margin-top: 0px;margin-bottom: 16px;"><a class="o_text-primary" href="{{ URL::route('home') }}" style="text-decoration: none;outline: none;color: #126de5;"><img src="{{ URL::asset('client/images/mail_logo.png') }}" width="136" height="27" alt="RapidRecycle" style="max-width: 136px;-ms-interpolation-mode: bicubic;vertical-align: middle;border: 0;line-height: 100%;height: auto;outline: none;text-decoration: none;"></a></p>
+                      <p class="o_mb" style="margin-top: 0px;margin-bottom: 16px;">©2021 Rapid Recycle</p>
                       <p class="o_mb" style="margin-top: 0px;margin-bottom: 16px;">
-                        2603 Woodridge Lane,<br>
-                        Memphis, TN 38104, USA
+                        1730 E Warner Rd, Suite 7,<br>
+                        Tempe, AZ 85284, USA
                       </p>
                       <p style="margin-top: 0px;margin-bottom: 0px;">
-                        <a class="o_text-light o_underline" href="https://example.com/" style="text-decoration: underline;outline: none;color: #82899a;">Help Center</a> <span class="o_hide-xs">&nbsp; • &nbsp;</span><br class="o_hide-lg" style="display: none;font-size: 0;max-height: 0;width: 0;line-height: 0;overflow: hidden;mso-hide: all;visibility: hidden;">
-                        <a class="o_text-light o_underline" href="https://example.com/" style="text-decoration: underline;outline: none;color: #82899a;">Preferences</a> <span class="o_hide-xs">&nbsp; • &nbsp;</span><br class="o_hide-lg" style="display: none;font-size: 0;max-height: 0;width: 0;line-height: 0;overflow: hidden;mso-hide: all;visibility: hidden;">
-                        <a class="o_text-light o_underline" href="https://example.com/" style="text-decoration: underline;outline: none;color: #82899a;">Unsubscribe</a>
+                        <a class="o_text-light o_underline" href="{{ URL::route('support') }}" style="text-decoration: underline;outline: none;color: #82899a;">Support</a>
                       </p>
                     </div>
                     <!--[if mso]></td></tr></table><![endif]-->

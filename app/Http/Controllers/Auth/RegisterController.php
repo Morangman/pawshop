@@ -10,10 +10,12 @@ use App\Notifications\RegisterConfirmationNotification;
 use App\User;
 use Auth;
 use Carbon\Carbon;
+use App\Mail\VerificationMail;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Lang;
 use Notification;
 use Session;
@@ -56,10 +58,16 @@ class RegisterController extends Controller
 
         $user->attachRole('user');
 
-        Notification::send(
-            $user,
-            new RegisterConfirmationNotification($user->getAttribute('register_code'))
-        );
+        // Notification::send(
+        //     $user,
+        //     new RegisterConfirmationNotification($user->getAttribute('register_code'))
+        // );
+
+        Mail::to($user->getAttribute('email'))
+            ->send(new VerificationMail(
+                $user->getAttribute('register_code'),
+                $user->getAttribute('email')
+            ));
 
         if ($request->get('is_guest')) {
             Auth::login($user);
