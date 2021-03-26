@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Category;
+use App\User;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\SettingTrait;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ResetPasswordMail;
 use Redirect;
 use View;
 
@@ -59,16 +62,27 @@ class ForgotPasswordController extends Controller
             ->whereNull('subcategory_id')
             ->get();
 
-        $response = $this->broker()->sendResetLink(
-            $request->only('email')
-        );
+        // $response = $this->broker()->sendResetLink(
+        //     $request->only('email')
+        // );
 
-        return $response === Password::RESET_LINK_SENT
-            ? View::make('auth.reset_success', [
+        $user = User::query()->where('email', $request->only('email'))->first();
+        $token = Password::getRepository()->create($user);
+
+        Mail::to($user->getAttribute('email'))
+            ->send(new ResetPasswordMail(
+                $token,
+                $user->getAttribute('email')
+            ));
+
+        if (Mail::failures()) {
+            return $this->sendResetLinkFailedResponse($request, $response);
+        }
+
+        return View::make('auth.reset_success', [
                 'settings' => $this->getSettings() ?? [],
                 'categories' => $categories
-            ])
-            : $this->sendResetLinkFailedResponse($request, $response);
+            ]);
     }
 
     /**
