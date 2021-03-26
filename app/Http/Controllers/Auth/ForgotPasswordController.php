@@ -19,6 +19,7 @@ use View;
 use URL;
 use Session;
 use Lang;
+use stdClass;
 
 class ForgotPasswordController extends Controller
 {
@@ -93,7 +94,14 @@ class ForgotPasswordController extends Controller
             return new RedirectResponse(URL::route('web.password.request'), 302);
         }
 
-        return new RedirectResponse(URL::route('web.reset.success'), 302);
+        return View::make('auth.reset_success', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'category' => new stdClass(),
+            'steps' => [],
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
+        ]);
     }
 
     /**
