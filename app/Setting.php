@@ -31,6 +31,9 @@ class Setting extends Model implements HasMedia
         'general_settings',
         'terms',
         'code_insert',
+        'user_agreement',
+        'law_enforcement',
+        'privacy_policy',
     ];
 
     /**
@@ -39,6 +42,9 @@ class Setting extends Model implements HasMedia
     protected $casts = [
         'general_settings' => 'array',
         'terms' => 'string',
+        'user_agreement' => 'string',
+        'law_enforcement' => 'string',
+        'privacy_policy' => 'string',
         'code_insert' => 'string',
     ];
 }

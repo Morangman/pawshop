@@ -141,6 +141,18 @@ class CategoryController extends Controller
             );
         }
 
+        $premiumPrices = [];
+
+        foreach(DB::table('premium_price')->where('category_id', $category->getKey())->get() as $price) {
+            $premiumPrices[] = [
+                'id' => $price->id,
+                'step_id' => $price->step_id,
+                'step_name' => Step::query()->whereKey($price->step_id)->first()->getAttribute('value'),
+                'price_plus' => $price->price_plus,
+                'price_percent' => $price->price_percent,
+            ];
+        }
+
         return View::make(
             'admin.category.edit',
             [
@@ -153,6 +165,7 @@ class CategoryController extends Controller
                 'steps' => $stepsByName,
                 'categorysteps' => $resultArr,
                 'prices' => $priceVariations,
+                'premiumPrices' => $premiumPrices,
             ]
         );
     }

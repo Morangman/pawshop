@@ -510,6 +510,42 @@
                         </div>
                     </div>
                 </b-tab>
+                <b-tab title="Law Enforcement">
+                    <label>
+                        <h4>Law Enforcement</h4>
+                    </label>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <vue-editor v-model="model.law_enforcement"></vue-editor>
+                            </div>
+                        </div>
+                    </div>
+                </b-tab>
+                <b-tab title="Privacy policy">
+                    <label>
+                        <h4>Privacy policy</h4>
+                    </label>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <vue-editor v-model="model.privacy_policy"></vue-editor>
+                            </div>
+                        </div>
+                    </div>
+                </b-tab>
+                <b-tab title="User Agreement">
+                    <label>
+                        <h4>User Agreement</h4>
+                    </label>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <vue-editor v-model="model.user_agreement"></vue-editor>
+                            </div>
+                        </div>
+                    </div>
+                </b-tab>
                 <b-tab :title="$t('admin.setting.form.code_insert.title')">
                     <label>
                         <h4>{{ $t('admin.setting.form.code_insert.title') }}</h4>

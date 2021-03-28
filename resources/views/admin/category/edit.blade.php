@@ -22,5 +22,6 @@
         :categorysteps="{{ json_encode($categorysteps) }}"
         :steps="{{ json_encode($steps) }}"
         :prices="{{ json_encode($prices) }}"
+        :premiumprices="{{ json_encode($premiumPrices) }}"
     ></category-edit>
 @endsection

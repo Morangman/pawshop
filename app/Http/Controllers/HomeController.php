@@ -149,6 +149,69 @@ class HomeController extends Controller
     /**
      * @return \Illuminate\Contracts\View\View
      */
+    public function userAgreement(): ViewContract
+    {
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
+
+        return View::make('user_agreement', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'category' => new stdClass(),
+            'steps' => [],
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
+        ]);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function privacyPolicy(): ViewContract
+    {
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
+
+        return View::make('privacy_policy', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'category' => new stdClass(),
+            'steps' => [],
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
+        ]);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function lawEnforcement(): ViewContract
+    {
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
+
+        return View::make('law_enforcement', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'category' => new stdClass(),
+            'steps' => [],
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
+        ]);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\View
+     */
     public function checkout(): ViewContract
     {
         $categories = Category::query()
@@ -456,7 +519,7 @@ class HomeController extends Controller
         if ($isBroken) {
             if ($category) {
                 if ($resultPrice >= 5) {
-                    $resultPrice = 5;
+                    $resultPrice = 5.00;
                 }
             }
         }

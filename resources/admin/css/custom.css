@@ -196,3 +196,12 @@
     align-items: center;
     justify-content: center;
 }
+
+.flex {
+    display: flex;
+}
+
+
+.steps-row p{
+    margin-right: 10px;
+}

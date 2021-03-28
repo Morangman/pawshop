@@ -23,6 +23,12 @@ Route::get('/support', 'HomeController@support')->name('support');
 
 Route::get('/terms', 'HomeController@terms')->name('terms');
 
+Route::get('/user_agreement', 'HomeController@userAgreement')->name('user_agreement');
+
+Route::get('/privacy_policy', 'HomeController@privacyPolicy')->name('privacy_policy');
+
+Route::get('/law_enforcement', 'HomeController@lawEnforcement')->name('law_enforcement');
+
 Route::get('/checkout', 'HomeController@checkout')->name('checkout');
 
 Route::get('/account', [

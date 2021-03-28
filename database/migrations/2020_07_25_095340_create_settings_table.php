@@ -23,6 +23,9 @@ class CreateSettingsTable extends Migration
             $table->json('general_settings');
             $table->text('code_insert')->nullable();
             $table->text('terms')->nullable();
+            $table->text('user_agreement')->nullable();
+            $table->text('law_enforcement')->nullable();
+            $table->text('privacy_policy')->nullable();
             $table->timestamps();
         });
     }

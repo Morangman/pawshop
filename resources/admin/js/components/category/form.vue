@@ -186,17 +186,49 @@
                         </strong>
                         <div class="change-blocks-wrapper__item" v-for="(price, index) in priceVariations">
                             <div class="form-group row">
+                            <div class="flex flex-row steps-row">
                                 <p v-for="step in price.steps">{{ step.value }}</p>
+                            </div>
                                 <input
                                     name="slug"
                                     type="text"
                                     v-model="price.price"
                                     class="form-control"
-                                    :class="{ 'border-danger': errors.slug }"
                                 >
                             </div>
                         </div>
                     </div>
+
+                   <div class="form-group">
+                        <strong>
+                            <h1>Premium prices</h1>
+                        </strong>
+                        <div class="change-blocks-wrapper__item" v-for="(price, index) in premiumprices">
+                            <div class="form-group row flex flex-row steps-row">
+                                <p>{{ price.step_name }}</p>
+                            </div>
+                            <div class="form-group row">
+                                <label>
+                                    <strong>Price plus</strong>
+                                </label>
+                                <input
+                                    name="price_plus"
+                                    type="text"
+                                    v-model="price.price_plus"
+                                    class="form-control"
+                                >
+                                <label>
+                                    <strong>Price percent</strong>
+                                </label>
+                                <input
+                                    name="price_percent"
+                                    type="text"
+                                    v-model="price.price_percent"
+                                    class="form-control"
+                                >
+                            </div>
+                        </div>
+                    </div>   
                 </div>
             </div>
             <div class="text-right">
@@ -240,6 +272,10 @@
                 required: false,
             },
             prices: {
+                type: Array,
+                required: false,
+            },
+            premiumprices: {
                 type: Array,
                 required: false,
             },

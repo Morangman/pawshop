@@ -282,12 +282,6 @@
                         </label>
                         <p>{{ model.insurance }}</p>
                     </div>
-                    <div class="form-group" v-if="model.tracking_number">
-                        <label>
-                            <strong>Fedex tracking number</strong>
-                        </label>
-                        <p>{{ model.tracking_number }}</p>
-                    </div>
                 </div>
             </div>
         </div>

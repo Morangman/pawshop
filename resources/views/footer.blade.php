@@ -40,6 +40,10 @@
                 <ul>
                     <li class="title">Menu</li>
                     <li><a href="{{ URL::route('support') }}" data-title="Mobile Service">Support</a></li>
+                    <li><a href="{{ URL::route('user_agreement') }}" data-title="Mobile Service">User Agreement</a></li>
+                    <li><a href="{{ URL::route('privacy_policy') }}" data-title="Mobile Service">Privacy Policy</a></li>
+                    <li><a href="{{ URL::route('law_enforcement') }}" data-title="Mobile Service">Law Enforcement</a></li>
+                    <li><a href="{{ URL::route('terms') }}" data-title="Mobile Service">Terms and Conditions </a></li>
                 </ul>
                 <ul>
                     <li class="title">Our Address</li>
