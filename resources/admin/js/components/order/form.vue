@@ -118,13 +118,10 @@
                             <label>
                                 <strong>{{ $t('admin.order.form.state') }}</strong>
                             </label>
-                            <input
-                                name="state"
-                                type="text"
-                                v-model="model.address.state"
-                                class="form-control"
-                                :class="{ 'border-danger': errors['address.state'] }"
-                            >
+                            <select name="state" autocomplete="on" type="text" class="form-control" :class="{ 'border-danger': errors['address.state'] }" v-model="model.address.state">
+                                <option :value="null">State*</option>
+                                <option v-for="(state, i) in states" :key="`state_${i}`" :value="i">{{ state }}</option>
+                            </select>
                             <div v-for="(error, i) in errors['address.state']"
                                  :key="`address__error__${i}`"
                                  class="text-danger error"
@@ -403,6 +400,10 @@
             },
             products: {
                 type: Array,
+                required: true,
+            },
+            states: {
+                type: Object,
                 required: true,
             },
             suspect: {

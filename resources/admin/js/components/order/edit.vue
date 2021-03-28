@@ -3,6 +3,7 @@
         v-if="model"
         :model.sync="model"
         :products.sync="products"
+        :states.sync="states"
         :bcode.sync="bcode"
         :suspect.sync="suspect"
         :errors.sync="errors"
@@ -32,6 +33,10 @@
             },
             products: {
                 type: Array,
+                required: true,
+            },
+            states: {
+                type: Object,
                 required: true,
             },
             suspect: {

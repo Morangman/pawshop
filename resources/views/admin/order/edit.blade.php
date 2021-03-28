@@ -20,5 +20,6 @@
         :bcode="{{ json_encode($barcodeSrc, true) }}"
         :products="{{ json_encode($productByCategory, true) }}"
         :suspect="{{ json_encode($suspectIp, true) }}"
+        :states="{{ json_encode($states, true) }}"
     ></order-edit>
 @endsection

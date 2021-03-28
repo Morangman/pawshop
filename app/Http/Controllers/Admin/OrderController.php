@@ -110,6 +110,7 @@ class OrderController extends Controller
             'admin.order.edit',
             [
                 'order' => $order,
+                'states' => Lang::get('states'),
                 'productByCategory' => $categories,
                 'suspectIp' => $suspectIp,
                 'barcodeSrc' => $d->getBarcodeHTML($order->getKey(), 'EAN13', 3.5, 100),
