@@ -25809,6 +25809,7 @@ __webpack_require__.r(__webpack_exports__);
         },
         "form": {
           "user": "User",
+          "fedex_label": "FedEx label",
           "name": "Name",
           "phone": "Phone",
           "email": "Email",
@@ -26267,7 +26268,8 @@ __webpack_require__.r(__webpack_exports__);
       "title": "Admin panel",
       "navbar": {
         "profile": "Profile",
-        "logout": "Exit"
+        "logout": "Logout",
+        "notifications": "Notifications"
       },
       "sidebar": {
         "users": "Users",

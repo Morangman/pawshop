@@ -6,7 +6,8 @@ return [
     'title' => 'Admin panel',
     'navbar' => [
         'profile' => 'Profile',
-        'logout' => 'Exit',
+        'logout' => 'Logout',
+        'notifications' => 'Notifications',
     ],
     'sidebar' => [
         'users' => 'Users',

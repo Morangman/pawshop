@@ -27,6 +27,11 @@ Route::post('', [
     'uses' => 'OrderController@store',
 ]);
 
+Route::post('', [
+    'as' => '.search',
+    'uses' => 'OrderController@search',
+]);
+
 Route::get('{order}/edit', [
     'as' => '.edit',
     'uses' => 'OrderController@edit',

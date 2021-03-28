@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Migrations\Migration;
 
 /**
@@ -38,6 +39,8 @@ class CreateOrdersTable extends Migration
                 ->references('id')
                 ->on('users');
         });
+
+        DB::statement("ALTER TABLE orders AUTO_INCREMENT = 12120;");
     }
 
     /**

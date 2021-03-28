@@ -49,6 +49,7 @@ class SettingSeeder extends Seeder
                 "switch_point" => Config::get('parser.switch_point'),
                 "ds_point" => Config::get('parser.ds_point'),
                 "appleWatch_point" => Config::get('parser.appleWatch_point'),
+                "appleTV_point" => Config::get('parser.appleTV_point'),
             ],
             'terms' => '',
             'code_insert' => '',

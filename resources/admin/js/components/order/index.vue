@@ -145,6 +145,13 @@
     import moment from 'moment';
 
     export default {
+        props: {
+            searched: {
+                type: Object,
+                required: false,
+            },
+        },
+
         components: {
             InfiniteLoading,
         },
@@ -205,9 +212,17 @@
         },
 
         created() {
-            this.getOrders();
+            if (this.searched) {
+                this.orders = this.searched.data;
 
-            this.debouncedGetOrders =_.debounce(this.getOrders, 500);
+                this.total = this.searched.total;
+
+                this.isLoading = false;
+            } else {
+                this.getOrders();
+
+                this.debouncedGetOrders =_.debounce(this.getOrders, 500);
+            }
         },
     };
 </script>

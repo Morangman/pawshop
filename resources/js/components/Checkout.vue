@@ -22,6 +22,9 @@
                     <!-- Step 1 -->
                     <div class="checkout-content-step" v-if="stepIndex === 1 && !this.user.id">
                         <h2>Account</h2>
+                        <div class="checkout-account">
+                            <a :href="$r('web.register')">Create an Account</a>
+                        </div>
                         <div class="checkout-login">
                             <div class="inner-block">
                                 <div class="checkout-customer">
@@ -69,9 +72,6 @@
                                     </div>
                                     <a href="#" v-if="orderData.user_email" v-on:click="validateEmail" class="btn red-btn">Continue as Guest</a>
                                 </div>
-                                <div class="checkout-account">
-                                    <a :href="$r('web.register')">Create an Account</a>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -96,7 +96,7 @@
                                         <small>PayPal</small>
                                     </span>
                                 </label>
-                                <label v-on:click="selectPaymentZelle()" class="payment-radiobox">
+                                <label v-on:click="selectPaymentZelle()" class="payment-radiobox" v-if="totalSumm > 500">
                                     <input type="radio" name="payment-radios">
                                     <span>
                                         <img src="../../client/images/pay_zelle.png" alt="">

@@ -12,6 +12,8 @@ return [
     ],
     'form' => [
         'user' => 'User',
+        'fedex_label' => 'User',
+        'fedex_label' => 'FedEx label',
         'name' => 'Name',
         'phone' => 'Phone',
         'email' => 'Email',

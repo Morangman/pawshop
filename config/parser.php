@@ -30,4 +30,5 @@ return [
     "switch_point" => "https://www.sellcell.com/sell/nintendo-switch/",
     "ds_point" => "https://www.sellcell.com/sell/nintendo-ds/",
     "appleWatch_point" => "https://www.sellcell.com/sell/apple-watch/",
+    "appleTV_point" => "https://www.sellcell.com/sell/apple-tv/",
 ];

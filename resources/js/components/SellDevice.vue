@@ -60,7 +60,7 @@
                         </ol>
                         <div class="links">
                             <a href="#condition-popup" class="btn popup-open" data-effect="mfp-zoom-in">Condition Examples</a>
-                            <a href="https://www.youtube.com/watch?v=N2EPWemOuuE" class="play-link popup-youtube"><img src="../../client/images/play.svg" alt=""></a>
+                            <!-- <a href="/" class="play-link popup-youtube"><img src="../../client/images/play.svg" alt=""></a> -->
                         </div>
                     </div>
                 </div>
@@ -279,6 +279,14 @@
                             }
                         }
                     });
+
+                    if (this.selectedStep) {
+                        if (this.selectedStep.is_checkbox) {
+                            this.selectedAccesories = [];
+                        } else {
+                            this.selectedSteps[this.steps[this.stepIndex].items[0].name_id] = null;
+                        }
+                    }
 
                     this.stepIndex--;
 

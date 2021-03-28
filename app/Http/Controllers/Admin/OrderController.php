@@ -34,7 +34,7 @@ class OrderController extends Controller
      */
     public function index(): ViewContract
     {
-        return View::make('admin.order.index');
+        return View::make('admin.order.index', ['orders' => null]);
     }
 
     /**
@@ -196,6 +196,31 @@ class OrderController extends Controller
     public function get(Order $order): JsonResponse
     {
         return $this->json()->ok($order);
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     *
+     *  @return \Illuminate\Contracts\View\View
+     *
+     * @throws \Exception
+     */
+    public function search(Request $request): ViewContract
+    {
+        $orders = Order::query()
+            ->when(
+                $request->get('search'),
+                function ($query, $search) {
+                    $keyword = "%{$search}%";
+
+                    $query->where('address->name', 'like', $keyword)
+                        ->orWhere('id', 'like', $keyword)
+                        ->orWhere('tracking_number', 'like', $keyword);
+                }
+            )
+            ->paginate(20);
+
+        return View::make('admin.order.index', ['orders' => $orders]);
     }
 
     /**

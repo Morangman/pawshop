@@ -21,12 +21,18 @@
                             <strong>{{ $t('admin.order.form.user') }}</strong>
                         </label>
                         <a :href="$r('admin.user.edit', {user: model.user_id})">{{ model.user_id }}</a>
-                        <div v-for="(error, i) in errors.user"
-                             :key="`user__error__${i}`"
-                             class="text-danger error"
-                        >
-                            {{ error }}
-                        </div>
+                    </div>
+                    <div class="form-group" v-if="model.payment.fedexLabel">
+                        <label>
+                            <strong>{{ $t('admin.order.form.fedex_label') }}</strong>
+                        </label>
+                        <p><a :href="model.payment.fedexLabel">{{ model.payment.fedexLabel }}</a></p>
+                    </div>
+                    <div class="form-group" v-if="model.tracking_number">
+                        <label>
+                            <strong>Fedex tracking number</strong>
+                        </label>
+                        <p>{{ model.tracking_number }}</p>
                     </div>
                     <div class="form-group row">
                         <div class="form-group col-md-6">

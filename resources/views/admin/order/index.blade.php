@@ -12,5 +12,7 @@
 @endsection
 
 @section('content')
-    <order-index></order-index>
+    <order-index
+        :searched="{{ json_encode($orders, true) }}"
+    ></order-index>
 @endsection

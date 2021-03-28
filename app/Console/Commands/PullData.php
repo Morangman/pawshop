@@ -38,6 +38,7 @@ class PullData extends Command
     public $phoneAccessories = [];
     public $consoleAccessories = [];
     public $smartwatchAccessories = [];
+    public $appleTVAccesories = [];
     public $smartwatchBands = [];
     public $functionals = [];
     public $controller = [];
@@ -46,6 +47,7 @@ class PullData extends Command
     public $phoneAccessoriesName;
     public $consoleAccessoriesName;
     public $smartwatchAccessoriesName;
+    public $appleTVAccesoriesName;
     public $functionalName;
     public $capacityName;
     public $controllerName;
@@ -159,6 +161,39 @@ class PullData extends Command
                 'slug' => null,
                 'attribute' => null,
                 'value' => $controllerVariant['name'],
+                'decryption' => null,
+            ]);
+        }
+
+        $this->appleTVAccesoriesName = StepName::query()->create([
+            'name' => 'Accessories for Apple TV',
+            'title' => 'What accessories will be included?',
+            'is_condition' => 0,
+            'is_functional' => 0,
+            'is_checkbox' => 1,
+        ]);
+
+        $appleTVAccesoriesVariations = [
+            [
+                'name' => 'Original Box',
+                'price_plus' => '1',
+            ],
+            [
+                'name' => 'HDMI/Power Cord',
+                'price_plus' => '1',
+            ],
+            [
+                'name' => 'Apple TV Siri Remote',
+                'price_plus' => '1',
+            ],
+        ];
+
+        foreach ($appleTVAccesoriesVariations as $appleTVAccesoriesVariat) {
+            Step::query()->create([
+                'name_id' => $this->appleTVAccesoriesName->getKey(),
+                'slug' => null,
+                'attribute' => null,
+                'value' => $appleTVAccesoriesVariat['name'],
                 'decryption' => null,
             ]);
         }
@@ -404,6 +439,7 @@ class PullData extends Command
         $this->controller = Step::query()->where('name_id', $this->controllerName->getKey())->get();
         $this->consoleAccessories = Step::query()->where('name_id', $this->consoleAccessoriesName->getKey())->get();
         $this->smartwatchAccessories = Step::query()->where('name_id', $this->smartwatchAccessoriesName->getKey())->get();
+        $this->appleTVAccesories = Step::query()->where('name_id', $this->appleTVAccesoriesName->getKey())->get();
         $this->smartwatchBands = Step::query()->where('name_id', $this->bandTypeName->getKey())->get();
 
         $this->line('Start parsing devices...');
@@ -416,6 +452,7 @@ class PullData extends Command
         $cameraImage = '/client/images/camera.png';
         $consoleImage = '/client/images/console.png';
         $watchImage = '/client/images/watch.png';
+        $appleTvImage = '/client/images/appletv.png';
 
         $maxPrice = 5;
 
@@ -2691,6 +2728,85 @@ class PullData extends Command
 
         $this->line('Apple watch was parsed...');
 
+        $this->line('Starting parsing AppleTV...');
+
+        $appleTvPoint = $settings->getAttribute('general_settings')['appleTV_point'];
+
+        $appleTVCrawler = $client->request('GET', $appleTvPoint);
+
+        $appleTVCategory = Category::query()->create([
+            'name' => 'Sell Apple TV',
+            'slug' => 'sell_apple_tv',
+            'image' => $appleTvImage,
+        ]);
+
+        //APPLE TV
+        $appleTV = $appleTVCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
+
+            $appleTVStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
+
+            $capacities = $appleTVStepsCrawler->filter('.capacity-logos-sprite')->each(function (Crawler $nodeCrawler) {
+                $cpies = [];
+
+                return $cpies[] = [
+                    'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+                    'attribute' => $slug ? 'capacity' : null,
+                    'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+                ];
+            });
+
+            return [
+                'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
+                'title' => 'Apple '.$nodeCrawler->filter('.h4')->text(),
+                'slug' =>   preg_replace('/^\/(.+?)\/apple-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
+                'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
+                'capacities' => $capacities,
+            ];
+        });
+
+        foreach ($appleTV as $device) {
+            if ($device['capacities'] != []) {
+                foreach ($device['capacities'] as $capacity) {
+                    $isItemExist = Step::query()
+                        ->where('name_id', $this->capacityName->getKey())
+                        ->where('slug', $capacity['slug'])
+                        ->exists();
+
+                    if (!$isItemExist) {
+                        Step::query()->create([
+                            'name_id' => $this->capacityName->getKey(),
+                            'slug' => $capacity['slug'],
+                            'attribute' => $capacity['attribute'],
+                            'value' => $capacity['name'],
+                            'decryption' => null,
+                        ]);
+                    }
+                }
+            }
+
+            $isExist = Category::query()->where('name', $device['title'])->exists();
+
+            if (!$isExist) {
+                $category = Category::query()->create([
+                    'subcategory_id' => $appleTVCategory->getKey(),
+                    'name' => $device['title'],
+                    'slug' => $device['slug'],
+                    'custom_text' => $device['price'],
+                    'is_parsed' => 1,
+                    'is_hidden' => $device['price'] < $maxPrice ? 1 : 0,
+                ]);
+
+                $this->saveAppleTVSteps($category->getKey(), $device['capacities']);
+
+                $media = $category->addMediaFromUrl($device['image'])
+                    ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+                $category->update(['image' => $media->getFullUrl()]);
+            }
+        }
+
+        $this->line('Apple TV was parsed...');
+
         $this->line('Work is done!');
     }
 
@@ -2902,6 +3018,68 @@ class PullData extends Command
                 'category_id' => $categoryId,
                 'step_id' => $func->getKey(),
                 'sort_order' => 3,
+            ]);
+        }
+    }
+
+        /**
+     * @param int $categoryId
+     * @param array $capacities
+     *
+     * @return void
+     */
+    private function saveAppleTVSteps(int $categoryId, array $capacities = [])
+    {
+        foreach ($this->conditions as $c) {
+            if ($c->getAttribute('value') === 'Brand New') {
+                DB::table('premium_price')->insert([
+                    'category_id' => $categoryId,
+                    'step_id' => $c->getKey(),
+                    'price_percent' => 10,
+                ]);
+            }
+
+            CategoryStep::query()->create([
+                'category_id' => $categoryId,
+                'step_id' => $c->getKey(),
+                'sort_order' => 1,
+            ]);
+        }
+
+        if ($capacities) {
+            foreach ($capacities as $cp) {
+                $cpst = Step::query()
+                    ->where('name_id', $this->capacityName->getKey())
+                    ->where('slug', $cp['slug'])
+                    ->first();
+
+                CategoryStep::query()->create([
+                    'category_id' => $categoryId,
+                    'step_id' => $cpst->getKey(),
+                    'sort_order' => 2,
+                ]);
+            }
+        }
+
+        foreach ($this->appleTVAccesories as $ac) {
+            DB::table('premium_price')->insert([
+                'category_id' => $categoryId,
+                'step_id' => $ac->getKey(),
+                'price_plus' => 1,
+            ]);
+
+            CategoryStep::query()->create([
+                'category_id' => $categoryId,
+                'step_id' => $ac->getKey(),
+                'sort_order' => 3,
+            ]);
+        }
+
+        foreach ($this->functionals as $func) {
+            CategoryStep::query()->create([
+                'category_id' => $categoryId,
+                'step_id' => $func->getKey(),
+                'sort_order' => 4,
             ]);
         }
     }

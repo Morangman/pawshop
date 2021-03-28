@@ -1,12 +1,8 @@
 <div class="navbar navbar-expand-md navbar-dark navbar-slide-top fixed-top">
     <div class="navbar-brand">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a href="#" class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block">
-                    <i class="icon-paragraph-justify3"></i>
-                </a>
-            </li>
-        </ul>
+        <a href="{{ URL::route('admin.order.index')}}" class="d-inline-block">
+            <img src="{{ URL::asset('client/images/white-main-logo.png') }}" alt="">
+        </a>
     </div>
     <div class="d-md-none">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile">
@@ -17,6 +13,19 @@
         </button>
     </div>
     <div class="collapse navbar-collapse" id="navbar-mobile">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a href="#" class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block">
+                    <i class="icon-paragraph-justify3"></i>
+                </a>
+            </li>
+        </ul>
+        <div class="col col-md-5">
+        <form method="post" action="{{ URL::route('admin.order.search')}}">
+            {{csrf_field()}}
+            <input name="search" type="text" placeholder="Search orders by name, id or tracking number" class="form-control">
+        </form>
+        </div>
         <span class="ml-md-3 mr-md-auto hidden"></span>
         <ul class="navbar-nav">
             @if($user = Auth::user())
@@ -24,13 +33,13 @@
                 @if($user->unreadNotifications->count() > 0)
                 <a href="#" class="navbar-nav-link dropdown-toggle caret-0" data-toggle="dropdown" aria-expanded="false">
                     <i class="icon-bubbles4"></i>
-                    <span class="d-md-none ml-2">Сповіщення</span>
+                    <span class="d-md-none ml-2">@lang('common.navbar.notifications')</span>
                     <span class="badge badge-pill bg-warning-400 ml-auto ml-md-0">{{ $user->unreadNotifications->count() }}</span>
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-right dropdown-content wmin-md-350">
                     <div class="dropdown-content-header">
-                        <span class="font-weight-semibold">Сповіщення</span>
+                        <span class="font-weight-semibold">@lang('common.navbar.notifications')</span>
                     </div>
 
                     <div class="dropdown-content-body dropdown-scrollable">
@@ -53,7 +62,7 @@
                     </div>
 
                     <div class="dropdown-content-footer justify-content-center p-0">
-                        <a href="{{ URL::route('admin.notification.index') }}" class="bg-light text-grey w-100 py-2" data-popup="tooltip" title="" data-original-title="Показати всі"><i class="icon-menu7 d-block top-0"></i></a>
+                        <a href="{{ URL::route('admin.notification.index') }}" class="bg-light text-grey w-100 py-2" data-popup="tooltip" title="" data-original-title="Show All"><i class="icon-menu7 d-block top-0"></i></a>
                     </div>
                 </div>
                 @endif
