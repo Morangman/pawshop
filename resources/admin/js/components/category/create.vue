@@ -45,6 +45,7 @@
                     subcategory_id: null,
                     faq_id: null,
                     custom_text: null,
+                    premium_price: null,
                     steps: [],
                 },
                 errors: {},

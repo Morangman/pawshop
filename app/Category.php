@@ -36,6 +36,7 @@ class Category extends Model implements HasMedia
         'slug',
         'image',
         'custom_text',
+        'premium_price',
         'is_hidden',
         'is_parsed',
     ];
@@ -50,6 +51,7 @@ class Category extends Model implements HasMedia
         'slug' => 'string',
         'image' => 'string',
         'custom_text' => 'string',
+        'premium_price' => 'string',
         'is_hidden' => 'bool',
         'is_parsed' => 'bool',
     ];

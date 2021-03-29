@@ -25650,6 +25650,7 @@ __webpack_require__.r(__webpack_exports__);
           "subcategory": "Parent category",
           "status": "Status",
           "text": "Cash in up to..",
+          "premium_price": "Premium price for device",
           "steps": "Steps for device",
           "select_step": "Select step",
           "hidden": "Is hidden"

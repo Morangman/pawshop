@@ -555,6 +555,10 @@ class HomeController extends Controller
             }
         }
 
+        if ($premiumPriceForDevice = $category->getAttribute('premium_price')) {
+            $resultPrice += (float) $premiumPriceForDevice;
+        }
+
         return $this->json()->ok(['price' => $resultPrice]);
     }
 

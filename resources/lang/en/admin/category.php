@@ -15,6 +15,7 @@ return [
         'subcategory' => 'Parent category',
         'status' => 'Status',
         'text' => 'Cash in up to..',
+        'premium_price' => 'Premium price for device',
         'steps' => 'Steps for device',
         'select_step' => 'Select step',
         'hidden' => 'Is hidden',

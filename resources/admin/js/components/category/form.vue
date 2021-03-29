@@ -100,6 +100,24 @@
                     </div>
                     <div class="form-group">
                         <label>
+                            <strong>{{ $t('admin.category.form.premium_price') }}</strong>
+                        </label>
+                        <input
+                            name="premium_price"
+                            type="text"
+                            v-model="model.premium_price"
+                            class="form-control"
+                            :class="{ 'border-danger': errors.premium_price }"
+                        >
+                        <div v-for="(error, i) in errors.premium_price"
+                             :key="`premium_price__error__${i}`"
+                             class="text-danger error"
+                        >
+                            {{ error }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
                             <strong>{{ $t('admin.category.form.status') }}</strong>
                         </label>
                         <b-form-checkbox
