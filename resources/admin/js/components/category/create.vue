@@ -46,6 +46,7 @@
                     faq_id: null,
                     custom_text: null,
                     premium_price: null,
+                    price_for_broken: null,
                     steps: [],
                 },
                 errors: {},

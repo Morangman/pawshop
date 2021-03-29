@@ -28,6 +28,7 @@ class CreateCategoriesTable extends Migration
             $table->string('image')->nullable();
             $table->string('custom_text')->nullable();
             $table->string('premium_price')->nullable();
+            $table->string('price_for_broken')->default('5.00');
             $table->boolean('is_hidden')->default(0);
             $table->boolean('is_parsed')->default(0);
             $table->timestamps();

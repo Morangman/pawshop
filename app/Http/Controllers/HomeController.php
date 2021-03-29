@@ -547,16 +547,14 @@ class HomeController extends Controller
             $resultPrice = number_format((float) $resultPrice + $addToPrice, 2, '.', '');
         }
 
-        if ($isBroken) {
-            if ($category) {
-                if ($resultPrice >= 5) {
-                    $resultPrice = 5.00;
-                }
-            }
-        }
-
         if ($premiumPriceForDevice = $category->getAttribute('premium_price')) {
             $resultPrice += (float) $premiumPriceForDevice;
+        }
+
+        if ($isBroken) {
+            if ($priceForBroken = $category->getAttribute('price_for_broken')) {
+                $resultPrice = $priceForBroken;
+            }
         }
 
         return $this->json()->ok(['price' => $resultPrice]);

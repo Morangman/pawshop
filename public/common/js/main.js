@@ -25651,6 +25651,7 @@ __webpack_require__.r(__webpack_exports__);
           "status": "Status",
           "text": "Cash in up to..",
           "premium_price": "Premium price for device",
+          "price_for_broken": "Price for broken device",
           "steps": "Steps for device",
           "select_step": "Select step",
           "hidden": "Is hidden"

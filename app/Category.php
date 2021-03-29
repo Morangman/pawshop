@@ -37,6 +37,7 @@ class Category extends Model implements HasMedia
         'image',
         'custom_text',
         'premium_price',
+        'price_for_broken',
         'is_hidden',
         'is_parsed',
     ];
@@ -52,6 +53,7 @@ class Category extends Model implements HasMedia
         'image' => 'string',
         'custom_text' => 'string',
         'premium_price' => 'string',
+        'price_for_broken' => 'string',
         'is_hidden' => 'bool',
         'is_parsed' => 'bool',
     ];

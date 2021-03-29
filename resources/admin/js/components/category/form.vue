@@ -118,6 +118,24 @@
                     </div>
                     <div class="form-group">
                         <label>
+                            <strong>{{ $t('admin.category.form.price_for_broken') }}</strong>
+                        </label>
+                        <input
+                            name="price_for_broken"
+                            type="text"
+                            v-model="model.price_for_broken"
+                            class="form-control"
+                            :class="{ 'border-danger': errors.price_for_broken }"
+                        >
+                        <div v-for="(error, i) in errors.price_for_broken"
+                             :key="`price_for_broken__error__${i}`"
+                             class="text-danger error"
+                        >
+                            {{ error }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
                             <strong>{{ $t('admin.category.form.status') }}</strong>
                         </label>
                         <b-form-checkbox
