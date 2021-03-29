@@ -17,6 +17,7 @@ use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
@@ -179,6 +180,8 @@ class OrderController extends Controller
      */
     public function delete(Order $order): JsonResponse
     {
+        DB::table('order_device')->where('order_id', $order->getKey())->delete();
+
         $order->delete();
 
         Session::flash(

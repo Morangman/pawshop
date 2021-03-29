@@ -7,9 +7,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 /**
- * Class CreatePremiumPriceTable
+ * Class CreateOrderDeviceTable
  */
-class CreatePremiumPriceTable extends Migration
+class CreateOrderDeviceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -18,13 +18,21 @@ class CreatePremiumPriceTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('premium_price', function (Blueprint $table) {
+        Schema::create('order_device', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('step_id');
-            $table->string('price_plus')->nullable();
-            $table->string('price_percent')->nullable();
             $table->timestamps();
+
+            $table->foreign('order_id')
+                ->references('id')
+                ->on('orders')
+                ->onDelete('cascade');
+
+            $table->foreign('category_id')
+                ->references('id')
+                ->on('categories')
+                ->onDelete('cascade');
         });
     }
 
@@ -35,6 +43,6 @@ class CreatePremiumPriceTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('premium_price');
+        Schema::dropIfExists('order_device');
     }
 }

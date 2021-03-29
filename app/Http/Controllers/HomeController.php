@@ -262,6 +262,13 @@ class HomeController extends Controller
 
         $order = Order::create($orderData);
 
+        foreach($order->getAttribute('orders')['order'] as $item) {
+            DB::table('order_device')->insert([
+                'order_id' => $order->getKey(),
+                'category_id' => $item['device']['id'],
+            ]);
+        }
+
         try {
             Mail::to($order->getAttribute('user_email'))
                 ->send(new OrderConfirmationMail(
