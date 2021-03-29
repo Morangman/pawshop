@@ -164,7 +164,7 @@
                   <td class="o_bg-white o_px-md o_py" align="center" style="background-color: #ffffff;padding-left: 24px;padding-right: 24px;padding-top: 16px;padding-bottom: 16px;">
                     <!--[if mso]><table width="584" cellspacing="0" cellpadding="0" border="0" role="presentation"><tbody><tr><td align="center"><![endif]-->
                     <div class="o_col-6s o_sans o_text o_text-secondary o_center" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;max-width: 584px;color: #424651;text-align: center;">
-                      <h4 class="o_heading o_text-dark o_mb-xs" style="font-family: Helvetica, Arial, sans-serif;font-weight: bold;margin-top: 0px;margin-bottom: 8px;color: #242b3d;font-size: 18px;line-height: 23px;">Hello, {{ $data['user_email'] }}</h4>
+                      <h4 class="o_heading o_text-dark o_mb-xs" style="font-family: Helvetica, Arial, sans-serif;font-weight: bold;margin-top: 0px;margin-bottom: 8px;color: #242b3d;font-size: 18px;line-height: 23px;">Hello, {{ $data['user_name'] }}</h4>
                       <p class="o_mb-md" style="margin-top: 0px;margin-bottom: 24px;">Thank you for ordering from Rapid Recycle. See your order confirmation below.</p>
                       <table align="center" cellspacing="0" cellpadding="0" border="0" role="presentation">
                         <tbody>
@@ -206,9 +206,11 @@
                             <tr>
                               <td class="o_bg-ultra_light o_br o_px o_py o_sans o_text-xs o_text-secondary" align="left" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;background-color: #ebf5fa;color: #424651;border-radius: 4px;padding-left: 16px;padding-right: 16px;padding-top: 16px;padding-bottom: 16px;">
                                 <p class="o_mb-xs" style="margin-top: 0px;margin-bottom: 8px;"><strong>OFFER #{{ $data['id'] }}</strong></p>
-                                <p class="o_mb-md" style="margin-top: 0px;margin-bottom: 24px;">Placed on {{ \Carbon\Carbon::parse($data['created_at'])->format('j F, d, Y') }}<br>
+                                <p class="o_mb-md" style="margin-top: 0px;margin-bottom: 8px;">Placed on {{ \Carbon\Carbon::parse($data['created_at'])->format('j F, d, Y') }}<br>
                                 <p class="o_mb-xs" style="margin-top: 0px;margin-bottom: 8px;"><strong> Payout Preference</strong></p>
-                                <p style="margin-top: 0px;margin-bottom: 0px;">{{ $data['payment']['name'] }}</p>
+                                <p style="margin-top: 0px;margin-bottom: 8px;">{{ $data['payment']['name'] }}</p>
+                                <p class="o_mb-xs" style="margin-top: 0px;margin-bottom: 8px;"><strong>Shipping Method</strong></p>
+                                <p style="margin-top: 0px;margin-bottom: 0px;">FedEx</p>
                               </td>
                             </tr>
                           </tbody>
@@ -226,10 +228,10 @@
                                 <p class="o_mb-xs" style="margin-top: 0px;margin-bottom: 8px;"><strong>Shipping Information</strong></p>
                                 <p class="o_mb-md" style="margin-top: 0px;margin-bottom: 24px;">{{ $data['address']['name'] }}<br>
                                   {{ $data['address']['address1'] }}<br>
+                                  {!! isset($data['address']['address2']) ? $data['address']['address2'].'<br>' : '' !!}
                                   {{ $data['address']['city'] }}, {{ str_replace("string:", "", $data['address']['state']) }} {{ $data['address']['postal_code'] }}<br>
-                                  United States</p>
-                                <p class="o_mb-xs" style="margin-top: 0px;margin-bottom: 8px;"><strong>Shipping Method</strong></p>
-                                <p style="margin-top: 0px;margin-bottom: 0px;">FedEx</p>
+                                  United States <br>
+                                  {{  $data['address']['phone'] }}</p>
                               </td>
                             </tr>
                           </tbody>
@@ -298,7 +300,7 @@
                         <p class="o_text-secondary o_mb-xs" style="color: #424651;margin-top: 0px;margin-bottom: 8px;">x{{ $order['ctn'] }}</p>
                         @foreach ($order['steps'] as $step)
                         <p class="o_text-xs o_mb-xs" style="font-size: 14px;line-height: 21px;margin-top: 0px;margin-bottom: 8px;">
-                          {{ $step['value'] }}
+                          <span style="color: #424651;">{{ $step['step_name']['name'] }}</span> : {{ $step['value'] }}
                         </p>
                         @endforeach
                       </div>
@@ -349,12 +351,32 @@
                             <td width="284" align="left">
                               <table width="100%" role="presentation" cellspacing="0" cellpadding="0" border="0">
                                 <tbody>
+                                  @if (isset($data['exp_service']))
+                                    <tr>
+                                      <td width="50%" class="o_pt" align="left" style="padding-top: 16px;">
+                                        <p class="o_sans o_text o_text-secondary" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;color: #424651;"><strong>Expedited Service:</strong></p>
+                                      </td>
+                                      <td width="50%" class="o_pt" align="right" style="padding-top: 16px;">
+                                        <p class="o_sans o_text o_text-primary" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;color: #126de5;"><strong>-$20 USD</strong></p>
+                                      </td>
+                                    </tr>
+                                  @endif
+                                  @if (isset($data['insurance']))
+                                    <tr>
+                                      <td width="50%" class="o_pt" align="left" style="padding-top: 16px;">
+                                        <p class="o_sans o_text o_text-secondary" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;color: #424651;"><strong>Shipping insurance:</strong></p>
+                                      </td>
+                                      <td width="50%" class="o_pt" align="right" style="padding-top: 16px;">
+                                        <p class="o_sans o_text o_text-primary" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;color: #126de5;"><strong>-${{ number_format($data['insurance_summ'], 2, '.', '') }} USD</strong></p>
+                                      </td>
+                                    </tr>
+                                  @endif
                                   <tr>
                                     <td width="50%" class="o_pt" align="left" style="padding-top: 16px;">
                                       <p class="o_sans o_text o_text-secondary" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;color: #424651;"><strong>Total:</strong></p>
                                     </td>
                                     <td width="50%" class="o_pt" align="right" style="padding-top: 16px;">
-                                      <p class="o_sans o_text o_text-primary" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;color: #126de5;"><strong>${{ $data['total_summ'] }} USD</strong></p>
+                                      <p class="o_sans o_text o_text-primary" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;color: #126de5;"><strong>${{ number_format($data['total_summ'], 2, '.', '') }} USD</strong></p>
                                     </td>
                                   </tr>
                                 </tbody>

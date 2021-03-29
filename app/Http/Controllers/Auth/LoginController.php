@@ -139,8 +139,7 @@ class LoginController extends Controller
 
             Mail::to($createdUser->getAttribute('email'))
                 ->send(new VerificationMail(
-                    (string) $createdUser->getAttribute('register_code'),
-                    $createdUser->getAttribute('email')
+                    $createdUser->toArray(),
                 ));
 
             Auth::login($createdUser);
@@ -202,8 +201,7 @@ class LoginController extends Controller
 
             Mail::to($createdUser->getAttribute('email'))
                 ->send(new VerificationMail(
-                    (string) $createdUser->getAttribute('register_code'),
-                    $createdUser->getAttribute('email')
+                    $createdUser->toArray(),
                 ));
 
             Auth::login($createdUser);

@@ -244,12 +244,34 @@ class HomeController extends Controller
             'user_email' => $request->get('user_email') ?? Auth::user()->getAttribute('email')
         ]);
 
+        $insuranceSumm = 0;
+        $totalSumm = 0;
+        $expShipping = 20;
+
+        if (isset($orderData['insurance'])) {
+            foreach($orderData['orders']['order'] as $order) {
+                $totalSumm += (float) $order['total'];
+            }
+
+            if (isset($orderData['exp_service'])) {
+                $totalSumm -= $expShipping;
+            }
+
+            $insuranceSumm = ($totalSumm * 1)/100;
+        }
+
         $order = Order::create($orderData);
 
         try {
             Mail::to($order->getAttribute('user_email'))
                 ->send(new OrderConfirmationMail(
-                    $order->toArray()
+                    array_merge(
+                        $order->toArray(),
+                        [
+                            'user_name' => Auth::user()->getAttribute('name'),
+                            'insurance_summ' => $insuranceSumm,
+                        ]
+                    )
                 ));
         } catch (\Exception $e) {}
 

@@ -60,8 +60,7 @@ class RegisterController extends Controller
 
         Mail::to($user->getAttribute('email'))
             ->send(new VerificationMail(
-                $user->getAttribute('register_code'),
-                $user->getAttribute('email')
+                $user->toArray(),
             ));
 
         if ($request->get('is_guest')) {

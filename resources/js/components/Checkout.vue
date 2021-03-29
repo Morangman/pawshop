@@ -316,7 +316,7 @@
                     <ul class="cart-total-list">
                         <li>
                             <span>Total Payout</span>
-                            <div class="price">${{ parseFloat(totalSumm).toFixed(2) }}</div>
+                            <div class="price">${{ number_format(totalSumm, 2) }}</div>
                         </li>
                         <li v-if="orderData.exp_service">
                             <span>Expedited Service</span>
@@ -425,9 +425,11 @@
                 }
 
                 if (this.orderData.insurance) {
-                    this.insurancePrice = parseFloat((this.totalSumm * 1)/100).toFixed(2);
+                    let insuranceValue = (this.totalSumm * 1)/100;
 
-                    this.totalSumm = this.totalSumm - (this.totalSumm * 1)/100;
+                    this.insurancePrice = this.number_format(insuranceValue, 2);
+
+                    this.totalSumm = this.totalSumm - insuranceValue;
                 } else {
                     this.insurancePrice = 0;
                 }
@@ -629,6 +631,10 @@
                 } else {
                     this.termsError = true;
                 }
+            },
+
+            number_format(number, decimals) {
+                return Number(Math.round(number+"e"+decimals)+"e-"+decimals); 
             }
         },
 

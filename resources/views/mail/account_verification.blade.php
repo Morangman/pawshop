@@ -174,7 +174,7 @@
                       <tbody>
                         <tr>
                           <td width="284" class="o_bg-ultra_light o_br o_text-xs o_sans o_px-xs o_py" align="center" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;background-color: #ebf5fa;border-radius: 4px;padding-left: 8px;padding-right: 8px;padding-top: 16px;padding-bottom: 16px;">
-                            <p class="o_text-dark" style="color: #242b3d;margin-top: 0px;margin-bottom: 0px;"><strong>{{ $email }}</strong></p>
+                            <p class="o_text-dark" style="color: #242b3d;margin-top: 0px;margin-bottom: 0px;"><strong>{{ $data['name'] }}</strong></p>
                           </td>
                         </tr>
                       </tbody>
@@ -202,7 +202,7 @@
                       <tbody>
                         <tr>
                           <td width="300" class="o_btn o_bg-primary o_br o_heading o_text" align="center" style="font-family: Helvetica, Arial, sans-serif;font-weight: bold;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;mso-padding-alt: 12px 24px;background-color: #126de5;border-radius: 4px;">
-                            <a class="o_text-white" href="{{ URL::route('web.email.verify', ['code' => $code,'email' => $email ]) }}" style="text-decoration: none;outline: none;color: #ffffff;display: block;padding: 12px 24px;mso-text-raise: 3px;">Verify My E-mail Address</a>
+                            <a class="o_text-white" href="{{ URL::route('web.email.verify', ['code' => $data['register_code'], 'email' => $data['email'] ]) }}" style="text-decoration: none;outline: none;color: #ffffff;display: block;padding: 12px 24px;mso-text-raise: 3px;">Verify My E-mail Address</a>
                           </td>
                         </tr>
                       </tbody>

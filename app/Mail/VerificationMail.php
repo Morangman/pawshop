@@ -12,27 +12,20 @@ class VerificationMail extends Mailable
     use Queueable, SerializesModels;
 
     /**
-     * @var string
+     * @var array
      */
-    public $code;
-
-    /**
-     * @var string
-     */
-    public $email;
+    public $data;
 
     /**
      * Create a new message instance.
      * 
-     * @param string $code
-     * @param string $email
+     * @param array $data
      *
      * @return void
      */
-    public function __construct(string $code, string $email)
+    public function __construct(array $data)
     {
-        $this->code = $code;
-        $this->email = $email;
+        $this->data = $data;
     }
 
     /**
