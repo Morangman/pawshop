@@ -26,6 +26,10 @@ import OrderIndex from './components/order/index';
 import OrderCreate from './components/order/create';
 import OrderEdit from './components/order/edit';
 
+import StatusIndex from './components/status/index';
+import StatusCreate from './components/status/create';
+import StatusEdit from './components/status/edit';
+
 import CommentIndex from './components/comment/index';
 import CommentCreate from './components/comment/create';
 import CommentEdit from './components/comment/edit';
@@ -57,6 +61,9 @@ export default {
     OrderIndex,
     OrderCreate,
     OrderEdit,
+    StatusIndex,
+    StatusCreate,
+    StatusEdit,
     CommentIndex,
     CommentCreate,
     CommentEdit,

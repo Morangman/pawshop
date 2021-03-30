@@ -65,11 +65,6 @@ return [
     ],
     'order_statuses' => [
         Order::STATUS_NEW => 'New order',
-        Order::STATUS_IN_PROCESS => 'In work',
-        Order::STATUS_PAYMENT_EXPECTED => 'Payment expected',
-        Order::STATUS_COMPLETED => 'Successfully completed',
-        Order::STATUS_POSTPONED => 'The decision is postponed',
-        Order::STATUS_CANCELED => 'Canceled',
     ],
     'create' => [
         'title' => 'Create order',

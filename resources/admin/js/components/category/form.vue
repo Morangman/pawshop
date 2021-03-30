@@ -158,7 +158,7 @@
                             <h1>{{ $t('admin.category.form.steps') }}</h1>
                         </strong>
                         <div class="form-group">
-                            <div class="change-blocks-wrapper__item" v-for="(item, index) in categorysteps">
+                            <div class="change-blocks-wrapper__item" v-for="(item, index) in categorysteps" :key="`step__${index}`">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="text-right">
@@ -220,10 +220,10 @@
                         <strong>
                             <h1>Price variations</h1>
                         </strong>
-                        <div class="change-blocks-wrapper__item" v-for="(price, index) in priceVariations">
+                        <div class="change-blocks-wrapper__item" v-for="(price, index) in priceVariations" :key="`variation__${index}`">
                             <div class="form-group row">
                             <div class="flex flex-row steps-row">
-                                <p v-for="step in price.steps">{{ step.value }}</p>
+                                <p v-for="(step, index) in price.steps" :key="`step_price__${index}`">{{ step.value }}</p>
                             </div>
                                 <input
                                     name="slug"
@@ -239,7 +239,7 @@
                         <strong>
                             <h1>Premium prices</h1>
                         </strong>
-                        <div class="change-blocks-wrapper__item" v-for="(price, index) in premiumprices">
+                        <div class="change-blocks-wrapper__item" v-for="(price, index) in premiumprices" :key="`premium_price__${index}`">
                             <div class="form-group row flex flex-row steps-row">
                                 <p>{{ price.step_name }}</p>
                             </div>

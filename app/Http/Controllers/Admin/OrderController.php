@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Order\StoreRequest;
 use App\Http\Requests\Admin\Order\UpdateRequest;
 use App\Order;
+use App\OrderStatus;
 use App\Reminder;
 use App\SuspectIp;
 use App\User;
@@ -35,7 +36,10 @@ class OrderController extends Controller
      */
     public function index(): ViewContract
     {
-        return View::make('admin.order.index', ['orders' => null]);
+        return View::make('admin.order.index', [
+            'orders' => null,
+            'statuses' => OrderStatus::query()->orderBy('order', 'asc')->get(),
+        ]);
     }
 
     /**
@@ -112,6 +116,7 @@ class OrderController extends Controller
             [
                 'order' => $order,
                 'states' => Lang::get('states'),
+                'statuses' => OrderStatus::query()->orderBy('order', 'asc')->get(),
                 'productByCategory' => $categories,
                 'suspectIp' => $suspectIp,
                 'barcodeSrc' => $d->getBarcodeHTML($order->getKey(), 'EAN13', 3.5, 100),
@@ -239,6 +244,7 @@ class OrderController extends Controller
         $orderStatus = $request->get('order_status');
 
         $orders = Order::query()
+            ->with('orderStatus')
             ->when(
                 $orderStatus,
                 function ($q) use ($orderStatus) {

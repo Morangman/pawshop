@@ -13,6 +13,7 @@ return [
         'users' => 'Users',
         'tasks' => 'Tasks',
         'categories' => 'Categories',
+        'statuses' => 'Order statuses',
         'steps' => 'Steps',
         'tips' => 'Tips',
         'products' => 'Products',

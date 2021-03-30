@@ -14,5 +14,6 @@
 @section('content')
     <order-index
         :searched="{{ json_encode($orders, true) }}"
+        :statuses="{{ json_encode($statuses, true) }}"
     ></order-index>
 @endsection

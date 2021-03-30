@@ -4,6 +4,7 @@
         :model.sync="model"
         :products.sync="products"
         :states.sync="states"
+        :statuses.sync="statuses"
         :bcode.sync="bcode"
         :suspect.sync="suspect"
         :errors.sync="errors"
@@ -36,6 +37,10 @@
                 required: true,
             },
             states: {
+                type: Array,
+                required: true,
+            },
+            statuses: {
                 type: Object,
                 required: true,
             },

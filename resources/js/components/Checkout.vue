@@ -96,7 +96,7 @@
                                         <small>PayPal</small>
                                     </span>
                                 </label>
-                                <label v-on:click="selectPaymentZelle()" class="payment-radiobox" v-if="totalSumm > 500">
+                                <label v-on:click="selectPaymentZelle()" class="payment-radiobox">
                                     <input type="radio" name="payment-radios">
                                     <span>
                                         <img src="../../client/images/pay_zelle.png" alt="">
@@ -113,12 +113,15 @@
                                 <div v-if="paymentError" class="invalid-feedback">
                                     <strong>You must select the type of payment and confirm the mail</strong>
                                 </div>
+                                <div v-if="paymentZelleError" class="invalid-feedback">
+                                    <strong>Minimum payout amount from $500 for Zelle</strong>
+                                </div>
                             </div>
                         </div>
                         <div class="checkout-payment-content" v-if="orderData.payment.type === 1">
                             <p>We'll mail you a check once your item(s) have been received and verified by our team.</p>
                         </div>
-                        <div class="checkout-payment-content" v-if="orderData.payment.type === 2">
+                        <div class="checkout-payment-content" v-if="orderData.payment.type === 2 && !paymentZelleError">
                             <p>We'll credit your PayPal Email Address once your item(s) have been verified by our staff. Please note that PayPal charges a fee ($0.30 + 2.9%) to receive funds using their service.</p>
                             <div class="inputs-flex">
                                 <div class="input-block width-50">
@@ -129,7 +132,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="checkout-payment-content" v-if="orderData.payment.type === 3">
+                        <div class="checkout-payment-content" v-if="orderData.payment.type === 3 && !paymentZelleError">
                             <p>We'll credit your Zelle® account once your item(s) have been verified by our staff. Email address provided must be associated and linked with your Zelle® account to avoid any delays.</p>
                             <div class="inputs-flex">
                                 <div class="input-block width-50">
@@ -140,7 +143,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="checkout-payment-content" v-if="orderData.payment.type === 4">
+                        <div class="checkout-payment-content" v-if="orderData.payment.type === 4 && !paymentZelleError">
                             <p>We'll credit your Venmo® account once your item(s) have been verified by our staff. Email address provided must be associated and linked with your Venmo® account to avoid any delays.</p>
                             <div class="inputs-flex">
                                 <div class="input-block width-50">
@@ -369,6 +372,7 @@
                 password: null,
                 emailError: null,
                 paymentError: false,
+                paymentZelleError: false,
                 addressError: {
                     name: false,
                     phone: false,
@@ -459,6 +463,7 @@
 
             selectPaymentCheck() {
                 this.paymentError = false;
+                this.paymentZelleError = false;
 
                 this.orderData.payment.email = this.user.id ? this.user.email : this.orderData.user_email;
                 this.checkEmail = this.user.id ? this.user.email : this.orderData.user_email;
@@ -468,6 +473,7 @@
 
             selectPaymentPayPal() {
                 this.paymentError = false;
+                this.paymentZelleError = false;
 
                 this.orderData.payment.email = '';
                 this.checkEmail = '';
@@ -477,15 +483,21 @@
 
             selectPaymentZelle() {
                 this.paymentError = false;
+                this.paymentZelleError = false;
 
-                this.orderData.payment.email = '';
-                this.checkEmail = '';
-                this.orderData.payment.name = 'Zelle';
-                this.orderData.payment.type = 3;
+                if (this.totalSumm < 500) {
+                    this.paymentZelleError = true;
+                } else {
+                    this.orderData.payment.email = '';
+                    this.checkEmail = '';
+                    this.orderData.payment.name = 'Zelle';
+                    this.orderData.payment.type = 3;
+                }
             },
 
             selectPaymentVenmo() {
                 this.paymentError = false;
+                this.paymentZelleError = false;
 
                 this.orderData.payment.email = '';
                 this.checkEmail = '';
@@ -522,6 +534,7 @@
 
             validatePayment(){
                 this.paymentError = false;
+                this.paymentZelleError = false;
 
                 if (
                     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.orderData.payment.email) &&

@@ -158,7 +158,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <p style="color: #8aa621;">{{ statuses[order.ordered_status] }}</p>
+                                                <p :style="'color:' + status.color">{{ status.name }}</p>
                                             </td>
                                             <td>
                                                 <div class="price">${{ product.total }}</div>
@@ -230,7 +230,7 @@
                 required: true,
                 statuses: [],
             },
-            statuses: {
+            status: {
                 type: Object,
                 required: true,
             },

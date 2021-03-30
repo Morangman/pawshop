@@ -18,7 +18,7 @@
                         required
                     >
                         <option :value="null">{{ $t('admin.order.index.search.all') }}</option>
-                        <option v-for="(status, key) in $t('admin.order.order_statuses')" :value="key">{{ status }}</option>
+                        <option v-for="(status, key) in statuses" :value="status.id">{{ status.name }}</option>
                     </select>
                 </div>
                 <div class="col col-md-5">
@@ -110,7 +110,7 @@
                                     <td v-html="highlightSearchResult(order.address.name, filters.search)"></td>
                                     <td>{{ order.address.phone }}</td>
                                     <td>
-                                        {{ $t('admin.order.order_statuses.' + order.ordered_status) }}
+                                        <b :style="'color:' + order.order_status.color">{{ order.order_status.name }}</b>
                                     </td>
                                     <td>{{ normalizeDate(order.created_at) }}</td>
                                     <td>
@@ -148,6 +148,10 @@
         props: {
             searched: {
                 type: Object,
+                required: false,
+            },
+            statuses: {
+                type: Array,
                 required: false,
             },
         },

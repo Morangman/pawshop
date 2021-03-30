@@ -225,7 +225,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <p>{{ statuses[userOrder.ordered_status] }}</p>
+                                                <p :style="'color:' + userOrder.order_status.color">{{ userOrder.order_status.name }}</p>
                                             </td>
                                             <td>
                                                 <div class="price">${{ parseFloat(userOrder.total_summ).toFixed(2) }}</div>

@@ -211,7 +211,7 @@
                         <label>
                             <strong>{{ $t('admin.order.form.ordered_product') }}: <span v-if="model.id">{{ model.orders.length }}</span></strong>
                         </label>
-                        <div class="change-blocks-wrapper__item" v-for="(product, index) in model.orders.order">
+                        <div class="change-blocks-wrapper__item" v-for="(product, index) in model.orders.order" :key="`product__${index}`">
                                 <div class="text-right mb-2">
                                     <a href="#" class="text-danger" v-on:click="deleteOrderedProduct(index)" :title="$t('common.word.remove')">
                                         <i class="icon-bin"></i>
@@ -219,7 +219,7 @@
                                 </div>
                                 <div class="form-group">
                                     <select class="form-control selectpicker" v-model="product.id" required>
-                                        <option v-for="(item, index) in products" :value="item.id">{{ item.name }}</option>
+                                        <option v-for="(item, index) in products" :value="item.id" :key="`product_item__${index}`">{{ item.name }}</option>
                                     </select>
                                 </div>
                                 <div class="form-group row">
@@ -248,7 +248,21 @@
                                     </div>
                                 </div>
 
-                                <p><span v-for="(step, key) in product.steps">{{ key === Object.keys(product.steps).pop() ? step.value :  step.value + ', ' }}</span></p>
+                                <p>
+                                    <span v-for="(step, key) in product.steps" :key="`product_step__${key}`">
+                                        <div class="flex-row">
+                                            <label>
+                                                <strong>{{ step.step_name.name + ': ' }}</strong>
+                                            </label>
+                                            <input
+                                                name="step_name"
+                                                type="text"
+                                                v-model="step.value"
+                                                class="form-control flex-input"
+                                            >
+                                        </div>
+                                    </span>
+                                </p>
                         </div>
                         <div v-for="(error, i) in errors.orders"
                              :key="`orders_product__error__${i}`"
@@ -256,9 +270,18 @@
                         >
                             {{ error }}
                         </div>
-                        <label>
-                            <strong>{{ $t('admin.order.form.summ') }}: <span v-if="model.id">{{ parseFloat(model.total_summ).toFixed(2) }}</span></strong>
-                        </label>
+                        <div class="flex-row">
+                            <label>
+                                <strong>{{ $t('admin.order.form.summ') }}: </strong>
+                            </label>
+                            <input
+                                v-if="model.id"
+                                name="step_name"
+                                type="text"
+                                v-model="model.total_summ"
+                                class="form-control flex-input"
+                            >
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>
@@ -290,7 +313,7 @@
                             <strong>{{ $t('admin.order.form.ordered_status') }}</strong>
                         </label>
                         <select class="form-control" name="ordered_status" v-model="model.ordered_status" required :class="{ 'border-danger': errors.ordered_status }">
-                            <option v-for="(status, i) in $t('admin.order.order_statuses')" :value="i">{{ status }}</option>
+                            <option v-for="(status, i) in statuses" :key="`order_status__${i}`" :value="status.id">{{ status.name }}</option>
                         </select>
                         <div v-for="(error, i) in errors.ordered_status"
                              :key="`ordered_status_product__error__${i}`"
@@ -404,6 +427,10 @@
             },
             states: {
                 type: Object,
+                required: true,
+            },
+            statuses: {
+                type: Array,
                 required: true,
             },
             suspect: {

@@ -25803,6 +25803,46 @@ __webpack_require__.r(__webpack_exports__);
           "error": "No notifications found"
         }
       },
+      "order-status": {
+        "breadcrumbs": {
+          "index": "Order statuses",
+          "create": "Create status",
+          "edit": "Edit status"
+        },
+        "form": {
+          "name": "Name*",
+          "color": "Bage color",
+          "order": "Order"
+        },
+        "index": {
+          "title": "Order statuses",
+          "header_btn": "Create status",
+          "filters": {
+            "search": "Search statuses by typing one of these fields: name"
+          },
+          "table": {
+            "headers": {
+              "id": "ID",
+              "name": "Name",
+              "created_at": "Created date"
+            }
+          }
+        },
+        "create": {
+          "title": "Create status"
+        },
+        "edit": {
+          "title": "Edit status"
+        },
+        "delete": {
+          "title": "Delete status"
+        },
+        "messages": {
+          "create": "Status has been successfully created",
+          "update": "Status has been successfully updated",
+          "delete": "Status has been successfully deleted"
+        }
+      },
       "order": {
         "breadcrumbs": {
           "index": "Orders",
@@ -26277,6 +26317,7 @@ __webpack_require__.r(__webpack_exports__);
         "users": "Users",
         "tasks": "Tasks",
         "categories": "Categories",
+        "statuses": "Order statuses",
         "steps": "Steps",
         "tips": "Tips",
         "products": "Products",

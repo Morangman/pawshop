@@ -76,6 +76,15 @@ Route::group(
 
 Route::group(
     [
+        'as' => '.order-status',
+        'prefix' => 'order-status',
+        'middleware' => ['anyrole:admin|manager']
+    ],
+    __DIR__.'/admin/order-status.php'
+);
+
+Route::group(
+    [
         'as' => '.comment',
         'prefix' => 'comment',
         'middleware' => ['anyrole:admin|manager']

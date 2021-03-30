@@ -6,6 +6,7 @@ use App\Category;
 use App\Comment;
 use App\Faq;
 use App\Order;
+use App\OrderStatus;
 use App\Setting;
 use App\Step;
 use App\StepName;
@@ -97,6 +98,7 @@ class RouteServiceProvider extends ServiceProvider
             'stepName' => StepName::class,
             'media' => Media::class,
             'order' => Order::class,
+            'status' => OrderStatus::class,
             'comment' => Comment::class,
             'faq' => Faq::class,
             'task' => Task::class,

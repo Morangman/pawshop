@@ -336,7 +336,7 @@ class HomeController extends Controller
             'steps' => [],
             'relatedCategories' => $categories,
             'faqs' => new stdClass(),
-            'statuses' => Lang::get('admin/order.order_statuses'),
+            'status' => $order->orderStatus()->first(),
             'states' => Lang::get('states'),
         ]);
     }
@@ -364,7 +364,7 @@ class HomeController extends Controller
             'faqs' => new stdClass(),
             'states' => Lang::get('states'),
             'statuses' => Lang::get('admin/order.order_statuses'),
-            'orders' => Order::query()->where('user_id', Auth::id())->get() ?? [],
+            'orders' => Order::query()->where('user_id', Auth::id())->with('orderStatus')->get() ?? [],
             'tab' => $request->get('tab')
         ]);
     }

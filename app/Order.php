@@ -7,6 +7,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\Models\Media;
 
 /**
@@ -22,11 +23,6 @@ class Order extends Model implements HasMedia
     public const MEDIA_COLLECTION_UPS = 'ups';
 
     public const STATUS_NEW = 1;
-    public const STATUS_IN_PROCESS = 2;
-    public const STATUS_PAYMENT_EXPECTED = 3;
-    public const STATUS_COMPLETED = 4;
-    public const STATUS_POSTPONED = 5;
-    public const STATUS_CANCELED = 6;
 
     /**
      * @var string
@@ -68,6 +64,19 @@ class Order extends Model implements HasMedia
         'ordered_status' => 'int',
         'ip_address' => 'string',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function orderStatus(): BelongsTo
+    {
+        return $this->belongsTo(
+            OrderStatus::class,
+            'ordered_status',
+            'id',
+            'orderStatus'
+        );
+    }
 
     /**
      * @return array

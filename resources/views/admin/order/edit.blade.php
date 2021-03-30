@@ -21,5 +21,6 @@
         :products="{{ json_encode($productByCategory, true) }}"
         :suspect="{{ json_encode($suspectIp, true) }}"
         :states="{{ json_encode($states, true) }}"
+        :statuses="{{ json_encode($statuses, true) }}"
     ></order-edit>
 @endsection

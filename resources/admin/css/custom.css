@@ -79,6 +79,7 @@
 }
 
 .vue-swatches__container {
+    inset: auto!important;
     box-sizing: content-box;
 }
 
@@ -202,6 +203,18 @@
 }
 
 
-.steps-row p{
+.steps-row p{ 
     margin-right: 10px;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.flex-input {
+    max-width: 50%;
 }
