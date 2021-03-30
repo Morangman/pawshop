@@ -73,7 +73,7 @@ class LoginController extends Controller
             'faqs' => new stdClass(),
             'states' => Lang::get('states'),
             'statuses' => Lang::get('admin/order.order_statuses'),
-            'orders' => Order::query()->where('user_id', Auth::id())->get() ?? [],
+            'orders' => Order::query()->where('user_id', Auth::id())->with('orderStatus')->get() ?? [],
             'tab' => ''
         ]);
     }
@@ -155,7 +155,7 @@ class LoginController extends Controller
             'faqs' => new stdClass(),
             'states' => Lang::get('states'),
             'statuses' => Lang::get('admin/order.order_statuses'),
-            'orders' => Order::query()->where('user_id', Auth::id())->get() ?? [],
+            'orders' => Order::query()->where('user_id', Auth::id())->with('orderStatus')->get() ?? [],
             'tab' => ''
         ]);
     }
@@ -217,7 +217,7 @@ class LoginController extends Controller
             'faqs' => new stdClass(),
             'states' => Lang::get('states'),
             'statuses' => Lang::get('admin/order.order_statuses'),
-            'orders' => Order::query()->where('user_id', Auth::id())->get() ?? [],
+            'orders' => Order::query()->where('user_id', Auth::id())->with('orderStatus')->get() ?? [],
             'tab' => ''
         ]);
     }

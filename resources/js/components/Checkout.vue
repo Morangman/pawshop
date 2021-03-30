@@ -118,7 +118,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="checkout-payment-content" v-if="orderData.payment.type === 1">
+                        <div class="checkout-payment-content" v-if="orderData.payment.type === 1 && !paymentZelleError">
                             <p>We'll mail you a check once your item(s) have been received and verified by our team.</p>
                         </div>
                         <div class="checkout-payment-content" v-if="orderData.payment.type === 2 && !paymentZelleError">
@@ -534,7 +534,8 @@
 
             validatePayment(){
                 this.paymentError = false;
-                this.paymentZelleError = false;
+
+                if (!this.paymentZelleError)
 
                 if (
                     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.orderData.payment.email) &&
