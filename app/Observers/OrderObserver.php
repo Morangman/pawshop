@@ -67,12 +67,10 @@ class OrderObserver
                     }
 
                     if ($diff !== []) {
-                        try {
                             Mail::to($order->getAttribute('user_email'))
                                 ->send(new OrderChangeConfirmationMail(
                                     $order->toArray()
                                 ));
-                        } catch (\Exception $e) {}
     
                         $order->unsetEventDispatcher();
     
