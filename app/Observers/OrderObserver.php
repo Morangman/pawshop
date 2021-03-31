@@ -50,7 +50,7 @@ class OrderObserver
 
                 $diff = [];
 
-                if (isset($newValues['order'])) {
+                if ($key === "orders") {
                     foreach ($newValues['order'] as $keyOrder => $newOrder) {
                         foreach ($newOrder['steps'] as $keyStep => $step) {
                             if ($step['value'] !== $oldValues['order'][$keyOrder]['steps'][$keyStep]['value']) {
@@ -65,20 +65,20 @@ class OrderObserver
                             }
                         }
                     }
+
+                    if ($diff !== []) {
+                        try {
+                            Mail::to($order->getAttribute('user_email'))
+                                ->send(new OrderChangeConfirmationMail(
+                                    $order->toArray()
+                                ));
+                        } catch (\Exception $e) {}
+    
+                        $order->unsetEventDispatcher();
+    
+                        $order->update([$key => $newValues]);
+                    }
                 }
-
-                if ($diff !== []) {
-                    try {
-                        Mail::to($order->getAttribute('user_email'))
-                            ->send(new OrderChangeConfirmationMail(
-                                $order->toArray()
-                            ));
-                    } catch (\Exception $e) {}
-                }
-
-                $order->unsetEventDispatcher();
-
-                $order->update(['orders' => $newValues]);
             }
         }
     }
