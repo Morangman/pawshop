@@ -67,10 +67,33 @@ class OrderObserver
                     }
 
                     if ($diff !== []) {
+                        $insuranceSumm = 0;
+                        $totalSumm = 0;
+                        $expShipping = 20;
+                
+                        if ($order->getAttribute('insurance')) {
+                            foreach($order->getAttribute('orders')['order'] as $order) {
+                                $totalSumm += (float) $order['total'];
+                            }
+                
+                            if ($order->getAttribute('exp_service')) {
+                                $totalSumm -= $expShipping;
+                            }
+                
+                            $insuranceSumm = ($totalSumm * 1)/100;
+                        }
+                        
+                        try {
                             Mail::to($order->getAttribute('user_email'))
                                 ->send(new OrderChangeConfirmationMail(
-                                    $order->toArray()
+                                    array_merge(
+                                        $order->toArray(),
+                                        [
+                                            'insurance_summ' => $insuranceSumm,
+                                        ]
+                                    )
                                 ));
+                        } catch (\Exception $e) {}
     
                         $order->unsetEventDispatcher();
     
