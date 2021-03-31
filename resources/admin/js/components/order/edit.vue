@@ -76,7 +76,7 @@
                         },
                     },
                 ).then(() => {
-                    location.href = Router.route('admin.order.edit', { order: this.order.id });
+                    //location.href = Router.route('admin.order.edit', { order: this.order.id });
                 }).catch(({ response: { data: { errors } } }) => {
                     this.errors = errors;
                     this.scrollToError();
