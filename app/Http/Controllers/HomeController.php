@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use App\Mail\OrderConfirmationMail;
+use App\Notifications\OrderConfirmNotification;
 use Illuminate\Support\Facades\Mail;
 use Lang;
 use Session;
@@ -312,6 +313,43 @@ class HomeController extends Controller
             'steps' => [],
             'relatedCategories' => $categories,
             'faqs' => new stdClass(),
+        ]);
+    }
+
+    /**
+     * @param \App\Order $order
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function confirmOrder(Order $order): ViewContract
+    {
+        Notification::send(
+            User::query()->scopes(['notifiableUsers'])->get(),
+            new OrderConfirmNotification($order->toArray())
+        );
+
+        $order->unsetEventDispatcher();
+
+        $order->forceFill([
+            'orders->confirmed' => Order::STATUS_CONFIRMED
+        ])->save();
+
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
+
+        return View::make('thanks', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'order' => $order,
+            'category' => new stdClass(),
+            'steps' => [],
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
+            'status' => $order->orderStatus()->first(),
+            'states' => Lang::get('states'),
         ]);
     }
 

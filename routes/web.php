@@ -43,6 +43,8 @@ Route::get('/get-category/{slug}', 'HomeController@getByCategory')->name('get-ca
 
 Route::get('/order/{order}/thanks', 'HomeController@thanks')->name('thanks');
 
+Route::get('/order/{order}/confirm-order', 'HomeController@confirmOrder')->name('confirm-order');
+
 Route::get('/{order}/fedex-label', 'HomeController@getFedexLabel')->name('fedex-label');
 
 Route::get('/redirect-google', 'Auth\LoginController@redirectToGoogleProvider')->name('redirect-google');

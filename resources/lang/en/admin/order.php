@@ -66,6 +66,11 @@ return [
     'order_statuses' => [
         Order::STATUS_NEW => 'New order',
     ],
+    'confirm_statuses' => [
+        Order::STATUS_CHANGED => 'Changed',
+        Order::STATUS_NOT_CONFIRMED => 'Pending decision',
+        Order::STATUS_CONFIRMED => 'Confirmed',
+    ],
     'create' => [
         'title' => 'Create order',
     ],

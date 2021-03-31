@@ -37,11 +37,11 @@
                 required: true,
             },
             states: {
-                type: Array,
+                type: Object,
                 required: true,
             },
             statuses: {
-                type: Object,
+                type: Array,
                 required: true,
             },
             suspect: {

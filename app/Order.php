@@ -24,6 +24,10 @@ class Order extends Model implements HasMedia
 
     public const STATUS_NEW = 1;
 
+    public const STATUS_CHANGED = 1;
+    public const STATUS_NOT_CONFIRMED = 1;
+    public const STATUS_CONFIRMED = 2;
+
     /**
      * @var string
      */

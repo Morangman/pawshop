@@ -322,6 +322,13 @@
                             {{ error }}
                         </div>
                     </div>
+                    <div class="flex-row" v-if="model.orders.changed">
+                        <label>
+                            <strong>Approval of changes:</strong>
+                        </label>
+                        <a v-if="parseInt(model.orders.confirmed) === 2"><p style="color:green;">{{ $t('admin.order.confirm_statuses.' + model.orders.confirmed) }} <i class="icon-checkmark"></i></p></a>
+                        <a v-if="parseInt(model.orders.confirmed) === 1"><p style="color:red;">{{ $t('admin.order.confirm_statuses.' + model.orders.confirmed) }} <i class="icon-hour-glass"></i></p></a>
+                    </div>
                     <div class="text-center date-centered">
                         <table class="table table-bordered table-t5px-b10px">
                             <tbody><tr class="w-50percent text-333 small">

@@ -25902,12 +25902,11 @@ __webpack_require__.r(__webpack_exports__);
           }
         },
         "order_statuses": {
-          "1": "New order",
-          "2": "In work",
-          "3": "Payment expected",
-          "4": "Successfully completed",
-          "5": "The decision is postponed",
-          "6": "Canceled"
+          "1": "New order"
+        },
+        "confirm_statuses": {
+          "1": "Pending decision",
+          "2": "Confirmed"
         },
         "create": {
           "title": "Create order"
