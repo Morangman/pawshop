@@ -72,8 +72,8 @@ class OrderObserver
                         $expShipping = 20;
                 
                         if ($order->getAttribute('insurance')) {
-                            foreach($order->getAttribute('orders')['order'] as $order) {
-                                $totalSumm += (float) $order['total'];
+                            foreach($order->getAttribute('orders')['order'] as $orderData) {
+                                $totalSumm += (float) $orderData['total'];
                             }
                 
                             if ($order->getAttribute('exp_service')) {
