@@ -111,9 +111,11 @@ class UserController extends Controller
     {
         $order = Order::query()->where('user_id', $user->getKey())->first();
                 
-        DB::table('order_device')->where('order_id', $order->getKey())->delete();
+        if ($order) {
+            DB::table('order_device')->where('order_id', $order->getKey())->delete();
 
-        $order->delete();
+            $order->delete();
+        }
 
         $user->delete();
 
