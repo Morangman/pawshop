@@ -41,13 +41,29 @@ class CategoryController extends Controller
      */
     public function create(): ViewContract
     {
+        $stepsByName = [];
+
+        foreach (StepName::all() as $stepName) {
+            $stepsByName[] = array_merge(
+                $stepName->toArray(),
+                [
+                    'items' => Step::query()->where('name_id', $stepName->getKey())->get()->toArray(),
+                    'items_variations' => Step::query()->where('name_id', $stepName->getKey())->get()->toArray(),
+                ]
+            );
+        }
+
         return View::make('admin.category.create', [
+            'category' => null,
             'categories' => Category::query()
                 ->whereNull('custom_text')
                 ->whereNull('subcategory_id')
                 ->get(),
             'faqs' => Faq::all(),
-            'steps' => Step::all(),
+            'steps' => $stepsByName,
+            'categorysteps' => [],
+            'prices' => [],
+            'premiumPrices' => [],
         ]);
     }
 
@@ -61,15 +77,43 @@ class CategoryController extends Controller
     {
         $category = Category::create($request->all());
 
-        if ($steps = $request->get('steps')) {
+        if ($requestSteps = $request->get('steps')) {
             $stepsIds = [];
-            foreach ($steps as $step) {
-                $stepsIds[] = $step['id'];
+            foreach ($requestSteps as $step) {
+                foreach ($step['items'] as $item) {
+                    $stepsIds[] = $item['id'];
+                }
             }
 
             $steps = Step::find($stepsIds);
 
             $category->steps()->attach($steps);
+
+            $attributes = [];
+
+            foreach ($requestSteps as $step) {
+                foreach ($step['items'] as $item) {
+                    $attributes[$step['id']][] = [
+                        'id' => $item['id']
+                    ];
+                }
+            }
+    
+            $combinations = $this->array_cartesian_product($attributes);
+
+            foreach ($combinations as $combination) {
+                $combinationIds = [];
+                foreach ($combination as $item) {
+                    $combinationIds[] = (int) $item['id'];
+                }
+
+                DB::table('prices')->insert([
+                    'category_id' => $category->getKey(),
+                    'steps_ids' => json_encode($combinationIds),
+                    'price' => 0,
+                    'is_parsed' => 1,
+                ]);              
+            }
         }
 
         $this->handleDocuments($request, $category);
@@ -100,7 +144,8 @@ class CategoryController extends Controller
         foreach ($pricesByCategory as $price) {
             $priceVariations[] = [
                 'steps' => Step::query()->whereIn('id', json_decode($price->steps_ids))->get()->toArray(),
-                'price' => $price->price
+                'price' => $price->price,
+                'id' => $price->id,
             ];
         }
 
@@ -181,10 +226,12 @@ class CategoryController extends Controller
     {
         $category = Category::query()->where('slug', $slug)->first();
 
-        if ($steps = $request->get('steps')) {
+        if ($requestSteps = $request->get('steps')) {
             $stepsIds = [];
-            foreach ($steps as $step) {
-                $stepsIds[] = $step['id'];
+            foreach ($requestSteps as $step) {
+                foreach ($step['items'] as $item) {
+                    $stepsIds[] = $item['id'];
+                }
             }
 
             $steps = Step::find($stepsIds);
@@ -205,6 +252,101 @@ class CategoryController extends Controller
     }
 
     /**
+     * @param \Illuminate\Http\Request $request
+     * @param string $slug
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function generatePricesVariations(Request $request, string $slug): JsonResponse
+    {
+        $category = Category::query()->where('slug', $slug)->first();
+
+        DB::table('prices')->where('category_id', $category->getKey())->delete();
+
+        $attributes = [];
+
+        foreach ($category->steps()->get()->toArray() as $step) {
+            $nameId = Step::query()->whereKey((int) $step['id'])->first()->getAttribute('name_id');
+
+            $attributes[$nameId][] = [
+                'id' => (int) $step['id']
+            ];
+        }
+
+        $combinations = $this->array_cartesian_product($attributes);
+
+        foreach ($combinations as $combination) {
+            $combinationIds = [];
+            foreach ($combination as $item) {
+                $combinationIds[] = $item['id'];
+            }
+
+            DB::table('prices')->insert([
+                'category_id' => $category->getKey(),
+                'steps_ids' => json_encode($combinationIds),
+                'price' => 0,
+                'is_parsed' => 1,
+            ]);              
+        }
+
+        Session::flash(
+            'success',
+            Lang::get('admin/category.messages.update')
+        );
+
+        return $this->json()->noContent();
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param string $slug
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updatePrice(Request $request, string $slug): JsonResponse
+    {
+        $category = Category::query()->where('slug', $slug)->first();
+
+        if ($price = $request->get('price')) {
+            DB::table('prices')->where('id', (int) $request->get('id'))->where('category_id', $category->getKey())->update([
+                'price' => (float) $price
+            ]);
+        }
+
+        Session::flash(
+            'success',
+            Lang::get('admin/category.messages.update')
+        );
+
+        return $this->json()->noContent();
+    }
+
+        /**
+     * @param \Illuminate\Http\Request $request
+     * @param string $slug
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updatePremiumPrice(Request $request, string $slug): JsonResponse
+    {
+        $category = Category::query()->where('slug', $slug)->first();
+
+        if ($id = $request->get('id')) {
+            DB::table('premium_price')->where('id', (int) $id)->where('step_id', (int) $request->get('step_id'))->where('category_id', $category->getKey())->update([
+                'price_plus' => (float) $request->get('price_plus'),
+                'price_percent' => (float) $request->get('price_percent'),
+            ]);
+        }
+
+        Session::flash(
+            'success',
+            Lang::get('admin/category.messages.update')
+        );
+
+        return $this->json()->noContent();
+    }
+
+    /**
      * @param string $slug
      *
      * @return \Illuminate\Http\JsonResponse
@@ -214,6 +356,10 @@ class CategoryController extends Controller
     public function delete(string $slug): JsonResponse
     {
         $category = Category::query()->where('slug', $slug)->first();
+        
+        DB::table('category_step')->where('category_id', $category->getKey())->delete();
+
+        DB::table('prices')->where('category_id', $category->getKey())->delete();
 
         $category->delete();
 
@@ -284,5 +430,46 @@ class CategoryController extends Controller
 
             $category->update(['image' => $media->getFullUrl()]);
         }
+    }
+
+    function array_cartesian_product($arrays)
+    {
+        $result = array();
+        $arrays = array_values($arrays);
+        $sizeIn = sizeof($arrays);
+        $size = $sizeIn > 0 ? 1 : 0;
+        foreach ($arrays as $array)
+            $size = $size * sizeof($array);
+        for ($i = 0; $i < $size; $i ++)
+        {
+            $result[$i] = array();
+            for ($j = 0; $j < $sizeIn; $j ++)
+                array_push($result[$i], current($arrays[$j]));
+            for ($j = ($sizeIn -1); $j >= 0; $j --)
+            {
+                if (next($arrays[$j]))
+                    break;
+                elseif (isset ($arrays[$j]))
+                    reset($arrays[$j]);
+            }
+        }
+        return $result;
+    }
+
+    function maxValueInArray($array, $keyToSearch)
+    {
+        $currentMax = NULL;
+        foreach($array as $arr)
+        {
+            foreach($arr as $key => $value)
+            {
+                if ($key == $keyToSearch && ($value >= $currentMax))
+                {
+                    $currentMax = $value;
+                }
+            }
+        }
+
+        return $currentMax;
     }
 }

@@ -32,6 +32,21 @@ Route::patch('{slug}', [
     'uses' => 'CategoryController@update',
 ]);
 
+Route::post('{slug}/update-price', [
+    'as' => '.update-price',
+    'uses' => 'CategoryController@updatePrice',
+]);
+
+Route::post('{slug}/update-premium', [
+    'as' => '.update-premium',
+    'uses' => 'CategoryController@updatePremiumPrice',
+]);
+
+Route::post('{slug}/generate-prices', [
+    'as' => '.generate-prices',
+    'uses' => 'CategoryController@generatePricesVariations',
+]);
+
 Route::get('{slug}', [
     'as' => '.get',
     'uses' => 'CategoryController@get',

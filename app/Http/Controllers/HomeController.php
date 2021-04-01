@@ -552,7 +552,15 @@ class HomeController extends Controller
                 }
             }
 
-            if (isset($step['slug']) && isset($step['attribute'])) {
+            if ($category->getAttribute('is_parsed')) {
+                if (isset($step['slug']) && isset($step['attribute'])) {
+                    $id = $step['id'];
+                    if ($step['value'] === 'Flawless') {
+                        $id = Step::query()->where('value', 'Brand New')->first()->getKey();
+                    }
+                    $ids[] = $id;
+                }
+            } else {
                 $id = $step['id'];
                 if ($step['value'] === 'Flawless') {
                     $id = Step::query()->where('value', 'Brand New')->first()->getKey();

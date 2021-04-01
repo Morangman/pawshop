@@ -158,7 +158,7 @@
                             <h1>{{ $t('admin.category.form.steps') }}</h1>
                         </strong>
                         <div class="form-group">
-                            <div class="change-blocks-wrapper__item" v-for="(item, index) in categorysteps" :key="`step__${index}`">
+                            <div class="change-blocks-wrapper__item" v-for="(item, index) in stepsByCategory" :key="`step__${index}`">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="text-right">
@@ -175,7 +175,7 @@
                                                         <strong>{{ $t('admin.category.form.select_step') }}</strong>
                                                     </label>
                                                     <model-list-select :list="steps"
-                                                                       v-model="categorysteps[index]"
+                                                                       v-model="stepsByCategory[index]"
                                                                        option-value="id"
                                                                        :custom-text="name"
                                                                         placeholder="select item">
@@ -188,7 +188,7 @@
                                                 <div class="form-group">
                                                     <multiselect
                                                         v-model="item.items"
-                                                        :options="item.items_variations"
+                                                        :options="item.items_variations ? item.items_variations : []"
                                                         :multiple="true"
                                                         class="multiselect1"
                                                         :close-on-select="true"
@@ -232,14 +232,23 @@
                                     class="form-control"
                                 >
                             </div>
+                            <div class="form-group row">
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary"
+                                    v-on:click="updatePrice(price)"
+                                >
+                                    Update price
+                                </button>
+                            </div>
                         </div>
                     </div>
 
-                   <div class="form-group">
+                   <div class="form-group" v-if="premiumPrices.length">
                         <strong>
                             <h1>Premium prices</h1>
                         </strong>
-                        <div class="change-blocks-wrapper__item" v-for="(price, index) in premiumprices" :key="`premium_price__${index}`">
+                        <div class="change-blocks-wrapper__item" v-for="(price, index) in premiumPrices" :key="`premium_price__${index}`">
                             <div class="form-group row flex flex-row steps-row">
                                 <p>{{ price.step_name }}</p>
                             </div>
@@ -263,6 +272,15 @@
                                     class="form-control"
                                 >
                             </div>
+                            <div class="form-group row">
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary"
+                                    v-on:click="updatePremiumPrice(price)"
+                                >
+                                    Update premium price
+                                </button>
+                            </div>
                         </div>
                     </div>   
                 </div>
@@ -275,6 +293,15 @@
                         @click.prevent="deleteCategory"
                     >
                         {{ $t('common.word.delete') }}
+                    </button>
+                </template>
+                <template v-if="model.id">
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        @click.prevent="generatePrices"
+                    >
+                        Generate prices variations
                     </button>
                 </template>
                 <button
@@ -340,6 +367,8 @@
                 categoryPreviewImage: null,
                 stepsByCategory: [],
                 priceVariations: [],
+                premiumPrices: [],
+                pricesData: {},
             };
         },
 
@@ -353,7 +382,75 @@
         },
 
         methods: {
+            updatePrice(data) {
+                this.formData = new FormData();
+                this.formData.set('_method', 'POST');
+
+                this.collectFormData(data);
+
+                axios.post(
+                    Router.route('admin.category.update-price', { slug: this.model.slug }),
+                    this.formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then(() => {
+                    notify.success(
+                        'Price was be updated'
+                    );
+                }).catch(({ response: { data: { errors } } }) => {
+                    notify.success(
+                        errors
+                    );
+                });
+            },
+
+            updatePremiumPrice(data) {
+                this.formData = new FormData();
+                this.formData.set('_method', 'POST');
+
+                this.collectFormData(data);
+
+                axios.post(
+                    Router.route('admin.category.update-premium', { slug: this.model.slug }),
+                    this.formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then(() => {
+                    notify.success(
+                        'Premium price was be updated'
+                    );
+                }).catch(({ response: { data: { errors } } }) => {
+                    notify.success(
+                        errors
+                    );
+                });
+            },
+
+            generatePrices() {
+                axios.post(
+                    Router.route('admin.category.generate-prices', { slug: this.model.slug }),
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then(() => {
+                    location.href = Router.route('admin.category.edit', { slug: this.model.slug });
+                }).catch(({ response: { data: { errors } } }) => {
+                    notify.success(
+                        errors
+                    );
+                });
+            },
+
             debouncedRefresh() {
+                this.model.steps = this.stepsByCategory;
                 this.$forceUpdate();
             },
 
@@ -362,7 +459,7 @@
             },
 
             addStep() {
-                this.categorysteps.push({
+                this.stepsByCategory.push({
                     id: null,
                 });
 
@@ -370,7 +467,7 @@
             },
 
             deleteStep(index) {
-                this.categorysteps.splice(index, 1);
+                this.stepsByCategory.splice(index, 1);
 
                 this.$forceUpdate();
             },
@@ -410,8 +507,8 @@
                 this.model.is_hidden = Number(this.model.is_hidden);
 
                 this.stepsByCategory = this.categorysteps;
-            } else {
-                this.categorysteps = [];
+
+                this.premiumPrices = this.premiumprices;
             }
 
             this.categoryPreviewImage = this.model.image;
