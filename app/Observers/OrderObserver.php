@@ -45,7 +45,7 @@ class OrderObserver
         
         foreach ($order->getAttributes() as $key => $value) {
             if (!$order->originalIsEquivalent($key, $value)) {
-                $oldValues = json_decode($order->getOriginal($key), true);
+                $oldValues = is_int($order->getOriginal($key)) ? $order->getOriginal($key) : json_decode($order->getOriginal($key), true);
                 $newValues = json_decode($value, true);
 
                 $diff = [];
