@@ -220,31 +220,45 @@
                         <strong>
                             <h1>Price variations</h1>
                         </strong>
-                        <div class="change-blocks-wrapper__item" v-for="(price, index) in priceVariations" :key="`variation__${index}`">
-                            <div class="form-group row">
-                            <div class="flex flex-row steps-row">
-                                <p v-for="(step, index) in price.steps" :key="`step_price__${index}`">{{ step.value }}</p>
-                            </div>
-                                <input
-                                    name="slug"
-                                    type="text"
-                                    v-model="price.price"
-                                    class="form-control"
-                                >
-                            </div>
-                            <div class="form-group row">
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary"
-                                    v-on:click="updatePrice(price)"
-                                >
-                                    Update price
-                                </button>
-                            </div>
-                        </div>
+                        <input
+                            name="price_for_broken"
+                            type="text"
+                            class="col-md-6 form-control"
+                            placeholder="Search by step name"
+                            v-model="searchText"
+                            v-on:input="serachPriceByStepName"
+                        >
+                        <table class="table">
+                        <thead>
+                            <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Steps</th>
+                            <th scope="col">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(price, index) in priceVariations" :key="`variation__${index}`">
+                                <th scope="row"> {{ price.id }} </th>
+                                <td>
+                                    <div class="flex flex-row steps-row">
+                                        <p v-for="(step, index) in price.steps" :key="`step_price__${index}`">{{ step.value }}</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input
+                                        name="slug"
+                                        type="text"
+                                        v-model="price.price"
+                                        class="form-control"
+                                        v-on:input="updatePrice(price)"
+                                    >
+                                </td>
+                            </tr>
+                        </tbody>
+                        </table>
                     </div>
 
-                   <div class="form-group" v-if="premiumPrices.length">
+                    <div class="form-group" v-if="premiumPrices.length">
                         <strong>
                             <h1>Premium prices</h1>
                         </strong>
@@ -282,7 +296,7 @@
                                 </button>
                             </div>
                         </div>
-                    </div>   
+                    </div>
                 </div>
             </div>
             <div class="text-right">
@@ -369,6 +383,7 @@
                 priceVariations: [],
                 premiumPrices: [],
                 pricesData: {},
+                searchText: null,
             };
         },
 
@@ -382,6 +397,22 @@
         },
 
         methods: {
+            serachPriceByStepName() {
+                if (this.searchText) {
+                    this.priceVariations = [];
+
+                    _.each(this.prices, (price, key) => {
+                        _.each(price.steps, (step, i) => {
+                            if (step.value.includes(this.searchText)) {
+                                this.priceVariations.push(price);
+                            }
+                        });
+                    });
+                } else {
+                    this.priceVariations = this.prices;
+                }
+            },
+
             updatePrice(data) {
                 this.formData = new FormData();
                 this.formData.set('_method', 'POST');
