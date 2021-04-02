@@ -217,6 +217,7 @@ class OrderController extends Controller
     public function search(Request $request): ViewContract
     {
         $orders = Order::query()
+            ->with('orderStatus')
             ->when(
                 $request->get('search'),
                 function ($query, $search) {
@@ -229,7 +230,10 @@ class OrderController extends Controller
             )
             ->paginate(20);
 
-        return View::make('admin.order.index', ['orders' => $orders]);
+        return View::make('admin.order.index', [
+            'orders' => $orders,
+            'statuses' => OrderStatus::query()->orderBy('order', 'asc')->get(),
+        ]);
     }
 
     /**

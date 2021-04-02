@@ -45,8 +45,9 @@
                     <li><a href="{{ URL::route('terms') }}" data-title="Mobile Service">Terms and Conditions </a></li>
                 </ul>
                 <ul>
-                    <li class="title">Our Address</li>
+                    <li class="title">Our Contacts</li>
                     <li class="location"><img src="{{ asset('client/images/marker_white.png') }}" alt="" /><a href="https://www.google.com/maps/place/33.335524625196314, -111.91218306985526" target="_blank">1730 E Warner Rd, Suite 7, Tempe, AZ 85284</a></li>
+                    <li class="location"><img src="{{ asset('client/images/phone.svg') }}" alt="" /><a href="tel:+16025546313">+1 (602) 554-6313</a></li>
                 </ul>
                 <ul>
                     @foreach($categories as $category)
