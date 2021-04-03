@@ -3038,6 +3038,22 @@ h2 {
     display: flex;
 }
 
+.device-preloader {
+  display: flex;
+  justify-content: center;
+  margin-top: 150px;
+  margin-bottom: 150px;
+}
+
+.device-preloader svg{
+  width: 120px;
+  height: auto;
+}
+
+[v-cloak] {
+  display:none
+}
+
 @media screen and (max-width: 700px){
     .box{
         width: 100%;

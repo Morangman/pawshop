@@ -250,7 +250,7 @@
                                         type="text"
                                         v-model="price.price"
                                         class="form-control"
-                                        v-on:input="updatePrice(price)"
+                                        v-on:keyup.enter="updatePrice(price)"
                                     >
                                 </td>
                             </tr>

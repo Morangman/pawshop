@@ -7,12 +7,20 @@
         <!-- ========= order-section ============ -->
         <section class="order-section">
             <div class="container">
-                <sell-device
-                    :category="{{ json_encode($category) }}"
-                    :steps="{{ json_encode($steps) }}"
-                    :categories="{{ json_encode($relatedCategories) }}"
-                    :faqs="{{ json_encode($faqs) }}"
-                ></sell-device>
+                <div v-cloak>
+                    <sell-device
+                        :category="{{ json_encode($category) }}"
+                        :steps="{{ json_encode($steps) }}"
+                        :categories="{{ json_encode($relatedCategories) }}"
+                        :faqs="{{ json_encode($faqs) }}"
+                    ></sell-device>
+                  </div>
+                  
+                  <div v-if="!$data">
+                    <div class="device-preloader">
+                        <p>LOADING...</p>
+                    </div>
+                  </div>
             </div>
         </section>
     </div>
