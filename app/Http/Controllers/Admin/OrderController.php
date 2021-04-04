@@ -295,11 +295,11 @@ class OrderController extends Controller
         
         $expShipping = 20;
 
-        if ($data['exp_service']) {
+        if (isset($data['exp_service'])) {
             (float) $orderTotalSumm -= $expShipping;
         }
 
-        if ($data['insurance']) {
+        if (isset($data['insurance'])) {
             (float) $orderTotalSumm -= ((float) $orderTotalSumm  * 1)/100;
         }
 
