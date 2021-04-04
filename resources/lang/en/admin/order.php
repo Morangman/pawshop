@@ -28,6 +28,7 @@ return [
         'created_at' => 'Created date',
         'updated_at' => 'Updated date',
         'summ' => 'The amount of ordered products',
+        'custom_summ' => 'Custom amount of ordered products',
         'order_number' => 'Order number',
         'add_suspect_ip' => 'Add an IP address to the suspect',
         'suspect_ip' => 'The IP address is marked as suspicious',

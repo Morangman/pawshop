@@ -213,7 +213,7 @@
                         </label>
                         <div class="change-blocks-wrapper__item" v-for="(product, index) in model.orders.order" :key="`product__${index}`">
                                 <div class="text-right mb-2">
-                                    <a href="#" class="text-danger" v-on:click="deleteOrderedProduct(index)" :title="$t('common.word.remove')">
+                                    <a href="javascript:void(0)" class="text-danger" v-on:click="deleteOrderedProduct(index)" :title="$t('common.word.remove')">
                                         <i class="icon-bin"></i>
                                     </a>
                                 </div>
@@ -254,12 +254,11 @@
                                             <label>
                                                 <strong>{{ step.step_name.name + ': ' }}</strong>
                                             </label>
-                                            <input
-                                                name="step_name"
-                                                type="text"
-                                                v-model="step.value"
-                                                class="form-control flex-input"
-                                            >
+                                            <select class="form-control flex-input" v-model="step.id">
+                                                <optgroup v-for="(sortedStep, index) in steps" :key="`sorted_product_step__${index}`" :label="index">
+                                                    <option v-for="(step, index) in sortedStep" :key="`step_product_step__${index}`" :value="step.id">{{ step.value }}</option>
+                                                </optgroup>
+                                            </select>
                                         </div>
                                     </span>
                                 </p>
@@ -276,9 +275,21 @@
                             </label>
                             <input
                                 v-if="model.id"
-                                name="step_name"
+                                name="total_summ"
                                 type="text"
                                 v-model="model.total_summ"
+                                class="form-control flex-input"
+                            >
+                        </div>
+                        <div class="flex-row">
+                            <label>
+                                <strong>{{ $t('admin.order.form.custom_summ') }}: </strong>
+                            </label>
+                            <input
+                                v-if="model.id"
+                                name="custom_summ"
+                                type="text"
+                                v-model="model.custom_summ"
                                 class="form-control flex-input"
                             >
                         </div>
@@ -432,6 +443,10 @@
                 type: Array,
                 required: true,
             },
+            steps: {
+                type: Object,
+                required: true,
+            },
             states: {
                 type: Object,
                 required: true,
@@ -505,12 +520,10 @@
             },
 
             deleteOrderedProduct(index) {
-                this.model.ordered_product.splice(index, 1);
-                this.selectedOrderedProduct.splice(index, 1);
-                this.selectedOrderedProductColor.splice(index, 1);
+                this.model.orders.order.splice(index, 1);
 
-                if (this.selectedOrderedProduct.length < 1) {
-                    this.model.ordered_product = [];
+                if (this.model.orders.order.length < 1) {
+                    this.model.orders.order = [];
                 }
 
                 this.summOrderedProducts();

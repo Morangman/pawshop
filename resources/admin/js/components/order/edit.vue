@@ -3,6 +3,7 @@
         v-if="model"
         :model.sync="model"
         :products.sync="products"
+        :steps.sync="steps"
         :states.sync="states"
         :statuses.sync="statuses"
         :bcode.sync="bcode"
@@ -34,6 +35,10 @@
             },
             products: {
                 type: Array,
+                required: true,
+            },
+            steps: {
+                type: Object,
                 required: true,
             },
             states: {

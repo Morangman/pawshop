@@ -22,5 +22,6 @@
         :suspect="{{ json_encode($suspectIp, true) }}"
         :states="{{ json_encode($states, true) }}"
         :statuses="{{ json_encode($statuses, true) }}"
+        :steps="{{ json_encode($steps, true) }}"
     ></order-edit>
 @endsection

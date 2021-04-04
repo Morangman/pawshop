@@ -10,7 +10,10 @@ use App\Http\Requests\Admin\Order\StoreRequest;
 use App\Http\Requests\Admin\Order\UpdateRequest;
 use App\Order;
 use App\OrderStatus;
+use App\Price;
 use App\Reminder;
+use App\Step;
+use App\StepName;
 use App\SuspectIp;
 use App\User;
 use Carbon\Carbon;
@@ -109,6 +112,14 @@ class OrderController extends Controller
             ->whereNotNull('subcategory_id')
             ->get();
 
+        $steps = Step::query()->with('stepName')->get();
+
+        $sortedSteps = [];
+
+        foreach ($steps->toArray() as $step) {
+            $sortedSteps[$step['step_name']['name']][] = $step;
+        }
+
         $suspectIp = SuspectIp::query()->where('ip_address', $order->getAttribute('ip_address'))->get();
 
         return View::make(
@@ -120,6 +131,7 @@ class OrderController extends Controller
                 'productByCategory' => $categories,
                 'suspectIp' => $suspectIp,
                 'barcodeSrc' => $d->getBarcodeHTML($order->getKey(), 'EAN13', 3.5, 100),
+                'steps' => $sortedSteps,
             ]
         );
     }
@@ -142,15 +154,15 @@ class OrderController extends Controller
 
     /**
      * @param \App\Http\Requests\Admin\Order\UpdateRequest $request
-     * @param \App\Order $order
+     * @param \App\Order $model
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(UpdateRequest $request, Order $order): JsonResponse
+    public function update(UpdateRequest $request, Order $model): JsonResponse
     {
         if ($remindData = $request->get('reminder')) {
             Reminder::query()->create([
-                'order_id' => $order->getKey(),
+                'order_id' => $model->getKey(),
                 'user_id' => Auth::id(),
                 'email' => Auth::user()->getAttribute('email'),
                 'title' => $remindData['title'] ?? Lang::get('admin/order.reminder.title'),
@@ -161,12 +173,143 @@ class OrderController extends Controller
 
         if ($suspectIp = $request->get('suspect_ip')) {
             SuspectIp::query()->create([
-                'order_id' => $order->getKey(),
+                'order_id' => $model->getKey(),
                 'ip_address' => $suspectIp,
             ]);
         }
 
-        $order->update($request->all());
+        $data = $request->post();
+
+        $orderTotalSumm = 0;
+
+        foreach($data['orders']['order'] as $key => $order) {
+            $ids = [];
+
+            $category = Category::query()->whereKey($order['device']['id'])->first();
+
+            $addToPrice = 0;
+
+            $addPercent = 0;
+    
+            $isBroken = false;
+
+            foreach($order['steps'] as $i => $step) {
+                $step = Step::query()->whereKey($step['id'])->with('stepName')->first()->toArray();
+
+                $data['orders']['order'][$key]['steps'][$i] = $step;
+
+                $premiumPrice = DB::table('premium_price')
+                    ->where('step_id', $step['id'])
+                    ->where('category_id', $order['device']['id'])
+                    ->first();
+
+                if ($step['value'] === 'Brand New') {
+                    if ($category) {
+                        foreach ($category->steps()->get() as $stepItem) {
+                            if ($stepItem->stepName->is_checkbox) {
+                                $premiumPriceForAccesory = DB::table('premium_price')
+                                    ->where('step_id', $stepItem->getKey())
+                                    ->where('category_id', $order['device']['id'])
+                                    ->first();
+
+                                $addToPrice += $premiumPriceForAccesory->price_plus;
+                            }
+                        }
+                    }
+                }
+
+                if ($premiumPrice) {
+                    if ($pricePlus = $premiumPrice->price_plus) {
+                        $addToPrice += $pricePlus;
+                    }
+
+                    if ($percentPlus = $premiumPrice->price_percent) {
+                        $addPercent += $percentPlus;
+                    }
+                }
+
+                $stepCategory = StepName::query()->whereKey($step['name_id'])->first();
+
+                if ($stepCategory->getAttribute('is_functional')) {
+                    if ($step['value'] === 'No') {
+                        $isBroken = true;
+                    }
+                }
+
+                if ($category->getAttribute('is_parsed')) {
+                    if (isset($step['slug']) && isset($step['attribute'])) {
+                        $id = $step['id'];
+                        if ($step['value'] === 'Flawless') {
+                            $id = Step::query()->where('value', 'Brand New')->first()->getKey();
+                        }
+                        $ids[] = $id;
+                    }
+                } else {
+                    $id = $step['id'];
+                    if ($step['value'] === 'Flawless') {
+                        $id = Step::query()->where('value', 'Brand New')->first()->getKey();
+                    }
+                    $ids[] = $id;
+                }
+            }
+
+            $resultPrice = 0;
+
+            $prices = Price::query()->where('category_id', $order['device']['id'])->get();
+    
+            foreach ($prices as $price) {
+                if ( $price->getAttribute('is_parsed')) {
+                    $similar = array_intersect($ids, $price->getAttribute('steps_ids'));
+    
+                    if (sizeof($ids) === sizeof($similar)) {
+                        $resultPrice = $price->getAttribute('price');
+                    }
+                }
+            }
+    
+            if ($addPercent) {
+                $priceAddPercent = ((float) $resultPrice * $addPercent) / 100;
+    
+                $resultPrice = number_format((float) $resultPrice + $priceAddPercent, 2, '.', '');
+            }
+    
+            if ($addToPrice) {
+                $resultPrice = number_format((float) $resultPrice + $addToPrice, 2, '.', '');
+            }
+    
+            if ($premiumPriceForDevice = $category->getAttribute('premium_price')) {
+                $resultPrice += (float) $premiumPriceForDevice;
+            }
+    
+            if ($isBroken) {
+                if ($priceForBroken = $category->getAttribute('price_for_broken')) {
+                    $resultPrice = $priceForBroken;
+                }
+            }
+
+            $data['orders']['order'][$key]['summ'] = $resultPrice * (int) $order['ctn'];
+            $data['orders']['order'][$key]['total'] = $resultPrice * (int) $order['ctn'];
+
+            $orderTotalSumm += (float) $resultPrice * (int) $order['ctn'];
+        }
+        
+        $expShipping = 20;
+
+        if ($data['exp_service']) {
+            (float) $orderTotalSumm -= $expShipping;
+        }
+
+        if ($data['insurance']) {
+            (float) $orderTotalSumm -= ((float) $orderTotalSumm  * 1)/100;
+        }
+
+        if(isset($data['custom_summ'])) {
+            $data['total_summ'] = $data['custom_summ'];
+        } else {
+            $data['total_summ'] = number_format((float) $orderTotalSumm, 2, '.', '');
+        }
+
+        $model->update($data);
 
         Session::flash(
             'success',
