@@ -28,10 +28,32 @@
             <div id="step" class="order-options-block" v-if="selectedStep">
                 <h4 id="step-title">{{ selectedStep.title }}</h4>
                 <div class="helping-block" v-if="selectedStep.tip">
-                    <a href="#helping-popup" class="popup-open" data-effect="mfp-zoom-in">
+                    <a href="javascript:void(0)" v-on:click="helpingPopup = true" data-effect="mfp-zoom-in">
                         <img src="../../client/images/icon_help.svg" alt="">
                         <span>{{ selectedStep.tip ? selectedStep.tip.name : '' }}</span>
                     </a>
+                    
+                    <div v-if="helpingPopup">
+                        <div class="mfp-bg mfp-zoom-in mfp-ready"></div>
+                        <div v-on:click="helpingPopup = false" class="mfp-wrap mfp-close-btn-in mfp-auto-cursor mfp-zoom-in mfp-ready" tabindex="-1" style="overflow: hidden auto;">
+                            <div class="mfp-container mfp-s-ready mfp-inline-holder">
+                                <div class="mfp-content">
+                                    <div id="helping-popup-1" class="popup-modal mfp-with-anim">
+                                        <div class="popup-content">
+                                            <div class="helping-popup-content">
+                                                <h4>{{ selectedStep.tip.name }}</h4>
+                                                <p v-html="selectedStep.tip ? selectedStep.tip.text : ''"></p>
+                                            </div>
+                                            <button v-on:click="helpingPopup = false" type="button" title="Close (Esc)" class="mfp-close">
+                                                <img src="/images/close.png?3365377fd075715b06b6510224785880" alt="">
+                                                <img src="/images/close_popup.png?c75e43c6a14689556029439fe821d637" alt="" class="sm-only">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="order-options-radios">
                     <div class="options-radio" v-for="(option, index) in selectedStep.items" :key="`step${option.id}_${index}`">
@@ -200,18 +222,6 @@
             </button>
         </div>
     </div>
-
-    <div v-if="selectedStep && selectedStep.tip" id="helping-popup" class="popup-modal mfp-hide mfp-with-anim">
-        <div class="popup-content">
-            <div class="helping-popup-content">
-                <span v-html="selectedStep.tip ? selectedStep.tip.text : ''"></span>
-            </div>
-            <button class="mfp-close" type="button" title="Close (Esc)">
-                <img src="../../client/images/close.png" alt="" />
-                <img class="sm-only" src="../../client/images/close_popup.png" alt="" />
-            </button>
-        </div>
-    </div>
 </div>
 </template>
 
@@ -249,7 +259,8 @@
                 selectedAccesories: [],
                 stepIndex: 0,
                 options: [],
-                summ: parseFloat(this.category.custom_text)
+                summ: parseFloat(this.category.custom_text),
+                helpingPopup: false,
             };
         },
 
