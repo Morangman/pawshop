@@ -68,18 +68,6 @@
                     <div><button v-on:click="backStep" class="btn gray-btn step-button">Back</button></div>
                     <div><button v-on:click="nextStep" v-if="stepSelected || selectedStep.is_checkbox" class="btn red-btn step-button">Next step</button></div>
                 </div>
-
-                <div v-if="selectedStep.tip" id="helping-popup" class="popup-modal mfp-hide mfp-with-anim">
-                    <div class="popup-content">
-                        <div class="helping-popup-content">
-                            <span v-html="selectedStep.tip ? selectedStep.tip.text : ''"></span>
-                        </div>
-                        <button class="mfp-close" type="button" title="Close (Esc)">
-                            <img src="../../client/images/close.png" alt="" />
-                            <img class="sm-only" src="../../client/images/close_popup.png" alt="" />
-                        </button>
-                    </div>
-                </div>
             </div>
 
             <div class="order-options-block" v-if="!selectedStep">
@@ -205,6 +193,18 @@
                     </div>
                 </div>
                 <div class="note">*Scratches may be enhanced to show detail</div>
+            </div>
+            <button class="mfp-close" type="button" title="Close (Esc)">
+                <img src="../../client/images/close.png" alt="" />
+                <img class="sm-only" src="../../client/images/close_popup.png" alt="" />
+            </button>
+        </div>
+    </div>
+
+    <div v-if="selectedStep.tip" id="helping-popup" class="popup-modal mfp-hide mfp-with-anim">
+        <div class="popup-content">
+            <div class="helping-popup-content">
+                <span v-html="selectedStep.tip ? selectedStep.tip.text : ''"></span>
             </div>
             <button class="mfp-close" type="button" title="Close (Esc)">
                 <img src="../../client/images/close.png" alt="" />
