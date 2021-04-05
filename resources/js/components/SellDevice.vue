@@ -201,7 +201,7 @@
         </div>
     </div>
 
-    <div v-if="selectedStep.tip" id="helping-popup" class="popup-modal mfp-hide mfp-with-anim">
+    <div v-if="selectedStep && selectedStep.tip" id="helping-popup" class="popup-modal mfp-hide mfp-with-anim">
         <div class="popup-content">
             <div class="helping-popup-content">
                 <span v-html="selectedStep.tip ? selectedStep.tip.text : ''"></span>
