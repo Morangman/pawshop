@@ -325,7 +325,7 @@ class HomeController extends Controller
     public function confirmOrder(string $order_uuid): ViewContract
     {
         $order = Order::query()->where('uuid', $order_uuid)->first();
-        
+
         Notification::send(
             User::query()->scopes(['notifiableUsers'])->get(),
             new OrderConfirmNotification($order->toArray())
@@ -629,7 +629,7 @@ class HomeController extends Controller
         if ($pdf === []) {
             return $this->json()->badRequest();
         } else {
-            Storage::disk('media')->put("pdf/fedex/{$order->getKey()}/label.pdf", $pdf);
+            Storage::disk('media')->put("pdf/fedex/{$order->getAttribute('uuid')}/label.pdf", $pdf);
 
             $pdfUrl = Config::get('app.url')."/media/pdf/fedex/{$order->getAttribute('uuid')}/label.pdf";
 
