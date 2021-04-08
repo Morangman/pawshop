@@ -41,9 +41,9 @@ Route::get('/header-search', 'HomeController@headerSearchDevice')->name('header-
 
 Route::get('/get-category/{slug}', 'HomeController@getByCategory')->name('get-category');
 
-Route::get('/order/{order}/thanks', 'HomeController@thanks')->name('thanks');
+Route::get('/order/{order_uuid}/thanks', 'HomeController@thanks')->name('thanks');
 
-Route::get('/order/{order}/confirm-order', 'HomeController@confirmOrder')->name('confirm-order');
+Route::get('/order/{order_uuid}/confirm-order', 'HomeController@confirmOrder')->name('confirm-order');
 
 Route::get('/{order}/fedex-label', 'HomeController@getFedexLabel')->name('fedex-label');
 

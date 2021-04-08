@@ -97,7 +97,6 @@ class RouteServiceProvider extends ServiceProvider
             'step' => Step::class,
             'stepName' => StepName::class,
             'media' => Media::class,
-            'order' => Order::class,
             'status' => OrderStatus::class,
             'comment' => Comment::class,
             'faq' => Faq::class,

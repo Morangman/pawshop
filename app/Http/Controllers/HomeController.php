@@ -241,6 +241,7 @@ class HomeController extends Controller
     public function makeOrder(ClientOrderStoreRequest $request): JsonResponse
     {
         $orderData = array_merge($request->all(), [
+            'uuid' => uniqid(),
             'ip_address' => $request->ip(),
             'user_email' => $request->get('user_email') ?? Auth::user()->getAttribute('email')
         ]);
@@ -285,7 +286,7 @@ class HomeController extends Controller
                 ));
         } catch (\Exception $e) {}
 
-        return $this->json()->ok(['order_id' => $order->getKey()]);
+        return $this->json()->ok(['order_uuid' => $order->getAttribute('uuid')]);
     }
 
     /**
@@ -317,12 +318,14 @@ class HomeController extends Controller
     }
 
     /**
-     * @param \App\Order $order
+     * @param string $order_uuid
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function confirmOrder(Order $order): ViewContract
+    public function confirmOrder(string $order_uuid): ViewContract
     {
+        $order = Order::query()->where('uuid', $order_uuid)->first();
+        
         Notification::send(
             User::query()->scopes(['notifiableUsers'])->get(),
             new OrderConfirmNotification($order->toArray())
@@ -354,12 +357,14 @@ class HomeController extends Controller
     }
 
     /**
-     * @param \App\Order $order
+     * @param string $order_uuid
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function thanks(Order $order): ViewContract
+    public function thanks(string $order_uuid): ViewContract
     {
+        $order = Order::query()->where('uuid', $order_uuid)->first();
+
         $categories = Category::query()
             ->where('is_hidden', false)
             ->whereNull('custom_text')
@@ -449,6 +454,8 @@ class HomeController extends Controller
      */
     public function updateOrderAddress(UpdateRequest $request, Order $order): JsonResponse
     {
+        $order->unsetEventDispatcher();
+
         $order->update($request->all());
 
         $fedexService = new FedexService();
@@ -458,9 +465,9 @@ class HomeController extends Controller
         if ($pdf === []) {
             return $this->json()->badRequest();
         } else {
-            Storage::disk('media')->put("pdf/fedex/{$order->getKey()}/label.pdf", $pdf);
+            Storage::disk('media')->put("pdf/fedex/{$order->getAttribute('uuid')}/label.pdf", $pdf);
 
-            $pdfUrl = Config::get('app.url')."/media/pdf/fedex/{$order->getKey()}/label.pdf";
+            $pdfUrl = Config::get('app.url')."/media/pdf/fedex/{$order->getAttribute('uuid')}/label.pdf";
 
             $paymentData = $order->getAttribute('payment');
 
@@ -613,6 +620,8 @@ class HomeController extends Controller
      */
     public function getFedexLabel(Order $order): JsonResponse
     {
+        $order->unsetEventDispatcher();
+
         $fedexService = new FedexService();
 
         $pdf = $fedexService->ship($order);
@@ -622,7 +631,7 @@ class HomeController extends Controller
         } else {
             Storage::disk('media')->put("pdf/fedex/{$order->getKey()}/label.pdf", $pdf);
 
-            $pdfUrl = Config::get('app.url')."/media/pdf/fedex/{$order->getKey()}/label.pdf";
+            $pdfUrl = Config::get('app.url')."/media/pdf/fedex/{$order->getAttribute('uuid')}/label.pdf";
 
             $paymentData = $order->getAttribute('payment');
 

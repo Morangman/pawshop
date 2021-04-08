@@ -638,7 +638,7 @@
 
                         localStorage.setItem("orders", JSON.stringify(orders));
 
-                        location.href = Router.route('thanks', {order: data.data.order_id});
+                        location.href = Router.route('thanks', {order_uuid: data.data.order_uuid});
                     }).catch(({ response: { data: { errors } } }) => {
                         this.errors = errors;
                     });

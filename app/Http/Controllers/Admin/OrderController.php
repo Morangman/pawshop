@@ -154,15 +154,15 @@ class OrderController extends Controller
 
     /**
      * @param \App\Http\Requests\Admin\Order\UpdateRequest $request
-     * @param \App\Order $model
+     * @param \App\Order $order
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(UpdateRequest $request, Order $model): JsonResponse
+    public function update(UpdateRequest $request, Order $order): JsonResponse
     {
         if ($remindData = $request->get('reminder')) {
             Reminder::query()->create([
-                'order_id' => $model->getKey(),
+                'order_id' => $order->getKey(),
                 'user_id' => Auth::id(),
                 'email' => Auth::user()->getAttribute('email'),
                 'title' => $remindData['title'] ?? Lang::get('admin/order.reminder.title'),
@@ -173,7 +173,7 @@ class OrderController extends Controller
 
         if ($suspectIp = $request->get('suspect_ip')) {
             SuspectIp::query()->create([
-                'order_id' => $model->getKey(),
+                'order_id' => $order->getKey(),
                 'ip_address' => $suspectIp,
             ]);
         }
@@ -182,10 +182,10 @@ class OrderController extends Controller
 
         $orderTotalSumm = 0;
 
-        foreach($data['orders']['order'] as $key => $order) {
+        foreach($data['orders']['order'] as $key => $orderData) {
             $ids = [];
 
-            $category = Category::query()->whereKey($order['device']['id'])->first();
+            $category = Category::query()->whereKey($orderData['device']['id'])->first();
 
             $addToPrice = 0;
 
@@ -193,14 +193,14 @@ class OrderController extends Controller
     
             $isBroken = false;
 
-            foreach($order['steps'] as $i => $step) {
+            foreach($orderData['steps'] as $i => $step) {
                 $step = Step::query()->whereKey($step['id'])->with('stepName')->first()->toArray();
 
                 $data['orders']['order'][$key]['steps'][$i] = $step;
 
                 $premiumPrice = DB::table('premium_price')
                     ->where('step_id', $step['id'])
-                    ->where('category_id', $order['device']['id'])
+                    ->where('category_id', $orderData['device']['id'])
                     ->first();
 
                 if ($step['value'] === 'Brand New') {
@@ -209,7 +209,7 @@ class OrderController extends Controller
                             if ($stepItem->stepName->is_checkbox) {
                                 $premiumPriceForAccesory = DB::table('premium_price')
                                     ->where('step_id', $stepItem->getKey())
-                                    ->where('category_id', $order['device']['id'])
+                                    ->where('category_id', $orderData['device']['id'])
                                     ->first();
 
                                 $addToPrice += $premiumPriceForAccesory->price_plus;
@@ -255,7 +255,7 @@ class OrderController extends Controller
 
             $resultPrice = 0;
 
-            $prices = Price::query()->where('category_id', $order['device']['id'])->get();
+            $prices = Price::query()->where('category_id', $orderData['device']['id'])->get();
     
             foreach ($prices as $price) {
                 if ( $price->getAttribute('is_parsed')) {
@@ -287,10 +287,10 @@ class OrderController extends Controller
                 }
             }
 
-            $data['orders']['order'][$key]['summ'] = $resultPrice * (int) $order['ctn'];
-            $data['orders']['order'][$key]['total'] = $resultPrice * (int) $order['ctn'];
+            $data['orders']['order'][$key]['summ'] = $resultPrice * (int) $orderData['ctn'];
+            $data['orders']['order'][$key]['total'] = $resultPrice * (int) $orderData['ctn'];
 
-            $orderTotalSumm += (float) $resultPrice * (int) $order['ctn'];
+            $orderTotalSumm += (float) $resultPrice * (int) $orderData['ctn'];
         }
         
         $expShipping = 20;
@@ -309,7 +309,7 @@ class OrderController extends Controller
             $data['total_summ'] = number_format((float) $orderTotalSumm, 2, '.', '');
         }
 
-        $model->update($data);
+        $order->update($data);
 
         Session::flash(
             'success',

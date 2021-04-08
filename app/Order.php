@@ -9,6 +9,7 @@ use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\Models\Media;
+use Str;
 
 /**
  * Class Order
@@ -37,6 +38,7 @@ class Order extends Model implements HasMedia
      * @var array
      */
     protected $fillable = [
+        'uuid',
         'user_id',
         'tracking_number',
         'user_email',
@@ -55,6 +57,7 @@ class Order extends Model implements HasMedia
      * @var array
      */
     protected $casts = [
+        'uuid' => 'string',
         'user_id' => 'int',
         'tracking_number' => 'int',
         'user_email' => 'string',
