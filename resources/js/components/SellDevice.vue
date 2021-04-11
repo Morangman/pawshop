@@ -454,6 +454,14 @@
                     localStorage.setItem("orders", JSON.stringify(orders));
                 }
 
+                axios.post(
+                    Router.route('add-to-box', { category: this.category.id }),
+                ).then((data) => {
+                    //console.log(data);
+                }).catch(({ response: { data: { errors } } }) => {
+                    //console.log(errors);
+                });
+
                 location.href = Router.route('cart');
             }
         },

@@ -40,6 +40,7 @@ class Category extends Model implements HasMedia
         'price_for_broken',
         'is_hidden',
         'is_parsed',
+        'box_count',
     ];
 
     /**
@@ -56,6 +57,7 @@ class Category extends Model implements HasMedia
         'price_for_broken' => 'string',
         'is_hidden' => 'bool',
         'is_parsed' => 'bool',
+        'box_count' => 'int',
     ];
 
     /**

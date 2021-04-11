@@ -61,6 +61,8 @@ Route::post('/order', 'HomeController@makeOrder')->name('order');
 
 Route::post('/get-price', 'HomeController@getPrice')->name('get-price');
 
+Route::post('/add-to-box', 'HomeController@addToBox')->name('add-to-box');
+
 Route::post('/comment', 'HomeController@addComment')->name('comment');
 
 Route::patch('/update-account/{user}', [

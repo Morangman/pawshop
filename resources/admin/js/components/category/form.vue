@@ -100,6 +100,12 @@
                     </div>
                     <div class="form-group">
                         <label>
+                            <strong>{{ $t('admin.category.form.cart_count') }}</strong>
+                        </label>
+                        <p>{{ model.box_count }}</p>
+                    </div>
+                    <div class="form-group">
+                        <label>
                             <strong>{{ $t('admin.category.form.premium_price') }}</strong>
                         </label>
                         <input

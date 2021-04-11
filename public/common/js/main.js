@@ -25649,6 +25649,7 @@ __webpack_require__.r(__webpack_exports__);
           "faq": "FAQ",
           "subcategory": "Parent category",
           "status": "Status",
+          "cart_count": "Add to cart quantity",
           "text": "Cash in up to..",
           "premium_price": "Premium price for device",
           "price_for_broken": "Price for broken device",

@@ -642,6 +642,18 @@ class HomeController extends Controller
     }
 
     /**
+     * @param App\Category $category
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function addToBox(Category $category): JsonResponse
+    {
+        $category->increment('box_count', 1);
+
+        return $this->json()->noContent();
+    }
+
+    /**
      * @param string $slug
      *
      * @return \Illuminate\Contracts\View\View
