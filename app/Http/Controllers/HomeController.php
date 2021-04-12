@@ -8,6 +8,7 @@ use App\Category;
 use App\Comment;
 use App\Faq;
 use App\Http\Controllers\Traits\SettingTrait;
+use App\Http\Controllers\Traits\TelegramTrait;
 use App\Http\Requests\Admin\Order\UpdateRequest;
 use App\Http\Requests\Client\Account\StoreRequest as UpdateAccountInfoRequest;
 use App\Http\Requests\Client\Callback\StoreRequest as CallbackRequest;
@@ -48,6 +49,7 @@ use stdClass;
 class HomeController extends Controller
 {
     use SettingTrait;
+    use TelegramTrait;
 
     /**
      * @return \Illuminate\Contracts\View\View
@@ -264,6 +266,8 @@ class HomeController extends Controller
 
         $order = Order::create($orderData);
 
+        $this->sendMessage('New offer', route('admin.order.edit', ['order' => $order->getKey()]));
+
         foreach($order->getAttribute('orders')['order'] as $item) {
             for ($i = 1; $i <= (int) $item['ctn']; $i++) {
                 DB::table('order_device')->insert([
@@ -296,25 +300,65 @@ class HomeController extends Controller
      */
     public function callback(CallbackRequest $request): ViewContract
     {
-        Notification::send(
-            User::query()->scopes(['notifiableUsers'])->get(),
-            new ContactNotification($request)
-        );
-
         $categories = Category::query()
             ->where('is_hidden', false)
             ->whereNull('custom_text')
             ->whereNull('subcategory_id')
             ->get();
 
-        return View::make('support', [
-            'settings' => $this->getSettings() ?? [],
-            'categories' => $categories,
-            'category' => new stdClass(),
-            'steps' => [],
-            'relatedCategories' => $categories,
-            'faqs' => new stdClass(),
-        ]);
+        $url = 'https://www.google.com/recaptcha/api/siteverify';
+        $remoteip = $_SERVER['REMOTE_ADDR'];
+        $data = [
+                'secret' => config('services.recaptcha.secretkey'),
+                'response' => $request->get('recaptcha'),
+                'remoteip' => $remoteip
+              ];
+        $options = [
+                'http' => [
+                  'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                  'method' => 'POST',
+                  'content' => http_build_query($data)
+                ]
+            ];
+        $context = stream_context_create($options);
+                $result = file_get_contents($url, false, $context);
+                $resultJson = json_decode($result);
+        if ($resultJson->success != true) {
+            return View::make('support', [
+                'settings' => $this->getSettings() ?? [],
+                'categories' => $categories,
+                'category' => new stdClass(),
+                'steps' => [],
+                'relatedCategories' => $categories,
+                'faqs' => new stdClass(),
+            ]);
+        }
+        if ($resultJson->score >= 0.3) {
+            Notification::send(
+                User::query()->scopes(['notifiableUsers'])->get(),
+                new ContactNotification($request)
+            );
+    
+            $this->sendMessage('Callback notification', route('admin.notification.index'));
+    
+            return View::make('support', [
+                'settings' => $this->getSettings() ?? [],
+                'categories' => $categories,
+                'category' => new stdClass(),
+                'steps' => [],
+                'relatedCategories' => $categories,
+                'faqs' => new stdClass(),
+            ]);
+        } else {
+            return View::make('support', [
+                'settings' => $this->getSettings() ?? [],
+                'categories' => $categories,
+                'category' => new stdClass(),
+                'steps' => [],
+                'relatedCategories' => $categories,
+                'faqs' => new stdClass(),
+            ]);
+        }
     }
 
     /**

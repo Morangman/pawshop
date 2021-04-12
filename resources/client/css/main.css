@@ -3054,6 +3054,17 @@ h2 {
   display:none
 }
 
+.recaptcha-block {
+  text-align: center;
+}
+
+.recaptcha-block a{
+  text-decoration: auto;
+  color: blue;
+}
+
+.grecaptcha-badge { visibility: hidden; }
+
 @media screen and (max-width: 700px){
     .box{
         width: 100%;

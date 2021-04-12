@@ -52,4 +52,9 @@ return [
         'account_number' => env('FEDEX_ACCOUNT_NUMBER'),
         'meter_number' => env('FEDEX_METER_NUMBER'),
     ],
+
+    'recaptcha' => [
+        'sitekey' => env('RECAPTCHA_SITE_KEY'),
+        'secretkey' => env('RECAPTCHA_SECRET_KEY'),
+    ],
 ];

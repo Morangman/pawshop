@@ -21,7 +21,11 @@
                 <input name="phone" type="tel" placeholder="Phone number" />
                 <input name="email" type="email" placeholder="E-mail" required />
                 <textarea name="text" placeholder="Your question"></textarea>
+                <input type="hidden" name="recaptcha" id="recaptcha">
                 <button type="submit" class="btn red-btn ">Send <img src="{{ asset('client/images/white_arrow.png') }}" alt="" /></button>
+                <div class="recaptcha-block">
+                    <p>This site is protected by ReCaptcha</p>
+                </div>
             </form>
             <button class="mfp-close" type="button" title="Close (Esc)"><img src="{{ asset('client/images/close.png') }}" alt="" /><img class="sm-only" src="{{ asset('client/images/close_popup.png') }}" alt="" /></button>
         </div>
