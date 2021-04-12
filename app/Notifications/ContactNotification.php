@@ -21,18 +21,18 @@ class ContactNotification extends Notification
     use Queueable;
 
     /**
-     * @var \Illuminate\Http\Request
+     * @var int
      */
-    protected $contactData;
+    protected $callbackId;
 
     /**
      * ContactNotification constructor.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param int $callbackId
      */
-    public function __construct(Request $request)
+    public function __construct(int $callbackId)
     {
-        $this->contactData = $request;
+        $this->callbackId = $callbackId;
     }
 
     /**
@@ -54,11 +54,7 @@ class ContactNotification extends Notification
     {
         return [
             'title' => 'Callback notification',
-            'name' => $this->contactData->get('name'),
-            'phone' => $this->contactData->get('phone'),
-            'email' => $this->contactData->get('email'),
-            'text' => $this->contactData->get('text'),
-            'date' => (new Carbon())->toDateTimeString(),
+            'callback_id' => $this->callbackId,
         ];
     }
 }

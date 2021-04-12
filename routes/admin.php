@@ -94,6 +94,15 @@ Route::group(
 
 Route::group(
     [
+        'as' => '.callback',
+        'prefix' => 'callback',
+        'middleware' => ['anyrole:admin|manager']
+    ],
+    __DIR__.'/admin/callback.php'
+);
+
+Route::group(
+    [
         'as' => '.notification',
         'prefix' => 'notification',
         'middleware' => ['anyrole:admin|manager']

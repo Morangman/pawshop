@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Callback;
 use App\Category;
 use App\Comment;
 use App\Faq;
@@ -103,6 +104,7 @@ class RouteServiceProvider extends ServiceProvider
             'task' => Task::class,
             'setting' => Setting::class,
             'nitification' => Notification::class,
+            'callback' => Callback::class,
         ];
 
         foreach ($models as $key => $class) {

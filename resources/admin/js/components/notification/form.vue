@@ -20,29 +20,11 @@
                         </label>
                         <a :href="$r('admin.order.edit', { order: model.data.order_id })">{{ model.data.order_id }}</a>
                     </div>
-                    <div class="form-group" v-if="model.data.name">
+                    <div class="form-group" v-if="model.data.callback_id">
                         <label>
-                            <strong>Name:</strong>
+                            <strong>Callback id: </strong>
                         </label>
-                        <p>{{ model.data.name }}</p>
-                    </div>
-                    <div class="form-group" v-if="model.data.email">
-                        <label>
-                            <strong>Email:</strong>
-                        </label>
-                        <p>{{ model.data.email }}</p>
-                    </div>
-                    <div class="form-group" v-if="model.data.phone">
-                        <label>
-                            <strong>Phone:</strong>
-                        </label>
-                        <p>{{ model.data.phone }}</p>
-                    </div>
-                    <div class="form-group" v-if="model.data.text">
-                        <label>
-                            <strong>Message:</strong>
-                        </label>
-                        <p>{{ model.data.text }}</p>
+                        <a :href="$r('admin.callback.edit', { callback: model.data.callback_id })">{{ model.data.callback_id }}</a>
                     </div>
                     <div class="form-group" v-if="model.data.comment_id">
                         <label>

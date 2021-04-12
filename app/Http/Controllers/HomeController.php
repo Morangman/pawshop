@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers;
 
+use App\Callback;
 use App\Category;
 use App\Comment;
 use App\Faq;
@@ -308,21 +309,25 @@ class HomeController extends Controller
 
         $url = 'https://www.google.com/recaptcha/api/siteverify';
         $remoteip = $_SERVER['REMOTE_ADDR'];
+        
         $data = [
-                'secret' => config('services.recaptcha.secretkey'),
-                'response' => $request->get('recaptcha'),
-                'remoteip' => $remoteip
-              ];
+            'secret' => config('services.recaptcha.secretkey'),
+            'response' => $request->get('recaptcha'),
+            'remoteip' => $remoteip
+        ];
+
         $options = [
-                'http' => [
-                  'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-                  'method' => 'POST',
-                  'content' => http_build_query($data)
-                ]
-            ];
+            'http' => [
+                'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method' => 'POST',
+                'content' => http_build_query($data)
+            ]
+        ];
+
         $context = stream_context_create($options);
-                $result = file_get_contents($url, false, $context);
-                $resultJson = json_decode($result);
+        $result = file_get_contents($url, false, $context);
+        $resultJson = json_decode($result);
+
         if ($resultJson->success != true) {
             return View::make('support', [
                 'settings' => $this->getSettings() ?? [],
@@ -333,13 +338,16 @@ class HomeController extends Controller
                 'faqs' => new stdClass(),
             ]);
         }
+
         if ($resultJson->score >= 0.3) {
+            $callback = Callback::query()->create($request->all());
+
             Notification::send(
                 User::query()->scopes(['notifiableUsers'])->get(),
-                new ContactNotification($request)
+                new ContactNotification($callback->getKey())
             );
     
-            $this->sendMessage('Callback notification', route('admin.notification.index'));
+            $this->sendMessage($request->get('text') ?? 'Callback notification', route('admin.callback.edit', ['callback' => $callback->getKey()]));
     
             return View::make('support', [
                 'settings' => $this->getSettings() ?? [],
