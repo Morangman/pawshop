@@ -32,6 +32,7 @@ return [
                 'email' => 'Email',
                 'role' => 'Role',
                 'created_at' => 'Created date',
+                'last_accessed_at' => 'Online at',
             ],
         ],
     ],

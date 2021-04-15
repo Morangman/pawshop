@@ -17,6 +17,11 @@ Route::get('{notification}/view', [
     'uses' => 'NotificationController@view',
 ]);
 
+Route::post('read', [
+    'as' => '.read',
+    'uses' => 'NotificationController@read',
+]);
+
 Route::delete('{notification}', [
     'as' => '.delete',
     'uses' => 'NotificationController@delete',

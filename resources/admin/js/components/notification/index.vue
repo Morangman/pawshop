@@ -1,10 +1,20 @@
 <template>
     <div class="card">
         <div class="card-body">
+            <div class="form-group row">
+                <div class="col col-md-2">
+                    <button class="btn btn-primary" @click.prevent="readNotifications">
+                        Read
+                    </button>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table" id="bookings">
                     <thead>
                     <tr class="bg-blue">
+                        <th>
+                            <input type="checkbox" v-model="allSelected" v-on:change="selectAll"/>
+                        </th>
                         <th>{{ $t('admin.notification.index.table.headers.title') }}</th>
                         <th>
                             {{ $t('admin.notification.index.table.headers.created_at') }}
@@ -32,6 +42,9 @@
                     <tbody>
                     <template v-if="!isLoading">
                         <tr v-for="(notification, i) in notifications" :key="`notification_${i}`">
+                            <td>
+                                <input type="checkbox" v-model="selected.ids" :value="notification.id"/>
+                            </td>
                             <td>
                                 {{ notification.data.title }}
                                 <span class="badge badge-pill badge-success" v-if="!notification.read_at">
@@ -69,13 +82,14 @@
 <script>
     import IndexPageHelper from '../../mixins/index_page_helper';
     import InfiniteLoading from 'vue-infinite-loading';
+    import FormHelper from '../../mixins/form_helper';
 
     export default {
         components: {
             InfiniteLoading,
         },
 
-        mixins: [IndexPageHelper],
+        mixins: [IndexPageHelper, FormHelper],
 
         data() {
             return {
@@ -85,8 +99,14 @@
                     dir: 'desc',
                 },
                 notifications: [],
+                selected: {
+                    ids: [],
+                },
+                formData: null,
                 total: null,
                 isLoading: true,
+                errors: {},
+                allSelected: false,
             };
         },
 
@@ -116,6 +136,38 @@
                 }).finally(() => {
                     this.isLoading = false;
                 })
+            },
+
+            readNotifications() {
+                this.formData = new FormData();
+                this.formData.set('_method', 'POST');
+                this.collectFormData(this.selected);
+                
+                axios.post(
+                    Router.route(
+                        'admin.notification.read'
+                    ),
+                    this.formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then(({ data }) => {
+                    location.reload();
+                }).catch(({ response: { data: { errors } } }) => {
+                    notify.error(_.head(errors));
+                });
+            },
+
+            selectAll() {
+                if (this.allSelected) {
+                    _.each(this.notifications, (value, key) => {
+                        this.selected.ids.push(value.id);
+                    });
+                } else {
+                    this.selected.ids = [];
+                }
             },
 
             sort(field, direction) {

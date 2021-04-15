@@ -68,6 +68,22 @@ class NotificationController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      *
+     * @throws \Exception
+     */
+    public function read(Request $request): JsonResponse
+    {
+        foreach ($request->get('ids') as $id) {
+            DatabaseNotification::query()->whereKey($id)->first()->markAsRead();
+        }
+
+        return $this->json()->noContent();
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     *
      * @throws \InvalidArgumentException
      */
     public function getAll(Request $request): JsonResponse

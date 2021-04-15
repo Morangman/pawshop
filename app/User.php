@@ -36,6 +36,10 @@ class User extends Authenticatable
         'email',
         'addresses',
         'password',
+        'email_verified_at',
+        'register_code',
+        'is_active',
+        'last_accessed_at',
     ];
 
     /**
@@ -59,6 +63,7 @@ class User extends Authenticatable
         'phone' => 'string',
         'addresses' => 'array',
         'email_verified_at' => 'datetime',
+        'last_accessed_at' => 'datetime',
         'register_code' => 'int',
         'is_active' => 'bool',
         'password' => 'string',
@@ -82,7 +87,9 @@ class User extends Authenticatable
     public function scopeAdmins(Builder $query): Builder
     {
         return $query->whereHas('roles', function (Builder $subQuery) {
-            return $subQuery->where('roles.name', 'admin');
+            return $subQuery->where('roles.name', 'admin')
+                ->orWhere('roles.name', 'superadmin')
+                ->orWhere('roles.name', 'manager');
         });
     }
 

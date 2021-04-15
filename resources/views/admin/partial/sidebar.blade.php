@@ -38,6 +38,12 @@
                         <span>@lang('common.sidebar.users')</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ URL::route('admin.admin.index') }}" class="nav-link @active_menu_class('admin.admin')">
+                        <i class="icon-users2"></i>
+                        <span>@lang('common.sidebar.admins')</span>
+                    </a>
+                </li>
                 @endrole
                 <li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Data editing</div> <i class="icon-menu" title="Components"></i></li>
                 <li class="nav-item">

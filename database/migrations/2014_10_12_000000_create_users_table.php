@@ -30,6 +30,7 @@ class CreateUsersTable extends Migration
             $table->unsignedMediumInteger('register_code')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->timestamp('last_accessed_at')->nullable();
             $table->timestamps();
         });
     }

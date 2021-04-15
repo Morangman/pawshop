@@ -13,6 +13,15 @@ Route::group(
 
 Route::group(
     [
+        'as' => '.admin',
+        'prefix' => 'admin',
+        'middleware' => ['role:admin']
+    ],
+    __DIR__.'/admin/admin.php'
+);
+
+Route::group(
+    [
         'as' => '.category',
         'prefix' => 'category',
         'middleware' => ['anyrole:admin|manager']

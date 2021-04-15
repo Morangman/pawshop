@@ -11,6 +11,7 @@ return [
     ],
     'sidebar' => [
         'users' => 'Users',
+        'admins' => 'Admins',
         'tasks' => 'Tasks',
         'categories' => 'Categories',
         'statuses' => 'Order statuses',

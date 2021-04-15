@@ -26167,7 +26167,8 @@ __webpack_require__.r(__webpack_exports__);
               "phone": "Phone number",
               "email": "Email",
               "role": "Role",
-              "created_at": "Created date"
+              "created_at": "Created date",
+              "last_accessed_at": "Online at"
             }
           }
         },
@@ -26358,6 +26359,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       "sidebar": {
         "users": "Users",
+        "admins": "Admins",
         "tasks": "Tasks",
         "categories": "Categories",
         "statuses": "Order statuses",

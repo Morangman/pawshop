@@ -12,6 +12,7 @@ use App\User;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Session;
@@ -50,7 +51,13 @@ class UserController extends Controller
      */
     public function store(StoreRequest $request): JsonResponse
     {
-        $user = User::create($request->all());
+        $userData = array_merge($request->all(), [
+            'is_active' => true,
+            'register_code' => null,
+            'email_verified_at' => Carbon::now(),
+        ]);
+
+        $user = User::create($userData);
 
         $user->attachRole($request->get('role'));
 
@@ -109,12 +116,12 @@ class UserController extends Controller
      */
     public function delete(User $user): JsonResponse
     {
-        $order = Order::query()->where('user_id', $user->getKey())->first();
-                
-        if ($order) {
-            DB::table('order_device')->where('order_id', $order->getKey())->delete();
+        $orders = Order::query()->where('user_id', $user->getKey())->pluck('id')->toArray();
 
-            $order->delete();
+        if ($orders) {
+            DB::table('order_device')->whereIn('order_id', $orders)->delete();
+
+            Order::query()->whereIn('id', $orders)->delete();
         }
 
         $user->delete();
@@ -162,6 +169,7 @@ class UserController extends Controller
                     $q->orderBy($sort, $request->get('dir', 'asc'));
                 }
             )
+            ->scopes(['users'])
             ->with('roles')
             ->paginate(20);
 
