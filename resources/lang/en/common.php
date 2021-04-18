@@ -10,8 +10,8 @@ return [
         'notifications' => 'Notifications',
     ],
     'sidebar' => [
-        'users' => 'Users',
-        'admins' => 'Admins',
+        'users' => 'Clients',
+        'admins' => 'Users',
         'tasks' => 'Tasks',
         'categories' => 'Categories',
         'statuses' => 'Order statuses',
