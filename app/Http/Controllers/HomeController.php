@@ -564,6 +564,8 @@ class HomeController extends Controller
 
         $category = Category::query()->whereKey($request->get('category_id'))->first();
 
+        $category->increment('view_count', 1);
+
         $ids = [];
 
         $addToPrice = 0;

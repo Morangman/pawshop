@@ -106,6 +106,12 @@
                     </div>
                     <div class="form-group">
                         <label>
+                            <strong>{{ $t('admin.category.form.view_count') }}</strong>
+                        </label>
+                        <p>{{ model.view_count }}</p>
+                    </div>
+                    <div class="form-group">
+                        <label>
                             <strong>{{ $t('admin.category.form.premium_price') }}</strong>
                         </label>
                         <input
