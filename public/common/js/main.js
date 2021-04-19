@@ -26003,6 +26003,24 @@ __webpack_require__.r(__webpack_exports__);
           "seo_image_delete": "Photo successfully deleted"
         }
       },
+      "statistics": {
+        "breadcrumbs": {
+          "index": "Statistics"
+        },
+        "form": {
+          "id": "ID",
+          "image": "Image",
+          "title": "Title",
+          "cart_count": "Add to cart quantity",
+          "view_count": "Number of views",
+          "coefficient": "Сoefficient",
+          "parsed_price": "Parsed price",
+          "custom_price": "Custom price"
+        },
+        "messages": {
+          "update": "Device has been successfully updated"
+        }
+      },
       "step": {
         "breadcrumbs": {
           "index": "Step",
@@ -26359,10 +26377,11 @@ __webpack_require__.r(__webpack_exports__);
         "notifications": "Notifications"
       },
       "sidebar": {
-        "users": "Users",
-        "admins": "Admins",
+        "users": "Clients",
+        "admins": "Users",
         "tasks": "Tasks",
         "categories": "Categories",
+        "statistics": "Statistics",
         "statuses": "Order statuses",
         "steps": "Steps",
         "tips": "Tips",

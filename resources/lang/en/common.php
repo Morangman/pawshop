@@ -14,6 +14,7 @@ return [
         'admins' => 'Users',
         'tasks' => 'Tasks',
         'categories' => 'Categories',
+        'statistics' => 'Statistics',
         'statuses' => 'Order statuses',
         'steps' => 'Steps',
         'tips' => 'Tips',

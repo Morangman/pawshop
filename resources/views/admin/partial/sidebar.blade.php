@@ -51,6 +51,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ URL::route('admin.statistics.index') }}" class="nav-link @active_menu_class('admin.statistics')">
+                                <i class="icon-users2"></i>
+                                <span>@lang('common.sidebar.statistics')</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ URL::route('admin.category.index') }}" class="nav-link @active_menu_class('admin.category')">
                                 <i class="icon-drawer"></i>
                                 <span>@lang('common.sidebar.categories')</span>

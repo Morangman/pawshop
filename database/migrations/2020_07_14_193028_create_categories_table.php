@@ -31,6 +31,7 @@ class CreateCategoriesTable extends Migration
             $table->string('price_for_broken')->default('5.00');
             $table->unsignedBigInteger('box_count')->default(0);
             $table->unsignedBigInteger('view_count')->default(0);
+            $table->unsignedBigInteger('coefficient')->default(0);
             $table->boolean('is_hidden')->default(0);
             $table->boolean('is_parsed')->default(0);
             $table->timestamps();

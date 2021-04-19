@@ -204,15 +204,11 @@
 
 
 .steps-row p{ 
-    margin-right: 10px;
+    margin: 0;
 }
 
 .flex-row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
 }
 
 .flex-input {

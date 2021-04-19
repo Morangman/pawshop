@@ -455,7 +455,7 @@
                 }
 
                 axios.post(
-                    Router.route('add-to-box', { category: this.category.id }),
+                    Router.route('add-to-box', { slug: this.category.slug }),
                 ).then((data) => {
                     //console.log(data);
                 }).catch(({ response: { data: { errors } } }) => {

@@ -139,11 +139,20 @@ class CategoryController extends Controller
 
         $priceVariations = [];
 
-        $pricesByCategory = DB::table('prices')->where('category_id', $category->getKey())->get();
+        $pricesByCategory = DB::table('prices')->where('category_id', $category->getKey())->get()->toArray();
 
-        foreach ($pricesByCategory as $price) {
+        $idsArray = [];
+
+        foreach ($pricesByCategory as $index => $obj) {
+            $idsArray[] = json_decode($obj->steps_ids);
+        }
+
+        $idsArray = array_unique($idsArray, SORT_REGULAR);
+
+        foreach ($idsArray as $ids) {
+            $price = DB::table('prices')->where('category_id', $category->getKey())->whereJsonContains('steps_ids', $ids)->first();
             $priceVariations[] = [
-                'steps' => Step::query()->whereIn('id', json_decode($price->steps_ids))->get()->toArray(),
+                'steps' => Step::query()->whereIn('id', $ids)->get()->toArray(),
                 'price' => $price->price,
                 'id' => $price->id,
             ];
@@ -471,5 +480,26 @@ class CategoryController extends Controller
         }
 
         return $currentMax;
+    }
+
+    function my_array_unique($array, $keep_key_assoc = false){
+        $duplicate_keys = array();
+        $tmp = array();       
+    
+        foreach ($array as $key => $val){
+            // convert objects to arrays, in_array() does not support objects
+            if (is_object($val))
+                $val = (array)$val;
+    
+            if (!in_array($val, $tmp))
+                $tmp[] = $val;
+            else
+                $duplicate_keys[] = $key;
+        }
+    
+        foreach ($duplicate_keys as $key)
+            unset($array[$key]);
+    
+        return $keep_key_assoc ? $array : array_values($array);
     }
 }

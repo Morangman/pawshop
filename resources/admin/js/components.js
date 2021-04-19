@@ -47,6 +47,8 @@ import NotificationView from './components/notification/view';
 
 import SettingIndex from './components/setting/index';
 
+import StatisticsIndex from './components/statistics/index';
+
 export default {
     UserIndex,
     UserCreate,
@@ -83,5 +85,6 @@ export default {
     CommentEdit,
     NotificationIndex,
     NotificationView,
-    SettingIndex
+    SettingIndex,
+    StatisticsIndex
 };

@@ -41,6 +41,8 @@ class Category extends Model implements HasMedia
         'is_hidden',
         'is_parsed',
         'box_count',
+        'view_count',
+        'coefficient',
     ];
 
     /**
@@ -58,6 +60,8 @@ class Category extends Model implements HasMedia
         'is_hidden' => 'bool',
         'is_parsed' => 'bool',
         'box_count' => 'int',
+        'view_count' => 'int',
+        'coefficient' => 'float',
     ];
 
     /**

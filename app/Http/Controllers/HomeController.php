@@ -696,12 +696,14 @@ class HomeController extends Controller
     }
 
     /**
-     * @param App\Category $category
+     * @param string $slug
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function addToBox(Category $category): JsonResponse
+    public function addToBox(string $slug): JsonResponse
     {
+        $category = Category::query()->where('slug', $slug)->first();
+        
         $category->increment('box_count', 1);
 
         return $this->json()->noContent();
