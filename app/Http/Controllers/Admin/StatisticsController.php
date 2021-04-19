@@ -69,7 +69,12 @@ class StatisticsController extends Controller
         $statistics = DB::table('statistics')
             ->select('*')
             ->join('categories', 'statistics.category_id', '=', 'categories.id')
-            ->orderBy('statistics.steps_view_count', 'desc')
+            ->when(
+                $request->get('by'),
+                function ($q, $sort) use ($request) {
+                    $q->orderBy($sort, $request->get('dir', 'asc'));
+                }
+            )
             ->get()
             ->toArray();
             //->paginate(20);

@@ -7,22 +7,6 @@
                         <tr class="bg-blue">
                             <th>
                                 {{ $t('admin.statistics.form.id') }}
-                                <span>
-                                    <i
-                                            v-if="filters.by === 'id' && filters.dir === 'desc'"
-                                            @click.prevent="sort('id', 'asc')"
-                                            class="icon-arrow-down8 cursor-pointer"
-                                    ></i>
-                                    <i
-                                            v-if="filters.by === 'id' && filters.dir === 'asc'"
-                                            @click.prevent="sort('id', 'desc')"
-                                            class="icon-arrow-up8 cursor-pointer"
-                                    ></i>
-                                    <span v-if="filters.by !== 'id'" @click.prevent="sort('id', 'asc')">
-                                        <i class="icon-arrow-up8 cursor-pointer"></i>
-                                        <i class="icon-arrow-down8 cursor-pointer"></i>
-                                    </span>
-                                </span>
                             </th>
                             <th>
                                 {{ $t('admin.statistics.form.image') }}
@@ -54,6 +38,22 @@
                             </th>
                             <th>
                                 {{ $t('admin.statistics.form.view_count') }}
+                                <span>
+                                    <i
+                                            v-if="filters.by === 'steps_view_count' && filters.dir === 'desc'"
+                                            @click.prevent="sort('steps_view_count', 'asc')"
+                                            class="icon-arrow-down8 cursor-pointer"
+                                    ></i>
+                                    <i
+                                            v-if="filters.by === 'steps_view_count' && filters.dir === 'asc'"
+                                            @click.prevent="sort('steps_view_count', 'desc')"
+                                            class="icon-arrow-up8 cursor-pointer"
+                                    ></i>
+                                    <span v-if="filters.by !== 'steps_view_count'" @click.prevent="sort('steps_view_count', 'asc')">
+                                        <i class="icon-arrow-up8 cursor-pointer"></i>
+                                        <i class="icon-arrow-down8 cursor-pointer"></i>
+                                    </span>
+                                </span>
                             </th>
                             <th>
                                 {{ $t('admin.statistics.form.coefficient') }}
@@ -114,8 +114,8 @@
                 filters: {
                     page: 1,
                     search: null,
-                    by: 'id',
-                    dir: 'asc',
+                    by: 'steps_view_count',
+                    dir: 'desc',
                 },
                 products: [],
                 total: null,
