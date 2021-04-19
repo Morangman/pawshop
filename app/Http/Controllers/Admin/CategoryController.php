@@ -317,7 +317,13 @@ class CategoryController extends Controller
         $category = Category::query()->where('slug', $slug)->first();
 
         if ($price = $request->get('price')) {
-            DB::table('prices')->where('id', (int) $request->get('id'))->where('category_id', $category->getKey())->update([
+            $ids = [];
+
+            foreach ($request->get('steps') as $step) {
+                $ids[] = (int) $step['id'];
+            }
+
+            DB::table('prices')->where('category_id', $category->getKey())->whereJsonContains('steps_ids', $ids)->update([
                 'price' => (float) $price
             ]);
         }
