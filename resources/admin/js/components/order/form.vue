@@ -32,7 +32,7 @@
                         <label>
                             <strong>Fedex tracking number</strong>
                         </label>
-                        <a :href="'https://www.fedex.com/fedextrack/?trknbr=' + model.tracking_number">{{ model.tracking_number }}</a>
+                        <a :href="'https://www.fedex.com/fedextrack/?trknbr=' + model.tracking_number" target="_blank">{{ model.tracking_number }}</a>
                     </div>
                     <div class="form-group row">
                         <div class="form-group col-md-6">
