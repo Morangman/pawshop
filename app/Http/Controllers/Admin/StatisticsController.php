@@ -9,9 +9,14 @@ use App\Setting;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Setting\StoreRequest;
 use App\Http\Requests\Admin\Setting\UpdateRequest;
+use App\Step;
 use Illuminate\Contracts\View\View as ViewContract;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -60,36 +65,36 @@ class StatisticsController extends Controller
      * @throws \InvalidArgumentException
      */
     public function getAll(Request $request): JsonResponse
-    {   
-        $cats = Category::query()
-            ->where('is_hidden', false)
-            ->whereNotNull('custom_text')
-            ->whereNotNull('subcategory_id')
-            ->get();
+    {
+        $statistics = DB::table('statistics')
+            ->select('*')
+            ->join('categories', 'statistics.category_id', '=', 'categories.id')
+            ->orderBy('statistics.steps_view_count', 'desc')
+            ->get()
+            ->toArray();
+            //->paginate(20);
+        
+        $array = [];
 
-        foreach ($cats as $cat) {
-            $coefficient = (int) $cat->getAttribute('box_count') / (int) $cat->getAttribute('view_count');
-
-            $cat->update(['coefficient' => $coefficient]);     
+        foreach($statistics as $stat) {
+            $array[] = (array) $stat;
         }
 
-        $categories = Category::query()
-            ->where('is_hidden', false)
-            ->whereNotNull('custom_text')
-            ->whereNotNull('subcategory_id')
-            ->when(
-                $request->get('search'),
-                function ($query, $search) {
-                    $keyword = "%{$search}%";
+        foreach ($array as $key => $value) {
+            $stepsIds = json_decode($value['steps_ids']);
 
-                    $query->where('name', 'like', $keyword)
-                        ->orWhere('slug', 'like', $keyword)
-                        ->orWhere('id', 'like', $keyword);
-                }
-            )
-            ->orderBy('view_count', 'desc')
-            ->paginate(20);
+            $steps = Step::query()->whereIn('id', $stepsIds)->get()->toArray();
 
-        return $this->json()->ok($categories);
+            $array[$key]['steps'] = $steps;
+        }
+
+        return $this->json()->ok($this->paginate($array, 20, (int) $request->get('page'), []));
+    }
+
+    public function paginate($items, $perPage = 20, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 }

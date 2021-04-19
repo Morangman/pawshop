@@ -26008,14 +26008,15 @@ __webpack_require__.r(__webpack_exports__);
           "index": "Statistics"
         },
         "form": {
-          "id": "ID",
+          "id": "Product ID",
           "image": "Image",
+          "steps": "Steps",
           "title": "Title",
           "cart_count": "Add to cart quantity",
           "view_count": "Number of views",
           "coefficient": "Сoefficient",
-          "parsed_price": "Parsed price",
-          "custom_price": "Custom price"
+          "result_price": "Result price",
+          "product_price": "Product max price"
         },
         "messages": {
           "update": "Device has been successfully updated"

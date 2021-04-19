@@ -226,6 +226,8 @@
 </template>
 
 <script>
+    import FormHelper from '../../admin/js/mixins/form_helper';
+
     export default {
         props: {
             category: {
@@ -245,6 +247,8 @@
                 required: false,
             },
         },
+
+        mixins: [FormHelper],
 
         data() {
             return {
@@ -454,12 +458,28 @@
                     localStorage.setItem("orders", JSON.stringify(orders));
                 }
 
+                this.formData = new FormData();
+                this.formData.set('_method', 'POST');
+
+                this.collectFormData({
+                    steps: this.selectedSteps.concat(this.selectedAccesories),
+                    price: this.summ,
+                });
+
                 axios.post(
                     Router.route('add-to-box', { slug: this.category.slug }),
+                    this.formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
                 ).then((data) => {
                     //console.log(data);
                 }).catch(({ response: { data: { errors } } }) => {
-                    //console.log(errors);
+                    // notify.success(
+                    //     errors
+                    // );
                 });
 
                 location.href = Router.route('cart');

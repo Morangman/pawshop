@@ -47,6 +47,9 @@
                                 </span>
                             </th>
                             <th>
+                                {{ $t('admin.statistics.form.steps') }}
+                            </th>
+                            <th>
                                 {{ $t('admin.statistics.form.cart_count') }}
                             </th>
                             <th>
@@ -56,10 +59,10 @@
                                 {{ $t('admin.statistics.form.coefficient') }}
                             </th>
                             <th>
-                                {{ $t('admin.statistics.form.parsed_price') }}
+                                {{ $t('admin.statistics.form.result_price') }}
                             </th>
                             <th>
-                                {{ $t('admin.statistics.form.custom_price') }}
+                                {{ $t('admin.statistics.form.product_price') }}
                             </th>
                         </tr>
                     </thead>
@@ -68,11 +71,16 @@
                             <tr v-for="(product, i) in products" :key="`status_${i}`">
                                     <td><a :href="$r('admin.category.edit', { slug: product.slug })">{{ product.id }}</a></td>
                                     <td><img style="width: 100px; height: auto;" :src="product.image"/></td>
-                                    <td v-html="highlightSearchResult(product.title, filters.search)"></td>
-                                    <td>{{ product.box_count }}</td>
-                                    <td>{{ product.view_count }}</td>
-                                    <td>{{ product.coefficient }}</td>
-                                    <td>{{ product.custom_text }}</td>
+                                    <td><a :href="$r('admin.category.edit', { slug: product.slug })">{{ product.name }}</a></td>
+                                    <td>
+                                        <div class="flex flex-row">
+                                            <p class="mr-2" v-for="(step, i) in product.steps" :key="`step_${i}`">{{ step.value }}</p>
+                                        </div>
+                                    </td>
+                                    <td>{{ product.steps_box_count }}</td>
+                                    <td>{{ product.steps_view_count }}</td>
+                                    <td>{{ product.steps_coefficient }}</td>
+                                    <td>{{ product.price }}</td>
                                     <td>{{ product.custom_text }}</td>
                                 </tr>
                         </template>

@@ -568,6 +568,8 @@ class HomeController extends Controller
 
         $ids = [];
 
+        $allStepsIds = [];
+
         $addToPrice = 0;
 
         $addPercent = 0;
@@ -575,6 +577,8 @@ class HomeController extends Controller
         $isBroken = false;
 
         foreach ($steps as $step) {
+            $allStepsIds[] = $step['id'];
+
             $premiumPrice = DB::table('premium_price')
                 ->where('step_id', $step['id'])
                 ->where('category_id', $request->get('category_id'))
@@ -663,6 +667,27 @@ class HomeController extends Controller
                 $resultPrice = $priceForBroken;
             }
         }
+        
+        if (DB::table('statistics')->where('category_id', $category->getKey())->whereJsonContains('steps_ids', $allStepsIds)->exists()) {
+            try {
+                $stat = DB::table('statistics')->where('category_id', $category->getKey())->whereJsonContains('steps_ids', $allStepsIds);
+
+                $stat->increment('steps_view_count', 1);
+    
+                $coefficient = (int) $stat->first()->steps_box_count / (int) $stat->first()->steps_view_count;
+    
+                $stat->update(['steps_coefficient' => (float) number_format($coefficient, 1, '.', '.')]);
+            } catch (\Exception $e) {}
+        } else {
+            DB::table('statistics')->insert([
+                'category_id' => $request->get('category_id'),
+                'steps_box_count' => 0,
+                'steps_view_count' => 1,
+                'steps_coefficient' => 0,
+                'steps_ids' => json_encode($allStepsIds),
+                'price' => $resultPrice,
+            ]);
+        }
 
         return $this->json()->ok(['price' => $resultPrice]);
     }
@@ -697,14 +722,44 @@ class HomeController extends Controller
 
     /**
      * @param string $slug
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function addToBox(string $slug): JsonResponse
+    public function addToBox(string $slug, Request $request): JsonResponse
     {
+        $steps = $request->get('steps');
+
+        $stepsIds = [];
+
+        foreach ($steps as $step) {
+            $stepsIds[] = (int) $step['id'];
+        }
+
         $category = Category::query()->where('slug', $slug)->first();
-        
+
         $category->increment('box_count', 1);
+
+        if (DB::table('statistics')->where('category_id', $category->getKey())->whereJsonContains('steps_ids', $stepsIds)->exists()) {
+            try {
+                $stat = DB::table('statistics')->where('category_id', $category->getKey())->whereJsonContains('steps_ids', $stepsIds);
+
+                $stat->increment('steps_box_count', 1);
+    
+                $coefficient = (int) $stat->first()->steps_box_count / (int) $stat->first()->steps_view_count;
+    
+                $stat->update(['steps_coefficient' => (float) number_format($coefficient, 1, '.', '.')]);
+            } catch (\Exception $e) {}
+        } else {
+            DB::table('statistics')->insert([
+                'category_id' => $request->get('category_id'),
+                'steps_box_count' => 1,
+                'steps_view_count' => 1,
+                'steps_coefficient' => 1,
+                'steps_ids' => json_encode($stepsIds),
+                'price' => $request->get('price'),
+            ]);
+        }
 
         return $this->json()->noContent();
     }
