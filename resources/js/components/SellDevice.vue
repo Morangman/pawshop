@@ -462,7 +462,7 @@
                 this.formData.set('_method', 'POST');
 
                 this.collectFormData({
-                    steps: this.selectedSteps.concat(this.selectedAccesories),
+                    steps: this.selectedSteps,
                     price: this.summ,
                 });
 

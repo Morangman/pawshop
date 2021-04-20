@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Setting\StoreRequest;
 use App\Http\Requests\Admin\Setting\UpdateRequest;
 use App\Step;
+use App\StepName;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
@@ -89,6 +90,12 @@ class StatisticsController extends Controller
             $stepsIds = json_decode($value['steps_ids']);
 
             $steps = Step::query()->whereIn('id', $stepsIds)->get()->toArray();
+
+            foreach ($steps as $i => $step) {
+                $stepName = StepName::query()->where('id', $step['name_id'])->first()->toArray();
+
+                $steps[$i]['step_name'] = $stepName;
+            }
 
             $array[$key]['steps'] = $steps;
         }

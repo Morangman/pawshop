@@ -13,7 +13,7 @@
             <div class="header-flex">
                 <ul class="header-menu">
                     <li>
-                        <a href="" data-title="Device Repairs" class="has-drop">Device Repairs <img src="{{ asset('client/images/select_arrow.png') }}" alt="" /></a>
+                        <a href="" data-title="Choose Device" class="has-drop">Choose Device <img src="{{ asset('client/images/select_arrow.png') }}" alt="" /></a>
                         <ul class="drop-menu">
                             @foreach($categories as $category)
                                 <li><a href="{{ URL::route('get-category', ['slug' => $category->getAttribute('slug')]) }}">{{ $category->getAttribute('name') }}</a></li>

@@ -12,5 +12,5 @@
             <div class="section-space"></div>
         </div>
     </section>
-    @yield('footer', View::make('footer', ['categories' => $categories]))
+    @yield('footer', View::make('footer', ['categories' => $categories, 'settings' => $settings]))
 @endsection

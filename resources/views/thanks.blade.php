@@ -11,5 +11,5 @@
         ></thanks>
     </div>
 
-    @yield('footer', View::make('footer', ['categories' => $categories]))
+    @yield('footer', View::make('footer', ['categories' => $categories, 'settings' => $settings]))
 @endsection

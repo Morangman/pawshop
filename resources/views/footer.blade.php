@@ -44,14 +44,23 @@
                 <ul>
                     <li class="title">Menu</li>
                     <li><a href="{{ URL::route('support') }}" data-title="Mobile Service">Support</a></li>
-                    <li><a href="{{ URL::route('user_agreement') }}" data-title="Mobile Service">User Agreement</a></li>
-                    <li><a href="{{ URL::route('privacy_policy') }}" data-title="Mobile Service">Privacy Policy</a></li>
-                    <li><a href="{{ URL::route('terms') }}" data-title="Mobile Service">Terms and Conditions </a></li>
+                    @if($settings->getAttribute('user_agreement'))
+                        <li><a href="{{ URL::route('user_agreement') }}" data-title="Mobile Service">User Agreement</a></li>
+                    @endif
+                    @if($settings->getAttribute('privacy_policy'))
+                        <li><a href="{{ URL::route('privacy_policy') }}" data-title="Mobile Service">Privacy Policy</a></li>
+                    @endif
+                    @if($settings->getAttribute('terms'))
+                        <li><a href="{{ URL::route('terms') }}" data-title="Mobile Service">Terms and Conditions </a></li>
+                    @endif
+                    @if($settings->getAttribute('law_enforcement'))
+                        <li><a href="{{ URL::route('law_enforcement') }}" data-title="Mobile Service">Law Enforcement</a></li>
+                    @endif
                 </ul>
                 <ul>
                     <li class="title">Our Contacts</li>
-                    <li class="location"><img src="{{ asset('client/images/marker_white.png') }}" alt="" /><a href="https://www.google.com/maps/place/33.335524625196314, -111.91218306985526" target="_blank">1730 E Warner Rd, Suite 7, Tempe, AZ 85284</a></li>
-                    <li class="location"><img src="{{ asset('client/images/phone.svg') }}" alt="" /><a href="tel:+16025546313">+1 (602) 554-6313</a></li>
+                    <li class="location"><img src="{{ asset('client/images/marker_white.png') }}" alt="" /><a href="https://g.page/rapid-iphone-repair?share" target="_blank">1730 E Warner Rd, Suite 7, Tempe, AZ 85284</a></li>
+                    <li class="location phone-mobile"><img src="{{ asset('client/images/phone.svg') }}" alt="" /><a href="tel:+16025546313">+1 (602) 554-6313</a></li>
                 </ul>
                 <ul>
                     @foreach($categories as $category)
@@ -60,7 +69,7 @@
                 </ul>
             </div>
             <div class="footer-info">
-                <a href="tel:4803168679" class="tel">(480)-316-8679</a>
+                <a href="tel:+16025546313" class="tel">+1 (602) 554-6313</a>
                 <p>Mon-Sun 9:00AM-8:00PM</p>
                 <a href="" class="btn">Select Your Repair</a>
             </div>

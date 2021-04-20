@@ -3065,6 +3065,10 @@ h2 {
 
 .grecaptcha-badge { visibility: hidden; }
 
+.phone-mobile {
+  display: none;
+}
+
 @media screen and (max-width: 700px){
     .box{
         width: 100%;
@@ -3296,6 +3300,10 @@ h2 {
 
   .footer-info {
     display: none;
+  }
+
+  .phone-mobile {
+    display: block;
   }
 
   .footer-menu ul {

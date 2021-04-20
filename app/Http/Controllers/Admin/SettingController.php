@@ -86,9 +86,17 @@ class SettingController extends Controller
         $settingData = $request->except(
                 [
                     'code_insert',
+                    'law_enforcement',
+                    'privacy_policy',
+                    'terms',
+                    'user_agreement',
                 ]
             ) + [
                 'code_insert' => $request->get('code_insert') ?? '',
+                'law_enforcement' => $request->get('law_enforcement') ?? '',
+                'privacy_policy' => $request->get('privacy_policy') ?? '',
+                'terms' => $request->get('terms') ?? '',
+                'user_agreement' => $request->get('terms') ?? '',
             ];
 
         $setting->update($settingData);

@@ -35,6 +35,22 @@
                             </th>
                             <th>
                                 {{ $t('admin.statistics.form.cart_count') }}
+                                <span>
+                                    <i
+                                            v-if="filters.by === 'steps_box_count' && filters.dir === 'desc'"
+                                            @click.prevent="sort('steps_box_count', 'asc')"
+                                            class="icon-arrow-down8 cursor-pointer"
+                                    ></i>
+                                    <i
+                                            v-if="filters.by === 'steps_box_count' && filters.dir === 'asc'"
+                                            @click.prevent="sort('steps_box_count', 'desc')"
+                                            class="icon-arrow-up8 cursor-pointer"
+                                    ></i>
+                                    <span v-if="filters.by !== 'steps_box_count'" @click.prevent="sort('steps_box_count', 'asc')">
+                                        <i class="icon-arrow-up8 cursor-pointer"></i>
+                                        <i class="icon-arrow-down8 cursor-pointer"></i>
+                                    </span>
+                                </span>
                             </th>
                             <th>
                                 {{ $t('admin.statistics.form.view_count') }}
@@ -73,8 +89,8 @@
                                     <td><img style="width: 100px; height: auto;" :src="product.image"/></td>
                                     <td><a :href="$r('admin.category.edit', { slug: product.slug })">{{ product.name }}</a></td>
                                     <td>
-                                        <div class="flex flex-row">
-                                            <p class="mr-2" v-for="(step, i) in product.steps" :key="`step_${i}`">{{ step.value }}</p>
+                                        <div class="col" style="min-width: 200px;">
+                                            <p v-for="(step, i) in product.steps" :key="`step_${i}`">{{ step.step_name.name }}: {{ step.value }}</p>
                                         </div>
                                     </td>
                                     <td>{{ product.steps_box_count }}</td>

@@ -267,7 +267,7 @@ class HomeController extends Controller
 
         $order = Order::create($orderData);
 
-        $this->sendMessage('New offer', route('admin.order.edit', ['order' => $order->getKey()]));
+        //$this->sendMessage('New offer', route('admin.order.edit', ['order' => $order->getKey()]));
 
         foreach($order->getAttribute('orders')['order'] as $item) {
             for ($i = 1; $i <= (int) $item['ctn']; $i++) {
@@ -577,8 +577,6 @@ class HomeController extends Controller
         $isBroken = false;
 
         foreach ($steps as $step) {
-            $allStepsIds[] = $step['id'];
-
             $premiumPrice = DB::table('premium_price')
                 ->where('step_id', $step['id'])
                 ->where('category_id', $request->get('category_id'))
@@ -610,6 +608,10 @@ class HomeController extends Controller
             }
 
             $stepCategory = StepName::query()->whereKey($step['name_id'])->first();
+
+            if (!$stepCategory->getAttribute('is_checkbox')) {
+                $allStepsIds[] = $step['id'];
+            }
 
             if ($stepCategory->getAttribute('is_functional')) {
                 if ($step['value'] === 'No') {

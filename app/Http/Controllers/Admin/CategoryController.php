@@ -151,8 +151,16 @@ class CategoryController extends Controller
 
         foreach ($idsArray as $ids) {
             $price = DB::table('prices')->where('category_id', $category->getKey())->whereJsonContains('steps_ids', $ids)->first();
+            $steps = Step::query()->whereIn('id', $ids)->get()->toArray();
+
+            foreach ($steps as $i => $step) {
+                if ($category->getAttribute('is_parsed')) {
+                    $step['value'] === 'Brand New' ? $steps[$i]['value'] = 'Flawless' : $step['value'];
+                }
+            }
+
             $priceVariations[] = [
-                'steps' => Step::query()->whereIn('id', $ids)->get()->toArray(),
+                'steps' => $steps,
                 'price' => $price->price,
                 'id' => $price->id,
             ];

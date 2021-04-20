@@ -200,7 +200,7 @@
                                     <input v-model="orderData.address.address2" name="address-line2" autocomplete="on" type="text" placeholder="Adress 2">
                                 </div>
                                 <div class="input-block width-50">
-                                    <input v-model="orderData.address.city" :class="addressError.city ? 'input-error' : ''" name="country-name" autocomplete="on" type="text" placeholder="City*">
+                                    <input v-model="orderData.address.city" :class="addressError.city ? 'input-error' : ''" name="city" autocomplete="on" type="text" placeholder="City*">
                                     <div v-if="addressError.city" class="invalid-feedback">
                                         <strong>Please provide a city.</strong>
                                     </div>
