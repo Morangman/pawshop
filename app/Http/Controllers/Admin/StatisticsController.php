@@ -94,7 +94,11 @@ class StatisticsController extends Controller
             foreach ($steps as $i => $step) {
                 $stepName = StepName::query()->where('id', $step['name_id'])->first()->toArray();
 
-                $steps[$i]['step_name'] = $stepName;
+                if ($stepName['is_checkbox']) {
+                    unset($steps[$i]);
+                } else {
+                    $steps[$i]['step_name'] = $stepName;
+                }
             }
 
             $array[$key]['steps'] = $steps;
