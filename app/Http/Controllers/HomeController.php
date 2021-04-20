@@ -267,7 +267,7 @@ class HomeController extends Controller
 
         $order = Order::create($orderData);
 
-        //$this->sendMessage('New offer', route('admin.order.edit', ['order' => $order->getKey()]));
+        $this->sendMessage('New offer', route('admin.order.edit', ['order' => $order->getKey()]));
 
         foreach($order->getAttribute('orders')['order'] as $item) {
             for ($i = 1; $i <= (int) $item['ctn']; $i++) {
