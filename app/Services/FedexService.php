@@ -6,8 +6,13 @@ namespace App\Services;
 
 use App\Order;
 use FedEx\ShipService;
+use FedEx\TrackService\Request;
 use FedEx\ShipService\ComplexType;
 use FedEx\ShipService\SimpleType;
+use FedEx\TrackService\ComplexType\TrackRequest;
+use FedEx\TrackService\ComplexType\TrackSelectionDetail;
+use FedEx\TrackService\SimpleType\TrackIdentifierType;
+use FedEx\TrackService\SimpleType\TrackRequestProcessingOptionType;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
@@ -192,5 +197,38 @@ class FedexService
         } else {
             return [];
         }
+    }
+
+    public function track(int $id) {
+        $trackRequest = new TrackRequest();
+
+        // User Credential
+        $trackRequest->WebAuthenticationDetail->UserCredential->Key = $this->key;
+        $trackRequest->WebAuthenticationDetail->UserCredential->Password = $this->password;
+        
+        // Client Detail
+        $trackRequest->ClientDetail->AccountNumber = $this->accountNumber;
+        $trackRequest->ClientDetail->MeterNumber = $this->meterNumber;
+        
+        // Version
+        $trackRequest->Version->ServiceId = 'trck';
+        $trackRequest->Version->Major = 19;
+        $trackRequest->Version->Intermediate = 0;
+        $trackRequest->Version->Minor = 0;
+        
+        // Track 1 shipments TrackSelectionDetail
+        $trackRequest->SelectionDetails = [new TrackSelectionDetail()];
+        
+        // For get all events TrackRequestProcessingOptionType
+        $trackRequest->ProcessingOptions = [TrackRequestProcessingOptionType::_INCLUDE_DETAILED_SCANS];
+        
+        // Track shipment 1
+        $trackRequest->SelectionDetails[0]->PackageIdentifier->Value = $id;
+        $trackRequest->SelectionDetails[0]->PackageIdentifier->Type = TrackIdentifierType::_TRACKING_NUMBER_OR_DOORTAG;
+
+        $request = new Request();
+        $trackReply = $request->getTrackReply($trackRequest);
+
+        dd($trackReply);
     }
 }

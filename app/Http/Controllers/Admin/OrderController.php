@@ -12,6 +12,7 @@ use App\Order;
 use App\OrderStatus;
 use App\Price;
 use App\Reminder;
+use App\Services\FedexService;
 use App\Step;
 use App\StepName;
 use App\SuspectIp;
@@ -121,6 +122,14 @@ class OrderController extends Controller
         }
 
         $suspectIp = SuspectIp::query()->where('ip_address', $order->getAttribute('ip_address'))->get();
+
+        // if ($trackNumber = $order->getAttribute('tracking_number')) {
+        //     $fedexService = new FedexService();
+
+        //     $trackInfo = $fedexService->track($trackNumber);
+
+        //     dd($trackInfo);
+        // }
 
         return View::make(
             'admin.order.edit',
