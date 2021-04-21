@@ -206,6 +206,7 @@
                                     </div>
                                 </div>
                                 <div class="input-block width-25">
+                                    <input name="state" v-model="orderData.address.state" autocomplete="on" style="width: 0; height: 0; border: 0;">
                                     <CustomSelect
                                         :options="states"
                                         :default="'States*'"
