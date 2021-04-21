@@ -13,7 +13,7 @@
         </div>
     </section>
     <section class="header-steps">
-        <p class="header-steps_title">Get <span class="hero-cash">Cash</span> in Three Simple Steps</p>
+        <p class="header-steps_title">Get <span class="hero-cash">Cash</span> in Three <br class="show-for-small-only"> Simple Steps</p>
 
         <div class="container header-steps_items">
             <div class="header-steps_step">
