@@ -770,7 +770,7 @@ header {
 
 .order-section .description {
   font-weight: 300;
-  font-size: 14.5px;
+  font-size: 1.35rem;
   color: #0D2A54;
   margin-bottom: 16px;
 }
@@ -3083,7 +3083,7 @@ h2 {
   width: 100%;
   height: 100%;
   content: " ";
-  background: #222;
+  background: #0d2a54;
   opacity: .9;
 }
 
@@ -3163,7 +3163,7 @@ h2 {
 .header-steps_title {
   padding-top: 5rem;
   padding-bottom: 3rem;
-  color: #555;
+  color: #0d2a54;
   font-weight: 300;
   font-size: 2.25rem;
 }
@@ -3171,7 +3171,7 @@ h2 {
 .header-steps_step-title {
   font-size: 1.35rem;
   font-weight: 500;
-  color: #333;
+  color: #0d2a54;
 }
 
 .header-steps_step-text {
@@ -3180,7 +3180,11 @@ h2 {
   font-weight: normal;
   line-height: 1.6;
   margin-top: 30px;
-  color: #555;
+  color: #0d2a54;
+}
+
+.center-text {
+  text-align: center;
 }
 
 .header-steps_step img{
@@ -4066,7 +4070,8 @@ h2 {
 
   .order-section .description {
     margin-bottom: 7px;
-      text-align: center;
+    text-align: center;
+    font-size: 1.05rem;
   }
 
   .order-content {

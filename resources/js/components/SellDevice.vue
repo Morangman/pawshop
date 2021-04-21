@@ -1,7 +1,7 @@
 <template>
 <div>
-    <h1>Start Selling</h1>
-    <div class="description">Find the product you'd like to trade-in for cash</div>
+    <h1 class="center-text">Start Selling</h1>
+    <div class="description center-text">Find the product you'd like to trade-in for cash</div>
     <ul id="scrolled" class="order-steps-list" v-if="steps.length">
         <li v-for="(step, index) in steps" :class="stepIndex === index ? 'active-step' : ''">
             <a href="javascript:void(0)"><i>{{ index + 1 }}</i> <span>{{ index + 1 }}</span></a>

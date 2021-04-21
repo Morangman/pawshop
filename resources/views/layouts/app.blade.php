@@ -25,13 +25,13 @@
 
     <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.sitekey') }}"></script>
     <script>
-             grecaptcha.ready(function() {
-                 grecaptcha.execute('{{ config('services.recaptcha.sitekey') }}', {action: 'contact'}).then(function(token) {
-                    if (token) {
-                      document.getElementById('recaptcha').value = token;
-                    }
-                 });
-             });
+        grecaptcha.ready(function() {
+            grecaptcha.execute('{{ config('services.recaptcha.sitekey') }}', {action: 'contact'}).then(function(token) {
+            if (token) {
+                document.getElementById('recaptcha').value = token;
+            }
+            });
+        });
     </script>
 </head>
 <body>
@@ -48,6 +48,14 @@
     <script src="{{ URL::asset('client/js/jquery-1.12.4.min.js') }}"></script>
     <script src="{{ URL::asset('client/js/jquery.magnific-popup.min.js') }}"></script>
     <script src="{{ URL::asset('client/js/common.js') }}"></script>
+    <script>
+        $('.go-sell').click(function(e) {
+            e.preventDefault();
+            let id = $(this).attr('href');
+            let top = $(id).offset().top - 30;
+            $('body, html').animate({scrollTop: top}, 600);
+        });
+    </script>
     @yield('scripts')
 </body>
 </html>

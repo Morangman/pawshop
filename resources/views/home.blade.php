@@ -8,8 +8,8 @@
             <p class="hero-title pt-3">TRADE-IN <br class="show-for-small-only"> YOUR USED</p>
             <p class="hero-title">ELECTRONICS <br class="show-for-small-only"> for <span class="hero-cash">CASH</span></p>
             <p class="hero-text">The simplest and safest <br class="show-for-small-only"> way to sell your old phone <br class="show-for-small-only">  or tablet online</p>
-            <a href="#sell-device-section" class="btn red-btn" data-effect="mfp-zoom-in">SELL YOUR DEVICE</a>
-            <a class="hero-arrow-down" href="#sell-device-section"><img src="{{ asset('client/images/arrow-down.png') }}"/></a>
+            <a href="#sell-device-section" class="btn red-btn go-sell" data-effect="mfp-zoom-in">SELL YOUR DEVICE</a>
+            <a class="hero-arrow-down go-sell" href="#sell-device-section"><img src="{{ asset('client/images/arrow-down.png') }}"/></a>
         </div>
     </section>
     <section class="header-steps">
@@ -35,10 +35,10 @@
     </section>
     @endif
     <!--main-content-->
-    <div class="main-content">
+    <div id="sell-device-section" class="main-content">
         <!-- ========= order-section ============ -->
         <section class="order-section">
-            <div id="sell-device-section" class="container">
+            <div class="container">
                 <div v-cloak>
                     <sell-device
                         :category="{{ json_encode($category) }}"
