@@ -3221,6 +3221,8 @@ h2 {
 
     .hero-title {
       font-size: 2.5rem;
+      margin: 0;
+      line-height: normal;
     }
 
     .hero-text {
