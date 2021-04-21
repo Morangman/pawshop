@@ -199,7 +199,13 @@ class FedexService
         }
     }
 
-    public function track(int $id) {
+    /**
+     * @param int $id
+     *
+     * @return array|string
+     */
+    public function track(int $id)
+    {
         $trackRequest = new TrackRequest();
 
         // User Credential
