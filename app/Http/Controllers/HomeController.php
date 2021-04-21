@@ -72,6 +72,7 @@ class HomeController extends Controller
             'steps' => [],
             'relatedCategories' => $categories,
             'faqs' => new stdClass(),
+            'isMainPage' => true,
         ]);
     }
 
@@ -823,6 +824,7 @@ class HomeController extends Controller
             'settings' => $this->getSettings() ?? [],
             'relatedCategories' => $relatedCategories,
             'faqs' => $faqs ?? new stdClass(),
+            'isMainPage' => false,
         ]);
     }
 
