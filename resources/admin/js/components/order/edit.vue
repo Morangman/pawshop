@@ -5,6 +5,7 @@
         :products.sync="products"
         :steps.sync="steps"
         :states.sync="states"
+        :trackstatus.sync="trackstatus"
         :statuses.sync="statuses"
         :bcode.sync="bcode"
         :suspect.sync="suspect"
@@ -32,6 +33,10 @@
             bcode: {
                 type: String,
                 required: true,
+            },
+            trackstatus: {
+                type: String,
+                required: false,
             },
             products: {
                 type: Array,

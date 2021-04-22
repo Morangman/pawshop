@@ -226,7 +226,7 @@ class FedexService
         $trackRequest->SelectionDetails = [new TrackSelectionDetail()];
         
         // For get all events TrackRequestProcessingOptionType
-        $trackRequest->ProcessingOptions = [TrackRequestProcessingOptionType::_INCLUDE_DETAILED_SCANS];
+        //$trackRequest->ProcessingOptions = [TrackRequestProcessingOptionType::_INCLUDE_DETAILED_SCANS];
         
         // Track shipment 1
         $trackRequest->SelectionDetails[0]->PackageIdentifier->Value = $id;
@@ -234,7 +234,7 @@ class FedexService
 
         $request = new Request();
         $trackReply = $request->getTrackReply($trackRequest);
-
-        dd($trackReply);
+        
+        return $trackReply;
     }
 }

@@ -35,6 +35,13 @@
                         <br>
                         <a :href="'https://www.fedex.com/fedextrack/?trknbr=' + model.tracking_number" target="_blank">{{ model.tracking_number }}</a>
                     </div>
+                    <div class="form-group" v-if="model.tracking_number">
+                        <label>
+                            <strong>Fedex tracking status</strong>
+                        </label>
+                        <br>
+                        {{ trackstatus }}
+                    </div>
                     <div class="form-group row">
                         <div class="form-group col-md-6">
                             <label>
@@ -458,6 +465,10 @@
             },
             suspect: {
                 type: Array,
+                required: false,
+            },
+            trackstatus: {
+                type: String,
                 required: false,
             },
             errors: {

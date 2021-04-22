@@ -21,6 +21,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
@@ -123,13 +124,26 @@ class OrderController extends Controller
 
         $suspectIp = SuspectIp::query()->where('ip_address', $order->getAttribute('ip_address'))->get();
 
-        // if ($trackNumber = $order->getAttribute('tracking_number')) {
-        //     $fedexService = new FedexService();
+        $trackStatus = '';
 
-        //     $trackInfo = $fedexService->track($trackNumber);
+        if ($trackNumber = $order->getAttribute('tracking_number')) {
+            $fedexService = new FedexService();
 
-        //     dd($trackInfo);
-        // }
+            $trackInfo = $fedexService->track($trackNumber);
+
+            $trackArray = $trackInfo->toArray();
+
+            if ($trackArray['HighestSeverity'] === 'SUCCESS') {
+                $statusFromResponse = Arr::get(
+                    $trackArray,
+                    'CompletedTrackDetails.0.TrackDetails.0.StatusDetail.Description'
+                );
+
+                if ($statusFromResponse) {
+                    $trackStatus = $statusFromResponse;
+                }
+            }
+        }
 
         return View::make(
             'admin.order.edit',
@@ -141,6 +155,7 @@ class OrderController extends Controller
                 'suspectIp' => $suspectIp,
                 'barcodeSrc' => $d->getBarcodeHTML($order->getKey(), 'EAN13', 3.5, 100),
                 'steps' => $sortedSteps,
+                'trackStatus' => $trackStatus,
             ]
         );
     }
