@@ -3071,7 +3071,7 @@ h2 {
 
 .hero {
   position: relative;
-  background: #717171 url(../../client/images/hero-min.jpg.webp) no-repeat center center;
+  background: #717171 url(../../client/images/background.jpeg) no-repeat center center;
   background-size: cover;
   text-align: center;
 }
