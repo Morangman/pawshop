@@ -1,4 +1,5 @@
 <div class="footer-container">
+    @php $phone = isset($settings->getAttribute('general_settings')['phone']) ? $settings->getAttribute('general_settings')['phone'] : ''; @endphp
     <section class="support-section">
         <div class="container">
             <div class="support-content">
@@ -60,7 +61,7 @@
                 <ul>
                     <li class="title">Our Contacts</li>
                     <li class="location"><img src="{{ asset('client/images/marker_white.png') }}" alt="" /><a href="https://g.page/rapid-iphone-repair?share" target="_blank">1730 E Warner Rd, Suite 7, Tempe, AZ 85284</a></li>
-                    <li class="location phone-mobile"><img src="{{ asset('client/images/phone.svg') }}" alt="" /><a href="tel:+16025546313">+1 (602) 554-6313</a></li>
+                    <li class="location phone-mobile"><img src="{{ asset('client/images/phone.svg') }}" alt="" /><a href="tel:+{{ preg_replace('/\D+/', '', $phone) }}">{{ $phone }}</a></li>
                 </ul>
                 <ul>
                     @foreach($categories as $category)
@@ -69,7 +70,7 @@
                 </ul>
             </div>
             <div class="footer-info">
-                <a href="tel:+16025546313" class="tel">+1 (602) 554-6313</a>
+                <a href="tel:+{{ preg_replace('/\D+/', '', $phone) }}" class="tel">{{ $phone }}</a>
                 <p>Mon-Sun 9:00AM-8:00PM</p>
                 <a href="" class="btn">Select Your Repair</a>
             </div>
