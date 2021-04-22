@@ -273,7 +273,7 @@ class HomeController extends Controller
             route('admin.order.edit', ['order' => $order->getKey()]),
             $orderData['orders']['order'][0]['device']['image'],
             $orderData['orders']['order'][0]['device']['name'],
-            round((float) $order->getAttribute('total_summ'), 1),
+            round((float) $order->getAttribute('total_summ'), 2),
         );
 
         foreach($order->getAttribute('orders')['order'] as $item) {
