@@ -124,26 +124,26 @@ class OrderController extends Controller
 
         $suspectIp = SuspectIp::query()->where('ip_address', $order->getAttribute('ip_address'))->get();
 
-        $trackStatus = '';
+        // $trackStatus = '';
 
-        if ($trackNumber = $order->getAttribute('tracking_number')) {
-            $fedexService = new FedexService();
+        // if ($trackNumber = $order->getAttribute('tracking_number')) {
+        //     $fedexService = new FedexService();
 
-            $trackInfo = $fedexService->track($trackNumber);
+        //     $trackInfo = $fedexService->track($trackNumber);
 
-            $trackArray = $trackInfo->toArray();
+        //     $trackArray = $trackInfo->toArray();
 
-            if ($trackArray['HighestSeverity'] === 'SUCCESS') {
-                $statusFromResponse = Arr::get(
-                    $trackArray,
-                    'CompletedTrackDetails.0.TrackDetails.0.StatusDetail.Description'
-                );
+        //     if ($trackArray['HighestSeverity'] === 'SUCCESS') {
+        //         $statusFromResponse = Arr::get(
+        //             $trackArray,
+        //             'CompletedTrackDetails.0.TrackDetails.0.StatusDetail.Description'
+        //         );
 
-                if ($statusFromResponse) {
-                    $trackStatus = $statusFromResponse;
-                }
-            }
-        }
+        //         if ($statusFromResponse) {
+        //             $trackStatus = $statusFromResponse;
+        //         }
+        //     }
+        // }
 
         return View::make(
             'admin.order.edit',
@@ -155,7 +155,6 @@ class OrderController extends Controller
                 'suspectIp' => $suspectIp,
                 'barcodeSrc' => $d->getBarcodeHTML($order->getKey(), 'EAN13', 3.5, 100),
                 'steps' => $sortedSteps,
-                'trackStatus' => $trackStatus,
             ]
         );
     }
