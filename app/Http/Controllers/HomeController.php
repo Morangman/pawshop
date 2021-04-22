@@ -268,7 +268,13 @@ class HomeController extends Controller
 
         $order = Order::create($orderData);
 
-        $this->sendMessage('New offer', route('admin.order.edit', ['order' => $order->getKey()]));
+        $this->sendOffer(
+            'New offer',
+            route('admin.order.edit', ['order' => $order->getKey()]),
+            $orderData['orders']['order'][0]['device']['image'],
+            $orderData['orders']['order'][0]['device']['name'],
+            round((float) $order->getAttribute('total_summ'), 1),
+        );
 
         foreach($order->getAttribute('orders')['order'] as $item) {
             for ($i = 1; $i <= (int) $item['ctn']; $i++) {
