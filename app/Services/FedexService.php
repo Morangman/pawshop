@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Services;
 
 use App\Order;
+use App\Setting;
 use FedEx\ShipService;
 use FedEx\TrackService\Request;
 use FedEx\ShipService\ComplexType;
@@ -66,6 +67,10 @@ class FedexService
      */
     public function ship(Order $order)
     {
+        $settings = Setting::latest('updated_at')->first();
+
+        $phone = isset($settings->getAttribute('general_settings')['phone']) ? $settings->getAttribute('general_settings')['phone'] : '16027062575';
+
         $userCredential = new ComplexType\WebAuthenticationCredential();
         $userCredential
             ->setKey($this->key)
@@ -118,8 +123,8 @@ class FedexService
 
         $recipientContact = new ComplexType\Contact();
         $recipientContact
-            ->setPersonName('Contact Name')
-            ->setPhoneNumber('14803168679');
+            ->setPersonName('Rapid Recycle')
+            ->setPhoneNumber($phone);
 
         $recipient = new ComplexType\Party();
         $recipient
