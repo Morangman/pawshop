@@ -123,6 +123,7 @@
                                 <option :value="null">State*</option>
                                 <option v-for="(state, i) in states" :key="`state_${i}`" :value="i">{{ state }}</option>
                             </select>
+                            <input v-if="!states[model.address.state]" class="form-control" v-model="model.address.state"/>
                             <div v-for="(error, i) in errors['address.state']"
                                  :key="`address__error__${i}`"
                                  class="text-danger error"

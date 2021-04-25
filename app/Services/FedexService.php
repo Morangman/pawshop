@@ -16,6 +16,7 @@ use FedEx\TrackService\SimpleType\TrackIdentifierType;
 use FedEx\TrackService\SimpleType\TrackRequestProcessingOptionType;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -91,13 +92,25 @@ class FedexService
             ->setMinor(0)
             ->setServiceId('ship');
 
+        $orderState = '';
+
+        if (!isset(Lang::get('states')[$order->getAttribute('address')['state']])) {
+            foreach (Lang::get('states') as $key => $state) {
+                if ($state === ucwords($order->getAttribute('address')['state'])) {
+                    $orderState = str_replace('string:', '', $key);
+                }
+            }
+        } else {
+            $orderState = str_replace('string:', '', $order->getAttribute('address')['state']);
+        }
+
         $shipperAddress = new ComplexType\Address();
         $address1 = $order->getAttribute('address')['address1'];
         $address2 = isset($order->getAttribute('address')['address2']) ? $order->getAttribute('address')['address2'] : null;
         $shipperAddress
             ->setStreetLines([$address1, $address2 ? $address2 : $address1])
             ->setCity($order->getAttribute('address')['city'])
-            ->setStateOrProvinceCode(str_replace('string:', '', $order->getAttribute('address')['state']))
+            ->setStateOrProvinceCode($orderState)
             ->setPostalCode($order->getAttribute('address')['postal_code'])
             ->setCountryCode('US');
 

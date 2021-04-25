@@ -301,7 +301,7 @@
                         </div>
                         <div class="order-options-links">
                             <a href="#" v-on:click="backStep" class="btn gray-btn">Back</a>
-                            <a href="#" v-on:click="validateTerms" class="btn red-btn">Checkout</a>
+                            <a href="#" v-if="showCheckout" v-on:click="validateTerms" class="btn red-btn">Checkout</a>
                         </div>
                     </div>
 
@@ -374,6 +374,7 @@
                 emailError: null,
                 paymentError: false,
                 paymentZelleError: false,
+                showCheckout: true,
                 addressError: {
                     name: false,
                     phone: false,
@@ -612,6 +613,8 @@
             validateTerms() {
                 this.termsError = false;
 
+                this.showCheckout = false;
+
                 if (this.accept_terms)
                 {
                     this.orderData.total_summ = this.totalSumm;
@@ -645,6 +648,8 @@
                     });
                 } else {
                     this.termsError = true;
+
+                    this.showCheckout = true;
                 }
             },
 
