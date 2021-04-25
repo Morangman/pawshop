@@ -50,7 +50,7 @@ class OrderStatusController extends Controller
 
         Session::flash(
             'success',
-            Lang::get('admin/order_status.messages.create')
+            Lang::get('admin/order-status.messages.create')
         );
 
         return $this->json()->noContent();
@@ -84,7 +84,7 @@ class OrderStatusController extends Controller
 
         Session::flash(
             'success',
-            Lang::get('admin/order_status.messages.update')
+            Lang::get('admin/order-status.messages.update')
         );
 
         return $this->json()->noContent();
@@ -103,7 +103,7 @@ class OrderStatusController extends Controller
 
         Session::flash(
             'success',
-            Lang::get('admin/order_status.messages.delete')
+            Lang::get('admin/order-status.messages.delete')
         );
 
         return $this->json()->noContent();
