@@ -23,6 +23,24 @@
                                 </div>
                             </div>
                         </div>
+                        <label>
+                            <h4>Band price</h4>
+                        </label>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Price for all Apple watch band types</strong>
+                                    </label>
+                                    <input
+                                        name="band_price"
+                                        type="text"
+                                        v-model="model.general_settings.band_price"
+                                        class="form-control"
+                                    >
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <label>
@@ -660,6 +678,7 @@
                         switch_point: null,
                         ds_point: null,
                         appleWatch_point: null,
+                        band_price: null,
                     },
                     terms: null,
                     code_insert: null,

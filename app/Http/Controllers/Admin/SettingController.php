@@ -8,9 +8,11 @@ use App\Setting;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Setting\StoreRequest;
 use App\Http\Requests\Admin\Setting\UpdateRequest;
+use App\Step;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -82,6 +84,12 @@ class SettingController extends Controller
                 $setting->deleteMedia($firstMedia->first());
             }
         }
+
+        if ($bandPrice = $request->get('general_settings')['band_price']) {
+            $stepsIds = Step::query()->where('name_id', '=', 6)->pluck('id')->toArray();
+
+            DB::table('premium_price')->whereIn('step_id', $stepsIds)->update(['price_plus' => $bandPrice]);
+        }
         
         $settingData = $request->except(
                 [
@@ -146,6 +154,7 @@ class SettingController extends Controller
                 'code_insert' => $request->get('code_insert') ?? '',
                 'general_settings' => [
                     'email' => $request->get('general_settings')['email'] ?? null,
+                    'band_price' => $request->get('general_settings')['band_price'] ?? null,
                     'contact_email' => $request->get('general_settings')['contact_email'] ?? null,
                     'phone' => $request->get('general_settings')['phone'] ?? null,
                     'seo_meta' => $request->get('general_settings')['seo_meta'] ?? null,

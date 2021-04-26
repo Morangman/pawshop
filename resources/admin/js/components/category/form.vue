@@ -245,7 +245,8 @@
                             <tr>
                             <th scope="col">#</th>
                             <th scope="col" v-for="(step, index) in priceVariations.length ? priceVariations[0].steps : []" :key="`step_table__${index}`">{{ step.attribute }}</th>
-                            <th scope="col">price</th>
+                            <th scope="col">parsed price</th>
+                            <th scope="col">custom price</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -258,9 +259,18 @@
                                 </td>
                                 <td>
                                     <input
-                                        name="slug"
+                                        name="parsed_price"
                                         type="text"
                                         v-model="price.price"
+                                        class="form-control"
+                                        v-on:keyup.enter="updatePrice(price)"
+                                    >
+                                </td>
+                                <td>
+                                    <input
+                                        name="custom_price"
+                                        type="text"
+                                        v-model="price.custom_price"
                                         class="form-control"
                                         v-on:keyup.enter="updatePrice(price)"
                                     >
@@ -305,6 +315,13 @@
                                     v-on:click="updatePremiumPrice(price)"
                                 >
                                     Update premium price
+                                </button>
+                                <button
+                                    type="submit"
+                                    class="btn btn-danger"
+                                    v-on:click="deletePremiumPrice(price)"
+                                >
+                                    Delete premium price
                                 </button>
                             </div>
                         </div>
@@ -468,6 +485,33 @@
                     notify.success(
                         'Premium price was be updated'
                     );
+                }).catch(({ response: { data: { errors } } }) => {
+                    notify.success(
+                        errors
+                    );
+                });
+            },
+
+            deletePremiumPrice(data) {
+                this.formData = new FormData();
+                this.formData.set('_method', 'POST');
+
+                this.collectFormData(data);
+
+                axios.post(
+                    Router.route('admin.category.delete-premium', { slug: this.model.slug }),
+                    this.formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then(() => {
+                    notify.success(
+                        'Premium price was be deleted'
+                    );
+
+                    location.href = Router.route('admin.category.edit', { slug: this.model.slug });
                 }).catch(({ response: { data: { errors } } }) => {
                     notify.success(
                         errors

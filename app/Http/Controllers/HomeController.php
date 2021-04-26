@@ -604,6 +604,10 @@ class HomeController extends Controller
                 }
             }
 
+            if ($step['value'] === 'Broken') {
+                $isBroken = true;
+            }
+
             if ($premiumPrice) {
                 if ($pricePlus = $premiumPrice->price_plus) {
                     $addToPrice += $pricePlus;
@@ -652,7 +656,11 @@ class HomeController extends Controller
                 $similar = array_intersect($ids, $price->getAttribute('steps_ids'));
 
                 if (sizeof($ids) === sizeof($similar)) {
-                    $resultPrice = $price->getAttribute('price');
+                    if ($customPrice = $price->getAttribute('custom_price')) {
+                        $resultPrice = $customPrice;
+                    } else {
+                        $resultPrice = $price->getAttribute('price');
+                    }
                 }
             }
         }

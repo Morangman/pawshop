@@ -162,6 +162,7 @@ class CategoryController extends Controller
             $priceVariations[] = [
                 'steps' => $steps,
                 'price' => $price->price,
+                'custom_price' => $price->custom_price,
                 'id' => $price->id,
             ];
         }
@@ -248,6 +249,16 @@ class CategoryController extends Controller
             foreach ($requestSteps as $step) {
                 foreach ($step['items'] as $item) {
                     $stepsIds[] = $item['id'];
+
+                    if((int) $item['name_id'] === 6 && !DB::table('premium_price')->where('category_id', '=', $category->getKey())->where('step_id', '=', (int) $item['id'])->exists()) {
+                        DB::table('premium_price')->insert([
+                            'category_id' =>  $category->getKey(),
+                            'step_id' => (int) $item['id'],
+                            'price_plus' => null,
+                            'price_percent' => null,
+
+                        ]);
+                    }
                 }
             }
 
@@ -332,7 +343,19 @@ class CategoryController extends Controller
             }
 
             DB::table('prices')->where('category_id', $category->getKey())->whereJsonContains('steps_ids', $ids)->update([
-                'price' => (float) $price
+                'price' => (float) $price,
+            ]);
+        }
+        
+        if ($customPrice = $request->get('custom_price')) {
+            $ids = [];
+
+            foreach ($request->get('steps') as $step) {
+                $ids[] = (int) $step['id'];
+            }
+
+            DB::table('prices')->where('category_id', $category->getKey())->whereJsonContains('steps_ids', $ids)->update([
+                'custom_price' => (float) $customPrice,
             ]);
         }
 
@@ -344,7 +367,7 @@ class CategoryController extends Controller
         return $this->json()->noContent();
     }
 
-        /**
+    /**
      * @param \Illuminate\Http\Request $request
      * @param string $slug
      *
@@ -365,6 +388,25 @@ class CategoryController extends Controller
             'success',
             Lang::get('admin/category.messages.update')
         );
+
+        return $this->json()->noContent();
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param string $slug
+     *
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @throws \Exception
+     */
+    public function deletePremiumPrice(Request $request, string $slug): JsonResponse
+    {
+        $category = Category::query()->where('slug', $slug)->first();
+        
+        if ($id = $request->get('id')) {
+            DB::table('premium_price')->where('id', (int) $id)->where('step_id', (int) $request->get('step_id'))->where('category_id', $category->getKey())->delete();
+        }
 
         return $this->json()->noContent();
     }

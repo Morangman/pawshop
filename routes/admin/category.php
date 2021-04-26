@@ -42,6 +42,11 @@ Route::post('{slug}/update-premium', [
     'uses' => 'CategoryController@updatePremiumPrice',
 ]);
 
+Route::post('{slug}/delete-premium', [
+    'as' => '.delete-premium',
+    'uses' => 'CategoryController@deletePremiumPrice',
+]);
+
 Route::post('{slug}/generate-prices', [
     'as' => '.generate-prices',
     'uses' => 'CategoryController@generatePricesVariations',

@@ -25,6 +25,7 @@ class Price extends Model
         'category_id',
         'steps_ids',
         'price',
+        'custom_price',
         'is_parsed',
     ];
 
@@ -35,6 +36,7 @@ class Price extends Model
         'category_id' => 'int',
         'steps_ids' => 'array',
         'price' => 'string',
+        'custom_price' => 'string',
         'is_parsed' => 'bool',
     ];
 }

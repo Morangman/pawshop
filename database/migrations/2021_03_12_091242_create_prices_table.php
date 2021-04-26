@@ -23,6 +23,7 @@ class CreatePricesTable extends Migration
             $table->unsignedBigInteger('category_id');
             $table->json('steps_ids')->nullable();
             $table->decimal('price',10, 2)->default(0);
+            $table->decimal('custom_price',10, 2)->default(0);
             $table->boolean('is_parsed')->default(0);
             $table->timestamps();
         });
