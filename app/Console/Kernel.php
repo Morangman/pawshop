@@ -36,6 +36,6 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         //$schedule->command(Reminder::class)->dailyAt('7:00');
-        $schedule->command(CheckCart::class)->everyMinute();
+        $schedule->command(CheckCart::class)->dailyAt('12:00');
     }
 }
