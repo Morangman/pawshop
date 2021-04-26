@@ -63,6 +63,10 @@ Route::post('/get-price', 'HomeController@getPrice')->name('get-price');
 
 Route::post('/add-to-box/{slug}', 'HomeController@addToBox')->name('add-to-box');
 
+Route::post('/update-cart', 'HomeController@updateCart')->name('update-cart');
+
+Route::post('/delete-cart', 'HomeController@deleteCart')->name('delete-cart');
+
 Route::post('/comment', 'HomeController@addComment')->name('comment');
 
 Route::patch('/update-account/{user}', [

@@ -464,6 +464,7 @@
                 this.collectFormData({
                     steps: this.selectedSteps,
                     price: this.summ,
+                    orders: JSON.parse(localStorage.getItem("orders"))
                 });
 
                 axios.post(

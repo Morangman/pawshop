@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Http\Controllers;
 
 use App\Callback;
+use App\Cart;
 use App\Category;
 use App\Comment;
 use App\Faq;
@@ -249,6 +250,20 @@ class HomeController extends Controller
             'ip_address' => $request->ip(),
             'user_email' => $request->get('user_email') ?? Auth::user()->getAttribute('email')
         ]);
+
+        if(Auth::check()) {
+            if (Auth::user()->getAttribute('addresses') === null || Auth::user()->getAttribute('addresses') === []) {
+                User::query()->whereKey(Auth::id())->update(['addresses' => json_encode([$orderData['address']])]);
+            }
+    
+            if (isset($orderData['address']['phone'])) {
+                User::query()->whereKey(Auth::id())->update(['phone' => $orderData['address']['phone']]);
+            }
+            
+            if (Cart::query()->where('user_id', '=', Auth::id())->exists()) {
+                Cart::query()->where('user_id', '=', Auth::id())->delete();
+            }
+        }
 
         $insuranceSumm = 0;
         $totalSumm = 0;
@@ -738,6 +753,45 @@ class HomeController extends Controller
     }
 
     /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteCart(Request $request): JsonResponse
+    {
+        if(Auth::check()) {
+            if (Cart::query()->where('user_id', '=', Auth::id())->exists()) {
+                Cart::query()->where('user_id', '=', Auth::id())->delete();
+            }
+        }
+
+        return $this->json()->noContent();
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateCart(Request $request): JsonResponse
+    {
+        if(Auth::check()) {
+            if (Cart::query()->where('user_id', '=', Auth::id())->exists()) {
+                Cart::query()->where('user_id', '=', Auth::id())->update([
+                    'orders' => json_encode($request->get('orders')),
+                ]);
+            } else {
+                Cart::query()->create([
+                    'user_id' => Auth::id(),
+                    'orders' => $request->get('orders'),
+                ]);
+            }
+        }
+
+        return $this->json()->noContent();
+    }
+
+    /**
      * @param string $slug
      * @param \Illuminate\Http\Request $request
      *
@@ -745,6 +799,19 @@ class HomeController extends Controller
      */
     public function addToBox(string $slug, Request $request): JsonResponse
     {
+        if(Auth::check()) {
+            if (Cart::query()->where('user_id', '=', Auth::id())->exists()) {
+                Cart::query()->where('user_id', '=', Auth::id())->update([
+                    'orders' => json_encode($request->get('orders')),
+                ]);
+            } else {
+                Cart::query()->create([
+                    'user_id' => Auth::id(),
+                    'orders' => $request->get('orders'),
+                ]);
+            }
+        }
+
         $steps = $request->get('steps');
 
         $stepsIds = [];

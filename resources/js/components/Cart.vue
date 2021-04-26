@@ -71,7 +71,11 @@
 </template>
 
 <script>
+    import FormHelper from '../../admin/js/mixins/form_helper';
+
     export default {
+        mixins: [FormHelper],
+
         data() {
             return {
                 orders: JSON.parse(localStorage.getItem("orders")),
@@ -86,6 +90,8 @@
                 localStorage.setItem("orders", JSON.stringify(this.orders));
 
                 this.valuate();
+
+                this.updateDBCart();
             },
 
             clearCart() {
@@ -96,6 +102,16 @@
                 localStorage.setItem("orders", JSON.stringify(orders));
 
                 this.totalSumm = 0;
+
+                axios.post(
+                    Router.route('delete-cart'),
+                ).then((data) => {
+                    //console.log(data);
+                }).catch(({ response: { data: { errors } } }) => {
+                    // notify.success(
+                    //     errors
+                    // );
+                });
             },
 
             plusQtn(index) {
@@ -106,6 +122,8 @@
                 localStorage.setItem("orders", JSON.stringify(this.orders));
 
                 this.valuate();
+
+                this.updateDBCart();
 
                 location.reload();
             },
@@ -121,6 +139,8 @@
 
                 this.valuate();
 
+                this.updateDBCart();
+
                 location.reload();
             },
 
@@ -131,7 +151,46 @@
 
                 this.valuate();
 
+                this.updateDBCart();
+
                 location.reload();
+            },
+
+            updateDBCart() {
+                if (this.orders && this.orders['order'].length) {
+                    this.formData = new FormData();
+                    this.formData.set('_method', 'POST');
+
+                    this.collectFormData({
+                        orders: this.orders['order']
+                    });
+
+                    axios.post(
+                        Router.route('update-cart'),
+                        this.formData,
+                        {
+                            headers: {
+                                'Content-Type': 'multipart/form-data',
+                            },
+                        },
+                    ).then((data) => {
+                        //console.log(data);
+                    }).catch(({ response: { data: { errors } } }) => {
+                        // notify.success(
+                        //     errors
+                        // );
+                    });
+                } else {
+                    axios.post(
+                        Router.route('delete-cart'),
+                    ).then((data) => {
+                        //console.log(data);
+                    }).catch(({ response: { data: { errors } } }) => {
+                        // notify.success(
+                        //     errors
+                        // );
+                    });
+                }
             },
 
             valuate(){
