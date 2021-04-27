@@ -43,8 +43,6 @@ class FedexJob implements ShouldQueue
                     (int) $order->getAttribute('tracking_number')
                 )->toArray();
 
-                dd($response);
-
                 if ($fedExIntegration->isValidResponse($response)) {
                     $originalStatus = $order->getAttribute('fedex_status');
                     $statusFromResponse = Arr::get(
