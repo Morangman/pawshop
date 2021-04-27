@@ -619,9 +619,9 @@ class HomeController extends Controller
                 }
             }
 
-            if ($step['value'] === 'Broken') {
-                $isBroken = true;
-            }
+            // if ($step['value'] === 'Broken') {
+            //     $isBroken = true;
+            // }
 
             if ($premiumPrice) {
                 if ($pricePlus = $premiumPrice->price_plus) {

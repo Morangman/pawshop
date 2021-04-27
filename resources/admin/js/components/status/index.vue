@@ -91,7 +91,7 @@
                         <template v-if="!isLoading">
                             <tr v-for="(status, i) in statuses" :key="`status_${i}`">
                                     <td><a :href="$r('admin.order-status.edit', { status: status.id })">{{ status.id }}</a></td>
-                                    <td v-html="highlightSearchResult(status.name, filters.search)"></td>
+                                    <td :style="'color:' + status.color" v-html="highlightSearchResult(status.name, filters.search)"></td>
                                     <td>{{ status.created_at }}</td>
                                     <td>
                                         <a :href="$r('admin.order-status.edit', { status: status.id })">

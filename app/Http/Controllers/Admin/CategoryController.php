@@ -244,6 +244,20 @@ class CategoryController extends Controller
     {
         $category = Category::query()->where('slug', $slug)->first();
 
+        if ((int) $request->get('is_hidden') === 1){
+            if (Category::query()->where('subcategory_id', '=', $category->getKey())->exists()) {
+                Category::query()->where('subcategory_id', '=', $category->getKey())->update([
+                    'is_hidden' => 1,
+                ]);
+            }
+        } else {
+            if (Category::query()->where('subcategory_id', '=', $category->getKey())->exists()) {
+                Category::query()->where('subcategory_id', '=', $category->getKey())->update([
+                    'is_hidden' => 0,
+                ]);
+            }
+        }
+
         if ($requestSteps = $request->get('steps')) {
             $stepsIds = [];
             foreach ($requestSteps as $step) {

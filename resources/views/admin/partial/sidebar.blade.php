@@ -62,6 +62,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ URL::route('admin.callback.index') }}" class="nav-link @active_menu_class('admin.callback')">
+                                <i class="icon-bubbles3"></i>
+                                <span>Callbacks</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ URL::route('admin.step.index') }}" class="nav-link @active_menu_class('admin.step')">
                                 <i class="icon-footprint"></i>
                                 <span>@lang('common.sidebar.steps')</span>
