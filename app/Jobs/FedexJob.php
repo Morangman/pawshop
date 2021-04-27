@@ -38,14 +38,13 @@ class FedexJob implements ShouldQueue
         Order::query()
             ->whereNotNull('tracking_number')
             ->where('fedex_status', '!=', Order::STATUS_DELIVERED)
-            ->whereNull('fedex_status')
             ->each(static function ($order) use ($fedExIntegration) {
                 $response = $fedExIntegration->track(
                     (int) $order->getAttribute('tracking_number')
                 )->toArray();
 
                 if ($fedExIntegration->isValidResponse($response)) {
-                    $originalStatus = $order->getAttribute('fedex_status') ?? '';
+                    $originalStatus = $order->getAttribute('fedex_status');
                     $statusFromResponse = Arr::get(
                         $response,
                         'CompletedTrackDetails.0.TrackDetails.0.StatusDetail.Code'
