@@ -25931,7 +25931,7 @@ __webpack_require__.r(__webpack_exports__);
           "title": "Orders",
           "header_btn": "Create order",
           "filters": {
-            "search": "Search orders by typing one of these fields: name, id or tracking number"
+            "search": "Search by typing name, id or tracking number"
           },
           "table": {
             "headers": {
@@ -25939,6 +25939,7 @@ __webpack_require__.r(__webpack_exports__);
               "name": "Name",
               "contacts": "Contacts",
               "status": "Status",
+              "fedex_status": "FedEx status",
               "created_at": "Created date"
             }
           },
@@ -25952,6 +25953,22 @@ __webpack_require__.r(__webpack_exports__);
         "confirm_statuses": {
           "1": "Pending decision",
           "2": "Confirmed"
+        },
+        "fedex_statuses": {
+          "OC": "Shipment created",
+          "SS": "Shipment scheduled",
+          "PU": "Shipment picked up",
+          "IT": "Shipment in transit",
+          "DL": "Shipment delivered"
+        },
+        "fedex_statuses_colored": {
+          "OC": "<span class=\"badge badge-primary\">Shipment created</span>",
+          "SS": "<span class=\"badge badge-secondary\">Shipment scheduled</span>",
+          "PU": "<span class=\"badge badge-warning\">Shipment picked up</span>",
+          "IT": "<span class=\"badge badge-info\">Shipment in transit</span>",
+          "AR": "<span class=\"badge badge-info\">Shipment in transit</span>",
+          "OD": "<span class=\"badge badge-info\">Shipment in transit</span>",
+          "DL": "<span class=\"badge badge-success\">Shipment delivered</span>"
         },
         "create": {
           "title": "Create order"

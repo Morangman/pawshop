@@ -33,6 +33,7 @@ class CreateOrdersTable extends Migration
             $table->string('exp_service')->nullable();
             $table->string('insurance')->nullable();
             $table->string('ip_address')->nullable();
+            $table->string('fedex_status')->nullable();
             $table->tinyInteger('ordered_status')->unsigned()->default(1);
             $table->timestamps();
 

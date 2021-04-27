@@ -413,12 +413,26 @@ class OrderController extends Controller
     {
         $orderStatus = $request->get('order_status');
 
+        $fedexStatus = $request->get('fedex_status');
+
         $orders = Order::query()
             ->with('orderStatus')
             ->when(
                 $orderStatus,
                 function ($q) use ($orderStatus) {
                     $q->where('ordered_status', $orderStatus);
+                }
+            )
+            ->when(
+                $fedexStatus,
+                function ($q) use ($fedexStatus) {
+                    if ($fedexStatus === Order::STATUS_IN_TRANSIT) {
+                        $q->where('fedex_status', Order::STATUS_IN_TRANSIT)
+                            ->orWhere('fedex_status', Order::STATUS_ARRIVED)
+                            ->orWhere('fedex_status', Order::STATUS_ON_FEDEX_VEHICLE);
+                    } else {
+                        $q->where('fedex_status', $fedexStatus);
+                    }
                 }
             )
             ->when(

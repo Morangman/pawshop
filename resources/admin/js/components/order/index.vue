@@ -21,7 +21,20 @@
                         <option v-for="(status, key) in statuses" :value="status.id">{{ status.name }}</option>
                     </select>
                 </div>
-                <div class="col col-md-5">
+                <div class="form-group col-md-auto">
+                    <label for="orderStatus" class="d-inline-block">{{ $t('admin.order.index.table.headers.fedex_status') }} :</label>
+                    <select
+                        id="fedexStatus"
+                        class="form-control form-control-sm d-inline-block"
+                        style="width: auto;"
+                        v-model="filters.fedex_status"
+                        required
+                    >
+                        <option :value="null">{{ $t('admin.order.index.search.all') }}</option>
+                        <option v-for="(status, key) in $t('admin.order.fedex_statuses')" :value="key">{{ status }}</option>
+                    </select>
+                </div>
+                <div class="col col-md-3">
                     <input
                         id="searchOrder"
                         v-model="filters.search"
@@ -81,6 +94,7 @@
                             </th>
                             <th>{{ $t('admin.order.index.table.headers.contacts') }}</th>
                             <th>{{ $t('admin.order.index.table.headers.status') }}</th>
+                            <th>{{ $t('admin.order.index.table.headers.fedex_status') }}</th>
                             <th>
                                 {{ $t('admin.order.index.table.headers.created_at') }}
                                 <span>
@@ -111,6 +125,9 @@
                                     <td>{{ order.address.phone }}</td>
                                     <td>
                                         <b :style="'color:' + order.order_status.color">{{ order.order_status.name }}</b>
+                                    </td>
+                                    <td>
+                                        <span v-if="order.fedex_status" v-html="$t('admin.order.fedex_statuses_colored.' + order.fedex_status)"></span>
                                     </td>
                                     <td>{{ normalizeDate(order.created_at) }}</td>
                                     <td>
@@ -168,6 +185,7 @@
                     page: 1,
                     search: null,
                     order_status: null,
+                    fedex_status: null,
                     by: 'id',
                     dir: 'desc',
                 },

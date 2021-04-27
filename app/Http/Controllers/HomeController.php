@@ -545,7 +545,10 @@ class HomeController extends Controller
 
             $paymentData = $order->getAttribute('payment');
 
-            $order->update(['payment' => array_merge($paymentData, ['fedexLabel' => $pdfUrl])]);
+            $order->update([
+                'payment' => array_merge($paymentData, ['fedexLabel' => $pdfUrl]),
+                'fedex_status' => Order::STATUS_SHIPMENT_CREATED,
+            ]);
 
             return $this->json()->ok(['url' => $pdfUrl]);
         }
@@ -746,7 +749,10 @@ class HomeController extends Controller
 
             $paymentData = $order->getAttribute('payment');
 
-            $order->update(['payment' => array_merge($paymentData, ['fedexLabel' => $pdfUrl])]);
+            $order->update([
+                'payment' => array_merge($paymentData, ['fedexLabel' => $pdfUrl]),
+                'fedex_status' => Order::STATUS_SHIPMENT_CREATED,
+            ]);
 
             return $this->json()->ok(['url' => $pdfUrl]);
         }

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Lang;
 use Spatie\MediaLibrary\Models\Media;
 use Str;
 
@@ -28,6 +29,14 @@ class Order extends Model implements HasMedia
     public const STATUS_CHANGED = 1;
     public const STATUS_NOT_CONFIRMED = 1;
     public const STATUS_CONFIRMED = 2;
+
+    public const STATUS_SHIPMENT_CREATED = 'OC';
+    public const STATUS_SHIPMENT_SCHEDULED = 'SS';
+    public const STATUS_PICKED_UP = 'PU';
+    public const STATUS_IN_TRANSIT = 'IT';
+    public const STATUS_ARRIVED = 'AR';
+    public const STATUS_ON_FEDEX_VEHICLE = 'OD';
+    public const STATUS_DELIVERED = 'DL';
 
     /**
      * @var string
@@ -50,6 +59,7 @@ class Order extends Model implements HasMedia
         'insurance',
         'notes',
         'ordered_status',
+        'fedex_status',
         'ip_address',
     ];
 
@@ -69,6 +79,7 @@ class Order extends Model implements HasMedia
         'insurance' => 'string',
         'notes' => 'string',
         'ordered_status' => 'int',
+        'fedex_status' => 'string',
         'ip_address' => 'string',
     ];
 
@@ -113,5 +124,62 @@ class Order extends Model implements HasMedia
                 ];
             })
             ->toArray();
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStatusesOptions(): array
+    {
+        return [
+            [
+                'label' => Lang::get(
+                    'admin/order.fedex_statuses.'.static::STATUS_SHIPMENT_CREATED
+                ),
+                'value' => static::STATUS_SHIPMENT_CREATED,
+            ],
+            [
+                'label' => Lang::get(
+                    'admin/order.fedex_statuses.'.static::STATUS_SHIPMENT_SCHEDULED
+                ),
+                'value' => static::STATUS_SHIPMENT_SCHEDULED,
+            ],
+            [
+                'label' => Lang::get(
+                    'admin/order.fedex_statuses.'.static::STATUS_PICKED_UP
+                ),
+                'value' => static::STATUS_PICKED_UP,
+            ],
+            [
+                'label' => Lang::get(
+                    'admin/order.fedex_statuses.'.static::STATUS_IN_TRANSIT
+                ),
+                'value' => static::STATUS_IN_TRANSIT,
+            ],
+            [
+                'label' => Lang::get(
+                    'admin/order.fedex_statuses.'.static::STATUS_DELIVERED
+                ),
+                'value' => static::STATUS_DELIVERED,
+            ],
+        ];
+    }
+
+    /**
+     * @param string $status
+     *
+     * @return bool
+     */
+    public static function isValidStatus(string $status): bool
+    {
+        return in_array($status, [
+            static::STATUS_SHIPMENT_CREATED,
+            static::STATUS_SHIPMENT_SCHEDULED,
+            static::STATUS_PICKED_UP,
+            static::STATUS_IN_TRANSIT,
+            static::STATUS_DELIVERED,
+            static::STATUS_ARRIVED,
+            static::STATUS_ON_FEDEX_VEHICLE,
+        ], true);
     }
 }

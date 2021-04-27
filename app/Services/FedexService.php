@@ -46,6 +46,12 @@ class FedexService
      */
     protected $meterNumber;
 
+    public const SUCCESS_RESPONSE_CODE = 'SUCCESS';
+
+    public const ERROR_RESPONSE_CODE = 'ERROR';
+
+    public const FAILURE_RESPONSE_CODE = 'FAILURE';
+
     /**
      * FedexService constructor.
      *
@@ -59,6 +65,23 @@ class FedexService
         $this->password = Arr::get($config, 'password');
         $this->accountNumber = Arr::get($config, 'account_number');
         $this->meterNumber = Arr::get($config, 'meter_number');
+    }
+
+    /**
+     * @param array $response
+     *
+     * @return bool
+     */
+    public function isValidResponse(array $response): bool
+    {
+        $highestSeverity = Arr::get($response, 'HighestSeverity');
+
+        if (!$highestSeverity) {
+            return false;
+        }
+
+        return $highestSeverity !== static::FAILURE_RESPONSE_CODE
+            && $highestSeverity !== static::ERROR_RESPONSE_CODE;
     }
 
     /**

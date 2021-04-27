@@ -49,7 +49,7 @@ return [
         'title' => 'Orders',
         'header_btn' => 'Create order',
         'filters' => [
-            'search' => 'Search orders by typing one of these fields: name, id or tracking number',
+            'search' => 'Search by typing name, id or tracking number',
         ],
         'table' => [
             'headers' => [
@@ -57,6 +57,7 @@ return [
                 'name' => 'Name',
                 'contacts' => 'Contacts',
                 'status' => 'Status',
+                'fedex_status' => 'FedEx status',
                 'created_at' => 'Created date',
             ],
         ],
@@ -71,6 +72,22 @@ return [
         Order::STATUS_CHANGED => 'Changed',
         Order::STATUS_NOT_CONFIRMED => 'Pending decision',
         Order::STATUS_CONFIRMED => 'Confirmed',
+    ],
+    'fedex_statuses' => [
+        Order::STATUS_SHIPMENT_CREATED => 'Shipment created',
+        Order::STATUS_SHIPMENT_SCHEDULED => 'Shipment scheduled',
+        Order::STATUS_PICKED_UP => 'Shipment picked up',
+        Order::STATUS_IN_TRANSIT => 'Shipment in transit',
+        Order::STATUS_DELIVERED => 'Shipment delivered',
+    ],
+    'fedex_statuses_colored' => [
+        Order::STATUS_SHIPMENT_CREATED => '<span class="badge badge-primary">Shipment created</span>',
+        Order::STATUS_SHIPMENT_SCHEDULED => '<span class="badge badge-secondary">Shipment scheduled</span>',
+        Order::STATUS_PICKED_UP => '<span class="badge badge-warning">Shipment picked up</span>',
+        Order::STATUS_IN_TRANSIT => '<span class="badge badge-info">Shipment in transit</span>',
+        Order::STATUS_ARRIVED => '<span class="badge badge-info">Shipment in transit</span>',
+        Order::STATUS_ON_FEDEX_VEHICLE => '<span class="badge badge-info">Shipment in transit</span>',
+        Order::STATUS_DELIVERED => '<span class="badge badge-success">Shipment delivered</span>',
     ],
     'create' => [
         'title' => 'Create order',
