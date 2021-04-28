@@ -22,6 +22,7 @@ class CreateOrderStatusTable extends Migration
             $table->bigIncrements('id');
             $table->string('color')->nullable();
             $table->string('name');
+            $table->string('fedex_status')->nullable();
             $table->unsignedBigInteger('order')->default(1);
             $table->timestamps();
         });

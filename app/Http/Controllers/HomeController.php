@@ -400,16 +400,18 @@ class HomeController extends Controller
     {
         $order = Order::query()->where('uuid', $order_uuid)->first();
 
-        Notification::send(
-            User::query()->scopes(['notifiableUsers'])->get(),
-            new OrderConfirmNotification($order->toArray())
-        );
-
-        $order->unsetEventDispatcher();
-
-        $order->forceFill([
-            'orders->confirmed' => Order::STATUS_CONFIRMED
-        ])->save();
+        if ($order->getAttribute('orders')['confirmed'] !== Order::STATUS_CONFIRMED) {
+            Notification::send(
+                User::query()->scopes(['notifiableUsers'])->get(),
+                new OrderConfirmNotification($order->toArray())
+            );
+    
+            $order->unsetEventDispatcher();
+    
+            $order->forceFill([
+                'orders->confirmed' => Order::STATUS_CONFIRMED
+            ])->save();
+        }
 
         $categories = Category::query()
             ->where('is_hidden', false)

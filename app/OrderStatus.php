@@ -24,6 +24,7 @@ class OrderStatus extends Model
     protected $fillable = [
         'name',
         'color',
+        'fedex_status',
         'order',
     ];
 
@@ -33,6 +34,7 @@ class OrderStatus extends Model
     protected $casts = [
         'name' => 'string',
         'color' => 'string',
+        'fedex_status' => 'string',
         'order' => 'int',
     ];
 }

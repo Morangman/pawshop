@@ -135,7 +135,7 @@
                 filters: {
                     page: 1,
                     search: null,
-                    by: 'id',
+                    by: 'order',
                     dir: 'asc',
                 },
                 statuses: [],

@@ -7,6 +7,7 @@ namespace App\Jobs;
 use App\Cart;
 use App\Mail\CartMail;
 use App\Order;
+use App\OrderStatus;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -51,10 +52,27 @@ class FedexJob implements ShouldQueue
                     );
 
                     if ($statusFromResponse
-                        && $statusFromResponse !== $originalStatus
                         && Order::isValidStatus($statusFromResponse)
                     ) {
-                        $order->update(['fedex_status' => $statusFromResponse]);
+                        $realSts = $statusFromResponse;
+
+                        if ($statusFromResponse === Order::STATUS_IN_TRANSIT ||
+                            $statusFromResponse === Order::STATUS_ON_FEDEX_VEHICLE ||
+                            $statusFromResponse === Order::STATUS_ARRIVED
+                        ) {
+                            $realSts = Order::STATUS_IN_TRANSIT;
+                        }
+
+                        $status = OrderStatus::query()->where('fedex_status', '=', $realSts)->first();
+
+                        $order->unsetEventDispatcher();
+
+                        if ($order->getAttribute('ordered_status') !== Order::STATUS_RECEIVED || $order->getAttribute('ordered_status') !== Order::STATUS_CANCELLED) {
+                            $order->update([
+                                'ordered_status' => $status ? $status->getKey() : Order::STATUS_NEW,
+                                'fedex_status' => $statusFromResponse
+                            ]);
+                        }
                     }
                 }
             });

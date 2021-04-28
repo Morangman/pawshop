@@ -43,6 +43,26 @@
 
                     <div class="form-group">
                         <label>
+                            <strong>{{ $t('admin.order-status.form.fedex_status') }}</strong>
+                        </label>
+                        <select
+                            id="fedex_status"
+                            class="form-control"
+                            v-model="model.fedex_status"
+                            required
+                        >
+                            <option v-for="(status, key) in $t('admin.order.fedex_statuses')" :value="key">{{ status }}</option>
+                        </select>
+                        <div v-for="(error, i) in errors.fedex_status"
+                             :key="`fedex_status__error__${i}`"
+                             class="text-danger error"
+                        >
+                            {{ error }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
                             <strong>{{ $t('admin.order-status.form.order') }}</strong>
                         </label>
                         <input

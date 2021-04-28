@@ -24,6 +24,7 @@
                     name: null,
                     color: null,
                     order: null,
+                    fedex_status: null,
                 },
                 errors: {},
                 formData: null,

@@ -29,6 +29,10 @@ class StoreRequest extends FormRequest
                 'nullable',
                 'string',
             ],
+            'fedex_status' => [
+                'nullable',
+                'string',
+            ],
             'order' => [
                 'nullable',
                 'integer',

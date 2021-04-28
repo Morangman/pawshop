@@ -25856,7 +25856,8 @@ __webpack_require__.r(__webpack_exports__);
         "form": {
           "name": "Name*",
           "color": "Bage color",
-          "order": "Order"
+          "order": "Order",
+          "fedex_status": "FedEx status"
         },
         "index": {
           "title": "Order statuses",
