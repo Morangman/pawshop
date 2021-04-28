@@ -80,6 +80,12 @@ class FedexJob implements ShouldQueue
                             $response,
                             'CompletedTrackDetails.0.TrackDetails.0.DatesOrTimes'
                         );
+
+                        if ($statusFromResponse === Order::STATUS_DELIVERED) {
+                            $order->update([
+                                'delivered_date' => Carbon::now(),
+                            ]);
+                        }
         
                         if ($estimateDates) {
                             foreach ($estimateDates as $date) {

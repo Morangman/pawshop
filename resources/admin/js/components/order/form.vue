@@ -42,6 +42,13 @@
                         <br>
                         <p>{{ normalizeDate(model.estimate_date) }}</p>
                     </div>
+                    <div class="form-group" v-if="model.delivered_date">
+                        <label>
+                            <strong>Delivereed date</strong>
+                        </label>
+                        <br>
+                        <p>{{ normalizeDate(model.delivered_date) }}</p>
+                    </div>
                     <div class="form-group row">
                         <div class="form-group col-md-6">
                             <label>

@@ -70,6 +70,7 @@ class Order extends Model implements HasMedia
         'fedex_status',
         'ip_address',
         'estimate_date',
+        'delivered_date',
     ];
 
     /**
@@ -91,6 +92,7 @@ class Order extends Model implements HasMedia
         'fedex_status' => 'string',
         'ip_address' => 'string',
         'estimate_date' => 'datetime',
+        'delivered_date' => 'datetime',
     ];
 
     /**
