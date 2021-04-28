@@ -17,6 +17,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Mail;
 use App\Services\FedexService;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 
 /**
  * Class FedexJob
@@ -74,6 +75,21 @@ class FedexJob implements ShouldQueue
                         $status = OrderStatus::query()->where('fedex_status', '=', $realSts)->first();
 
                         $order->unsetEventDispatcher();
+
+                        $estimateDates = Arr::get(
+                            $response,
+                            'CompletedTrackDetails.0.TrackDetails.0.DatesOrTimes'
+                        );
+        
+                        if ($estimateDates) {
+                            foreach ($estimateDates as $date) {
+                                if($date['Type'] === 'ESTIMATED_DELIVERY') {
+                                    $order->update([
+                                        'estimate_date' => Carbon::parse($date['DateOrTimestamp']),
+                                    ]);
+                                }
+                            }
+                        }
 
                         $order->update([
                             'ordered_status' => $status ? $status->getKey() : Order::STATUS_NEW,

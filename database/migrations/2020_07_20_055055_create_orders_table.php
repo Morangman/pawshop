@@ -35,6 +35,7 @@ class CreateOrdersTable extends Migration
             $table->string('ip_address')->nullable();
             $table->string('fedex_status')->nullable();
             $table->tinyInteger('ordered_status')->unsigned()->default(1);
+            $table->timestamp('estimate_date')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')

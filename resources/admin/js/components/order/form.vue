@@ -35,6 +35,13 @@
                         <br>
                         <a :href="'https://www.fedex.com/fedextrack/?trknbr=' + model.tracking_number" target="_blank">{{ model.tracking_number }}</a>
                     </div>
+                    <div class="form-group" v-if="model.estimate_date">
+                        <label>
+                            <strong>Estimate date of delivery</strong>
+                        </label>
+                        <br>
+                        <p>{{ normalizeDate(model.estimate_date) }}</p>
+                    </div>
                     <div class="form-group row">
                         <div class="form-group col-md-6">
                             <label>
