@@ -15,6 +15,24 @@
             <ul class="nav nav-sidebar" data-nav-type="accordion">
                 @php
                     $user = Auth::user();
+
+                    $statuses = [
+                        'All' => [
+                            'url' => URL::route('admin.order.index'),
+                            'count' => \App\Order::query()->get()->count(),
+                            'color' => '#ffffff',
+                        ],
+                    ];
+
+                    foreach (\App\OrderStatus::query()->get() as $status) {
+                        $ordersCount = \App\Order::query()->where('ordered_status', '=', $status->getKey())->count();
+
+                        $statuses[$status->getAttribute('name')] = [
+                            'url' => URL::route('admin.order.index', ['status' => $status->getKey()]),
+                            'count' => $ordersCount,
+                            'color' => $status->getAttribute('color'),
+                        ];
+                    }
                 @endphp
                 <li class="nav-item">
                     <a href="{{ URL::route('admin.notification.index') }}" class="nav-link @active_menu_class('admin.notification')">
@@ -30,6 +48,18 @@
                         <i class="icon-filter4"></i>
                         <span>@lang('common.sidebar.orders')</span>
                     </a>
+                </li>
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"><i class="icon-cog"></i> <span>@lang('common.sidebar.orders')</span></a>
+                    <ul class="nav nav-group-sub" data-submenu-title="Pickers" style="display: none;">
+                        @foreach($statuses as $key => $status)
+                        <li class="nav-item">
+                            <a href="{{ $status['url'] }}" class="nav-link @active_menu_class('admin.order')">
+                                <b style="color:{{ $status['color'] }}">{{ $key }} <span class="badge badge-info"><b>{{ $status['count'] }}</b></span></b>
+                            </a>
+                        </li>
+                        @endforeach
+                    </ul>
                 </li>
                 @role('admin')
                 <li class="nav-item">

@@ -225,9 +225,9 @@
                 this.isLoading = false;
             } else {
                 this.getOrders();
-
-                this.debouncedGetOrders =_.debounce(this.getOrders, 500);
             }
+
+            this.debouncedGetOrders =_.debounce(this.getOrders, 500);
         },
     };
 </script>

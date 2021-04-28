@@ -37,12 +37,22 @@ use Milon\Barcode\DNS1D;
 class OrderController extends Controller
 {
     /**
+     * @param \Illuminate\Http\Request $request
+     * 
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(): ViewContract
+    public function index(Request $request): ViewContract
     {
+        if ($request->get('status')) {
+            $orders = Order::query()->where('ordered_status', '=', $request->get('status'))
+                ->with('orderStatus')
+                ->paginate(20);
+        } else {
+            $orders = null;
+        }
+
         return View::make('admin.order.index', [
-            'orders' => null,
+            'orders' => $orders,
             'statuses' => OrderStatus::query()->orderBy('order', 'asc')->get(),
         ]);
     }
