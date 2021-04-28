@@ -39,6 +39,8 @@ class FedexJob implements ShouldQueue
         Order::query()
             ->whereNotNull('tracking_number')
             ->where('fedex_status', '!=', Order::STATUS_DELIVERED)
+            ->where('ordered_status', '!=', Order::STATUS_RECEIVED)
+            ->where('ordered_status', '!=', Order::STATUS_CANCELLED)
             ->each(static function ($order) use ($fedExIntegration) {
                 $response = $fedExIntegration->track(
                     (int) $order->getAttribute('tracking_number')
@@ -73,12 +75,10 @@ class FedexJob implements ShouldQueue
 
                         $order->unsetEventDispatcher();
 
-                        if ($order->getAttribute('ordered_status') !== Order::STATUS_RECEIVED || $order->getAttribute('ordered_status') !== Order::STATUS_CANCELLED) {
-                            $order->update([
-                                'ordered_status' => $status ? $status->getKey() : Order::STATUS_NEW,
-                                'fedex_status' => $statusFromResponse
-                            ]);
-                        }
+                        $order->update([
+                            'ordered_status' => $status ? $status->getKey() : Order::STATUS_NEW,
+                            'fedex_status' => $statusFromResponse
+                        ]);
                     }
                 }
             });
