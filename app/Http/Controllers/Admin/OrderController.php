@@ -132,33 +132,20 @@ class OrderController extends Controller
             $sortedSteps[$step['step_name']['name']][] = $step;
         }
 
+        $orderArray = $order->toArray();
+
+        foreach($orderArray['orders']['order'] as $key => $orderData) {
+            foreach($orderData['steps'] as $i => $step) {
+                $orderArray['orders']['order'][$key]['steps'][$i]['variations'] = Step::query()->where('name_id', '=', $step['step_name']['id'])->get()->toArray();
+            }
+        }
+
         $suspectIp = SuspectIp::query()->where('ip_address', $order->getAttribute('ip_address'))->get();
-
-        // $trackStatus = '';
-
-        // if ($trackNumber = $order->getAttribute('tracking_number')) {
-        //     $fedexService = new FedexService();
-
-        //     $trackInfo = $fedexService->track($trackNumber);
-
-        //     $trackArray = $trackInfo->toArray();
-
-        //     if ($trackArray['HighestSeverity'] === 'SUCCESS') {
-        //         $statusFromResponse = Arr::get(
-        //             $trackArray,
-        //             'CompletedTrackDetails.0.TrackDetails.0.StatusDetail.Description'
-        //         );
-
-        //         if ($statusFromResponse) {
-        //             $trackStatus = $statusFromResponse;
-        //         }
-        //     }
-        // }
 
         return View::make(
             'admin.order.edit',
             [
-                'order' => $order,
+                'order' => $orderArray,
                 'states' => Lang::get('states'),
                 'statuses' => OrderStatus::query()->orderBy('order', 'asc')->get(),
                 'productByCategory' => $categories,
