@@ -37,7 +37,13 @@ class Order extends Model implements HasMedia
     public const STATUS_PICKED_UP = 'PU';
     public const STATUS_IN_TRANSIT = 'IT';
     public const STATUS_ARRIVED = 'AR';
+    public const STATUS_AT_FEDEX_FACILITY = 'AF';
+    public const STATUS_AT_SORT_FACILITY = 'SF';
     public const STATUS_ON_FEDEX_VEHICLE = 'OD';
+    public const STATUS_ON_ORIGIN_FACILITY = 'OF';
+    public const STATUS_LEFT_ORIGIN = 'LO';
+    public const STATUS_CLEARANCE_DELAY = 'CD';
+    public const STATUS_ON_FEDEX_FACILITY = 'FD';
     public const STATUS_DELIVERED = 'DL';
 
     /**
@@ -182,6 +188,12 @@ class Order extends Model implements HasMedia
             static::STATUS_DELIVERED,
             static::STATUS_ARRIVED,
             static::STATUS_ON_FEDEX_VEHICLE,
+            static::STATUS_ON_FEDEX_FACILITY,
+            static::STATUS_AT_FEDEX_FACILITY,
+            static::STATUS_AT_SORT_FACILITY,
+            static::STATUS_ON_ORIGIN_FACILITY,
+            static::STATUS_LEFT_ORIGIN,
+            static::STATUS_CLEARANCE_DELAY,
         ], true);
     }
 }

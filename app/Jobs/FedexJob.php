@@ -58,7 +58,13 @@ class FedexJob implements ShouldQueue
 
                         if ($statusFromResponse === Order::STATUS_IN_TRANSIT ||
                             $statusFromResponse === Order::STATUS_ON_FEDEX_VEHICLE ||
-                            $statusFromResponse === Order::STATUS_ARRIVED
+                            $statusFromResponse === Order::STATUS_ARRIVED ||
+                            $statusFromResponse === Order::STATUS_ON_FEDEX_FACILITY ||
+                            $statusFromResponse === Order::STATUS_AT_FEDEX_FACILITY ||
+                            $statusFromResponse === Order::STATUS_AT_SORT_FACILITY ||
+                            $statusFromResponse === Order::STATUS_ON_ORIGIN_FACILITY ||
+                            $statusFromResponse === Order::STATUS_LEFT_ORIGIN ||
+                            $statusFromResponse === Order::STATUS_CLEARANCE_DELAY
                         ) {
                             $realSts = Order::STATUS_IN_TRANSIT;
                         }
