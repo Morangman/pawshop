@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Traits;
 
+use App\Order;
 use CURLFile;
 
 /**
@@ -54,6 +55,7 @@ trait TelegramTrait
      */
     protected function sendOffer(
         string $title = 'New offer',
+        int $id,
         string $url = '',
         string $imageUrl = '',
         string $pruductName = '',
@@ -74,11 +76,15 @@ trait TelegramTrait
             ]
         ];
 
+        $order = Order::query()->whereKey($id)->first();
+
+        $name = $order->getAttribute('address')['name'];
+
         $kboard = json_encode($keyboard);
 
         $image = explode(PHP_EOL, $imageUrl);
         $image = urlencode(trim($image[0]));
-        $text = urlencode("$title\n$pruductName\n$price$");
+        $text = urlencode("$title\n№$id\n$name\n$pruductName\n$price$");
         $url = "https://api.telegram.org/bot{$botApiToken}/sendPhoto?chat_id={$chat_id}&photo={$image}&caption={$text}&reply_markup={$kboard}";
         file_get_contents($url);
     }

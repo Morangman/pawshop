@@ -285,6 +285,7 @@ class HomeController extends Controller
 
         $this->sendOffer(
             'New offer',
+            $order->getKey(),
             route('admin.order.edit', ['order' => $order->getKey()]),
             $orderData['orders']['order'][0]['device']['image'],
             $orderData['orders']['order'][0]['device']['name'],
