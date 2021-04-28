@@ -43,14 +43,8 @@
                         @endif
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ URL::route('admin.order.index') }}" class="nav-link @active_menu_class('admin.product')">
-                        <i class="icon-filter4"></i>
-                        <span>@lang('common.sidebar.orders')</span>
-                    </a>
-                </li>
                 <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link"><i class="icon-cog"></i> <span>@lang('common.sidebar.orders')</span></a>
+                    <a href="#" class="nav-link"><i class="icon-filter4"></i> <span>@lang('common.sidebar.orders')</span></a>
                     <ul class="nav nav-group-sub" data-submenu-title="Pickers" style="display: none;">
                         @foreach($statuses as $key => $status)
                         <li class="nav-item">
