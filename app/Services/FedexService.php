@@ -8,6 +8,7 @@ use App\Order;
 use App\Setting;
 use FedEx\ShipService;
 use FedEx\TrackService\Request;
+use FedEx\TrackService\Track;
 use FedEx\ShipService\ComplexType;
 use FedEx\ShipService\SimpleType;
 use FedEx\TrackService\ComplexType\TrackRequest;
@@ -274,6 +275,11 @@ class FedexService
         $trackRequest->SelectionDetails[0]->PackageIdentifier->Type = TrackIdentifierType::_TRACKING_NUMBER_OR_DOORTAG;
 
         $request = new Request();
+
+        if (env('FEDEX_KEY_IS_PROD', 0)) {
+            $request->getSoapClient()->__setLocation('https://ws.fedex.com:443/web-services/track'); //use production URL
+        }
+
         $trackReply = $request->getTrackReply($trackRequest);
 
         // Storage::put('public/pdf/info.json', json_encode($trackReply->toArray(), JSON_PRETTY_PRINT));

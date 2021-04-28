@@ -17,6 +17,7 @@
         "laravel/socialite": "^3.2.0",
         "laravel/tinker": "^1.0",
         "lord/laroute": "^2.5",
+        "maxirus/fedex": "^0.0.1@beta",
         "mcmatters/laravel-helpers": "^2.3",
         "mcmatters/laravel-roles": "dev-master",
         "milon/barcode": "5.1",
