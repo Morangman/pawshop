@@ -893,6 +893,7 @@ class HomeController extends Controller
         $relatedCategories = Category::query()
             ->where('subcategory_id', '=', $category->getKey())
             ->where('is_hidden', false)
+            ->orderBy('prod_year', 'desc')
             ->get();
 
         $categories = Category::query()

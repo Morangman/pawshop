@@ -41,6 +41,24 @@
                     </div>
                     <div class="form-group">
                         <label>
+                            <strong>Production year</strong>
+                        </label>
+                        <input
+                            name="prod_year"
+                            type="text"
+                            v-model="model.prod_year"
+                            class="form-control"
+                            :class="{ 'border-danger': errors.prod_year }"
+                        >
+                        <div v-for="(error, i) in errors.prod_year"
+                             :key="`prod_year__error__${i}`"
+                             class="text-danger error"
+                        >
+                            {{ error }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>
                             <strong>{{ $t('admin.category.form.image') }}</strong>
                         </label>
                         <b-form-file

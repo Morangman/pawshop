@@ -42,6 +42,7 @@ class Category extends Model implements HasMedia
         'is_parsed',
         'box_count',
         'view_count',
+        'prod_year',
     ];
 
     /**
@@ -60,6 +61,7 @@ class Category extends Model implements HasMedia
         'is_parsed' => 'bool',
         'box_count' => 'int',
         'view_count' => 'int',
+        'prod_year' => 'int',
     ];
 
     /**
