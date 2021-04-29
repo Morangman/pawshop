@@ -8,6 +8,7 @@ use App\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Order\StoreRequest;
 use App\Http\Requests\Admin\Order\UpdateRequest;
+use App\Mail\OrderReceivedMail;
 use App\Order;
 use App\OrderStatus;
 use App\Price;
@@ -25,6 +26,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Milon\Barcode\DNS1D;
@@ -335,6 +337,28 @@ class OrderController extends Controller
         }
 
         $order->update($data);
+
+        if ((int) $data['ordered_status'] === Order::STATUS_RECEIVED && !$order->getAttribute('is_received_notify')) {
+            $order->unsetEventDispatcher();
+            
+            try {
+                $user = User::query()->whereKey($order->getAttribute('user_id'))->first();
+
+                Mail::to($order->getAttribute('user_email'))
+                    ->send(new OrderReceivedMail(
+                        array_merge(
+                            $order->toArray(),
+                            [
+                                'user_name' => $user->getAttribute('name'),
+                            ]
+                        )
+                    ));
+
+                    $order->update([
+                        'is_received_notify' => 1,
+                    ]);
+            } catch (\Exception $e) {}
+        }
 
         Session::flash(
             'success',
