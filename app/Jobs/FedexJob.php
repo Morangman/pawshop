@@ -84,19 +84,25 @@ class FedexJob implements ShouldQueue
                             'CompletedTrackDetails.0.TrackDetails.0.DatesOrTimes'
                         );
 
-                        // if ($realSts === Order::STATUS_IN_TRANSIT) {
-                        //     try {
-                        //         $user = User::query()->whereKey($order->getAttribute('user_id'))->first();
+                        if ($realSts === Order::STATUS_IN_TRANSIT && !$order->getAttribute('is_transit_notify')) {
+                            try {
+                                $user = User::query()->whereKey($order->getAttribute('user_id'))->first();
 
-                        //         Mail::to($order->getAttribute('user_email'))
-                        //             ->send(new OrderInTransitMail(
-                        //                 [
-                        //                     'orders' => $order->toArray(),
-                        //                     'user_name' => $user->getAttribute('name'),
-                        //                 ]
-                        //             ));
-                        //     } catch (\Exception $e) {}
-                        // }
+                                Mail::to($order->getAttribute('user_email'))
+                                    ->send(new OrderInTransitMail(
+                                        array_merge(
+                                            $order->toArray(),
+                                            [
+                                                'user_name' => $user->getAttribute('name'),
+                                            ]
+                                        )
+                                    ));
+
+                                    $order->update([
+                                        'is_transit_notify' => 1,
+                                    ]);
+                            } catch (\Exception $e) {}
+                        }
 
                         if ($statusFromResponse === Order::STATUS_DELIVERED) {
                             $order->update([
