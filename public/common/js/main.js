@@ -25940,6 +25940,7 @@ __webpack_require__.r(__webpack_exports__);
               "name": "Name",
               "contacts": "Contacts",
               "status": "Status",
+              "label_status": "Label created",
               "fedex_status": "FedEx status",
               "created_at": "Created date"
             }
@@ -25963,13 +25964,7 @@ __webpack_require__.r(__webpack_exports__);
           "DL": "Shipment delivered"
         },
         "fedex_statuses_colored": {
-          "OC": "<span class=\"badge badge-primary\">Shipment created</span>",
-          "SS": "<span class=\"badge badge-secondary\">Shipment scheduled</span>",
-          "PU": "<span class=\"badge badge-warning\">Shipment picked up</span>",
-          "IT": "<span class=\"badge badge-info\">Shipment in transit</span>",
-          "AR": "<span class=\"badge badge-info\">Shipment in transit</span>",
-          "OD": "<span class=\"badge badge-info\">Shipment in transit</span>",
-          "DL": "<span class=\"badge badge-success\">Shipment delivered</span>"
+          "OC": "<span class=\"badge badge-primary\">Label created</span>"
         },
         "create": {
           "title": "Create order"

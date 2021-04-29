@@ -81,6 +81,7 @@
                             </th>
                             <th>{{ $t('admin.order.index.table.headers.contacts') }}</th>
                             <th>{{ $t('admin.order.index.table.headers.status') }}</th>
+                            <th>{{ $t('admin.order.index.table.headers.label_status') }}</th>
                             <th>
                                 {{ $t('admin.order.index.table.headers.created_at') }}
                                 <span>
@@ -111,6 +112,9 @@
                                     <td>{{ order.address.phone }}</td>
                                     <td>
                                         <b :style="'color:' + order.order_status.color">{{ order.order_status.name }}</b>
+                                    </td>
+                                    <td>
+                                        <span v-if="order.tracking_number" class="badge badge-primary">Label created</span>
                                     </td>
                                     <td>{{ normalizeDate(order.created_at) }}</td>
                                     <td>

@@ -57,6 +57,7 @@ return [
                 'name' => 'Name',
                 'contacts' => 'Contacts',
                 'status' => 'Status',
+                'label_status' => 'Label created',
                 'fedex_status' => 'FedEx status',
                 'created_at' => 'Created date',
             ],
@@ -81,13 +82,7 @@ return [
         Order::STATUS_DELIVERED => 'Shipment delivered',
     ],
     'fedex_statuses_colored' => [
-        Order::STATUS_SHIPMENT_CREATED => '<span class="badge badge-primary">Shipment created</span>',
-        Order::STATUS_SHIPMENT_SCHEDULED => '<span class="badge badge-secondary">Shipment scheduled</span>',
-        Order::STATUS_PICKED_UP => '<span class="badge badge-warning">Shipment picked up</span>',
-        Order::STATUS_IN_TRANSIT => '<span class="badge badge-info">Shipment in transit</span>',
-        Order::STATUS_ARRIVED => '<span class="badge badge-info">Shipment in transit</span>',
-        Order::STATUS_ON_FEDEX_VEHICLE => '<span class="badge badge-info">Shipment in transit</span>',
-        Order::STATUS_DELIVERED => '<span class="badge badge-success">Shipment delivered</span>',
+        Order::STATUS_SHIPMENT_CREATED => '<span class="badge badge-primary">Label created</span>',
     ],
     'create' => [
         'title' => 'Create order',

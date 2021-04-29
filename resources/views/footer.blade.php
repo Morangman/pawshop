@@ -39,7 +39,7 @@
                     <img src="{{ asset('client/images/footer_logo.png') }}" alt="" />
                     <span>Rapid <i>Recycle</i></span>
                 </a>
-                <div class="copyright">&copy; 2017-2021. All rights reserved.</div>
+                <div class="copyright">&copy; 2013-2021. All rights reserved.</div>
             </div>
             <div class="footer-menu">
                 <ul>

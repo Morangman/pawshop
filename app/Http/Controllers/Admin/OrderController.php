@@ -46,6 +46,7 @@ class OrderController extends Controller
         if ($request->get('status')) {
             $orders = Order::query()->where('ordered_status', '=', $request->get('status'))
                 ->with('orderStatus')
+                ->orderBy('id', 'desc')
                 ->paginate(20);
         } else {
             $orders = null;

@@ -238,6 +238,15 @@
                                         <option v-for="(item, index) in products" :value="item.id" :key="`product_item__${index}`">{{ item.name }}</option>
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                        <input
+                                            name="ordered_product-imei"
+                                            type="text"
+                                            placeholder="IMEI"
+                                            v-model="product.imei"
+                                            class="form-control"
+                                        >
+                                </div>
                                 <div class="form-group row">
                                     <div class="form-group col-md-6">
                                         <input

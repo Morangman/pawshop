@@ -37,6 +37,13 @@
     margin-right: auto;
 }
 
+.nav-item>.order-status_nav {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 /*.table-responsive td {*/
 /*    min-width: 200px !important;*/
 /*}*/

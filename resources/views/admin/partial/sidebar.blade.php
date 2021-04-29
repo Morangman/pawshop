@@ -43,13 +43,13 @@
                         @endif
                     </a>
                 </li>
-                <li class="nav-item nav-item-submenu">
+                <li class="nav-item nav-item-submenu nav-item-open">
                     <a href="#" class="nav-link"><i class="icon-filter4"></i> <span>@lang('common.sidebar.orders')</span></a>
-                    <ul class="nav nav-group-sub" data-submenu-title="Pickers" style="display: none;">
+                    <ul class="nav nav-group-sub" data-submenu-title="Pickers" style="display: block;">
                         @foreach($statuses as $key => $status)
                         <li class="nav-item">
-                            <a href="{{ $status['url'] }}" class="nav-link @active_menu_class('admin.order')">
-                                <b style="color:{{ $status['color'] }}">{{ $key }} <span class="badge badge-info"><b>{{ $status['count'] }}</b></span></b>
+                            <a href="{{ $status['url'] }}" class="nav-link order-status_nav @active_menu_class('admin.order')">
+                                <b>{{ $key }}</b> <span style="border-color:{{ $status['color'] }}!important;" class="badge badge-flat badge-pill border-primary text-primary-600">{{ $status['count'] }}</span>
                             </a>
                         </li>
                         @endforeach

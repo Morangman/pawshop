@@ -54,7 +54,7 @@ trait TelegramTrait
      * @return void
      */
     protected function sendOffer(
-        string $title = 'New offer',
+        string $title = 'New order',
         int $id,
         string $url = '',
         string $imageUrl = '',
@@ -84,7 +84,7 @@ trait TelegramTrait
 
         $image = explode(PHP_EOL, $imageUrl);
         $image = urlencode(trim($image[0]));
-        $text = urlencode("$title\n№$id\n$name\n$pruductName\n$price$");
+        $text = urlencode("$title №$id\n$name\n$pruductName\n$price$");
         $url = "https://api.telegram.org/bot{$botApiToken}/sendPhoto?chat_id={$chat_id}&photo={$image}&caption={$text}&reply_markup={$kboard}";
         file_get_contents($url);
     }

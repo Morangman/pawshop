@@ -28,6 +28,14 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
 
 RUN docker-php-ext-install mysqli
 
+RUN apt-get update && \
+    apt-get install -y \
+        libc-client-dev libkrb5-dev && \
+    rm -r /var/lib/apt/lists/*
+    
+RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
+    docker-php-ext-install -j$(nproc) imap
+
 RUN echo "if [ -f /root/.bash/.bash_aliases ]; then\n\t. /root/.bash/.bash_aliases\nfi" >> /root/.bashrc
 
 WORKDIR /app
