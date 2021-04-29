@@ -25,8 +25,9 @@ class Order extends Model implements HasMedia
     public const MEDIA_COLLECTION_UPS = 'ups';
 
     public const STATUS_NEW = 1;
-    public const STATUS_RECEIVED = 5;
     public const STATUS_CANCELLED = 2;
+    public const STATUS_RECEIVED = 5;
+    public const STATUS_PAID = 6;
 
     public const STATUS_CHANGED = 1;
     public const STATUS_NOT_CONFIRMED = 1;

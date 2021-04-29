@@ -42,6 +42,7 @@ class FedexJob implements ShouldQueue
             ->where('fedex_status', '!=', Order::STATUS_DELIVERED)
             ->where('ordered_status', '!=', Order::STATUS_RECEIVED)
             ->where('ordered_status', '!=', Order::STATUS_CANCELLED)
+            ->where('ordered_status', '!=', Order::STATUS_PAID)
             ->each(static function ($order) use ($fedExIntegration) {
                 $response = $fedExIntegration->track(
                     (int) $order->getAttribute('tracking_number')
