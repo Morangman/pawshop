@@ -49,7 +49,7 @@
                         @foreach($statuses as $key => $status)
                         <li class="nav-item">
                             <a href="{{ $status['url'] }}" class="nav-link order-status_nav @active_menu_class('admin.order')">
-                                <b>{{ $key }}</b> <span style="border-color:{{ $status['color'] }}!important;" class="badge badge-flat badge-pill border-primary text-primary-600">{{ $status['count'] }}</span>
+                                <b>{{ $key }}</b> <span style="border-color:{{ $status['color'] }}!important; color: #ffffff;" class="badge badge-flat badge-pill border-primary text-primary-600">{{ $status['count'] }}</span>
                             </a>
                         </li>
                         @endforeach
