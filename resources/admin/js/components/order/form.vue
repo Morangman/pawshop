@@ -44,7 +44,7 @@
                     </div>
                     <div class="form-group" v-if="model.delivered_date">
                         <label>
-                            <strong>Delivereed date</strong>
+                            <strong>Delivered date</strong>
                         </label>
                         <br>
                         <p>{{ normalizeDate(model.delivered_date) }}</p>
