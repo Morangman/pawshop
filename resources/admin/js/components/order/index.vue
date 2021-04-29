@@ -8,7 +8,7 @@
                         {{ $t('admin.order.index.header_btn') }}
                     </a>
                 </div>
-                <div class="form-group col-md-auto">
+                <div class="form-group col-md-auto" v-if="!ordersstatus">
                     <label for="orderStatus" class="d-inline-block">{{ $t('admin.order.index.table.headers.status') }} :</label>
                     <select
                         id="orderStatus"
@@ -251,10 +251,6 @@
             getOrders() {
                 this.isLoading = true;
 
-                if (this.ordersstatus) {
-                    this.filters.order_status = this.ordersstatus;
-                }
-
                 axios.get(
                     Router.route(
                         'admin.order.all',
@@ -271,6 +267,9 @@
             },
 
             sort(field, direction) {
+                if (this.ordersstatus) {
+                    this.filters.order_status = this.ordersstatus;
+                }
                 this.filters.by = field;
                 this.filters.dir = direction;
             },
