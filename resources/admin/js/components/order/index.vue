@@ -210,6 +210,10 @@
                 type: Boolean,
                 required: false,
             },
+            ordersstatus: {
+                type: Number,
+                required: false,
+            },
         },
 
         components: {
@@ -246,6 +250,10 @@
         methods: {
             getOrders() {
                 this.isLoading = true;
+
+                if (this.ordersstatus) {
+                    this.filters.order_status = this.ordersstatus;
+                }
 
                 axios.get(
                     Router.route(

@@ -18,5 +18,6 @@
         :isnew="{{ json_encode($is_new, true) }}"
         :istransit="{{ json_encode($is_transit, true) }}"
         :isdelivered="{{ json_encode($is_delivered, true) }}"
+        :ordersstatus="{{ json_encode($orders_status, true) }}"
     ></order-index>
 @endsection
