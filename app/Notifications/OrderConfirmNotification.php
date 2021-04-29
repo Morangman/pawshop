@@ -68,7 +68,7 @@ class OrderConfirmNotification extends Notification
     public function toArray(): array
     {
         return [
-            'title' => 'Order was be confirmed',
+            'title' => 'Order has be confirmed',
             'order_id' => $this->order['id'],
         ];
     }

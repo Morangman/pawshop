@@ -60,6 +60,8 @@ return [
                 'label_status' => 'Label created',
                 'fedex_status' => 'FedEx status',
                 'created_at' => 'Created date',
+                'estimate_date' => 'Estimate date',
+                'delivered_date' => 'Delivered date',
             ],
         ],
         'search' => [

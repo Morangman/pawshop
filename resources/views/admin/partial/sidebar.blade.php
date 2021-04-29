@@ -16,15 +16,9 @@
                 @php
                     $user = Auth::user();
 
-                    $statuses = [
-                        'All' => [
-                            'url' => URL::route('admin.order.index'),
-                            'count' => \App\Order::query()->get()->count(),
-                            'color' => '#ffffff',
-                        ],
-                    ];
+                    $statuses = [];
 
-                    foreach (\App\OrderStatus::query()->get() as $status) {
+                    foreach (\App\OrderStatus::query()->orderBy('order')->get() as $status) {
                         $ordersCount = \App\Order::query()->where('ordered_status', '=', $status->getKey())->count();
 
                         $statuses[$status->getAttribute('name')] = [
@@ -33,6 +27,12 @@
                             'color' => $status->getAttribute('color'),
                         ];
                     }
+
+                    $statuses['All'] = [
+                        'url' => URL::route('admin.order.index'),
+                        'count' => \App\Order::query()->get()->count(),
+                        'color' => '',
+                    ];
                 @endphp
                 <li class="nav-item">
                     <a href="{{ URL::route('admin.notification.index') }}" class="nav-link @active_menu_class('admin.notification')">
@@ -49,7 +49,7 @@
                         @foreach($statuses as $key => $status)
                         <li class="nav-item">
                             <a href="{{ $status['url'] }}" class="nav-link order-status_nav @active_menu_class('admin.order')">
-                                <b>{{ $key }}</b> <span style="border-color:{{ $status['color'] }}!important; color: #ffffff;" class="badge badge-flat badge-pill border-primary text-primary-600">{{ $status['count'] }}</span>
+                                <b>{{ $key }}</b> <span style="background-color:{{ $status['color'] }}!important; color: #ffffff;" class="badge badge-primary">{{ $status['count'] }}</span>
                             </a>
                         </li>
                         @endforeach

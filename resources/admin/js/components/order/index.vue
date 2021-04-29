@@ -81,7 +81,45 @@
                             </th>
                             <th>{{ $t('admin.order.index.table.headers.contacts') }}</th>
                             <th>{{ $t('admin.order.index.table.headers.status') }}</th>
-                            <th>{{ $t('admin.order.index.table.headers.label_status') }}</th>
+                            <th v-if="isnew">{{ $t('admin.order.index.table.headers.label_status') }}</th>
+                            <th v-if="istransit">
+                                {{ $t('admin.order.index.table.headers.estimate_date') }}
+                                <span>
+                                    <i
+                                            v-if="filters.by === 'estimate_date' && filters.dir === 'desc'"
+                                            @click.prevent="sort('estimate_date', 'asc')"
+                                            class="icon-arrow-down8 cursor-pointer"
+                                    ></i>
+                                    <i
+                                            v-if="filters.by === 'estimate_date' && filters.dir === 'asc'"
+                                            @click.prevent="sort('estimate_date', 'desc')"
+                                            class="icon-arrow-up8 cursor-pointer"
+                                    ></i>
+                                    <span v-if="filters.by !== 'estimate_date'" @click.prevent="sort('estimate_date', 'asc')">
+                                        <i class="icon-arrow-up8 cursor-pointer"></i>
+                                        <i class="icon-arrow-down8 cursor-pointer"></i>
+                                    </span>
+                                </span>
+                            </th>
+                            <th v-if="isdelivered">
+                                {{ $t('admin.order.index.table.headers.delivered_date') }}
+                                <span>
+                                    <i
+                                            v-if="filters.by === 'delivered_date' && filters.dir === 'desc'"
+                                            @click.prevent="sort('delivered_date', 'asc')"
+                                            class="icon-arrow-down8 cursor-pointer"
+                                    ></i>
+                                    <i
+                                            v-if="filters.by === 'delivered_date' && filters.dir === 'asc'"
+                                            @click.prevent="sort('delivered_date', 'desc')"
+                                            class="icon-arrow-up8 cursor-pointer"
+                                    ></i>
+                                    <span v-if="filters.by !== 'delivered_date'" @click.prevent="sort('delivered_date', 'asc')">
+                                        <i class="icon-arrow-up8 cursor-pointer"></i>
+                                        <i class="icon-arrow-down8 cursor-pointer"></i>
+                                    </span>
+                                </span>
+                            </th>
                             <th>
                                 {{ $t('admin.order.index.table.headers.created_at') }}
                                 <span>
@@ -113,9 +151,11 @@
                                     <td>
                                         <b :style="'color:' + order.order_status.color">{{ order.order_status.name }}</b>
                                     </td>
-                                    <td>
+                                    <td v-if="isnew">
                                         <span v-if="order.tracking_number" class="badge badge-primary">Label created</span>
                                     </td>
+                                    <td v-if="istransit"><span v-if="order.estimate_date">{{ normalizeDate(order.estimate_date) }}</span></td>
+                                    <td v-if="isdelivered"><span v-if="order.delivered_date">{{ normalizeDate(order.delivered_date) }}</span></td>
                                     <td>{{ normalizeDate(order.created_at) }}</td>
                                     <td>
                                         <a :href="$r('admin.order.edit', { order: order.id })">
@@ -156,6 +196,18 @@
             },
             statuses: {
                 type: Array,
+                required: false,
+            },
+            isnew: {
+                type: Boolean,
+                required: false,
+            },
+            isdelivered: {
+                type: Boolean,
+                required: false,
+            },
+            istransit: {
+                type: Boolean,
                 required: false,
             },
         },

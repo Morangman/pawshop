@@ -25942,7 +25942,9 @@ __webpack_require__.r(__webpack_exports__);
               "status": "Status",
               "label_status": "Label created",
               "fedex_status": "FedEx status",
-              "created_at": "Created date"
+              "created_at": "Created date",
+              "estimate_date": "Estimate date",
+              "delivered_date": "Delivered date"
             }
           },
           "search": {

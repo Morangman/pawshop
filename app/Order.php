@@ -26,6 +26,8 @@ class Order extends Model implements HasMedia
 
     public const STATUS_NEW = 1;
     public const STATUS_CANCELLED = 2;
+    public const STATUS_TRANSIT = 3;
+    public const STATUS_ORDER_DELIVERED = 4;
     public const STATUS_RECEIVED = 5;
     public const STATUS_PAID = 6;
 

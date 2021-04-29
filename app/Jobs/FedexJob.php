@@ -6,6 +6,7 @@ namespace App\Jobs;
 
 use App\Cart;
 use App\Mail\CartMail;
+use App\Mail\OrderInTransitMail;
 use App\Order;
 use App\OrderStatus;
 use App\User;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Services\FedexService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class FedexJob
@@ -81,6 +83,20 @@ class FedexJob implements ShouldQueue
                             $response,
                             'CompletedTrackDetails.0.TrackDetails.0.DatesOrTimes'
                         );
+
+                        // if ($realSts === Order::STATUS_IN_TRANSIT) {
+                        //     try {
+                        //         $user = User::query()->whereKey($order->getAttribute('user_id'))->first();
+
+                        //         Mail::to($order->getAttribute('user_email'))
+                        //             ->send(new OrderInTransitMail(
+                        //                 [
+                        //                     'orders' => $order->toArray(),
+                        //                     'user_name' => $user->getAttribute('name'),
+                        //                 ]
+                        //             ));
+                        //     } catch (\Exception $e) {}
+                        // }
 
                         if ($statusFromResponse === Order::STATUS_DELIVERED) {
                             $order->update([

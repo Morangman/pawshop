@@ -15,5 +15,8 @@
     <order-index
         :searched="{{ json_encode($orders, true) }}"
         :statuses="{{ json_encode($statuses, true) }}"
+        :isnew="{{ json_encode($is_new, true) }}"
+        :istransit="{{ json_encode($is_transit, true) }}"
+        :isdelivered="{{ json_encode($is_delivered, true) }}"
     ></order-index>
 @endsection

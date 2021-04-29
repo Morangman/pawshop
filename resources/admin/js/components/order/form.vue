@@ -35,7 +35,7 @@
                         <br>
                         <a :href="'https://www.fedex.com/fedextrack/?trknbr=' + model.tracking_number" target="_blank">{{ model.tracking_number }}</a>
                     </div>
-                    <div class="form-group" v-if="model.estimate_date">
+                    <div class="form-group" v-if="model.estimate_date && !model.delivered_date">
                         <label>
                             <strong>Estimate date of delivery</strong>
                         </label>
@@ -238,7 +238,8 @@
                                         <option v-for="(item, index) in products" :value="item.id" :key="`product_item__${index}`">{{ item.name }}</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group row">
+                                    <div class="form-group col-md-6">
                                         <input
                                             name="ordered_product-imei"
                                             type="text"
@@ -246,6 +247,16 @@
                                             v-model="product.imei"
                                             class="form-control"
                                         >
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <input
+                                            name="ordered_product-serial"
+                                            type="text"
+                                            placeholder="Serial Number"
+                                            v-model="product.serial"
+                                            class="form-control"
+                                        >
+                                    </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="form-group col-md-6">
