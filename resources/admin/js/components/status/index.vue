@@ -65,6 +65,7 @@
                                     </span>
                                 </span>
                             </th>
+                            <th>Sort №</th>
                             <th>
                                 {{ $t('admin.order-status.index.table.headers.created_at') }}
                                 <span>
@@ -92,6 +93,7 @@
                             <tr v-for="(status, i) in statuses" :key="`status_${i}`">
                                     <td><a :href="$r('admin.order-status.edit', { status: status.id })">{{ status.id }}</a></td>
                                     <td :style="'color:' + status.color" v-html="highlightSearchResult(status.name, filters.search)"></td>
+                                    <td><input class="form-control col-md-3" v-on:keyup.enter="updateStatusOrder(status)" v-model="status.order"/></td>
                                     <td>{{ status.created_at }}</td>
                                     <td>
                                         <a :href="$r('admin.order-status.edit', { status: status.id })">
@@ -122,13 +124,14 @@
 <script>
     import IndexPageHelper from '../../mixins/index_page_helper';
     import InfiniteLoading from 'vue-infinite-loading';
+    import FormHelper from '../../mixins/form_helper';
 
     export default {
         components: {
             InfiniteLoading,
         },
 
-        mixins: [IndexPageHelper],
+        mixins: [IndexPageHelper, FormHelper],
 
         data() {
             return {
@@ -169,6 +172,28 @@
                     notify.error(_.head(errors));
                 }).finally(() => {
                     this.isLoading = false;
+                });
+            },
+
+            updateStatusOrder(status) {
+                this.errors = {};
+                this.formData = new FormData();
+                this.formData.set('_method', 'PATCH');
+                this.collectFormData(status);
+
+                axios.post(
+                    Router.route('admin.order-status.update', { status: status.id }),
+                    this.formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then(() => {
+                    location.href = Router.route('admin.order-status.index');
+                }).catch(({ response: { data: { errors } } }) => {
+                    this.errors = errors;
+                    this.scrollToError();
                 });
             },
 
