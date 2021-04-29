@@ -62,22 +62,6 @@
                             </th>
                             <th>
                                 {{ $t('admin.order.index.table.headers.name') }}
-                                <span>
-                                    <i
-                                            v-if="filters.by === 'name' && filters.dir === 'desc'"
-                                            @click.prevent="sort('name', 'asc')"
-                                            class="icon-arrow-down8 cursor-pointer"
-                                    ></i>
-                                    <i
-                                            v-if="filters.by === 'name' && filters.dir === 'asc'"
-                                            @click.prevent="sort('name', 'desc')"
-                                            class="icon-arrow-up8 cursor-pointer"
-                                    ></i>
-                                    <span v-if="filters.by !== 'name'" @click.prevent="sort('name', 'asc')">
-                                        <i class="icon-arrow-up8 cursor-pointer"></i>
-                                        <i class="icon-arrow-down8 cursor-pointer"></i>
-                                    </span>
-                                </span>
                             </th>
                             <th>{{ $t('admin.order.index.table.headers.contacts') }}</th>
                             <th>{{ $t('admin.order.index.table.headers.status') }}</th>
