@@ -290,9 +290,11 @@
                                             <label>
                                                 <strong>{{ step.step_name.name + ': ' }}</strong>
                                             </label>
-                                            <select class="form-control flex-input" v-model="step.id" required>
-                                                <option v-for="(item, index) in step.variations" :value="item.id" :key="`sorted_product_step__${index}`">{{ item.value }}</option>
-                                            </select>
+                                            <div class="row">
+                                                <select class="form-control flex-input" v-model="step.id" required>
+                                                    <option v-for="(item, index) in step.variations" :value="item.id" :key="`sorted_product_step__${index}`">{{ item.value }}</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </span>
                                 </p>

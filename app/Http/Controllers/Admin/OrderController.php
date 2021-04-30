@@ -425,6 +425,10 @@ class OrderController extends Controller
         return View::make('admin.order.index', [
             'orders' => $orders,
             'statuses' => OrderStatus::query()->orderBy('order', 'asc')->get(),
+            'orders_status' => null,
+            'is_new' => false,
+            'is_transit' => false,
+            'is_delivered' => false,
         ]);
     }
 
