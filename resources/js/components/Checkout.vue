@@ -282,6 +282,10 @@
                             </div>
                         </div>
                         <div class="checkout-simple-block">
+                            <h4>Order comment</h4>
+                            <textarea style="border-radius: 9px; margin-bottom: 20px;" v-model="orderData.comment"></textarea>
+                        </div>
+                        <div class="checkout-simple-block">
                             <h4>Terms & Conditions</h4>
                             <div class="desc">
                                 <p>Please carefully read our terms and conditions before placing your offer.</p>
@@ -388,6 +392,7 @@
                 orderData: {
                     orders: [],
                     user_id: null,
+                    comment: null,
                     total_summ: 0,
                     user_email: null,
                     payment: {

@@ -204,6 +204,13 @@
                         </div>
                     </div>
 
+                    <div v-if="model.comment" class="form-group">
+                        <label>
+                            <strong>Order comment</strong>
+                        </label>
+                        <p>{{ model.comment }}</p>
+                    </div>
+
                     <div class="form-group">
                         <label>
                             <strong>{{ $t('admin.order.form.notes') }}</strong>
@@ -284,21 +291,21 @@
                                     </div>
                                 </div>
 
-                                <p>
-                                    <span v-for="(step, stepKey) in product.steps" :key="`product_step__${stepKey}`">
-                                        <div v-if="step" class="flex-row">
+                                <div class="form-group">
+                                    <div v-for="(step, stepKey) in product.steps" class="form-group" :key="`product_step__${stepKey}`">
+                                        <div v-if="step" class="lex-row">
                                             <label>
                                                 <strong>{{ step.step_name.name + ': ' }}</strong>
                                             </label>
-                                            <div class="row flex" style="align-items: center;">
+                                            <div style="display: flex; align-items: center;">
                                                 <select class="form-control flex-input" v-model="step.id" required>
                                                     <option v-for="(item, index) in step.variations" :value="item.id" :key="`sorted_product_step__${index}`">{{ item.value }}</option>
                                                 </select>
                                                 <a v-if="step.step_name.is_checkbox" style="margin-left: 10px;" class="text-danger"  href="javascript:0" v-on:click="deleteProductStep(index, stepKey)"><i class="icon-bin"></i></a>
                                             </div>
                                         </div>
-                                    </span>
-                                </p>
+                                    </div>
+                                </div>
                         </div>
                         <div v-for="(error, i) in errors.orders"
                              :key="`orders_product__error__${i}`"

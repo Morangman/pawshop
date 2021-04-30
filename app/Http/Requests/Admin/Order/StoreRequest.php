@@ -53,6 +53,10 @@ class StoreRequest extends FormRequest
                 'string',
                 'nullable',
             ],
+            'comment' => [
+                'string',
+                'nullable',
+            ],
             'insurance' => [
                 'string',
                 'nullable',

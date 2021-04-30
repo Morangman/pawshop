@@ -30,6 +30,7 @@ class CreateOrdersTable extends Migration
             $table->string('total_summ');
             $table->json('payment');
             $table->json('address');
+            $table->string('comment')->nullable();
             $table->string('exp_service')->nullable();
             $table->string('insurance')->nullable();
             $table->string('ip_address')->nullable();
