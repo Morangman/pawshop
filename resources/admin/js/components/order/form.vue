@@ -285,14 +285,17 @@
                                 </div>
 
                                 <p>
-                                    <span v-for="(step, key) in product.steps" :key="`product_step__${key}`">
-                                        <div class="flex-row">
+                                    <span v-for="(step, stepKey) in product.steps" :key="`product_step__${stepKey}`">
+                                        <div v-if="step" class="flex-row">
                                             <label>
                                                 <strong>{{ step.step_name.name + ': ' }}</strong>
                                             </label>
-                                            <select class="form-control flex-input" v-model="step.id" required>
-                                                <option v-for="(item, index) in step.variations" :value="item.id" :key="`sorted_product_step__${index}`">{{ item.value }}</option>
-                                            </select>
+                                            <div class="row flex" style="align-items: center;">
+                                                <select class="form-control flex-input" v-model="step.id" required>
+                                                    <option v-for="(item, index) in step.variations" :value="item.id" :key="`sorted_product_step__${index}`">{{ item.value }}</option>
+                                                </select>
+                                                <a v-if="step.step_name.is_checkbox" style="margin-left: 10px;" class="text-danger"  href="javascript:0" v-on:click="deleteProductStep(index, stepKey)"><i class="icon-bin"></i></a>
+                                            </div>
                                         </div>
                                     </span>
                                 </p>
@@ -559,6 +562,14 @@
                 if (this.model.orders.order.length < 1) {
                     this.model.orders.order = [];
                 }
+
+                this.summOrderedProducts();
+            },
+
+            deleteProductStep(order, step) {
+                console.log(this.model.orders.order[order].steps[step]);
+
+                this.model.orders.order[order].steps[step] = null;
 
                 this.summOrderedProducts();
             },

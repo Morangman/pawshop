@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="{{ Lang::locale() }}">
     <head>
-        <title>@lang('common.title')</title>
+        <title>@lang('common.title') ({{ \App\Order::query()->where('ordered_status', '=', \App\Order::STATUS_NEW)->count() }})</title>
 
+        <link id="favicon" rel="icon" type="image/png" href="{{ asset('client/images/favicon/favicon.png') }}">
+        
         <meta name="csrf-token" content="{!! csrf_token() !!}">
 
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
