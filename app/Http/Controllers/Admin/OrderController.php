@@ -126,7 +126,6 @@ class OrderController extends Controller
         $d->setStorPath(storage_path().'/');
 
         $categories = Category::query()
-            ->where('is_hidden', false)
             ->whereNotNull('custom_text')
             ->whereNotNull('subcategory_id')
             ->get();
