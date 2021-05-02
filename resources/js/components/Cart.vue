@@ -4,7 +4,7 @@
             <div class="cart-section-title">
                 <h1>Your box</h1>
                 <a href="" v-if="orders && orders['order'].length" v-on:click="clearCart" class="empty-cart-link">Empty your box</a>
-                <a href="/" v-if="!orders || !orders['order'].length" class="empty-cart-link">Select Your Repair</a>
+                <a href="/" v-if="!orders || !orders['order'].length" class="empty-cart-link">Sell Your Device</a>
             </div>
 
             <form class="cart-form" v-if="orders">
