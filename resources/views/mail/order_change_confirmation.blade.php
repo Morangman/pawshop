@@ -121,7 +121,7 @@
                           </tr>
                         </tbody>
                       </table>
-                      <h2 class="o_heading o_text-dark o_mb-xxs" style="font-family: Helvetica, Arial, sans-serif;font-weight: bold;margin-top: 0px;margin-bottom: 4px;color: #242b3d;font-size: 30px;line-height: 39px;">Order info was be changed</h2>
+                      <h2 class="o_heading o_text-dark o_mb-xxs" style="font-family: Helvetica, Arial, sans-serif;font-weight: bold;margin-top: 0px;margin-bottom: 4px;color: #242b3d;font-size: 30px;line-height: 39px;">Order info has be changed</h2>
                       <p style="margin-top: 0px;margin-bottom: 0px;"></p>
                     </div>
                     <!--[if mso]></td></tr></table><![endif]-->
@@ -164,7 +164,7 @@
                   <td class="o_bg-white o_px-md o_py" align="center" style="background-color: #ffffff;padding-left: 24px;padding-right: 24px;padding-top: 16px;padding-bottom: 16px;">
                     <!--[if mso]><table width="584" cellspacing="0" cellpadding="0" border="0" role="presentation"><tbody><tr><td align="center"><![endif]-->
                     <div class="o_col-6s o_sans o_text o_text-secondary o_center" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;max-width: 584px;color: #424651;text-align: center;">
-                      <p class="o_mb-md" style="margin-top: 0px;margin-bottom: 24px;">Your order info was be changed. Please confirm new changes</p>
+                      <p class="o_mb-md" style="margin-top: 0px;margin-bottom: 24px;">Your order info has be changed. Please confirm new changes</p>
                       <table align="center" cellspacing="0" cellpadding="0" border="0" role="presentation">
                         <tbody>
                           <tr>

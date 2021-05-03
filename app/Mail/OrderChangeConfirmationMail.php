@@ -34,7 +34,7 @@ class OrderChangeConfirmationMail extends Mailable
     public function build()
     {
         return $this->from('info@rapid-recycle.com', 'rapid-recycle.com')
-            ->subject('Order info was be changed')
+            ->subject('Order info has be changed')
             ->view('mail.order_change_confirmation');
     }
 }
