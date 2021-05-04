@@ -291,6 +291,11 @@
                                 </div>
                             </div>
 
+                            <div class="form-group">
+                                Is device locked:
+                                <input type="checkbox" id="scales" name="scales" v-model="product.is_locked">
+                            </div>
+
                             <div class="form-group" v-if="product.steps && !stepsData[index+product.id]">
                                 <div v-for="(step, stepKey) in product.steps" class="form-group" :key="`product_step__${stepKey}`">
                                     <div v-if="step" class="lex-row">
