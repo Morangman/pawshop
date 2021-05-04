@@ -88,7 +88,7 @@
                         <li class="nav-item">
                             <a href="{{ URL::route('admin.callback.index') }}" class="nav-link @active_menu_class('admin.callback')">
                                 <i class="icon-bubbles3"></i>
-                                <span>Callbacks</span>
+                                <span>@lang('common.sidebar.callbacks')</span>
                             </a>
                         </li>
                         <li class="nav-item">

@@ -4,9 +4,9 @@ declare(strict_types = 1);
 
 return [
     'breadcrumbs' => [
-        'index' => 'Callbacks',
-        'create' => 'Create Callback',
-        'edit' => 'Edit Callback',
+        'index' => 'Conversations',
+        'create' => 'Create Conversation',
+        'edit' => 'View Conversation',
     ],
     'form' => [
         'name' => 'Name',
@@ -15,10 +15,10 @@ return [
         'text' => 'Text',
     ],
     'index' => [
-        'title' => 'Callbacks',
-        'header_btn' => 'Create Callback',
+        'title' => 'Conversations',
+        'header_btn' => 'Create Conversation',
         'filters' => [
-            'search' => 'Search callbacks by typing one of these fields: name',
+            'search' => 'Search conversation by typing one of these fields: name',
         ],
         'table' => [
             'headers' => [
@@ -30,17 +30,17 @@ return [
         ],
     ],
     'create' => [
-        'title' => 'Create callback',
+        'title' => 'Create conversation',
     ],
     'edit' => [
-        'title' => 'Edit callback',
+        'title' => 'Edit conversation',
     ],
     'delete' => [
-        'title' => 'Delete callback',
+        'title' => 'Delete conversation',
     ],
     'messages' => [
-        'create' => 'Callback has been successfully created',
-        'update' => 'Callback has been successfully updated',
-        'delete' => 'Callback has been successfully deleted',
+        'create' => 'Conversation has been successfully created',
+        'update' => 'Conversation has been successfully updated',
+        'delete' => 'Conversation has been successfully deleted',
     ],
 ];

@@ -36,6 +36,14 @@ class StoreRequest extends FormRequest
                 'string',
                 'max:255',
             ],
+            'sender' => [
+                'nullable',
+                'integer',
+            ],
+            'viewed' => [
+                'nullable',
+                'integer',
+            ],
             'text' => [
                 'nullable',
             ],

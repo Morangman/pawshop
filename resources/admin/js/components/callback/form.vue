@@ -2,98 +2,60 @@
     <div class="row">
         <div class="col-xl-8 col-lg-8 col-md-10 col-sm-10 mx-auto form p-1">
             <div class="card">
-                <div class="card-body">
-                    <div class="form-group">
-                        <label>
-                            <strong>{{ $t('admin.comment.form.name') }}</strong>
-                        </label>
-                        <input
-                            name="name"
-                            type="text"
-                            v-model="model.name"
-                            class="form-control"
-                            :class="{ 'border-danger': errors.name }"
-                        >
-                        <div v-for="(error, i) in errors.name"
-                             :key="`name__error__${i}`"
-                             class="text-danger error"
-                        >
-                            {{ error }}
+                <div class="card-header header-elements-inline">
+                    <h5 class="card-title">Conversation with {{ model.name }} ({{ model.email }})</h5>
+                    <div class="header-elements">
+                        <div class="list-icons">
+                            <a class="list-icons-item" v-on:click="reload()" data-action="reload"></a>
+                            <delete-confirmation
+                                :route-path="$r('admin.callback.delete', { callback: model.id })"
+                                :redirect-path="$r('admin.callback.index')"
+                                :title="$t('common.word.delete')"
+                            />
                         </div>
                     </div>
+                </div>
+
+                <div v-if="!model.id" class="card-body">
                     <div class="form-group">
                         <label>
-                            <strong>{{ $t('admin.comment.form.email') }}</strong>
+                            <strong>Email*</strong>
                         </label>
                         <input
                             name="email"
                             type="text"
-                            v-model="model.email"
-                            class="form-control"
-                            :class="{ 'border-danger': errors.email }"
+                            v-model="message.email"
+                            placeholder="Email*"
+                            class="form-control col-md-5"
                         >
-                        <div v-for="(error, i) in errors.email"
-                             :key="`email__error__${i}`"
-                             class="text-danger error"
-                        >
-                            {{ error }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <strong>{{ $t('admin.callback.form.phone') }}</strong>
-                        </label>
-                        <input
-                            name="phone"
-                            type="text"
-                            v-model="model.phone"
-                            class="form-control"
-                            :class="{ 'border-danger': errors.phone }"
-                        >
-                        <div v-for="(error, i) in errors.phone"
-                             :key="`phone__error__${i}`"
-                             class="text-danger error"
-                        >
-                            {{ error }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <strong>{{ $t('admin.comment.form.text') }}</strong>
-                        </label>
-                        <textarea
-                            name="text"
-                            type="text"
-                            rows="4"
-                            v-model="model.text"
-                            class="form-control"
-                        ></textarea>
-                        <div v-for="(error, i) in errors.text"
-                             :key="`text__error__${i}`"
-                             class="text-danger error"
-                        >
-                            {{ error }}
-                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="text-right">
-                <template v-if="model.id">
-                    <button
-                        type="submit"
-                        class="btn btn-danger"
-                        @click.prevent="deleteComment"
-                    >
-                        {{ $t('common.word.delete') }}
-                    </button>
-                </template>
-                <button
-                    type="submit"
-                    class="btn btn-primary"
-                    @click.prevent="submit"
-                >
-                    {{ $t('common.word.save') }}
-                </button>
+
+                <div class="card-body">
+                    <ul ref="container" style="max-height: 300px;" class="media-list media-chat media-chat-scrollable mb-3">
+                        <li class="media content-divider justify-content-center text-muted mx-0">{{ model.created_at }}</li>
+
+                        <li v-if="model.id" class="media" :class="model.sender === 2 ? 'media-chat-item-reverse' : ''">
+                            <div class="media-body">
+                                <div class="media-chat-item"><span v-html="model.text"></span></div>
+                                <div class="font-size-sm text-muted mt-2">{{ model.created_at }}</div>
+                            </div>
+                        </li>
+                
+                        <li v-for="(message, i) in model.messages" :key="`message_${i}`" class="media" :class="message.sender === 2 ? 'media-chat-item-reverse' : ''">
+                            <div class="media-body">
+                                <div class="media-chat-item"><span v-html="message.text"></span></div>
+                                <div class="font-size-sm text-muted mt-2">{{ message.created_at }}</div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <textarea v-model="message.text" name="enter-message" class="form-control mb-3" rows="3" cols="1" placeholder="Enter your message..."></textarea>
+
+                    <div class="d-flex align-items-center">
+                        <button v-on:click="sendMessage" type="button" class="btn bg-teal-400 btn-labeled btn-labeled-right ml-auto"><b><i class="icon-paperplane"></i></b> Send</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -116,9 +78,39 @@
 
         mixins: [FormHelper],
 
+        data() {
+            return {
+                message: {
+                    email: this.model.email,
+                    name: this.model.name,
+                    text: null,
+                }
+            };
+        },
+
         methods: {
             submit() {
                 this.$emit('submit', this.model);
+            },
+
+            reload() {
+                location.reload();
+            },
+
+            sendMessage() {
+                this.errors = {};
+                this.formData = new FormData();
+                this.collectFormData(this.message);
+
+                axios.post(
+                    Router.route('admin.callback.send-message'),
+                    this.formData,
+                ).then(() => {
+                    location.reload();
+                }).catch(({ response: { data: { errors } } }) => {
+                    this.errors = errors;
+                    this.scrollToError();
+                });
             },
 
             deleteComment() {
@@ -126,6 +118,15 @@
                     this.$emit('delete');
                 });
             },
+
+            scrollToEnd () {
+                var content = this.$refs.container;
+                content.scrollTop = content.scrollHeight;
+            }
         },
+
+        mounted() {
+            this.scrollToEnd();
+        }
     };
 </script>

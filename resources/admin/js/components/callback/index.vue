@@ -65,6 +65,7 @@
                                     </span>
                                 </span>
                             </th>
+                            <th>Email</th>
                             <th>{{ $t('admin.callback.index.table.headers.text') }}</th>
                             <th>
                                 {{ $t('admin.callback.index.table.headers.created_at') }}
@@ -93,6 +94,7 @@
                             <tr v-for="(callback, i) in callbacks" :key="`callback_${i}`">
                                     <td><a :href="$r('admin.callback.edit', { callback: callback.id })">{{ callback.id }}</a></td>
                                     <td v-html="highlightSearchResult(callback.name, filters.search)"></td>
+                                    <td>{{ callback.email }}</td>
                                     <td>{{ callback.text }}</td>
                                     <td>{{ callback.created_at }}</td>
                                     <td>

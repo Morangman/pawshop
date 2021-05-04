@@ -20,10 +20,12 @@ class CreateCallbacksTable extends Migration
     {
         Schema::create('callbacks', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->string('email');
             $table->string('phone')->nullable();
             $table->text('text')->nullable();
+            $table->tinyInteger('sender')->unsigned()->nullable();
+            $table->tinyInteger('viewed')->unsigned()->default(1);
             $table->timestamps();
         });
     }

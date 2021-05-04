@@ -53,7 +53,7 @@ class OrderObserver
                 if ($key === "orders") {
                     foreach ($newValues['order'] as $keyOrder => $newOrder) {
                         foreach ($newOrder['steps'] as $keyStep => $step) {
-                            if ($step['id'] !== $oldValues['order'][$keyOrder]['steps'][$keyStep]['id']) {
+                            if ($oldValues['order'][$keyOrder] && $oldValues['order'][$keyOrder]['steps'][$keyStep]['id']) {
                                 $newValues['changed'] = Order::STATUS_CHANGED;
                                 $newValues['confirmed'] = Order::STATUS_NOT_CONFIRMED;
 

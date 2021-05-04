@@ -22,6 +22,11 @@ Route::get('create', [
     'uses' => 'OrderController@create',
 ]);
 
+Route::get('get-product', [
+    'as' => '.get-product',
+    'uses' => 'OrderController@getProduct',
+]);
+
 Route::post('', [
     'as' => '.store',
     'uses' => 'OrderController@store',
@@ -40,6 +45,11 @@ Route::get('{order}/edit', [
 Route::patch('{order}', [
     'as' => '.update',
     'uses' => 'OrderController@update',
+]);
+
+Route::patch('{order}/update-order', [
+    'as' => '.update-order',
+    'uses' => 'OrderController@addOrderedProduct',
 ]);
 
 Route::get('{order}', [

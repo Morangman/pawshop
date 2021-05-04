@@ -25639,9 +25639,9 @@ __webpack_require__.r(__webpack_exports__);
     "admin": {
       "callback": {
         "breadcrumbs": {
-          "index": "Callbacks",
-          "create": "Create Callback",
-          "edit": "Edit Callback"
+          "index": "Conversations",
+          "create": "Create Conversation",
+          "edit": "View Conversation"
         },
         "form": {
           "name": "Name",
@@ -25650,10 +25650,10 @@ __webpack_require__.r(__webpack_exports__);
           "text": "Text"
         },
         "index": {
-          "title": "Callbacks",
-          "header_btn": "Create Callback",
+          "title": "Conversations",
+          "header_btn": "Create Conversation",
           "filters": {
-            "search": "Search callbacks by typing one of these fields: name"
+            "search": "Search conversation by typing one of these fields: name"
           },
           "table": {
             "headers": {
@@ -25665,18 +25665,18 @@ __webpack_require__.r(__webpack_exports__);
           }
         },
         "create": {
-          "title": "Create callback"
+          "title": "Create conversation"
         },
         "edit": {
-          "title": "Edit callback"
+          "title": "Edit conversation"
         },
         "delete": {
-          "title": "Delete callback"
+          "title": "Delete conversation"
         },
         "messages": {
-          "create": "Callback has been successfully created",
-          "update": "Callback has been successfully updated",
-          "delete": "Callback has been successfully deleted"
+          "create": "Conversation has been successfully created",
+          "update": "Conversation has been successfully updated",
+          "delete": "Conversation has been successfully deleted"
         }
       },
       "category": {
@@ -26400,6 +26400,7 @@ __webpack_require__.r(__webpack_exports__);
         "statistics": "Statistics",
         "statuses": "Order statuses",
         "steps": "Steps",
+        "callbacks": "Conversations",
         "tips": "Tips",
         "products": "Products",
         "orders": "Orders",

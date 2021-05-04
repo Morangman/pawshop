@@ -17,6 +17,7 @@ return [
         'statistics' => 'Statistics',
         'statuses' => 'Order statuses',
         'steps' => 'Steps',
+        'callbacks' => 'Conversations',
         'tips' => 'Tips',
         'products' => 'Products',
         'orders' => 'Orders',

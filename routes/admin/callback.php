@@ -22,6 +22,11 @@ Route::post('', [
     'uses' => 'CallbackController@store',
 ]);
 
+Route::post('', [
+    'as' => '.send-message',
+    'uses' => 'CallbackController@sendEmail',
+]);
+
 Route::get('{callback}/edit', [
     'as' => '.edit',
     'uses' => 'CallbackController@edit',

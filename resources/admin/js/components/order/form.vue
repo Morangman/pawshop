@@ -235,77 +235,118 @@
                             <strong>{{ $t('admin.order.form.ordered_product') }}: <span v-if="model.id">{{ model.orders.length }}</span></strong>
                         </label>
                         <div class="change-blocks-wrapper__item" v-for="(product, index) in model.orders.order" :key="`product__${index}`">
-                                <div class="text-right mb-2">
-                                    <a href="javascript:void(0)" class="text-danger" v-on:click="deleteOrderedProduct(index)" :title="$t('common.word.remove')">
-                                        <i class="icon-bin"></i>
-                                    </a>
+                            <div class="text-right mb-2">
+                                <a href="javascript:void(0)" class="text-danger" v-on:click="deleteOrderedProduct(index)" :title="$t('common.word.remove')">
+                                    <i class="icon-bin"></i>
+                                </a>
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control selectpicker" v-model="product.id" v-on:change="selectProduct(index, product.id)" required>
+                                    <option v-for="(item, index) in products" :value="item.id" :key="`product_item__${index}`">{{ item.name }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group row">
+                                <div class="form-group col-md-6">
+                                    <input
+                                        name="ordered_product-imei"
+                                        type="text"
+                                        placeholder="IMEI"
+                                        v-model="product.imei"
+                                        class="form-control"
+                                    >
                                 </div>
-                                <div class="form-group">
-                                    <select class="form-control selectpicker" v-model="product.id" required>
-                                        <option v-for="(item, index) in products" :value="item.id" :key="`product_item__${index}`">{{ item.name }}</option>
-                                    </select>
+                                <div class="form-group col-md-6">
+                                    <input
+                                        name="ordered_product-serial"
+                                        type="text"
+                                        placeholder="Serial Number"
+                                        v-model="product.serial"
+                                        class="form-control"
+                                    >
                                 </div>
-                                <div class="form-group row">
-                                    <div class="form-group col-md-6">
-                                        <input
-                                            name="ordered_product-imei"
-                                            type="text"
-                                            placeholder="IMEI"
-                                            v-model="product.imei"
-                                            class="form-control"
-                                        >
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <input
-                                            name="ordered_product-serial"
-                                            type="text"
-                                            placeholder="Serial Number"
-                                            v-model="product.serial"
-                                            class="form-control"
-                                        >
-                                    </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="form-group col-md-6">
+                                    <input
+                                        name="ordered_product-quantity"
+                                        type="text"
+                                        :placeholder="$t('admin.order.form.ordered_products.quantity')"
+                                        v-model="product.ctn"
+                                        class="form-control"
+                                    >
                                 </div>
-                                <div class="form-group row">
-                                    <div class="form-group col-md-6">
+                                <div class="form-group col-md-6">
+                                    <div class="input-group">
                                         <input
-                                            name="ordered_product-quantity"
                                             type="text"
-                                            :placeholder="$t('admin.order.form.ordered_products.quantity')"
-                                            v-model="product.ctn"
-                                            class="form-control"
+                                            class="form-control price-summ product-order-list__item"
+                                            name="ordered_product-price"
+                                            :placeholder="$t('admin.order.form.ordered_products.price')"
+                                            v-model="product.total"
                                         >
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <div class="input-group">
-                                            <input
-                                                type="text"
-                                                class="form-control price-summ product-order-list__item"
-                                                name="ordered_product-price"
-                                                :placeholder="$t('admin.order.form.ordered_products.price')"
-                                                v-model="product.total"
-                                            >
-                                            <div class="input-group-append">
-                                                <span class="input-group-text" id="basic-addon2">$</span>
-                                            </div>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="basic-addon2">$</span>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="form-group">
-                                    <div v-for="(step, stepKey) in product.steps" class="form-group" :key="`product_step__${stepKey}`">
-                                        <div v-if="step" class="lex-row">
-                                            <label>
-                                                <strong>{{ step.step_name.name + ': ' }}</strong>
-                                            </label>
-                                            <div style="display: flex; align-items: center;">
-                                                <select class="form-control flex-input" v-model="step.id" required>
-                                                    <option v-for="(item, index) in step.variations" :value="item.id" :key="`sorted_product_step__${index}`">{{ item.value }}</option>
-                                                </select>
-                                                <a v-if="step.step_name.is_checkbox" style="margin-left: 10px;" class="text-danger"  href="javascript:0" v-on:click="deleteProductStep(index, stepKey)"><i class="icon-bin"></i></a>
-                                            </div>
+                            <div class="form-group" v-if="product.steps && !stepsData[index+product.id]">
+                                <div v-for="(step, stepKey) in product.steps" class="form-group" :key="`product_step__${stepKey}`">
+                                    <div v-if="step" class="lex-row">
+                                        <label>
+                                            <strong>{{ step.step_name ? step.step_name.name + ': ' : '' }}</strong>
+                                        </label>
+                                        <div style="display: flex; align-items: center;">
+                                            <select class="form-control flex-input" v-model="step.id" required>
+                                                <option v-for="(item, index) in step.variations" :value="item.id" :key="`sorted_product_step__${index}`">{{ item.value }}</option>
+                                            </select>
+                                            <a v-if="step.step_name ? step.step_name.is_checkbox : false" style="margin-left: 10px;" class="text-danger"  href="javascript:0" v-on:click="deleteProductStep(index, stepKey)"><i class="icon-bin"></i></a>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="form-group" v-if="stepsData[index+product.id]">
+                                <div class="admin-steps">
+                                    <p>{{ selectedStep[index].title }}</p>
+                                    <div class="options">
+                                        <div class="options-radio" v-for="(option, key) in selectedStep[index].items" :key="`step${option.id}_${key}`">
+                                            <label class="radiobox-block" v-if="!selectedStep[index].is_checkbox">
+                                                <input v-model="selectedSteps[option.step_name.id]" :checked="!!selectedStep[index].items[key].checked" :value="option" type="radio" :name="`step-${selectedStep[index].title}-radios`">
+                                                <i></i>
+                                                <span>
+                                                    <strong>{{ option.value }}</strong>
+                                                    <small>{{ option.decryption }}</small>
+                                                </span>
+                                            </label>
+                                            <label class="checkbox-block" v-if="selectedStep[index].is_checkbox">
+                                                <input v-model="selectedSteps" type="checkbox" v-bind:value="option"  :name="`step-${selectedStep[index].title}-checkbox`">
+                                                <i></i>
+                                                <span>
+                                                    <strong>{{ option.value }}</strong>
+                                                    <small>{{ option.decryption }}</small>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <button v-on:click="backStep(index, product.id)" class="btn btn-info">Back</button>
+                                    <button v-on:click="nextStep(index, product.id)" class="btn btn-info">Next step</button>
+                                </div>
+                            </div>
+                            <div class="text-right mb-2" v-if="product.device.name">
+                                <a :href="'https://www.ebay.com/sch/i.html?_nkw=' + product.device.name" target="_blank">
+                                    <img style="height:30px; width: auto;" :src="'../../../../client/images/ebay.png'" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <button
+                                v-on:click="addOrderItem"
+                                class="btn btn-primary margin-top-10"
+                            >{{ $t('common.word.add') }}</button>
                         </div>
                         <div v-for="(error, i) in errors.orders"
                              :key="`orders_product__error__${i}`"
@@ -516,6 +557,10 @@
                 selectedOrderedProduct: [],
                 selectedOrderedProductColor: [],
                 summOrdered: null,
+                selectedStep: [],
+                selectedSteps: [],
+                stepsData: [],
+                stepIndex: 0,
                 reminder: {
                     title: null,
                     text: null,
@@ -552,6 +597,36 @@
                 this.$emit('submit', this.model);
             },
 
+            nextStep(key, id) {
+                this.stepIndex++;
+
+                let dataSteps = this.stepsData[key+id][this.stepIndex];
+
+                if (dataSteps) {
+                    this.selectedStep[key] = dataSteps;
+                } else {
+                    this.model.orders.order[key].steps = this.selectedSteps;
+
+                    this.updateOrder({order: this.model.orders.order[key]});
+                }
+
+                this.$forceUpdate();
+            },
+
+            backStep(key, id) {
+                if (this.stepIndex > 0) {
+                    this.stepIndex--;
+
+                    let dataSteps = this.stepsData[key+id][this.stepIndex];
+
+                    if (dataSteps) {
+                        this.selectedStep[key] = dataSteps;
+                    }
+                }
+
+                this.$forceUpdate();
+            },
+
             addOrderedProduct() {
                 this.model.ordered_product.push({
                     product_title: null,
@@ -574,23 +649,7 @@
             },
 
             deleteProductStep(order, step) {
-                console.log(this.model.orders.order[order].steps[step]);
-
                 this.model.orders.order[order].steps[step] = null;
-
-                this.summOrderedProducts();
-            },
-
-            selectOrderedProduct(index) {
-                this.model.ordered_product[index].product_title = this.selectedOrderedProduct[index].title;
-                this.model.ordered_product[index].product = this.selectedOrderedProduct[index];
-            },
-
-            selectOrderedProductColor(index) {
-                this.model.ordered_product[index].product_color = this.selectedOrderedProductColor[index].color_name;
-                this.model.ordered_product[index].quantity = 1;
-                this.model.ordered_product[index].price = this.selectedOrderedProductColor[index].price;
-                this.model.ordered_product[index].variation = this.selectedOrderedProductColor[index];
 
                 this.summOrderedProducts();
             },
@@ -600,6 +659,59 @@
 
                 _.each(this.model.ordered_product, (key, value) => {
                     this.summOrdered += Number(key.price) * Number(key.quantity);
+                });
+            },
+
+            addOrderItem() {
+                this.model.orders.order.push({
+                    ctn: 1,
+                    device: [],
+                    id: null,
+                    steps: [],
+                    summ: 0,
+                    total: 0,
+                });
+            },
+
+            updateOrder(data) {
+                this.errors = {};
+                this.formData = new FormData();
+                this.formData.set('_method', 'PATCH');
+                this.collectFormData(data);
+
+                axios.post(
+                    Router.route('admin.order.update-order', { order: this.model.id }),
+                    this.formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then(() => {
+                    location.href = Router.route('admin.order.edit', { order: this.model.id });
+                }).catch(({ response: { data: { errors } } }) => {
+                    this.errors = errors;
+                    this.scrollToError();
+                });
+            },
+
+
+            selectProduct(key, id) {
+                this.selectedSteps = [];
+                this.stepsData = [];
+                this.selectedStep = [];
+
+                axios.get(
+                    Router.route('admin.order.get-product', { product: id }),
+                ).then((data) => {
+                    this.stepsData[key+id] = data.data.steps;
+                    this.model.orders.order[key].device = data.data.device;
+
+                    this.selectedStep[key] = data.data.steps[0];
+
+                    this.$forceUpdate();
+                }).catch((error) => {
+                    //console.log(error);
                 });
             },
 

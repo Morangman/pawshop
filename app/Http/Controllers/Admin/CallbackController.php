@@ -8,12 +8,16 @@ use App\Callback;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Callback\StoreRequest;
 use App\Http\Requests\Admin\Callback\UpdateRequest;
+use App\Mail\MessageMail;
+use App\Message;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
+use Prophecy\Call\Call;
 
 /**
  * Class CallbackController
@@ -56,16 +60,63 @@ class CallbackController extends Controller
     }
 
     /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function sendEmail(Request $request): JsonResponse
+    {
+        if (Callback::query()->where('email', '=', $request->get('email'))->exists()) {
+            $callback = Callback::query()->where('email', '=', $request->get('email'))->first();
+
+            Message::query()->create(
+                array_merge(
+                    $request->all(),
+                    [
+                        'sender' => Callback::SENDER_TO,
+                        'chat_id' => $callback->getKey()
+                    ]
+                )
+            );
+        } else {
+            Callback::query()->create(
+                array_merge(
+                    $request->all(),
+                    [
+                        'sender' => Callback::SENDER_TO,
+                    ]
+                )
+            );
+        }
+
+        try {
+            Mail::to($request->get('email'))
+                ->send(new MessageMail(['text' => $request->get('text')]));
+        } catch (\Exception $e) {}
+
+        Session::flash(
+            'success',
+            Lang::get('admin/callback.messages.update')
+        );
+
+        return $this->json()->noContent();
+    }
+
+    /**
      * @param \App\Callback $callback
      *
      * @return \Illuminate\Contracts\View\View
      */
     public function edit(Callback $callback): ViewContract
     {
+        $data = Callback::query()->whereKey($callback->getKey())->with('messages')->first();
+
         return View::make(
             'admin.callback.edit',
             [
-                'callback' => $callback,
+                'callback' => $data,
             ]
         );
     }
@@ -97,6 +148,8 @@ class CallbackController extends Controller
      */
     public function delete(Callback $callback): JsonResponse
     {
+        Message::query()->where('chat_id', '=', $callback->getKey())->delete();
+
         $callback->delete();
 
         Session::flash(
@@ -114,7 +167,9 @@ class CallbackController extends Controller
      */
     public function get(Callback $callback): JsonResponse
     {
-        return $this->json()->ok($callback);
+        $data = Callback::query()->whereKey($callback->getKey())->with('messages')->first();
+
+        return $this->json()->ok($data);
     }
 
     /**

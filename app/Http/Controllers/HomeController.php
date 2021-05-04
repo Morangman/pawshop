@@ -37,6 +37,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use App\Mail\OrderConfirmationMail;
+use App\Message;
 use App\Notifications\OrderConfirmNotification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
@@ -387,14 +388,28 @@ class HomeController extends Controller
         }
 
         if ($resultJson->score >= 0.3) {
-            $callback = Callback::query()->create($request->all());
+            if (Callback::query()->where('email', '=', $request->get('email'))->exists()) {
+                $callback = Callback::query()->where('email', '=', $request->get('email'))->first();
 
-            Notification::send(
-                User::query()->scopes(['notifiableUsers'])->get(),
-                new ContactNotification($callback->getKey())
-            );
+                Message::query()->create(
+                    array_merge(
+                        $request->all(),
+                        [
+                            'sender' => Callback::SENDER_FROM,
+                            'chat_id' => $callback->getKey()
+                        ]
+                    )
+                );
+            } else {
+                $callback = Callback::query()->create(array_merge($request->all(), ['sender' => Callback::SENDER_FROM]));
+            }
+
+            // Notification::send(
+            //     User::query()->scopes(['notifiableUsers'])->get(),
+            //     new ContactNotification($callback->getKey())
+            // );
     
-            $this->sendMessage($request->get('text') ?? 'Callback notification', route('admin.callback.edit', ['callback' => $callback->getKey()]));
+            //$this->sendMessage($request->get('text') ?? 'Callback notification', route('admin.callback.edit', ['callback' => $callback->getKey()]));
     
             return View::make('support', [
                 'settings' => $this->getSettings() ?? [],

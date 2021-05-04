@@ -116,6 +116,43 @@ class OrderController extends Controller
     }
 
     /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getProduct(Request $request)
+    {
+        $category = Category::query()->whereKey((int) $request->get('product'))->first();
+        
+        $stepsArr = [];
+
+        if ($steps = $category->steps()->get()) {
+            foreach ($steps as $key => $step) {
+                $stepsArr[$step->stepName->id]['items'][] = $step->toArray();
+                $stepsArr[$step->stepName->id]['is_condition'] = $step->stepName->is_condition;
+                $stepsArr[$step->stepName->id]['is_checkbox'] = $step->stepName->is_checkbox;
+                $stepsArr[$step->stepName->id]['is_functional'] = $step->stepName->is_functional;
+                $stepsArr[$step->stepName->id]['title'] = $step->stepName->title;
+            }
+        }
+
+        $resultArr = [];
+
+        foreach ($stepsArr as $stepArr) {
+            $resultArr[] = [
+                'title' => $stepArr['title'],
+                'items' => $stepArr['items'],
+                'is_condition' => $stepArr['is_condition'],
+                'is_checkbox' => $stepArr['is_checkbox'],
+                'is_functional' => $stepArr['is_functional'],
+                'tip' => null,
+            ];
+        }
+
+        return $this->json()->ok(['steps' => $resultArr, 'device' => $category->toArray()]);
+    }
+
+    /**
      * @param \App\Order $order
      *
      * @return \Illuminate\Contracts\View\View
@@ -177,6 +214,157 @@ class OrderController extends Controller
             'order' => $order,
         ]);
     }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Order $order
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function addOrderedProduct(Request $request, Order $order): JsonResponse
+    {
+        $order->unsetEventDispatcher();
+
+        $ordersArray = $order->getAttribute('orders');
+
+        $newOrderDevice = $request->get('order');
+
+        $ids = [];
+
+        $category = Category::query()->whereKey($newOrderDevice['device']['id'])->first();
+
+        $addToPrice = 0;
+
+        $addPercent = 0;
+
+        $orderTotalSumm = 0;
+
+        $isBroken = false;
+
+        foreach($newOrderDevice['steps'] as $i => $step) {
+            $step = Step::query()->whereKey($step['id'])->with('stepName')->first()->toArray();
+
+            $premiumPrice = DB::table('premium_price')
+                ->where('step_id', $step['id'])
+                ->where('category_id', $newOrderDevice['device']['id'])
+                ->first();
+
+            if ($step['value'] === 'Brand New') {
+                if ($category) {
+                    foreach ($category->steps()->get() as $stepItem) {
+                        if ($stepItem->stepName->is_checkbox) {
+                            $premiumPriceForAccesory = DB::table('premium_price')
+                                ->where('step_id', $stepItem->getKey())
+                                ->where('category_id', $newOrderDevice['device']['id'])
+                                ->first();
+
+                            $addToPrice += $premiumPriceForAccesory->price_plus;
+                        }
+                    }
+                }
+            }
+
+            if ($premiumPrice) {
+                if ($pricePlus = $premiumPrice->price_plus) {
+                    $addToPrice += $pricePlus;
+                }
+
+                if ($percentPlus = $premiumPrice->price_percent) {
+                    $addPercent += $percentPlus;
+                }
+            }
+
+            $stepCategory = StepName::query()->whereKey($step['name_id'])->first();
+
+            if ($stepCategory->getAttribute('is_functional')) {
+                if ($step['value'] === 'No') {
+                    $isBroken = true;
+                }
+            }
+
+            if ($category->getAttribute('is_parsed')) {
+                if (isset($step['slug']) && isset($step['attribute'])) {
+                    $id = $step['id'];
+                    if ($step['value'] === 'Flawless') {
+                        $id = Step::query()->where('value', 'Brand New')->first()->getKey();
+                    }
+                    $ids[] = $id;
+                }
+            } else {
+                $id = $step['id'];
+                if ($step['value'] === 'Flawless') {
+                    $id = Step::query()->where('value', 'Brand New')->first()->getKey();
+                }
+                $ids[] = $id;
+            }
+        }
+
+        $resultPrice = 0;
+
+        $prices = Price::query()->where('category_id', $newOrderDevice['device']['id'])->get();
+
+        foreach ($prices as $price) {
+            if ($price->getAttribute('is_parsed')) {
+                $similar = array_intersect($ids, $price->getAttribute('steps_ids'));
+
+                if (sizeof($ids) === sizeof($similar)) {
+                    $resultPrice = $price->getAttribute('price');
+                }
+            }
+        }
+
+        if ($addPercent) {
+            $priceAddPercent = ((float) $resultPrice * $addPercent) / 100;
+
+            $resultPrice = number_format((float) $resultPrice + $priceAddPercent, 2, '.', '');
+        }
+
+        if ($addToPrice) {
+            $resultPrice = number_format((float) $resultPrice + $addToPrice, 2, '.', '');
+        }
+
+        if ($premiumPriceForDevice = $category->getAttribute('premium_price')) {
+            $resultPrice += (float) $premiumPriceForDevice;
+        }
+
+        if ($isBroken) {
+            if ($priceForBroken = $category->getAttribute('price_for_broken')) {
+                $resultPrice = $priceForBroken;
+            }
+        }
+
+        $newOrderDevice['summ'] = $resultPrice * (int) $newOrderDevice['ctn'];
+        $newOrderDevice['total'] = $resultPrice * (int) $newOrderDevice['ctn'];
+
+        $ordersArray['order'][] = $newOrderDevice;
+
+        foreach ($ordersArray['order'] as $orderData) {
+            $orderTotalSumm += (float) $orderData['summ'];
+        }
+
+        $expShipping = 20;
+
+        if ($order->getAttribute('exp_service')) {
+            (float) $orderTotalSumm -= $expShipping;
+        }
+
+        if ($order->getAttribute('insurance')) {
+            (float) $orderTotalSumm -= ((float) $orderTotalSumm  * 1)/100;
+        }
+
+        $order->update([
+            'orders' => $ordersArray,
+            'total_summ' => number_format((float) $orderTotalSumm, 2, '.', ''),
+        ]);
+
+        Session::flash(
+            'success',
+            Lang::get('admin/order.messages.update')
+        );
+
+        return $this->json()->noContent();
+    }
+
 
     /**
      * @param \App\Http\Requests\Admin\Order\UpdateRequest $request
