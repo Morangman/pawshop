@@ -22,7 +22,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'orders' => [
-                'required',
+                'nullable',
                 'array',
             ],
             'user_id' => [

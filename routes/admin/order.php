@@ -52,6 +52,16 @@ Route::patch('{order}/update-order', [
     'uses' => 'OrderController@addOrderedProduct',
 ]);
 
+Route::patch('{order}/update-order-product', [
+    'as' => '.update-order-product',
+    'uses' => 'OrderController@updateOrder',
+]);
+
+Route::patch('{order}/delete-order-product', [
+    'as' => '.delete-order-product',
+    'uses' => 'OrderController@deleteOrderProduct',
+]);
+
 Route::get('{order}', [
     'as' => '.get',
     'uses' => 'OrderController@get',

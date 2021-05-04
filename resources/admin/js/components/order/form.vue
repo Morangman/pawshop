@@ -340,6 +340,10 @@
                                 <a :href="'https://www.ebay.com/sch/i.html?_nkw=' + product.device.name" target="_blank">
                                     <img style="height:30px; width: auto;" :src="'../../../../client/images/ebay.png'" />
                                 </a>
+                                <button
+                                    v-on:click="updateOrderProduct(index)"
+                                    class="btn btn-primary margin-top-10"
+                                >{{ $t('common.word.update') }}</button>
                             </div>
                         </div>
                         <div class="text-right">
@@ -580,6 +584,10 @@
 
         methods: {
             submit() {
+                delete this.model.orders;
+
+                console.log(this.model);
+
                 _.assign(this.model, { reminder: this.reminder });
 
                 this.$emit('submit', this.model);
@@ -639,13 +647,38 @@
             },
 
             deleteOrderedProduct(index) {
-                this.model.orders.order.splice(index, 1);
+                window.swal({
+                    title: this.$t('common.phrase.confirm.title'),
+                    text: this.$t('common.phrase.confirm.body'),
+                    icon: 'warning',
+                    buttons: [this.$t('common.word.cancel'), this.$t('common.word.confirm')],
+                }).then((result) => {
+                    if (!result) {
+                        return
+                    }
 
-                if (this.model.orders.order.length < 1) {
-                    this.model.orders.order = [];
-                }
+                    let productData = {key: index};
 
-                this.summOrderedProducts();
+                    this.errors = {};
+                    this.formData = new FormData();
+                    this.formData.set('_method', 'PATCH');
+                    this.collectFormData(productData);
+
+                    axios.post(
+                        Router.route('admin.order.delete-order-product', { order: this.model.id }),
+                        this.formData,
+                        {
+                            headers: {
+                                'Content-Type': 'multipart/form-data',
+                            },
+                        },
+                    ).then(() => {
+                        location.href = Router.route('admin.order.edit', { order: this.model.id });
+                    }).catch(({ response: { data: { errors } } }) => {
+                        this.errors = errors;
+                        this.scrollToError();
+                    });
+                });
             },
 
             deleteProductStep(order, step) {
@@ -681,6 +714,33 @@
 
                 axios.post(
                     Router.route('admin.order.update-order', { order: this.model.id }),
+                    this.formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then(() => {
+                    location.href = Router.route('admin.order.edit', { order: this.model.id });
+                }).catch(({ response: { data: { errors } } }) => {
+                    this.errors = errors;
+                    this.scrollToError();
+                });
+            },
+
+            updateOrderProduct(key) {
+                let productData = {
+                    order: this.model.orders.order[key],
+                    key: key,
+                };
+
+                this.errors = {};
+                this.formData = new FormData();
+                this.formData.set('_method', 'PATCH');
+                this.collectFormData(productData);
+
+                axios.post(
+                    Router.route('admin.order.update-order-product', { order: this.model.id }),
                     this.formData,
                     {
                         headers: {

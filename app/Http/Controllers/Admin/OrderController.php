@@ -221,6 +221,154 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
+    public function updateOrder(Request $request, Order $order): JsonResponse
+    {
+        $ordersArray = $order->getAttribute('orders');
+
+        $ordersArray['order'][(int) $request->get('key')] = $request->get('order');
+
+        $orderTotalSumm = 0;
+
+        foreach($ordersArray['order'] as $key => $orderData) {
+            $ids = [];
+
+            $category = Category::query()->whereKey($orderData['device']['id'])->first();
+
+            $addToPrice = 0;
+
+            $addPercent = 0;
+    
+            $isBroken = false;
+
+            foreach($orderData['steps'] as $i => $step) {
+                $step = Step::query()->whereKey((int) $step['id'])->with('stepName')->first()->toArray();
+
+                $ordersArray['order'][$key]['steps'][$i] = $step;
+
+                $premiumPrice = DB::table('premium_price')
+                    ->where('step_id', $step['id'])
+                    ->where('category_id', $orderData['device']['id'])
+                    ->first();
+
+                if ($step['value'] === 'Brand New') {
+                    if ($category) {
+                        foreach ($category->steps()->get() as $stepItem) {
+                            if ($stepItem->stepName->is_checkbox) {
+                                $premiumPriceForAccesory = DB::table('premium_price')
+                                    ->where('step_id', $stepItem->getKey())
+                                    ->where('category_id', $orderData['device']['id'])
+                                    ->first();
+
+                                $addToPrice += $premiumPriceForAccesory->price_plus;
+                            }
+                        }
+                    }
+                }
+
+                if ($premiumPrice) {
+                    if ($pricePlus = $premiumPrice->price_plus) {
+                        $addToPrice += $pricePlus;
+                    }
+
+                    if ($percentPlus = $premiumPrice->price_percent) {
+                        $addPercent += $percentPlus;
+                    }
+                }
+
+                $stepCategory = StepName::query()->whereKey($step['name_id'])->first();
+
+                if ($stepCategory->getAttribute('is_functional')) {
+                    if ($step['value'] === 'No') {
+                        $isBroken = true;
+                    }
+                }
+
+                if ($category->getAttribute('is_parsed')) {
+                    if (isset($step['slug']) && isset($step['attribute'])) {
+                        $id = $step['id'];
+                        if ($step['value'] === 'Flawless') {
+                            $id = Step::query()->where('value', 'Brand New')->first()->getKey();
+                        }
+                        $ids[] = $id;
+                    }
+                } else {
+                    $id = $step['id'];
+                    if ($step['value'] === 'Flawless') {
+                        $id = Step::query()->where('value', 'Brand New')->first()->getKey();
+                    }
+                    $ids[] = $id;
+                }
+            }
+
+            $resultPrice = 0;
+
+            $prices = Price::query()->where('category_id', $orderData['device']['id'])->get();
+    
+            foreach ($prices as $price) {
+                if ( $price->getAttribute('is_parsed')) {
+                    $similar = array_intersect($ids, $price->getAttribute('steps_ids'));
+    
+                    if (sizeof($ids) === sizeof($similar)) {
+                        $resultPrice = $price->getAttribute('price');
+                    }
+                }
+            }
+    
+            if ($addPercent) {
+                $priceAddPercent = ((float) $resultPrice * $addPercent) / 100;
+    
+                $resultPrice = number_format((float) $resultPrice + $priceAddPercent, 2, '.', '');
+            }
+    
+            if ($addToPrice) {
+                $resultPrice = number_format((float) $resultPrice + $addToPrice, 2, '.', '');
+            }
+    
+            if ($premiumPriceForDevice = $category->getAttribute('premium_price')) {
+                $resultPrice += (float) $premiumPriceForDevice;
+            }
+    
+            if ($isBroken) {
+                if ($priceForBroken = $category->getAttribute('price_for_broken')) {
+                    $resultPrice = $priceForBroken;
+                }
+            }
+
+            $ordersArray['order'][$key]['summ'] = $resultPrice * (int) $orderData['ctn'];
+            $ordersArray['order'][$key]['total'] = $resultPrice * (int) $orderData['ctn'];
+
+            $orderTotalSumm += (float) $resultPrice * (int) $orderData['ctn'];
+        }
+        
+        $expShipping = 20;
+
+        if ($order->getAttribute('exp_service')) {
+            (float) $orderTotalSumm -= $expShipping;
+        }
+
+        if ($order->getAttribute('insurance')) {
+            (float) $orderTotalSumm -= ((float) $orderTotalSumm  * 1)/100;
+        }
+
+        $order->update([
+            'orders' => $ordersArray,
+            'total_summ' => number_format((float) $orderTotalSumm, 2, '.', ''),
+        ]);
+
+        Session::flash(
+            'success',
+            Lang::get('admin/order.messages.update')
+        );
+
+        return $this->json()->noContent();
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Order $order
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function addOrderedProduct(Request $request, Order $order): JsonResponse
     {
         $order->unsetEventDispatcher();
@@ -242,7 +390,7 @@ class OrderController extends Controller
         $isBroken = false;
 
         foreach($newOrderDevice['steps'] as $i => $step) {
-            $step = Step::query()->whereKey($step['id'])->with('stepName')->first()->toArray();
+            $step = Step::query()->whereKey((int) $step['id'])->with('stepName')->first()->toArray();
 
             $premiumPrice = DB::table('premium_price')
                 ->where('step_id', $step['id'])
@@ -392,11 +540,55 @@ class OrderController extends Controller
             ]);
         }
 
-        $data = $request->post();
+        $order->update($request->all());
+
+        if ((int) $request->get('ordered_status') === Order::STATUS_RECEIVED && !$order->getAttribute('is_received_notify')) {
+            $order->unsetEventDispatcher();
+            
+            try {
+                $user = User::query()->whereKey($order->getAttribute('user_id'))->first();
+
+                Mail::to($order->getAttribute('user_email'))
+                    ->send(new OrderReceivedMail(
+                        array_merge(
+                            $order->toArray(),
+                            [
+                                'user_name' => $user->getAttribute('name'),
+                            ]
+                        )
+                    ));
+
+                    $order->update([
+                        'is_received_notify' => 1,
+                    ]);
+            } catch (\Exception $e) {}
+        }
+
+        Session::flash(
+            'success',
+            Lang::get('admin/order.messages.update')
+        );
+
+        return $this->json()->noContent();
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Order $order
+     *
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @throws \Exception
+     */
+    public function deleteOrderProduct(Request $request, Order $order): JsonResponse
+    {
+        $ordersArray = $order->getAttribute('orders');
+
+        array_splice($ordersArray['order'], 1, (int) $request->get('key'));
 
         $orderTotalSumm = 0;
 
-        foreach($data['orders']['order'] as $key => $orderData) {
+        foreach($ordersArray['order'] as $key => $orderData) {
             $ids = [];
 
             $category = Category::query()->whereKey($orderData['device']['id'])->first();
@@ -410,7 +602,7 @@ class OrderController extends Controller
             foreach($orderData['steps'] as $i => $step) {
                 $step = Step::query()->whereKey($step['id'])->with('stepName')->first()->toArray();
 
-                $data['orders']['order'][$key]['steps'][$i] = $step;
+                $ordersArray['order'][$key]['steps'][$i] = $step;
 
                 $premiumPrice = DB::table('premium_price')
                     ->where('step_id', $step['id'])
@@ -501,51 +693,26 @@ class OrderController extends Controller
                 }
             }
 
-            $data['orders']['order'][$key]['summ'] = $resultPrice * (int) $orderData['ctn'];
-            $data['orders']['order'][$key]['total'] = $resultPrice * (int) $orderData['ctn'];
+            $ordersArray['order'][$key]['summ'] = $resultPrice * (int) $orderData['ctn'];
+            $ordersArray['order'][$key]['total'] = $resultPrice * (int) $orderData['ctn'];
 
             $orderTotalSumm += (float) $resultPrice * (int) $orderData['ctn'];
         }
         
         $expShipping = 20;
 
-        if (isset($data['exp_service'])) {
+        if ($order->getAttribute('exp_service')) {
             (float) $orderTotalSumm -= $expShipping;
         }
 
-        if (isset($data['insurance'])) {
+        if ($order->getAttribute('insurance')) {
             (float) $orderTotalSumm -= ((float) $orderTotalSumm  * 1)/100;
         }
 
-        if(isset($data['custom_summ'])) {
-            $data['total_summ'] = $data['custom_summ'];
-        } else {
-            $data['total_summ'] = number_format((float) $orderTotalSumm, 2, '.', '');
-        }
-
-        $order->update($data);
-
-        if ((int) $data['ordered_status'] === Order::STATUS_RECEIVED && !$order->getAttribute('is_received_notify')) {
-            $order->unsetEventDispatcher();
-            
-            try {
-                $user = User::query()->whereKey($order->getAttribute('user_id'))->first();
-
-                Mail::to($order->getAttribute('user_email'))
-                    ->send(new OrderReceivedMail(
-                        array_merge(
-                            $order->toArray(),
-                            [
-                                'user_name' => $user->getAttribute('name'),
-                            ]
-                        )
-                    ));
-
-                    $order->update([
-                        'is_received_notify' => 1,
-                    ]);
-            } catch (\Exception $e) {}
-        }
+        $order->update([
+            'orders' => $ordersArray,
+            'total_summ' => number_format((float) $orderTotalSumm, 2, '.', ''),
+        ]);
 
         Session::flash(
             'success',
