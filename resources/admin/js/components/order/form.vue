@@ -291,11 +291,53 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                Is device locked:
-                                <input type="checkbox" id="scales" name="scales" v-model="product.is_locked">
+                            <div class="form-group row">
+                                <div class="form-group col-md-6">
+                                    Is device locked:
+                                    <input type="checkbox" id="scales" name="scales" v-model="product.is_locked">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="form-group col-md-6">
+                                    <label>
+                                        <strong>Delivey Price</strong>
+                                    </label>
+                                    <input
+                                        name="delivery_price"
+                                        type="text"
+                                        placeholder="Delivey Price"
+                                        v-model="product.delivery_price"
+                                        class="form-control"
+                                    >
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>
+                                        <strong>Repairs Price</strong>
+                                    </label>
+                                    <input
+                                        name="repairs_price"
+                                        type="text"
+                                        placeholder="Repairs Price"
+                                        v-model="product.repairs_price"
+                                        class="form-control"
+                                    >
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>
+                                        <strong>Sell Price</strong>
+                                    </label>
+                                    <input
+                                        name="sell_price"
+                                        type="text"
+                                        placeholder="Sell Price"
+                                        v-model="product.sell_price"
+                                        class="form-control"
+                                    >
+                                </div>
                             </div>
 
+                            <hr>
+                            
                             <div class="form-group" v-if="product.steps && !stepsData[index+product.id]">
                                 <div v-for="(step, stepKey) in product.steps" class="form-group" :key="`product_step__${stepKey}`">
                                     <div v-if="step" class="lex-row">
