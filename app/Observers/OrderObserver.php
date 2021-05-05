@@ -44,19 +44,19 @@ class OrderObserver
         $oldValues = [];
 
         foreach ($order->getAttributes() as $key => $value) {
-            if (!$order->originalIsEquivalent($key, $value)) {
+            if ($key === 'orders' && !$order->originalIsEquivalent($key, $value)) {
                 $oldValues = is_int($order->getOriginal($key)) ? $order->getOriginal($key) : json_decode($order->getOriginal($key), true);
                 $newValues = json_decode($value, true);
 
                 $diff = [];
 
-                if ($key === "orders") {
-                    foreach ($newValues['order'] as $keyOrder => $newOrder) {
-                        foreach ($newOrder['steps'] as $keyStep => $step) {
-                            if ($oldValues['order'][$keyOrder] && $oldValues['order'][$keyOrder]['steps'][$keyStep]['id']) {
+                foreach ($newValues['order'] as $keyOrder => $newOrder) {
+                    foreach ($newOrder['steps'] as $keyStep => $step) {
+                        if ($oldValues['order'][$keyOrder] && $oldValues['order'][$keyOrder]['steps'][$keyStep]['id']) {
+                            if($oldValues['order'][$keyOrder]['steps'][$keyStep]['id'] !== $newValues['order'][$keyOrder]['steps'][$keyStep]['id']) {
                                 $newValues['changed'] = Order::STATUS_CHANGED;
                                 $newValues['confirmed'] = Order::STATUS_NOT_CONFIRMED;
-
+    
                                 $diff[] = [
                                     'step' => $step,
                                     'order_id' => $newOrder['id'],
@@ -65,40 +65,40 @@ class OrderObserver
                             }
                         }
                     }
+                }
 
-                    if ($diff !== []) {
-                        $insuranceSumm = 0;
-                        $totalSumm = 0;
-                        $expShipping = 20;
-                
-                        if ($order->getAttribute('insurance')) {
-                            foreach($order->getAttribute('orders')['order'] as $orderData) {
-                                $totalSumm += (float) $orderData['total'];
-                            }
-                
-                            if ($order->getAttribute('exp_service')) {
-                                $totalSumm -= $expShipping;
-                            }
-                
-                            $insuranceSumm = ($totalSumm * 1)/100;
+                if ($diff !== []) {
+                    $insuranceSumm = 0;
+                    $totalSumm = 0;
+                    $expShipping = 20;
+            
+                    if ($order->getAttribute('insurance')) {
+                        foreach($order->getAttribute('orders')['order'] as $orderData) {
+                            $totalSumm += (float) $orderData['total'];
                         }
-                        
-                        try {
-                            Mail::to($order->getAttribute('user_email'))
-                                ->send(new OrderChangeConfirmationMail(
-                                    array_merge(
-                                        $order->toArray(),
-                                        [
-                                            'insurance_summ' => $insuranceSumm,
-                                        ]
-                                    )
-                                ));
-                        } catch (\Exception $e) {}
-    
-                        $order->unsetEventDispatcher();
-    
-                        $order->update([$key => $newValues]);
+            
+                        if ($order->getAttribute('exp_service')) {
+                            $totalSumm -= $expShipping;
+                        }
+            
+                        $insuranceSumm = ($totalSumm * 1)/100;
                     }
+                    
+                    try {
+                        Mail::to($order->getAttribute('user_email'))
+                            ->send(new OrderChangeConfirmationMail(
+                                array_merge(
+                                    $order->toArray(),
+                                    [
+                                        'insurance_summ' => $insuranceSumm,
+                                    ]
+                                )
+                            ));
+                    } catch (\Exception $e) {}
+
+                    $order->unsetEventDispatcher();
+
+                    $order->update([$key => $newValues]);
                 }
             }
         }
