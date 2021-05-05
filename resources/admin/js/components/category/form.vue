@@ -41,24 +41,6 @@
                     </div>
                     <div class="form-group">
                         <label>
-                            <strong>Production year</strong>
-                        </label>
-                        <input
-                            name="prod_year"
-                            type="text"
-                            v-model="model.prod_year"
-                            class="form-control"
-                            :class="{ 'border-danger': errors.prod_year }"
-                        >
-                        <div v-for="(error, i) in errors.prod_year"
-                             :key="`prod_year__error__${i}`"
-                             class="text-danger error"
-                        >
-                            {{ error }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>
                             <strong>{{ $t('admin.category.form.image') }}</strong>
                         </label>
                         <b-form-file
@@ -100,24 +82,6 @@
                     </div>
                     <div class="form-group">
                         <label>
-                            <strong>{{ $t('admin.category.form.text') }}</strong>
-                        </label>
-                        <input
-                            name="custom_text"
-                            type="text"
-                            v-model="model.custom_text"
-                            class="form-control"
-                            :class="{ 'border-danger': errors.custom_text }"
-                        >
-                        <div v-for="(error, i) in errors.custom_text"
-                             :key="`custom_text__error__${i}`"
-                             class="text-danger error"
-                        >
-                            {{ error }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>
                             <strong>{{ $t('admin.category.form.cart_count') }}</strong>
                         </label>
                         <p>{{ model.box_count }}</p>
@@ -127,42 +91,6 @@
                             <strong>{{ $t('admin.category.form.view_count') }}</strong>
                         </label>
                         <p>{{ model.view_count }}</p>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <strong>{{ $t('admin.category.form.premium_price') }}</strong>
-                        </label>
-                        <input
-                            name="premium_price"
-                            type="text"
-                            v-model="model.premium_price"
-                            class="form-control"
-                            :class="{ 'border-danger': errors.premium_price }"
-                        >
-                        <div v-for="(error, i) in errors.premium_price"
-                             :key="`premium_price__error__${i}`"
-                             class="text-danger error"
-                        >
-                            {{ error }}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <strong>{{ $t('admin.category.form.price_for_broken') }}</strong>
-                        </label>
-                        <input
-                            name="price_for_broken"
-                            type="text"
-                            v-model="model.price_for_broken"
-                            class="form-control"
-                            :class="{ 'border-danger': errors.price_for_broken }"
-                        >
-                        <div v-for="(error, i) in errors.price_for_broken"
-                             :key="`price_for_broken__error__${i}`"
-                             class="text-danger error"
-                        >
-                            {{ error }}
-                        </div>
                     </div>
                     <div class="form-group">
                         <label>
@@ -182,168 +110,6 @@
                             {{ error }}
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <strong>
-                            <h1>{{ $t('admin.category.form.steps') }}</h1>
-                        </strong>
-                        <div class="form-group">
-                            <div class="change-blocks-wrapper__item" v-for="(item, index) in stepsByCategory" :key="`step__${index}`">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="text-right">
-                                            <a href="javascript:void(0)" class="text-danger" v-on:click="deleteStep(index)">
-                                                {{ $t('common.word.remove') }}
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label>
-                                                        <strong>{{ $t('admin.category.form.select_step') }}</strong>
-                                                    </label>
-                                                    <model-list-select :list="steps"
-                                                                       v-model="stepsByCategory[index]"
-                                                                       option-value="id"
-                                                                       :custom-text="name"
-                                                                        placeholder="select item">
-                                                    </model-list-select>
-
-                                                    <div class="mt-3">
-                                                        <p>Selected:</p> <a :href="$r('admin.step.edit', { stepName: item.id })">{{ item.title }}</a>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <multiselect
-                                                        v-model="item.items"
-                                                        :options="item.items_variations ? item.items_variations : []"
-                                                        :multiple="true"
-                                                        class="multiselect1"
-                                                        :close-on-select="true"
-                                                        placeholder="Select step"
-                                                        label="value" track-by="value">
-                                                    </multiselect>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <button
-                                    v-on:click="addStep"
-                                    class="btn btn-primary margin-top-10"
-                                >{{ $t('common.word.add') }}</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div v-for="(error, i) in errors.items"
-                         :key="`items__error__${i}`"
-                         class="text-danger error"
-                    >
-                        {{ error }}
-                    </div>
-
-                    <div class="form-group">
-                        <strong>
-                            <h1>Price variations</h1>
-                        </strong>
-                        <input
-                            name="price_for_broken"
-                            type="text"
-                            class="col-md-6 form-control"
-                            placeholder="Search by step name"
-                            v-model="searchText"
-                            v-on:input="serachPriceByStepName"
-                        >
-                        <table class="table">
-                        <thead>
-                            <tr>
-                            <th scope="col">#</th>
-                            <th scope="col" v-for="(step, index) in priceVariations.length ? priceVariations[0].steps : []" :key="`step_table__${index}`">{{ step.attribute }}</th>
-                            <th scope="col">parsed price</th>
-                            <th scope="col">custom price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(price, index) in priceVariations" :key="`variation__${index}`">
-                                <th scope="row"> {{ price.id }} </th>
-                                <td v-for="(step, index) in price.steps" :key="`step_price__${index}`">
-                                    <div class="flex flex-row steps-row">
-                                        <p>{{ step.value }}</p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <input
-                                        name="parsed_price"
-                                        type="text"
-                                        v-model="price.price"
-                                        class="form-control"
-                                        v-on:keyup.enter="updatePrice(price)"
-                                    >
-                                </td>
-                                <td>
-                                    <input
-                                        name="custom_price"
-                                        type="text"
-                                        v-model="price.custom_price"
-                                        class="form-control"
-                                        v-on:keyup.enter="updatePrice(price)"
-                                    >
-                                </td>
-                            </tr>
-                        </tbody>
-                        </table>
-                    </div>
-
-                    <div class="form-group" v-if="premiumPrices.length">
-                        <strong>
-                            <h1>Premium prices</h1>
-                        </strong>
-                        <div class="change-blocks-wrapper__item" v-for="(price, index) in premiumPrices" :key="`premium_price__${index}`">
-                            <div class="form-group row flex flex-row steps-row">
-                                <p>{{ price.step_name }}</p>
-                            </div>
-                            <div class="form-group row">
-                                <label>
-                                    <strong>Price plus</strong>
-                                </label>
-                                <input
-                                    name="price_plus"
-                                    type="text"
-                                    v-model="price.price_plus"
-                                    class="form-control"
-                                >
-                                <label>
-                                    <strong>Price percent</strong>
-                                </label>
-                                <input
-                                    name="price_percent"
-                                    type="text"
-                                    v-model="price.price_percent"
-                                    class="form-control"
-                                >
-                            </div>
-                            <div class="form-group row">
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary"
-                                    v-on:click="updatePremiumPrice(price)"
-                                >
-                                    Update premium price
-                                </button>
-                                <button
-                                    type="submit"
-                                    class="btn btn-danger"
-                                    v-on:click="deletePremiumPrice(price)"
-                                >
-                                    Delete premium price
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="text-right">
@@ -354,15 +120,6 @@
                         @click.prevent="deleteCategory"
                     >
                         {{ $t('common.word.delete') }}
-                    </button>
-                </template>
-                <template v-if="model.id">
-                    <button
-                        type="submit"
-                        class="btn btn-primary"
-                        @click.prevent="generatePrices"
-                    >
-                        Generate prices variations
                     </button>
                 </template>
                 <button

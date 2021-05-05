@@ -31,6 +31,15 @@ Route::group(
 
 Route::group(
     [
+        'as' => '.product',
+        'prefix' => 'product',
+        'middleware' => ['anyrole:admin|manager']
+    ],
+    __DIR__.'/admin/product.php'
+);
+
+Route::group(
+    [
         'as' => '.statistics',
         'prefix' => 'statistics',
         'middleware' => ['anyrole:admin|manager']

@@ -66,6 +66,25 @@
                                 </span>
                             </th>
                             <th>
+                                {{ $t('admin.category.form.view_count') }}
+                                <span>
+                                    <i
+                                            v-if="filters.by === 'view_count' && filters.dir === 'desc'"
+                                            @click.prevent="sort('view_count', 'asc')"
+                                            class="icon-arrow-down8 cursor-pointer"
+                                    ></i>
+                                    <i
+                                            v-if="filters.by === 'view_count' && filters.dir === 'asc'"
+                                            @click.prevent="sort('view_count', 'desc')"
+                                            class="icon-arrow-up8 cursor-pointer"
+                                    ></i>
+                                    <span v-if="filters.by !== 'view_count'" @click.prevent="sort('view_count', 'asc')">
+                                        <i class="icon-arrow-up8 cursor-pointer"></i>
+                                        <i class="icon-arrow-down8 cursor-pointer"></i>
+                                    </span>
+                                </span>
+                            </th>
+                            <th>
                                 {{ $t('admin.category.index.table.headers.created_at') }}
                                 <span>
                                     <i
@@ -92,6 +111,7 @@
                             <tr v-for="(category, i) in categories" :key="`category_${i}`">
                                     <td><a :href="$r('admin.category.edit', { slug: category.slug })">{{ category.id }}</a></td>
                                     <td v-html="highlightSearchResult(category.name, filters.search)"></td>
+                                    <td>{{ category.view_count }}</td>
                                     <td>{{ category.created_at }}</td>
                                     <td>
                                         <a :href="$r('admin.category.edit', { slug: category.slug })">

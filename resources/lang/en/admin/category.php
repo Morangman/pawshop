@@ -15,7 +15,7 @@ return [
         'subcategory' => 'Parent category',
         'status' => 'Status',
         'cart_count' => 'Add to cart quantity',
-        'view_count' => 'Number of views',
+        'view_count' => 'Count of views',
         'text' => 'Cash in up to..',
         'premium_price' => 'Premium price for device',
         'price_for_broken' => 'Price for broken device',

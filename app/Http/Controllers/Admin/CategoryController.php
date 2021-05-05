@@ -29,9 +29,11 @@ use Illuminate\Support\Facades\View;
 class CategoryController extends Controller
 {
     /**
+     * @param \Illuminate\Http\Request $request
+     * 
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(): ViewContract
+    public function index(Request $request): ViewContract
     {
         return View::make('admin.category.index');
     }
@@ -472,6 +474,7 @@ class CategoryController extends Controller
     public function getAll(Request $request): JsonResponse
     {
         $categories = Category::query()
+            ->whereNull('custom_text')
             ->when(
                 $request->get('search'),
                 function ($query, $search) {

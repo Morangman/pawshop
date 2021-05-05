@@ -10,6 +10,10 @@ import CategoryIndex from './components/category/index';
 import CategoryCreate from './components/category/create';
 import CategoryEdit from './components/category/edit';
 
+import ProductIndex from './components/product/index';
+import ProductCreate from './components/product/create';
+import ProductEdit from './components/product/edit';
+
 import StepIndex from './components/step/index';
 import StepCreate from './components/step/create';
 import StepEdit from './components/step/edit';
@@ -59,6 +63,9 @@ export default {
     CategoryIndex,
     CategoryCreate,
     CategoryEdit,
+    ProductIndex,
+    ProductCreate,
+    ProductEdit,
     CallbackIndex,
     CallbackCreate,
     CallbackEdit,

@@ -905,6 +905,10 @@ class HomeController extends Controller
     {
         $category = Category::query()->where('slug', $slug)->first();
 
+        if (!$category->getAttribute('subcategory_id') || !$category->getAttribute('custom_text') ) {
+            $category->increment('view_count', 1);
+        }
+
         $relatedCategories = Category::query()
             ->where('subcategory_id', '=', $category->getKey())
             ->where('is_hidden', false)
