@@ -540,11 +540,11 @@ class OrderController extends Controller
             ]);
         }
 
+        $order->unsetEventDispatcher();
+
         $order->update($request->all());
 
         if ((int) $request->get('ordered_status') === Order::STATUS_RECEIVED && !$order->getAttribute('is_received_notify')) {
-            $order->unsetEventDispatcher();
-            
             try {
                 $user = User::query()->whereKey($order->getAttribute('user_id'))->first();
 
