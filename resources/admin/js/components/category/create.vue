@@ -2,11 +2,7 @@
     <category-form
         :model.sync="model"
         :categories.sync="categories"
-        :prices.sync="prices"
-        :premiumprices.sync="premiumprices"
         :faqs.sync="faqs"
-        :steps.sync="steps"
-        :categorysteps.sync="categorysteps"
         :errors.sync="errors"
         @submit="store"
     >
@@ -30,22 +26,6 @@
             faqs: {
                 type: Array,
                 required: true,
-            },
-            steps: {
-                type: Array,
-                required: false,
-            },
-            prices: {
-                type: Array,
-                required: false,
-            },
-            premiumprices: {
-                type: Array,
-                required: false,
-            },
-            categorysteps: {
-                type: Array,
-                required: false,
             },
             categories: {
                 type: Array,

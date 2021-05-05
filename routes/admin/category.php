@@ -22,42 +22,22 @@ Route::post('', [
     'uses' => 'CategoryController@store',
 ]);
 
-Route::get('{slug}/edit', [
+Route::get('{category}/edit', [
     'as' => '.edit',
     'uses' => 'CategoryController@edit',
 ]);
 
-Route::patch('{slug}', [
+Route::patch('{category}', [
     'as' => '.update',
     'uses' => 'CategoryController@update',
 ]);
 
-Route::post('{slug}/update-price', [
-    'as' => '.update-price',
-    'uses' => 'CategoryController@updatePrice',
-]);
-
-Route::post('{slug}/update-premium', [
-    'as' => '.update-premium',
-    'uses' => 'CategoryController@updatePremiumPrice',
-]);
-
-Route::post('{slug}/delete-premium', [
-    'as' => '.delete-premium',
-    'uses' => 'CategoryController@deletePremiumPrice',
-]);
-
-Route::post('{slug}/generate-prices', [
-    'as' => '.generate-prices',
-    'uses' => 'CategoryController@generatePricesVariations',
-]);
-
-Route::get('{slug}', [
+Route::get('{category}', [
     'as' => '.get',
     'uses' => 'CategoryController@get',
 ]);
 
-Route::delete('{slug}', [
+Route::delete('{category}', [
     'as' => '.delete',
     'uses' => 'CategoryController@delete',
 ]);

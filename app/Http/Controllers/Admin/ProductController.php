@@ -9,10 +9,8 @@ use App\Faq;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Category\StoreRequest;
 use App\Http\Requests\Admin\Category\UpdateRequest;
-use App\Setting;
 use App\Step;
 use App\StepName;
-use App\Tip;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -116,6 +114,20 @@ class ProductController extends Controller
                     'is_parsed' => 1,
                 ]);              
             }
+
+            $productMaxPrice = DB::table('prices')->where('category_id', $category->getKey())->max('price');
+
+            if ($productMaxPrice) {
+                $category->update([
+                    'custom_text' => $productMaxPrice,
+                ]);
+            }
+
+            if (!$request->get('slug')) {
+                $category->update([
+                    'slug' => preg_replace('~[^\pL\d]+~u', '-', strtolower($category->getAttribute('name'))),
+                ]);
+            }
         }
 
         $this->handleDocuments($request, $category);
@@ -129,14 +141,12 @@ class ProductController extends Controller
     }
 
     /**
-     * @param string $slug
+     * @param \App\Category $category
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit(string $slug): ViewContract
+    public function edit(Category $category): ViewContract
     {
-        $category = Category::query()->where('slug', $slug)->first();
-
         $stepsArr = [];
 
         $priceVariations = [];
@@ -237,15 +247,13 @@ class ProductController extends Controller
 
     /**
      * @param \App\Http\Requests\Admin\Category\UpdateRequest $request
-     * @param string $slug
+     * @param \App\Category $category
      *
      * @return \Illuminate\Http\JsonResponse
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded
      */
-    public function update(UpdateRequest $request, string $slug): JsonResponse
+    public function update(UpdateRequest $request, Category $category): JsonResponse
     {
-        $category = Category::query()->where('slug', $slug)->first();
-
         if ((int) $request->get('is_hidden') === 1){
             if (Category::query()->where('subcategory_id', '=', $category->getKey())->exists()) {
                 Category::query()->where('subcategory_id', '=', $category->getKey())->update([
@@ -297,14 +305,12 @@ class ProductController extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param string $slug
+     * @param \App\Category $category
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function generatePricesVariations(Request $request, string $slug): JsonResponse
+    public function generatePricesVariations(Request $request, Category $category): JsonResponse
     {
-        $category = Category::query()->where('slug', $slug)->first();
-
         DB::table('prices')->where('category_id', $category->getKey())->delete();
 
         $attributes = [];
@@ -343,14 +349,12 @@ class ProductController extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param string $slug
+     * @param \App\Category $category
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updatePrice(Request $request, string $slug): JsonResponse
+    public function updatePrice(Request $request, Category $category): JsonResponse
     {
-        $category = Category::query()->where('slug', $slug)->first();
-
         if ($price = $request->get('price')) {
             $ids = [];
 
@@ -385,14 +389,12 @@ class ProductController extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param string $slug
+     * @param \App\Category $category
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updatePremiumPrice(Request $request, string $slug): JsonResponse
+    public function updatePremiumPrice(Request $request, Category $category): JsonResponse
     {
-        $category = Category::query()->where('slug', $slug)->first();
-
         if ($id = $request->get('id')) {
             DB::table('premium_price')->where('id', (int) $id)->where('step_id', (int) $request->get('step_id'))->where('category_id', $category->getKey())->update([
                 'price_plus' => (float) $request->get('price_plus'),
@@ -410,16 +412,14 @@ class ProductController extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param string $slug
+     * @param \App\Category $category
      *
      * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Exception
      */
-    public function deletePremiumPrice(Request $request, string $slug): JsonResponse
+    public function deletePremiumPrice(Request $request, $category): JsonResponse
     {
-        $category = Category::query()->where('slug', $slug)->first();
-        
         if ($id = $request->get('id')) {
             DB::table('premium_price')->where('id', (int) $id)->where('step_id', (int) $request->get('step_id'))->where('category_id', $category->getKey())->delete();
         }
@@ -428,16 +428,14 @@ class ProductController extends Controller
     }
 
     /**
-     * @param string $slug
+     * @param \App\Category $category
      *
      * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Exception
      */
-    public function delete(string $slug): JsonResponse
+    public function delete(Category $category): JsonResponse
     {
-        $category = Category::query()->where('slug', $slug)->first();
-        
         DB::table('category_step')->where('category_id', $category->getKey())->delete();
 
         DB::table('prices')->where('category_id', $category->getKey())->delete();
@@ -453,14 +451,12 @@ class ProductController extends Controller
     }
 
     /**
-     * @param string $slug
+     * @param \App\Category $category
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function get(string $slug): JsonResponse
+    public function get(Category $category): JsonResponse
     {
-        $category = Category::query()->where('slug', $slug)->first();
-
         return $this->json()->ok($category);
     }
 

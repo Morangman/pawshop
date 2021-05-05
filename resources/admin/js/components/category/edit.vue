@@ -3,11 +3,7 @@
         v-if="model"
         :model.sync="model"
         :categories.sync="categories"
-        :prices.sync="prices"
-        :premiumprices.sync="premiumprices"
         :faqs.sync="faqs"
-        :steps.sync="steps"
-        :categorysteps.sync="categorysteps"
         :errors.sync="errors"
         @submit="update"
         @delete="deleteCategory"
@@ -33,22 +29,6 @@
                 type: Array,
                 required: true,
             },
-            steps: {
-                type: Array,
-                required: false,
-            },
-            prices: {
-                type: Array,
-                required: false,
-            },
-            premiumprices: {
-                type: Array,
-                required: false,
-            },
-            categorysteps: {
-                type: Array,
-                required: false,
-            },
             categories: {
                 type: Array,
                 required: false,
@@ -73,7 +53,7 @@
                 this.collectFormData(data);
 
                 axios.post(
-                    Router.route('admin.category.update', { slug: this.category.slug }),
+                    Router.route('admin.category.update', { category: this.category.id }),
                     this.formData,
                     {
                         headers: {
@@ -81,7 +61,7 @@
                         },
                     },
                 ).then(() => {
-                    location.href = Router.route('admin.category.edit', { slug: this.category.slug });
+                    location.href = Router.route('admin.category.edit', { category: this.category.id });
                 }).catch(({ response: { data: { errors } } }) => {
                     this.errors = errors;
                     this.scrollToError();
@@ -90,7 +70,7 @@
 
             deleteCategory() {
                 axios.delete(
-                    Router.route('admin.category.delete', { slug: this.category.slug }),
+                    Router.route('admin.category.delete', { category: this.category.id }),
                 ).then(() => {
                     location.href = Router.route('admin.category.index');
                 }).catch(({ response: { data: { errors } } }) => {

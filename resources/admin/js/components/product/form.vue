@@ -286,6 +286,7 @@
                                 </td>
                                 <td>
                                     <input
+                                        tabindex="-1"
                                         name="custom_price"
                                         type="text"
                                         v-model="price.custom_price"
@@ -467,7 +468,7 @@
                 this.collectFormData(data);
 
                 axios.post(
-                    Router.route('admin.product.update-price', { slug: this.model.slug }),
+                    Router.route('admin.product.update-price', { category: this.model.id }),
                     this.formData,
                     {
                         headers: {
@@ -492,7 +493,7 @@
                 this.collectFormData(data);
 
                 axios.post(
-                    Router.route('admin.product.update-premium', { slug: this.model.slug }),
+                    Router.route('admin.product.update-premium', { category: this.model.id }),
                     this.formData,
                     {
                         headers: {
@@ -517,7 +518,7 @@
                 this.collectFormData(data);
 
                 axios.post(
-                    Router.route('admin.product.delete-premium', { slug: this.model.slug }),
+                    Router.route('admin.product.delete-premium', { category: this.model.id }),
                     this.formData,
                     {
                         headers: {
@@ -529,7 +530,7 @@
                         'Premium price was be deleted'
                     );
 
-                    location.href = Router.route('admin.product.edit', { slug: this.model.slug });
+                    location.href = Router.route('admin.product.edit', { category: this.model.id });
                 }).catch(({ response: { data: { errors } } }) => {
                     notify.success(
                         errors
@@ -539,14 +540,14 @@
 
             generatePrices() {
                 axios.post(
-                    Router.route('admin.product.generate-prices', { slug: this.model.slug }),
+                    Router.route('admin.product.generate-prices', { category: this.model.id }),
                     {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                         },
                     },
                 ).then(() => {
-                    location.href = Router.route('admin.product.edit', { slug: this.model.slug });
+                    location.href = Router.route('admin.product.edit', { category: this.model.id });
                 }).catch(({ response: { data: { errors } } }) => {
                     notify.success(
                         errors

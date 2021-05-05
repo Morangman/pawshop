@@ -183,155 +183,12 @@
         data() {
             return {
                 categoryPreviewImage: null,
-                stepsByCategory: [],
-                priceVariations: [],
-                premiumPrices: [],
-                pricesData: {},
-                searchText: null,
             };
         },
 
-        watch: {
-            stepsByCategory: {
-                handler() {
-                    this.debouncedRefresh();
-                },
-                deep: true,
-            },
-        },
-
         methods: {
-            serachPriceByStepName() {
-                if (this.searchText) {
-                    this.priceVariations = [];
-
-                    _.each(this.prices, (price, key) => {
-                        _.each(price.steps, (step, i) => {
-                            if (step.value.includes(this.searchText)) {
-                                this.priceVariations.push(price);
-                            }
-                        });
-                    });
-                } else {
-                    this.priceVariations = this.prices;
-                }
-            },
-
-            updatePrice(data) {
-                this.formData = new FormData();
-                this.formData.set('_method', 'POST');
-
-                this.collectFormData(data);
-
-                axios.post(
-                    Router.route('admin.category.update-price', { slug: this.model.slug }),
-                    this.formData,
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        },
-                    },
-                ).then(() => {
-                    notify.success(
-                        'Price was be updated'
-                    );
-                }).catch(({ response: { data: { errors } } }) => {
-                    notify.success(
-                        errors
-                    );
-                });
-            },
-
-            updatePremiumPrice(data) {
-                this.formData = new FormData();
-                this.formData.set('_method', 'POST');
-
-                this.collectFormData(data);
-
-                axios.post(
-                    Router.route('admin.category.update-premium', { slug: this.model.slug }),
-                    this.formData,
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        },
-                    },
-                ).then(() => {
-                    notify.success(
-                        'Premium price was be updated'
-                    );
-                }).catch(({ response: { data: { errors } } }) => {
-                    notify.success(
-                        errors
-                    );
-                });
-            },
-
-            deletePremiumPrice(data) {
-                this.formData = new FormData();
-                this.formData.set('_method', 'POST');
-
-                this.collectFormData(data);
-
-                axios.post(
-                    Router.route('admin.category.delete-premium', { slug: this.model.slug }),
-                    this.formData,
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        },
-                    },
-                ).then(() => {
-                    notify.success(
-                        'Premium price was be deleted'
-                    );
-
-                    location.href = Router.route('admin.category.edit', { slug: this.model.slug });
-                }).catch(({ response: { data: { errors } } }) => {
-                    notify.success(
-                        errors
-                    );
-                });
-            },
-
-            generatePrices() {
-                axios.post(
-                    Router.route('admin.category.generate-prices', { slug: this.model.slug }),
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        },
-                    },
-                ).then(() => {
-                    location.href = Router.route('admin.category.edit', { slug: this.model.slug });
-                }).catch(({ response: { data: { errors } } }) => {
-                    notify.success(
-                        errors
-                    );
-                });
-            },
-
-            debouncedRefresh() {
-                this.model.steps = this.stepsByCategory;
-                this.$forceUpdate();
-            },
-
             submit() {
                 this.$emit('submit', this.model);
-            },
-
-            addStep() {
-                this.stepsByCategory.push({
-                    id: null,
-                });
-
-                this.$forceUpdate();
-            },
-
-            deleteStep(index) {
-                this.stepsByCategory.splice(index, 1);
-
-                this.$forceUpdate();
             },
 
             name (item) {
@@ -367,15 +224,9 @@
         created() {
             if (this.model.id) {
                 this.model.is_hidden = Number(this.model.is_hidden);
-
-                this.stepsByCategory = this.categorysteps;
-
-                this.premiumPrices = this.premiumprices;
             }
 
             this.categoryPreviewImage = this.model.image;
-
-            this.priceVariations = this.prices;
         },
     };
 </script>

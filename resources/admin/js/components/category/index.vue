@@ -109,16 +109,16 @@
                     <tbody>
                         <template v-if="!isLoading">
                             <tr v-for="(category, i) in categories" :key="`category_${i}`">
-                                    <td><a :href="$r('admin.category.edit', { slug: category.slug })">{{ category.id }}</a></td>
+                                    <td><a :href="$r('admin.category.edit', { category: category.id })">{{ category.id }}</a></td>
                                     <td v-html="highlightSearchResult(category.name, filters.search)"></td>
                                     <td>{{ category.view_count }}</td>
                                     <td>{{ category.created_at }}</td>
                                     <td>
-                                        <a :href="$r('admin.category.edit', { slug: category.slug })">
+                                        <a :href="$r('admin.category.edit', { category: category.id })">
                                             <i class="icon-pencil"></i>
                                         </a>
                                         <delete-confirmation
-                                            :route-path="$r('admin.category.delete', { slug: category.slug })"
+                                            :route-path="$r('admin.category.delete', { category: category.id })"
                                             :redirect-path="$r('admin.category.index')"
                                             :title="$t('common.word.delete')"
                                         />

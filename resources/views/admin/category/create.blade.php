@@ -19,9 +19,5 @@
         :category="{{ json_encode($category) }}"
         :faqs="{{ json_encode($faqs) }}"
         :categories="{{ json_encode($categories) }}"
-        :categorysteps="{{ json_encode($categorysteps) }}"
-        :steps="{{ json_encode($steps) }}"
-        :prices="{{ json_encode($prices) }}"
-        :premiumprices="{{ json_encode($premiumPrices) }}"
     ></category-create>
 @endsection

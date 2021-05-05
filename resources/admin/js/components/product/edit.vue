@@ -73,7 +73,7 @@
                 this.collectFormData(data);
 
                 axios.post(
-                    Router.route('admin.product.update', { slug: this.category.slug }),
+                    Router.route('admin.product.update', { category: this.category.id }),
                     this.formData,
                     {
                         headers: {
@@ -81,7 +81,7 @@
                         },
                     },
                 ).then(() => {
-                    location.href = Router.route('admin.product.edit', { slug: this.category.slug });
+                    location.href = Router.route('admin.product.edit', { category: this.category.id });
                 }).catch(({ response: { data: { errors } } }) => {
                     this.errors = errors;
                     this.scrollToError();
@@ -90,7 +90,7 @@
 
             deleteCategory() {
                 axios.delete(
-                    Router.route('admin.product.delete', { slug: this.category.slug }),
+                    Router.route('admin.product.delete', { category: this.category.id }),
                 ).then(() => {
                     location.href = Router.route('admin.product.index');
                 }).catch(({ response: { data: { errors } } }) => {
