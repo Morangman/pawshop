@@ -34,8 +34,8 @@ class DailyStatisticsController extends Controller
     public function index(): ViewContract
     {
         return View::make('admin.daily-statistics.index', [
-            'viewsCount' => DB::table('statistics')->sum('steps_view_count'),
-            'boxCount' => DB::table('statistics')->sum('steps_box_count'),
+            'viewsCount' => DB::table('daily_statistics')->sum('steps_view_count'),
+            'boxCount' => DB::table('daily_statistics')->sum('steps_box_count'),
         ]);
     }
 
