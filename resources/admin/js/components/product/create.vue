@@ -61,6 +61,7 @@
                     name: null,
                     slug: null,
                     image: null,
+                    image_url: null,
                     subcategory_id: null,
                     faq_id: null,
                     custom_text: null,

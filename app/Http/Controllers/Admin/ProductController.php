@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Admin;
 use App\Category;
 use App\Faq;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Category\StoreRequest;
-use App\Http\Requests\Admin\Category\UpdateRequest;
+use App\Http\Requests\Admin\Product\StoreRequest;
+use App\Http\Requests\Admin\Product\UpdateRequest;
 use App\Step;
 use App\StepName;
 use Illuminate\Contracts\View\View as ViewContract;
@@ -68,7 +68,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\Admin\Category\StoreRequest $request
+     * @param \App\Http\Requests\Admin\Product\StoreRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded
@@ -246,7 +246,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\Admin\Category\UpdateRequest $request
+     * @param \App\Http\Requests\Admin\Product\UpdateRequest $request
      * @param \App\Category $category
      *
      * @return \Illuminate\Http\JsonResponse
@@ -504,6 +504,13 @@ class ProductController extends Controller
     {
         if ($categoryPreviewImage = $request->file('image')) {
             $media = $category->addMedia($categoryPreviewImage)
+                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+            $category->update(['image' => $media->getFullUrl()]);
+        }
+
+        if ($productImageUrl = $request->get('image_url')) {
+            $media = $category->addMediaFromUrl($productImageUrl)
                 ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
 
             $category->update(['image' => $media->getFullUrl()]);
