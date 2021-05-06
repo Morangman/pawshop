@@ -12,5 +12,8 @@
 @endsection
 
 @section('content')
-    <statistics-index></statistics-index>
+    <statistics-index
+        :views="{{ $viewsCount }}"
+        :boxs="{{ $boxCount }}"
+    ></statistics-index>
 @endsection

@@ -34,7 +34,7 @@
                                 {{ $t('admin.statistics.form.steps') }}
                             </th>
                             <th>
-                                {{ $t('admin.statistics.form.cart_count') }}
+                                ({{ boxs }}) {{ $t('admin.statistics.form.cart_count') }}
                                 <span>
                                     <i
                                             v-if="filters.by === 'steps_box_count' && filters.dir === 'desc'"
@@ -53,7 +53,7 @@
                                 </span>
                             </th>
                             <th>
-                                {{ $t('admin.statistics.form.view_count') }}
+                                ({{ views }}) {{ $t('admin.statistics.form.view_count') }}
                                 <span>
                                     <i
                                             v-if="filters.by === 'steps_view_count' && filters.dir === 'desc'"
@@ -121,6 +121,17 @@
     export default {
         components: {
             InfiniteLoading,
+        },
+
+        props: {
+            views: {
+                type: Number,
+                required: false,
+            },
+            boxs: {
+                type: Number,
+                required: false,
+            },
         },
 
         mixins: [IndexPageHelper],

@@ -33,7 +33,10 @@ class StatisticsController extends Controller
      */
     public function index(): ViewContract
     {
-        return View::make('admin.statistics.index');
+        return View::make('admin.statistics.index', [
+            'viewsCount' => DB::table('statistics')->sum('steps_view_count'),
+            'boxCount' => DB::table('statistics')->sum('steps_box_count'),
+        ]);
     }
 
     /**

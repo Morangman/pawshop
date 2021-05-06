@@ -15,6 +15,7 @@
                         >
                             Print barcode
                         </a>
+                        <a class="btn btn-primary" :href="$r('thanks', {order_uuid: model.uuid})" target="_blank">Show Thank Page</a>
                     </div>
                     <div class="form-group" v-if="model.user_id">
                         <label>
