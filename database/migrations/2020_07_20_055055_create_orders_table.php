@@ -40,6 +40,7 @@ class CreateOrdersTable extends Migration
             $table->tinyInteger('is_received_notify')->unsigned()->nullable();
             $table->timestamp('estimate_date')->nullable();
             $table->timestamp('delivered_date')->nullable();
+            $table->timestamp('paid_date')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')

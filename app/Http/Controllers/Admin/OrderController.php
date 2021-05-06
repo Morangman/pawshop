@@ -564,6 +564,12 @@ class OrderController extends Controller
             } catch (\Exception $e) {}
         }
 
+        if ((int) $request->get('ordered_status') === Order::STATUS_PAID) {
+            $order->update([
+                'paid_date' => Carbon::now()
+            ]);
+        }
+
         Session::flash(
             'success',
             Lang::get('admin/order.messages.update')

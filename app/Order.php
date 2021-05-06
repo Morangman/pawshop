@@ -75,6 +75,7 @@ class Order extends Model implements HasMedia
         'ip_address',
         'estimate_date',
         'delivered_date',
+        'paid_date',
         'is_transit_notify',
         'is_received_notify',
     ];
@@ -100,6 +101,7 @@ class Order extends Model implements HasMedia
         'ip_address' => 'string',
         'estimate_date' => 'datetime',
         'delivered_date' => 'datetime',
+        'paid_date' => 'datetime',
         'is_transit_notify' => 'int',
         'is_received_notify' => 'int',
     ];

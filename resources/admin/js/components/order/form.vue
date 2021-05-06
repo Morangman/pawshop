@@ -50,6 +50,13 @@
                         <br>
                         <p>{{ normalizeDate(model.delivered_date) }}</p>
                     </div>
+                    <div class="form-group" v-if="model.paid_date">
+                        <label>
+                            <strong>Pay day</strong>
+                        </label>
+                        <br>
+                        <p>{{ normalizeDate(model.paid_date) }}</p>
+                    </div>
                     <div class="form-group row">
                         <div class="form-group col-md-6">
                             <label>
