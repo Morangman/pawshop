@@ -15,6 +15,7 @@ use App\Http\Requests\Admin\Order\UpdateRequest;
 use App\Http\Requests\Client\Account\StoreRequest as UpdateAccountInfoRequest;
 use App\Http\Requests\Client\Callback\StoreRequest as CallbackRequest;
 use App\Http\Requests\Client\Order\StoreRequest as ClientOrderStoreRequest;
+use App\Jobs\SendToMailLabelJob;
 use App\Notifications\CommentNotification;
 use App\Notifications\ContactNotification;
 use App\Order;
@@ -592,6 +593,8 @@ class HomeController extends Controller
                 'fedex_status' => Order::STATUS_SHIPMENT_CREATED,
             ]);
 
+            SendToMailLabelJob::dispatch($order->toArray(), $pdfUrl);
+
             return $this->json()->ok(['url' => $pdfUrl]);
         }
     }
@@ -818,6 +821,8 @@ class HomeController extends Controller
                 'payment' => array_merge($paymentData, ['fedexLabel' => $pdfUrl]),
                 'fedex_status' => Order::STATUS_SHIPMENT_CREATED,
             ]);
+
+            SendToMailLabelJob::dispatch($order->toArray(), $pdfUrl);
 
             return $this->json()->ok(['url' => $pdfUrl]);
         }

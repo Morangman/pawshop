@@ -11,7 +11,7 @@ class OrderChangeConfirmationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-        /**
+    /**
      * @var array
      */
     public $data;
