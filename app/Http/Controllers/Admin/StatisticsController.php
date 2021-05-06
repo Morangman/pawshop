@@ -4,11 +4,8 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin;
 
-use App\Category;
-use App\Setting;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Setting\StoreRequest;
-use App\Http\Requests\Admin\Setting\UpdateRequest;
 use App\Step;
 use App\StepName;
 use Illuminate\Contracts\View\View as ViewContract;
@@ -20,7 +17,6 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 
 /**
@@ -49,7 +45,6 @@ class StatisticsController extends Controller
      */
     public function update(StoreRequest $request): JsonResponse
     {
-
         Session::flash(
             'success',
             Lang::get('admin/statistics.messages.create')
@@ -78,7 +73,6 @@ class StatisticsController extends Controller
             )
             ->get()
             ->toArray();
-            //->paginate(20);
         
         $array = [];
 

@@ -79,11 +79,22 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ URL::route('admin.statistics.index') }}" class="nav-link @active_menu_class('admin.statistics')">
-                        <i class="icon-file-stats"></i>
-                        <span>@lang('common.sidebar.statistics')</span>
-                    </a>
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"><i class="icon-file-stats"></i><span>@lang('common.sidebar.statistics')</span></a>
+                    <ul class="nav nav-group-sub" data-submenu-title="Pickers" style="display: none;">
+                        <li class="nav-item">
+                            <a href="{{ URL::route('admin.statistics.index') }}" class="nav-link @active_menu_class('admin.statistics')">
+                                <i class="icon-file-stats"></i>
+                                <span>@lang('common.sidebar.statistics')</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ URL::route('admin.daily-statistics.index') }}" class="nav-link @active_menu_class('admin.daily-statistics')">
+                                <i class="icon-file-stats"></i>
+                                <span>@lang('common.sidebar.daily_statistics')</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 @endrole
                 <li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Data editing</div> <i class="icon-menu" title="Components"></i></li>

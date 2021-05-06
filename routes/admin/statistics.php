@@ -12,7 +12,7 @@ Route::get('all', [
     'uses' => 'StatisticsController@getAll',
 ]);
 
-Route::post('{slug}/update', [
+Route::post('{category}/update', [
     'as' => '.update',
     'uses' => 'StatisticsController@update',
 ]);

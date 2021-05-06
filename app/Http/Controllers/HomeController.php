@@ -633,6 +633,8 @@ class HomeController extends Controller
 
         $category->increment('view_count', 1);
 
+        Category::query()->whereKey($category->getAttribute('subcategory_id'))->increment('view_count', 1);
+
         $ids = [];
 
         $allStepsIds = [];
@@ -757,6 +759,27 @@ class HomeController extends Controller
             } catch (\Exception $e) {}
         } else {
             DB::table('statistics')->insert([
+                'category_id' => $request->get('category_id'),
+                'steps_box_count' => 0,
+                'steps_view_count' => 1,
+                'steps_coefficient' => 0,
+                'steps_ids' => json_encode($allStepsIds),
+                'price' => $resultPrice,
+            ]);
+        }
+
+        if (DB::table('daily_statistics')->where('category_id', $category->getKey())->whereJsonContains('steps_ids', $allStepsIds)->exists()) {
+            try {
+                $stat = DB::table('daily_statistics')->where('category_id', $category->getKey())->whereJsonContains('steps_ids', $allStepsIds);
+
+                $stat->increment('steps_view_count', 1);
+    
+                $coefficient = (int) $stat->first()->steps_box_count / (int) $stat->first()->steps_view_count;
+    
+                $stat->update(['steps_coefficient' => (float) number_format($coefficient, 1, '.', '.')]);
+            } catch (\Exception $e) {}
+        } else {
+            DB::table('daily_statistics')->insert([
                 'category_id' => $request->get('category_id'),
                 'steps_box_count' => 0,
                 'steps_view_count' => 1,
@@ -893,6 +916,27 @@ class HomeController extends Controller
             ]);
         }
 
+        if (DB::table('daily_statistics')->where('category_id', $category->getKey())->whereJsonContains('steps_ids', $stepsIds)->exists()) {
+            try {
+                $stat = DB::table('daily_statistics')->where('category_id', $category->getKey())->whereJsonContains('steps_ids', $stepsIds);
+
+                $stat->increment('steps_box_count', 1);
+    
+                $coefficient = (int) $stat->first()->steps_box_count / (int) $stat->first()->steps_view_count;
+    
+                $stat->update(['steps_coefficient' => (float) number_format($coefficient, 1, '.', '.')]);
+            } catch (\Exception $e) {}
+        } else {
+            DB::table('daily_statistics')->insert([
+                'category_id' => $request->get('category_id'),
+                'steps_box_count' => 1,
+                'steps_view_count' => 1,
+                'steps_coefficient' => 1,
+                'steps_ids' => json_encode($stepsIds),
+                'price' => $request->get('price'),
+            ]);
+        }
+
         return $this->json()->noContent();
     }
 
@@ -904,10 +948,6 @@ class HomeController extends Controller
     public function getByCategory(string $slug): ViewContract
     {
         $category = Category::query()->where('slug', $slug)->first();
-
-        if (!$category->getAttribute('subcategory_id') || !$category->getAttribute('custom_text') ) {
-            $category->increment('view_count', 1);
-        }
 
         $relatedCategories = Category::query()
             ->where('subcategory_id', '=', $category->getKey())

@@ -53,6 +53,8 @@ import SettingIndex from './components/setting/index';
 
 import StatisticsIndex from './components/statistics/index';
 
+import DailyStatisticsIndex from './components/daily-statistics/index';
+
 export default {
     UserIndex,
     UserCreate,
@@ -93,5 +95,6 @@ export default {
     NotificationIndex,
     NotificationView,
     SettingIndex,
-    StatisticsIndex
+    StatisticsIndex,
+    DailyStatisticsIndex
 };

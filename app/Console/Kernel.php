@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Console;
 
 use App\Console\Commands\CheckCart;
+use App\Console\Commands\ClearDailyStatistics;
 use App\Console\Commands\Fedex;
 use App\Console\Commands\OrderNormalizeStatus;
 use App\Console\Commands\PullData;
@@ -29,6 +30,7 @@ class Kernel extends ConsoleKernel
         CheckCart::class,
         Fedex::class,
         OrderNormalizeStatus::class,
+        ClearDailyStatistics::class,
     ];
 
     /**
@@ -42,5 +44,6 @@ class Kernel extends ConsoleKernel
         //$schedule->command(Reminder::class)->dailyAt('7:00');
         $schedule->command(CheckCart::class)->dailyAt('12:00');
         $schedule->command(Fedex::class)->everyThirtyMinutes();
+        $schedule->command(ClearDailyStatistics::class)->daily();
     }
 }

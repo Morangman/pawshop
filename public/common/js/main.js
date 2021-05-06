@@ -26449,6 +26449,7 @@ __webpack_require__.r(__webpack_exports__);
         "tasks": "Tasks",
         "categories": "Categories",
         "statistics": "Statistics",
+        "daily_statistics": "Daily Statistics",
         "statuses": "Order statuses",
         "steps": "Steps",
         "callbacks": "Conversations",

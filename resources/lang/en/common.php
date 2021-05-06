@@ -15,6 +15,7 @@ return [
         'tasks' => 'Tasks',
         'categories' => 'Categories',
         'statistics' => 'Statistics',
+        'daily_statistics' => 'Daily Statistics',
         'statuses' => 'Order statuses',
         'steps' => 'Steps',
         'callbacks' => 'Conversations',

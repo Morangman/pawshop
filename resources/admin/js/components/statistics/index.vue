@@ -85,9 +85,9 @@
                     <tbody>
                         <template v-if="!isLoading">
                             <tr v-for="(product, i) in products" :key="`status_${i}`">
-                                    <td><a :href="$r('admin.category.edit', { slug: product.slug })">{{ product.id }}</a></td>
+                                    <td><a :href="$r('admin.category.edit', { category: product.id })">{{ product.id }}</a></td>
                                     <td><img style="width: 100px; height: auto;" :src="product.image"/></td>
-                                    <td><a :href="$r('admin.category.edit', { slug: product.slug })">{{ product.name }}</a></td>
+                                    <td><a :href="$r('admin.category.edit', { category: product.id })">{{ product.name }}</a></td>
                                     <td>
                                         <div class="col" style="min-width: 200px;">
                                             <p v-for="(step, i) in product.steps" :key="`step_${i}`">{{ step.step_name.name }}: {{ step.value }}</p>
