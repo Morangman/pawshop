@@ -268,11 +268,6 @@ var App = function () {
                 else {
                     $target.parent('.' + navItemClass).not($navSidebarMini).addClass(navItemOpenClass).children('.' + navSubmenuClass).slideDown(navSlidingSpeed);
                 }
-
-                // Accordion
-                if ($target.parents('.' + navClass).data('nav-type') == 'accordion') {
-                    $target.parent('.' + navItemClass).not($navSidebarMini).siblings(':has(.' + navSubmenuClass + ')').removeClass(navItemOpenClass).children('.' + navSubmenuClass).slideUp(navSlidingSpeed);
-                }
             });
         });
 
