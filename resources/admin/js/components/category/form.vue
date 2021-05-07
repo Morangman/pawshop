@@ -45,9 +45,18 @@
                         </label>
                         <b-form-file
                             class="mt-1"
+                            style="margin-bottom: 20px;"
                             accept=".png,.jpg,.jpeg,.gif"
                             @change="showCategoryPreviewImage($event)"
                         ></b-form-file>
+                        <input
+                            name="image"
+                            type="text"
+                            v-model="model.image_url"
+                            placeholder="Image URL"
+                            class="form-control"
+                            :class="{ 'border-danger': errors.image }"
+                        >
                         <img width="auto"
                              height="100"
                              class="center-image"

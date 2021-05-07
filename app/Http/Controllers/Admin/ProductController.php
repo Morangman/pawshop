@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
+use Illuminate\Database\Query\JoinClause;
 
 /**
  * Class ProductController
@@ -151,6 +152,22 @@ class ProductController extends Controller
 
         $priceVariations = [];
 
+        // $data = DB::table('prices')->where('category_id', $category->getKey())->get()
+        //     ->each(function ($price) use ($priceVariations) {
+        //         $ids = json_decode($price->steps_ids);
+
+        //         $steps = Step::query()->whereIn('id', $ids)->get()->toArray();
+
+        //         $priceVariations[] = [
+        //             'steps' => $steps,
+        //             'price' => $price->price,
+        //             'custom_price' => $price->custom_price,
+        //             'id' => $price->id,
+        //         ];
+        //     });
+
+        // dd($priceVariations);
+
         $pricesByCategory = DB::table('prices')->where('category_id', $category->getKey())->get()->toArray();
 
         $idsArray = [];
@@ -163,20 +180,30 @@ class ProductController extends Controller
 
         foreach ($idsArray as $ids) {
             $price = DB::table('prices')->where('category_id', $category->getKey())->whereJsonContains('steps_ids', $ids)->first();
-            $steps = Step::query()->whereIn('id', $ids)->get()->toArray();
+            $steps = Step::query()->whereIn('id', $ids)->get();
+            $stepsArray = $steps->toArray();
+            $isBroken = false;
 
             foreach ($steps as $i => $step) {
+                $stepArray = $step->toArray();
+
                 if ($category->getAttribute('is_parsed')) {
-                    $step['value'] === 'Brand New' ? $steps[$i]['value'] = 'Flawless' : $step['value'];
+                    $stepArray['value'] === 'Brand New' ? $stepsArray[$i]['value'] = 'Flawless' : $stepArray['value'];
+                }
+
+                if ($step->stepName->is_functional && $stepArray['value'] === 'No') {
+                    $isBroken = true;
                 }
             }
 
-            $priceVariations[] = [
+            if (!$isBroken) {
+                $priceVariations[] = [
                 'steps' => $steps,
                 'price' => $price->price,
                 'custom_price' => $price->custom_price,
                 'id' => $price->id,
             ];
+        }
         }
 
         if ($steps = $category->steps()->get()) {

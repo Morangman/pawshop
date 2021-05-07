@@ -59,6 +59,12 @@ class CategoryController extends Controller
     {
         $category = Category::create($request->all());
 
+        if (!$request->get('slug')) {
+            $category->update([
+                'slug' => preg_replace('~[^\pL\d]+~u', '-', strtolower($category->getAttribute('name'))),
+            ]);
+        }
+
         $this->handleDocuments($request, $category);
 
         Session::flash(
@@ -201,6 +207,13 @@ class CategoryController extends Controller
     {
         if ($categoryPreviewImage = $request->file('image')) {
             $media = $category->addMedia($categoryPreviewImage)
+                ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
+
+            $category->update(['image' => $media->getFullUrl()]);
+        }
+
+        if ($productImageUrl = $request->get('image_url')) {
+            $media = $category->addMediaFromUrl($productImageUrl)
                 ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
 
             $category->update(['image' => $media->getFullUrl()]);
