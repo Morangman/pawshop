@@ -22,6 +22,11 @@ Route::post('', [
     'uses' => 'ProductController@store',
 ]);
 
+Route::post('generate', [
+    'as' => '.generate',
+    'uses' => 'ProductController@generatePrices',
+]);
+
 Route::get('{category}/edit', [
     'as' => '.edit',
     'uses' => 'ProductController@edit',

@@ -269,7 +269,7 @@
                                 class="btn btn-primary margin-top-10"
                             > <- Back</button>
                             <button
-                                v-on:click="nextStep()"
+                                v-on:click="generatePrices()"
                                 class="btn btn-primary margin-top-10"
                             >Next -></button>
                         </div>
@@ -292,9 +292,8 @@
                             <thead>
                                 <tr>
                                 <th scope="col">#</th>
-                                <th scope="col" v-for="(step, index) in priceVariations.length ? priceVariations[0].steps : []" :key="`step_table__${index}`">{{ step.attribute }}</th>
-                                <th scope="col">parsed price</th>
-                                <th scope="col">custom price</th>
+                                <th scope="col" v-for="(step, index) in priceVariations.length ? priceVariations[0].steps : []" :key="`step_table__${index}`">{{ step.step_name.name }}</th>
+                                <th scope="col">Price</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -314,16 +313,6 @@
                                             v-on:keyup.enter="updatePrice(price)"
                                         >
                                     </td>
-                                    <td>
-                                        <input
-                                            tabindex="-1"
-                                            name="custom_price"
-                                            type="text"
-                                            v-model="price.custom_price"
-                                            class="form-control"
-                                            v-on:keyup.enter="updatePrice(price)"
-                                        >
-                                    </td>
                                 </tr>
                             </tbody>
                             </table>
@@ -337,37 +326,14 @@
                             <button
                                 v-on:click="nextStep()"
                                 class="btn btn-primary margin-top-10"
-                            >Next -></button>
+                            >Save</button>
                         </div>
                     </template>
+
+                    <template v-if="stepCount > 4">
+                        <h1>Processing..</h1>
+                    </template>
                 </div>
-            </div>
-            <div class="text-right">
-                <template v-if="model.id">
-                    <button
-                        type="submit"
-                        class="btn btn-danger"
-                        @click.prevent="deleteCategory"
-                    >
-                        {{ $t('common.word.delete') }}
-                    </button>
-                </template>
-                <template v-if="model.id">
-                    <button
-                        type="submit"
-                        class="btn btn-primary"
-                        @click.prevent="generatePrices"
-                    >
-                        Generate prices variations
-                    </button>
-                </template>
-                <button
-                    type="submit"
-                    class="btn btn-primary"
-                    @click.prevent="store"
-                >
-                    {{ $t('common.word.save') }}
-                </button>
             </div>
         </div>
     </div>
@@ -393,10 +359,6 @@
                 required: true,
             },
             steps: {
-                type: Array,
-                required: false,
-            },
-            prices: {
                 type: Array,
                 required: false,
             },
@@ -458,6 +420,10 @@
         methods: {
             nextStep() {
                 this.stepCount++;
+
+                if (this.stepCount > 4) {
+                    this.store();
+                }
             },
 
             backStep() {
@@ -508,19 +474,33 @@
             },
 
             generatePrices() {
+                this.errors = {};
+                this.formData = new FormData();
+                this.collectFormData(this.model);
+
                 axios.post(
-                    Router.route('admin.product.generate-prices', { category: this.model.id }),
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        },
-                    },
-                ).then(() => {
-                    location.href = Router.route('admin.product.edit', { category: this.model.id });
+                    Router.route('admin.product.generate'),
+                    this.formData,
+                ).then((data) => {
+                    this.priceVariations = data.data.prices;
+
+                    this.prices = data.data.prices;
+
+                    this.model.id = data.data.product;
+
+                    this.stepCount++;
                 }).catch(({ response: { data: { errors } } }) => {
-                    notify.success(
-                        errors
-                    );
+                    this.errors = errors;
+
+                    let html = [];
+
+                    _.each(errors, (error, key) => {
+                        html.push(error[0]);
+                    });
+
+                    notify.error(html.join('<br>'));
+
+                    this.scrollToError();
                 });
             },
 
@@ -530,10 +510,11 @@
             },
 
             addStep() {
-                this.stepsByCategory.push({
-                    id: null,
-                });
+                // this.stepsByCategory[1] = {
+                //     id: null,
+                // };
 
+                this.stepsByCategory.splice(1, 0, {id: null});
                 this.$forceUpdate();
             },
 
@@ -575,7 +556,7 @@
                     Router.route('admin.product.store'),
                     this.formData,
                 ).then(() => {
-                    location.href = Router.route('admin.product.index');
+                    location.href = Router.route('admin.product.edit', { category: this.model.id });
                 }).catch(({ response: { data: { errors } } }) => {
                     this.errors = errors;
 
@@ -590,6 +571,10 @@
                     this.scrollToError();
                 });
             },
+        },
+
+        created() {
+            this.stepsByCategory = [this.steps[0], this.steps[8]];
         },
     };
 </script>

@@ -32,7 +32,7 @@ class StoreRequest extends FormRequest
                 'max:255',
             ],
             'custom_text' => [
-                'required',
+                'nullable',
                 'string',
                 'max:255',
             ],

@@ -76,6 +76,32 @@ class ProductController extends Controller
      */
     public function store(StoreRequest $request): JsonResponse
     {
+        $category = Category::query()->whereKey($request->get('id'))->first();
+
+        $productMaxPrice = DB::table('prices')->where('category_id', $category->getKey())->max('price');
+
+        if ($productMaxPrice) {
+            $category->update([
+                'custom_text' => $productMaxPrice,
+            ]);
+        }
+
+        Session::flash(
+            'success',
+            Lang::get('admin/product.messages.create')
+        );
+
+        return $this->json()->noContent();
+    }
+
+     /**
+     * @param \App\Http\Requests\Admin\Product\StoreRequest $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded
+     */
+    public function generatePrices(StoreRequest $request): JsonResponse
+    {
         $category = Category::create($request->all());
 
         if ($requestSteps = $request->get('steps')) {
@@ -115,30 +141,61 @@ class ProductController extends Controller
                     'is_parsed' => 1,
                 ]);              
             }
+        }
 
-            $productMaxPrice = DB::table('prices')->where('category_id', $category->getKey())->max('price');
+        $productMaxPrice = DB::table('prices')->where('category_id', $category->getKey())->max('price');
 
-            if ($productMaxPrice) {
-                $category->update([
-                    'custom_text' => $productMaxPrice,
-                ]);
-            }
+        if ($productMaxPrice) {
+            $category->update([
+                'custom_text' => $productMaxPrice,
+            ]);
+        }
 
-            if (!$request->get('slug')) {
-                $category->update([
-                    'slug' => preg_replace('~[^\pL\d]+~u', '-', strtolower($category->getAttribute('name'))),
-                ]);
-            }
+        if (!$request->get('slug')) {
+            $category->update([
+                'slug' => preg_replace('~[^\pL\d]+~u', '-', strtolower($category->getAttribute('name'))),
+            ]);
         }
 
         $this->handleDocuments($request, $category);
+
+        $priceVariations = [];
+
+        $prices = DB::table('prices')->where('category_id', $category->getKey())->get();
+
+        foreach($prices as $price) {
+            $isBroken = false;
+            
+            $ids = json_decode($price->steps_ids);
+
+            $steps = Step::query()->whereIn('id', $ids)->with('stepName')->get()->toArray();
+
+            foreach ($steps as $key => $step) {
+                if ($category->getAttribute('is_parsed')) {
+                    $step['value'] === 'Brand New' ? $steps[$key]['value'] = 'Flawless' : $step['value'];
+                }
+
+                if (isset($step['step_name']['is_functional']) && $step['value'] === 'No') {
+                    $isBroken = true;
+                }
+            }
+
+            if (!$isBroken) {
+                $priceVariations[] = [
+                    'steps' => $steps,
+                    'price' => $price->price,
+                    'custom_price' => $price->custom_price,
+                    'id' => $price->id,
+                ];
+            }
+        }
 
         Session::flash(
             'success',
             Lang::get('admin/product.messages.create')
         );
 
-        return $this->json()->noContent();
+        return $this->json()->ok(['prices' => $priceVariations, 'product' => $category->getKey()]);
     }
 
     /**
