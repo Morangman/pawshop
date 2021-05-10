@@ -38,9 +38,11 @@ class ProductController extends Controller
     }
 
     /**
+     * @param \Illuminate\Http\Request $request
+     * 
      * @return \Illuminate\Contracts\View\View
      */
-    public function create(): ViewContract
+    public function create(Request $request): ViewContract
     {
         $stepsByName = [];
 
@@ -65,6 +67,7 @@ class ProductController extends Controller
             'categorysteps' => [],
             'prices' => [],
             'premiumPrices' => [],
+            'subcategory' => $request->has('category') ? (int) $request->get('category') : null,
         ]);
     }
 

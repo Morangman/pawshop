@@ -278,7 +278,12 @@
                     <template v-if="stepCount === 4">
                         <div class="form-group">
                             <strong>
-                                <h1>Price variations</h1>
+                                <h1>
+                                    Price variations
+                                    <a :href="'https://www.ebay.com/sch/i.html?_nkw=' + model.name" target="_blank">
+                                        <img style="height:30px; width: auto;" :src="'../../../../client/images/ebay.png'" />
+                                    </a>
+                                </h1>
                             </strong>
                             <input
                                 name="price_for_broken"
@@ -310,7 +315,7 @@
                                             type="text"
                                             v-model="price.price"
                                             class="form-control"
-                                            v-on:keyup.enter="updatePrice(price)"
+                                            v-on:keyup="updatePrice(price)"
                                         >
                                     </td>
                                 </tr>
@@ -372,6 +377,10 @@
             },
             categories: {
                 type: Array,
+                required: false,
+            },
+            subcategory: {
+                type: Number,
                 required: false,
             },
         },
@@ -575,6 +584,10 @@
 
         created() {
             this.stepsByCategory = [this.steps[0], this.steps[8]];
+
+            if (this.subcategory) {
+                this.model.subcategory_id = this.subcategory;
+            }
         },
     };
 </script>

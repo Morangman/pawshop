@@ -23,5 +23,6 @@
         :steps="{{ json_encode($steps) }}"
         :prices="{{ json_encode($prices) }}"
         :premiumprices="{{ json_encode($premiumPrices) }}"
+        :subcategory="{{ json_encode($subcategory) }}"
     ></product-create>
 @endsection

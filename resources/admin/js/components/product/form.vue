@@ -5,7 +5,9 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label>
-                            <strong>{{ $t('admin.product.form.name') }}</strong>
+                            <strong>
+                                {{ $t('admin.product.form.name') }}
+                            </strong>
                         </label>
                         <input
                             name="name"
@@ -85,7 +87,17 @@
                     </div>
                     <div class="form-group">
                         <label>
-                            <strong>{{ $t('admin.product.form.subcategory') }}</strong>
+                            <strong>{{ $t('admin.product.form.subcategory') }}
+                            <template v-if="model.subcategory_id">
+                                <a
+                                    type="submit"
+                                    class="text-info"
+                                    :href="$r('admin.product.create', {category: model.subcategory_id})"
+                                >
+                                    <i class="icon-plus3"></i>
+                                </a>
+                            </template>
+                            </strong>
                         </label>
 
                         <model-list-select :list="categories"
@@ -194,7 +206,13 @@
 
                     <div class="form-group">
                         <strong>
-                            <h1>{{ $t('admin.product.form.steps') }}</h1>
+                            <h1>{{ $t('admin.product.form.steps') }}
+                                <template v-if="model.id">
+                                    <a :href="'https://www.ebay.com/sch/i.html?_nkw=' + model.name" target="_blank">
+                                        <img style="height:30px; width: auto;" :src="'../../../../client/images/ebay.png'" />
+                                    </a>
+                                </template>
+                            </h1>
                         </strong>
                         <div class="form-group">
                             <div class="change-blocks-wrapper__item" v-for="(item, index) in stepsByCategory" :key="`step__${index}`">
