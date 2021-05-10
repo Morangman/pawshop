@@ -790,6 +790,7 @@ class OrderController extends Controller
             'is_new' => false,
             'is_transit' => false,
             'is_delivered' => false,
+            'is_payed' => false,
         ]);
     }
 
