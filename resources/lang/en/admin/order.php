@@ -62,6 +62,7 @@ return [
                 'created_at' => 'Created date',
                 'estimate_date' => 'Estimate date',
                 'delivered_date' => 'Delivered date',
+                'payed_date' => 'Pay day',
             ],
         ],
         'search' => [

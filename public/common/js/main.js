@@ -25944,7 +25944,8 @@ __webpack_require__.r(__webpack_exports__);
               "fedex_status": "FedEx status",
               "created_at": "Created date",
               "estimate_date": "Estimate date",
-              "delivered_date": "Delivered date"
+              "delivered_date": "Delivered date",
+              "payed_date": "Pay day"
             }
           },
           "search": {

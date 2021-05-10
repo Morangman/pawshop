@@ -61,6 +61,7 @@ class OrderController extends Controller
             'is_new' => (int) $request->get('status') === Order::STATUS_NEW,
             'is_transit' => (int) $request->get('status') === Order::STATUS_TRANSIT,
             'is_delivered' => (int) $request->get('status') === Order::STATUS_ORDER_DELIVERED,
+            'is_payed' => (int) $request->get('status') === Order::STATUS_PAID,
         ]);
     }
 

@@ -104,6 +104,25 @@
                                     </span>
                                 </span>
                             </th>
+                            <th v-if="ispayed">
+                                {{ $t('admin.order.index.table.headers.payed_date') }}
+                                <span>
+                                    <i
+                                            v-if="filters.by === 'paid_date' && filters.dir === 'desc'"
+                                            @click.prevent="sort('paid_date', 'asc')"
+                                            class="icon-arrow-down8 cursor-pointer"
+                                    ></i>
+                                    <i
+                                            v-if="filters.by === 'paid_date' && filters.dir === 'asc'"
+                                            @click.prevent="sort('paid_date', 'desc')"
+                                            class="icon-arrow-up8 cursor-pointer"
+                                    ></i>
+                                    <span v-if="filters.by !== 'paid_date'" @click.prevent="sort('paid_date', 'asc')">
+                                        <i class="icon-arrow-up8 cursor-pointer"></i>
+                                        <i class="icon-arrow-down8 cursor-pointer"></i>
+                                    </span>
+                                </span>
+                            </th>
                             <th>
                                 {{ $t('admin.order.index.table.headers.created_at') }}
                                 <span>
@@ -140,6 +159,7 @@
                                     </td>
                                     <td v-if="istransit"><span v-if="order.estimate_date">{{ normalizeDate(order.estimate_date) }}</span></td>
                                     <td v-if="isdelivered"><span v-if="order.delivered_date">{{ normalizeDate(order.delivered_date) }}</span></td>
+                                    <td v-if="ispayed"><span v-if="order.paid_date">{{ normalizeDate(order.paid_date) }}</span></td>
                                     <td>{{ normalizeDate(order.created_at) }}</td>
                                     <td>
                                         <a :href="$r('admin.order.edit', { order: order.id })">
@@ -187,6 +207,10 @@
                 required: false,
             },
             isdelivered: {
+                type: Boolean,
+                required: false,
+            },
+            ispayed: {
                 type: Boolean,
                 required: false,
             },
