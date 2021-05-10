@@ -4,24 +4,24 @@ declare(strict_types = 1);
 
 namespace App\Console\Commands;
 
-use App\Jobs\CartJob;
+use App\Jobs\FedexLabelJob;
 use Illuminate\Console\Command;
 
-class CheckCart extends Command
+class FedexLabel extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'check:cart';
+    protected $signature = 'fedex:label';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Sending notification for users with cart';
+    protected $description = 'Sending notification for users who not create FedEx label';
 
     /**
      * Create a new command instance.
@@ -40,6 +40,6 @@ class CheckCart extends Command
      */
     public function handle(): void
     {
-        CartJob::dispatch();
+        FedexLabelJob::dispatch();
     }
 }
