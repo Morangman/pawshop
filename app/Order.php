@@ -30,6 +30,7 @@ class Order extends Model implements HasMedia
     public const STATUS_ORDER_DELIVERED = 4;
     public const STATUS_RECEIVED = 5;
     public const STATUS_PAID = 6;
+    public const STATUS_SOLD = 7;
 
     public const STATUS_CHANGED = 1;
     public const STATUS_NOT_CONFIRMED = 1;
