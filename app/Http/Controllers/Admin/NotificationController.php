@@ -80,6 +80,22 @@ class NotificationController extends Controller
     }
 
     /**
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @throws \Exception
+     */
+    public function readAll(): JsonResponse
+    {
+        $user = Auth::user();
+
+        $user->unreadNotifications()->get()->map(function($notification) {
+            $notification->markAsRead();
+        });
+
+        return $this->json()->noContent();
+    }
+
+    /**
      * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\JsonResponse

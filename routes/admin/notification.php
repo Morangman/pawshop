@@ -22,6 +22,11 @@ Route::post('read', [
     'uses' => 'NotificationController@read',
 ]);
 
+Route::post('read-all', [
+    'as' => '.read-all',
+    'uses' => 'NotificationController@readAll',
+]);
+
 Route::delete('{notification}', [
     'as' => '.delete',
     'uses' => 'NotificationController@delete',

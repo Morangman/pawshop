@@ -6,6 +6,9 @@
                     <button class="btn btn-primary" @click.prevent="readNotifications">
                         Read
                     </button>
+                    <button class="btn btn-primary" @click.prevent="readAllNotifications">
+                        Read All
+                    </button>
                 </div>
             </div>
             <div class="table-responsive">
@@ -153,6 +156,16 @@
                             'Content-Type': 'multipart/form-data',
                         },
                     },
+                ).then(({ data }) => {
+                    location.reload();
+                }).catch(({ response: { data: { errors } } }) => {
+                    notify.error(_.head(errors));
+                });
+            },
+
+            readAllNotifications() {
+                axios.post(
+                    Router.route('admin.notification.read-all')
                 ).then(({ data }) => {
                     location.reload();
                 }).catch(({ response: { data: { errors } } }) => {
