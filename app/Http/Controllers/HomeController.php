@@ -405,12 +405,12 @@ class HomeController extends Controller
                 $callback = Callback::query()->create(array_merge($request->all(), ['sender' => Callback::SENDER_FROM]));
             }
 
-            // Notification::send(
-            //     User::query()->scopes(['notifiableUsers'])->get(),
-            //     new ContactNotification($callback->getKey())
-            // );
+            Notification::send(
+                 User::query()->scopes(['notifiableUsers'])->get(),
+                 new ContactNotification($callback->getKey())
+            );
     
-            //$this->sendMessage($request->get('text') ?? 'Callback notification', route('admin.callback.edit', ['callback' => $callback->getKey()]));
+            $this->sendMessage($request->get('text') ?? 'Callback notification', route('admin.callback.edit', ['callback' => $callback->getKey()]));
     
             return View::make('support', [
                 'settings' => $this->getSettings() ?? [],
