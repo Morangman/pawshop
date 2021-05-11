@@ -83,10 +83,18 @@ class ProductController extends Controller
 
         $productMaxPrice = DB::table('prices')->where('category_id', $category->getKey())->max('price');
 
-        if ($productMaxPrice) {
+        $productCustomMaxPrice = DB::table('prices')->where('category_id', $category->getKey())->max('custom_price');
+
+        if ($productCustomMaxPrice) {
             $category->update([
-                'custom_text' => $productMaxPrice,
+                'custom_text' => $productCustomMaxPrice,
             ]);
+        } else {
+            if ($productMaxPrice) {
+                $category->update([
+                    'custom_text' => $productMaxPrice,
+                ]);
+            }
         }
 
         Session::flash(
@@ -144,14 +152,6 @@ class ProductController extends Controller
                     'is_parsed' => 0,
                 ]);              
             }
-        }
-
-        $productMaxPrice = DB::table('prices')->where('category_id', $category->getKey())->max('price');
-
-        if ($productMaxPrice) {
-            $category->update([
-                'custom_text' => $productMaxPrice,
-            ]);
         }
 
         if (!$request->get('slug')) {
@@ -395,6 +395,24 @@ class ProductController extends Controller
         $category->update($request->all());
 
         $this->handleDocuments($request, $category);
+
+        if ((int) $category->getAttribute('is_parsed') !== Category::IS_PARSED) {
+            $productMaxPrice = DB::table('prices')->where('category_id', $category->getKey())->max('price');
+
+            $productCustomMaxPrice = DB::table('prices')->where('category_id', $category->getKey())->max('custom_price');
+
+            if ($productCustomMaxPrice) {
+                $category->update([
+                    'custom_text' => (float) $productCustomMaxPrice,
+                ]);
+            } else {
+                if ($productMaxPrice) {
+                    $category->update([
+                        'custom_text' => (float) $productMaxPrice,
+                    ]);
+                }
+            }
+        }
 
         Session::flash(
             'success',

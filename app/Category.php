@@ -24,6 +24,8 @@ class Category extends Model implements HasMedia
     public const TAB_PRODUCT = 1;
     public const TAB_CATEGORY = 2;
 
+    public const IS_PARSED = 1;
+
     /**
      * @var string
      */
