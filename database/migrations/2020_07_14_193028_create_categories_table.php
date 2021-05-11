@@ -26,7 +26,7 @@ class CreateCategoriesTable extends Migration
             $table->string('slug')->nullable();
             $table->string('text')->nullable();
             $table->string('image')->nullable();
-            $table->string('custom_text')->nullable();
+            $table->decimal('custom_text', 10, 2)->nullable();
             $table->string('premium_price')->nullable();
             $table->string('price_for_broken')->default('5.00');
             $table->unsignedBigInteger('box_count')->default(0);
