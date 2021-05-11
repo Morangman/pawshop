@@ -410,7 +410,7 @@ class HomeController extends Controller
                  new ContactNotification($callback->getKey())
             );
     
-            $this->sendMessage($request->get('text') ?? 'Callback notification', route('admin.callback.edit', ['callback' => $callback->getKey()]));
+            $this->sendMessage($request->has('text') ? $request->get('text') : 'Callback notification', route('admin.callback.edit', ['callback' => $callback->getKey()]));
     
             return View::make('support', [
                 'settings' => $this->getSettings() ?? [],
