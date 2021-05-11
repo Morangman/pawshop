@@ -42,42 +42,6 @@
                         </div>
                         <div class="form-group">
                             <label>
-                                <strong>{{ $t('admin.product.form.text') }}</strong>
-                            </label>
-                            <input
-                                name="custom_text"
-                                type="text"
-                                v-model="model.custom_text"
-                                class="form-control"
-                                :class="{ 'border-danger': errors.custom_text }"
-                            >
-                            <div v-for="(error, i) in errors.custom_text"
-                                :key="`custom_text__error__${i}`"
-                                class="text-danger error"
-                            >
-                                {{ error }}
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <strong>{{ $t('admin.product.form.premium_price') }}</strong>
-                            </label>
-                            <input
-                                name="premium_price"
-                                type="text"
-                                v-model="model.premium_price"
-                                class="form-control"
-                                :class="{ 'border-danger': errors.premium_price }"
-                            >
-                            <div v-for="(error, i) in errors.premium_price"
-                                :key="`premium_price__error__${i}`"
-                                class="text-danger error"
-                            >
-                                {{ error }}
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>
                                 <strong>{{ $t('admin.product.form.price_for_broken') }}</strong>
                             </label>
                             <input
@@ -313,7 +277,7 @@
                                         <input
                                             name="parsed_price"
                                             type="text"
-                                            v-model="price.price"
+                                            v-model="price.custom_price"
                                             class="form-control"
                                             v-on:keyup="updatePrice(price)"
                                         >
@@ -328,6 +292,15 @@
                                 v-on:click="backStep()"
                                 class="btn btn-primary margin-top-10"
                             > <- Back</button>
+                            <template v-if="model.id">
+                                <button
+                                    type="submit"
+                                    class="btn btn-danger"
+                                    @click.prevent="deleteCategory"
+                                >
+                                    {{ $t('common.word.cancel') }}
+                                </button>
+                            </template>
                             <button
                                 v-on:click="nextStep()"
                                 class="btn btn-primary margin-top-10"
@@ -441,6 +414,18 @@
                 }
             },
 
+            deleteCategory() {
+                confirmation.delete(() => {
+                    axios.delete(
+                        Router.route('admin.product.delete', { category: this.model.id }),
+                    ).then(() => {
+                        location.href = Router.route('admin.product.index');
+                    }).catch(({ response: { data: { errors } } }) => {
+                        notify.error(_.head(errors));
+                    });
+                });
+            },
+
             serachPriceByStepName() {
                 if (this.searchText) {
                     this.priceVariations = [];
@@ -472,9 +457,6 @@
                         },
                     },
                 ).then(() => {
-                    notify.success(
-                        'Price was be updated'
-                    );
                 }).catch(({ response: { data: { errors } } }) => {
                     notify.success(
                         errors

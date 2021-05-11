@@ -141,7 +141,7 @@ class ProductController extends Controller
                     'category_id' => $category->getKey(),
                     'steps_ids' => json_encode($combinationIds),
                     'price' => 0,
-                    'is_parsed' => 1,
+                    'is_parsed' => 0,
                 ]);              
             }
         }

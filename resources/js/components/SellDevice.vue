@@ -87,7 +87,7 @@
                     </div>
                 </div>
                 <div class="order-options-links">
-                    <div><button v-on:click="backStep" class="btn gray-btn step-button">Back</button></div>
+                    <div><button v-on:click="backStep" v-if="stepIndex > 0" class="btn gray-btn step-button">Back</button></div>
                     <div><button v-on:click="nextStep" v-if="stepSelected || selectedStep.is_checkbox" class="btn red-btn step-button">Next step</button></div>
                 </div>
             </div>
@@ -191,28 +191,16 @@
                     <li><a href="#condition-4">Broken</a></li>
                 </ul>
                 <div id="condition-1" class="condition-tabs-content visible">
-                    <div class="photo-flex">
-                        <div class="image"><img src="../../client/images/conditions/condition_1_1.jpg" alt=""></div>
-                        <div class="image"><img src="../../client/images/conditions/condition_1_2.jpg" alt=""></div>
-                    </div>
+                    <div class="image"><img src="../../client/images/phone_icons.png" alt=""></div>
                 </div>
                 <div id="condition-2" class="condition-tabs-content">
-                    <div class="photo-flex">
-                        <div class="image"><img src="../../client/images/conditions/condition_2_1.jpg" alt=""></div>
-                        <div class="image"><img src="../../client/images/conditions/condition_2_2.jpg" alt=""></div>
-                    </div>
+                    <div class="image"><img src="../../client/images/phone_icons-28.png" alt=""></div>
                 </div>
                 <div id="condition-3" class="condition-tabs-content">
-                    <div class="photo-flex">
-                        <div class="image"><img src="../../client/images/conditions/condition_3_1.jpg" alt=""></div>
-                        <div class="image"><img src="../../client/images/conditions/condition_3_2.jpg" alt=""></div>
-                    </div>
+                    <div class="image"><img src="../../client/images/phone_icons-26.png" alt=""></div>
                 </div>
                 <div id="condition-4" class="condition-tabs-content">
-                    <div class="photo-flex">
-                        <div class="image"><img src="../../client/images/conditions/condition_4_1.jpg" alt=""></div>
-                        <div class="image"><img src="../../client/images/conditions/condition_4_2.jpg" alt=""></div>
-                    </div>
+                    <div class="image"><img src="../../client/images/phone_icons-25.png" alt=""></div>
                 </div>
                 <div class="note">*Scratches may be enhanced to show detail</div>
             </div>

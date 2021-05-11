@@ -17,17 +17,17 @@
 
         <div class="container header-steps_items">
             <div class="header-steps_step">
-                <img src="{{ asset('client/images/payment-method.png') }}"/>
+                <img src="{{ asset('client/images/phone_icons-22.png') }}"/>
                 <p class="header-steps_step-title">1. Get an Instant Quote</p>
                 <p class="header-steps_step-text">Find your used electronics and get an instant quote based on the condition.</p>
             </div>
             <div class="header-steps_step">
-                <img src="{{ asset('client/images/truck.png') }}"/>
+                <img src="{{ asset('client/images/phone_icons-23.png') }}"/>
                 <p class="header-steps_step-title">2. Ship For Free</p>
                 <p class="header-steps_step-text">We provide you with a free, trackable pre-paid shipping label for sending us your item(s).</p>
             </div>
             <div class="header-steps_step">
-                <img src="{{ asset('client/images/money.png') }}"/>
+                <img src="{{ asset('client/images/phone_icons-24.png') }}"/>
                 <p class="header-steps_step-title">3. Get Cash Fast</p>
                 <p class="header-steps_step-text">No need to wait for a buyer, get cash fast through Rapid-Recycle.com.</p>
             </div>

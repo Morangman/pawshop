@@ -304,21 +304,21 @@
                                 </td>
                                 <td>
                                     <input
+                                        tabindex="-1"
                                         name="parsed_price"
                                         type="text"
                                         v-model="price.price"
                                         class="form-control"
-                                        v-on:keyup.enter="updatePrice(price)"
+                                        v-on:keyup="updatePrice(price)"
                                     >
                                 </td>
                                 <td>
                                     <input
-                                        tabindex="-1"
                                         name="custom_price"
                                         type="text"
                                         v-model="price.custom_price"
                                         class="form-control"
-                                        v-on:keyup.enter="updatePrice(price)"
+                                        v-on:keyup="updatePrice(price)"
                                     >
                                 </td>
                             </tr>
@@ -503,9 +503,6 @@
                         },
                     },
                 ).then(() => {
-                    notify.success(
-                        'Price was be updated'
-                    );
                 }).catch(({ response: { data: { errors } } }) => {
                     notify.success(
                         errors

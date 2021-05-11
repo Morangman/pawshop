@@ -2242,8 +2242,6 @@ h2 {
 }
 
 .condition-tabs-content .image {
-  width: 50%;
-  padding: 0 15px;
   text-align: center;
 }
 
@@ -3190,7 +3188,7 @@ h2 {
 .header-steps_step img{
   width: 95px;
   height: auto;
-  padding-bottom: 3rem;
+  padding-bottom: 2rem;
 }
 
 .header-steps_step {
