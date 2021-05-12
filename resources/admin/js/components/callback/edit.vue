@@ -2,6 +2,7 @@
     <callback-form
         v-if="model"
         :model.sync="model"
+        :user.sync="user"
         :errors.sync="errors"
         @submit="update"
         @delete="deleteCallback"
@@ -22,6 +23,10 @@
             callback: {
                 type: Object,
                 required: true,
+            },
+            user: {
+                type: Object,
+                required: false,
             },
         },
 

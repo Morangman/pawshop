@@ -10,6 +10,7 @@ use App\Http\Requests\Admin\Callback\StoreRequest;
 use App\Http\Requests\Admin\Callback\UpdateRequest;
 use App\Mail\MessageMail;
 use App\Message;
+use App\User;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,7 +18,6 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
-use Prophecy\Call\Call;
 
 /**
  * Class CallbackController
@@ -111,12 +111,13 @@ class CallbackController extends Controller
      */
     public function edit(Callback $callback): ViewContract
     {
-        $data = Callback::query()->whereKey($callback->getKey())->with('messages')->first();
+        $user = User::query()->where('email', '=', $callback->getAttribute('email'))->first();
 
         return View::make(
             'admin.callback.edit',
             [
-                'callback' => $data,
+                'callback' => $callback->with('messages')->first(),
+                'user' => $user,
             ]
         );
     }
@@ -167,9 +168,7 @@ class CallbackController extends Controller
      */
     public function get(Callback $callback): JsonResponse
     {
-        $data = Callback::query()->whereKey($callback->getKey())->with('messages')->first();
-
-        return $this->json()->ok($data);
+        return $this->json()->ok($callback->with('messages')->first());
     }
 
     /**

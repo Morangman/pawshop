@@ -16,6 +16,7 @@
 
 @section('content')
     <callback-edit
-        :callback="{{ $callback }}"
+        :callback="{{ json_encode($callback) }}"
+        :user="{{ json_encode($user) }}"
     ></callback-edit>
 @endsection
