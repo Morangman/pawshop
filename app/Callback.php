@@ -63,11 +63,24 @@ class Callback extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function newMessages(): HasMany
+    {
+        return $this->hasMany(
+            Message::class,
+            'chat_id',
+            'id',
+            'messages'
+        )->where('viewed', '=', Callback::NOT_VIEWED);
+    }
+
+    /**
      * Get count of new messages.
      *
      * @return int
      */
-    public function readNotifications(): int
+    public function messagesCount(): int
     {
         return $this->messages()->where('viewed', '=', Callback::NOT_VIEWED)->count();
     }

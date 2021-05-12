@@ -35,13 +35,6 @@
                 <div class="card-body">
                     <ul ref="container" style="max-height: 300px;" class="media-list media-chat media-chat-scrollable mb-3">
                         <li class="media content-divider justify-content-center text-muted mx-0">{{ model.created_at }}</li>
-
-                        <li v-if="model.id" class="media" :class="model.sender === 2 ? 'media-chat-item-reverse' : ''">
-                            <div class="media-body">
-                                <div class="media-chat-item"><span v-html="model.text"></span></div>
-                                <div class="font-size-sm text-muted mt-2">{{ model.created_at }}</div>
-                            </div>
-                        </li>
                 
                         <li v-for="(message, i) in model.messages" :key="`message_${i}`" class="media" :class="message.sender === 2 ? 'media-chat-item-reverse' : ''">
                             <div class="media-body">

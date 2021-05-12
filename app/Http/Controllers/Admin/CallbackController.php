@@ -14,6 +14,7 @@ use App\User;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
@@ -92,7 +93,7 @@ class CallbackController extends Controller
         } else {
             $user = User::query()->where('email', '=', $request->get('email'))->first();
 
-            Callback::query()->create(
+            $callback = Callback::query()->create(
                 array_merge(
                     $request->all(),
                     [
@@ -101,7 +102,19 @@ class CallbackController extends Controller
                     ]
                 )
             );
+
+            Message::query()->create(
+                array_merge(
+                    $request->all(),
+                    [
+                        'sender' => Callback::SENDER_TO,
+                        'chat_id' => $callback->getKey(),
+                    ]
+                )
+            );
         }
+
+        $callback->messages()->update(['viewed' => Callback::IS_VIEWED]);
 
         try {
             Mail::to($request->get('email'))
@@ -133,6 +146,8 @@ class CallbackController extends Controller
         $callback = Callback::query()->whereKey($callback->getKey())->with('messages')->first();
 
         $user = User::query()->where('email', '=', $callback->getAttribute('email'))->first();
+
+        $callback->messages()->update(['viewed' => Callback::IS_VIEWED]);
 
         return View::make(
             'admin.callback.edit',
@@ -204,6 +219,7 @@ class CallbackController extends Controller
     public function getAll(Request $request): JsonResponse
     {
         $callbacks = Callback::query()
+            ->with('newMessages')
             ->when(
                 $request->get('search'),
                 function ($query, $search) {

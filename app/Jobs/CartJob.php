@@ -34,8 +34,8 @@ class CartJob implements ShouldQueue
 
         foreach ($carts as $cart) {
             $user = User::query()->whereKey($cart->getAttribute('user_id'))->first();
-
-            if ($user) {
+            
+            if ($user && $cart->getAttribute('send_ctn') !== 2) {
                 try {
                     Mail::to($user->getAttribute('email'))
                         ->send(new CartMail(
@@ -44,6 +44,9 @@ class CartJob implements ShouldQueue
                                 'user_name' => $user->getAttribute('name'),
                             ]
                         ));
+
+                    $cart->increment('send_ctn', 1);
+
                 } catch (\Exception $e) {}
             }
         }

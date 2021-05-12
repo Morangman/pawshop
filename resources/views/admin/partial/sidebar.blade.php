@@ -16,6 +16,8 @@
                 @php
                     $user = Auth::user();
 
+                    $chatMessageCount = \App\Message::query()->where('viewed', '=', \App\Callback::NOT_VIEWED)->count();
+
                     $statuses = [];
 
                     foreach (\App\OrderStatus::query()->orderBy('order')->get() as $status) {
@@ -62,6 +64,15 @@
                         <span>@lang('common.sidebar.users')</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ URL::route('admin.callback.index') }}" class="nav-link @active_menu_class('admin.callback')">
+                        <i class="icon-bubbles3"></i>
+                        <span>@lang('common.sidebar.callbacks')</span>
+                        @if($chatMessageCount > 0)
+                            <span class="badge badge-pill bg-warning-400 ml-auto ml-md-0" style="margin-left: auto!important;">{{ $chatMessageCount }}</span>
+                        @endif
+                    </a>
+                </li>
                 <li class="nav-item nav-item-submenu">
                     <a href="#" id="products-nav" class="nav-link"><i class="icon-drawer"></i><span>@lang('common.sidebar.products')</span></a>
                     <ul class="nav nav-group-sub" data-submenu-title="Pickers" style="display: none;">
@@ -106,12 +117,6 @@
                             <a href="{{ URL::route('admin.admin.index') }}" class="nav-link @active_menu_class('admin.admin')">
                                 <i class="icon-users2"></i>
                                 <span>@lang('common.sidebar.admins')</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ URL::route('admin.callback.index') }}" class="nav-link @active_menu_class('admin.callback')">
-                                <i class="icon-bubbles3"></i>
-                                <span>@lang('common.sidebar.callbacks')</span>
                             </a>
                         </li>
                         <li class="nav-item">

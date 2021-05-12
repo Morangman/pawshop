@@ -403,6 +403,16 @@ class HomeController extends Controller
                 );
             } else {
                 $callback = Callback::query()->create(array_merge($request->all(), ['sender' => Callback::SENDER_FROM]));
+
+                Message::query()->create(
+                    array_merge(
+                        $request->all(),
+                        [
+                            'sender' => Callback::SENDER_FROM,
+                            'chat_id' => $callback->getKey()
+                        ]
+                    )
+                );
             }
 
             Notification::send(

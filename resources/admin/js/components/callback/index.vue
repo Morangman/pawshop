@@ -93,7 +93,12 @@
                         <template v-if="!isLoading">
                             <tr v-for="(callback, i) in callbacks" :key="`callback_${i}`">
                                     <td><a :href="$r('admin.callback.edit', { callback: callback.id })">{{ callback.id }}</a></td>
-                                    <td v-html="highlightSearchResult(callback.name, filters.search)"></td>
+                                    <td>
+                                        <span v-html="highlightSearchResult(callback.name, filters.search)"></span>
+                                        <span class="badge badge-pill badge-success" v-if="callback.new_messages.length">
+                                            +{{ callback.new_messages.length }}
+                                        </span>
+                                    </td>
                                     <td>{{ callback.email }}</td>
                                     <td>{{ callback.text }}</td>
                                     <td>{{ callback.created_at }}</td>

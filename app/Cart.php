@@ -25,6 +25,7 @@ class Cart extends Model
     protected $fillable = [
         'user_id',
         'orders',
+        'send_ctn',
     ];
 
     /**
@@ -33,6 +34,7 @@ class Cart extends Model
     protected $casts = [
         'user_id' => 'int',
         'orders' => 'array',
+        'send_ctn' => 'int',
     ];
 
     /**
