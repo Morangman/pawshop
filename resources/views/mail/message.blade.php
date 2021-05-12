@@ -25,7 +25,7 @@
     <div id="signature">
         <font style="font-family:'Century Gothic', Arial, sans-serif; font-size: 9pt; color:#333;line-height:0.5;">
             <p id="name" style="color: #126de5; font-size:120%; font-weight:bolder; line-height: 0.5;">Rapid Recycle</p>
-            <p id="position">©2021 Rapid Recycle</p>
+            <p id="position">Rapid Recycle Team</p>
             <p id="tel">1730 E Warner Rd, Suite 7, Tempe, AZ 85284, USA</p>
         </font>
     </div>
