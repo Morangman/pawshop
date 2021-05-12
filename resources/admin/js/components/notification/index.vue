@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-body">
             <div class="form-group row">
-                <div class="col col-md-2">
+                <div class="col col-md-4">
                     <button class="btn btn-primary" @click.prevent="readNotifications">
                         Read
                     </button>

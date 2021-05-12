@@ -12,6 +12,7 @@ use App\Console\Commands\OrderNormalizeStatus;
 use App\Console\Commands\PullData;
 use App\Console\Commands\PullPrices;
 use App\Console\Commands\PullFailedPrices;
+use App\Console\Commands\RecountStatistics;
 use App\Console\Commands\Reminder;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -31,6 +32,7 @@ class Kernel extends ConsoleKernel
         CheckCart::class,
         Fedex::class,
         OrderNormalizeStatus::class,
+        RecountStatistics::class,
         ClearDailyStatistics::class,
         FedexLabel::class,
     ];

@@ -98,7 +98,7 @@
                 </li>
                 @endrole
                 <li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Data editing</div> <i class="icon-menu" title="Components"></i></li>
-                <li class="nav-item nav-item-submenu">
+                <li class="nav-item nav-item-submenu" data-name="settings">
                     <a href="#" class="nav-link"><i class="icon-cog"></i> <span>@lang('common.sidebar.settings')</span></a>
                     <ul class="nav nav-group-sub" data-submenu-title="Pickers" style="display: none;">
                         @role('admin')
