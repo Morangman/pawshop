@@ -17,7 +17,8 @@ class Callback extends Model
     public const SENDER_FROM = 1;
     public const SENDER_TO = 2;
 
-    public const IS_VIEWED = 1;
+    public const NOT_VIEWED = 1;
+    public const IS_VIEWED = 2;
 
     /**
      * @var string
@@ -59,5 +60,15 @@ class Callback extends Model
             'id',
             'messages'
         );
+    }
+
+    /**
+     * Get count of new messages.
+     *
+     * @return int
+     */
+    public function readNotifications(): int
+    {
+        return $this->messages()->where('viewed', '=', Callback::NOT_VIEWED)->count();
     }
 }

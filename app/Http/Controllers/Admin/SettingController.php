@@ -85,7 +85,9 @@ class SettingController extends Controller
             }
         }
 
-        if ($bandPrice = $request->get('general_settings')['band_price']) {
+        if (isset($request->get('general_settings')['band_price'])) {
+            $bandPrice = $request->get('general_settings')['band_price'];
+
             $stepsIds = Step::query()->where('name_id', '=', 6)->pluck('id')->toArray();
 
             DB::table('premium_price')->whereIn('step_id', $stepsIds)->update(['price_plus' => $bandPrice]);
@@ -154,7 +156,7 @@ class SettingController extends Controller
                 'code_insert' => $request->get('code_insert') ?? '',
                 'general_settings' => [
                     'email' => $request->get('general_settings')['email'] ?? null,
-                    'band_price' => $request->get('general_settings')['band_price'] ?? null,
+                    'band_price' => isset($request->get('general_settings')['band_price']) ? $request->get('general_settings')['band_price'] : null,
                     'contact_email' => $request->get('general_settings')['contact_email'] ?? null,
                     'phone' => $request->get('general_settings')['phone'] ?? null,
                     'seo_meta' => $request->get('general_settings')['seo_meta'] ?? null,
