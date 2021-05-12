@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('title', Lang::get('admin/notification.edit.title'))
+
 @section('page_title')
     <i class="icon-eye"></i>
     @lang('admin/notification.edit.title')

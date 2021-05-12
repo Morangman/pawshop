@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('title', 'Daily ' . Lang::get('admin/statistics.breadcrumbs.index'))
+
 @section('page_title')
     <i class="icon-list"></i>
     Daily @lang('admin/statistics.breadcrumbs.index')

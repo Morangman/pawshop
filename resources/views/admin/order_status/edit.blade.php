@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('title', Lang::get('admin/order-status.edit.title'))
+
 @section('page_title')
     <i class="icon-pencil"></i>
     @lang('admin/order-status.edit.title')

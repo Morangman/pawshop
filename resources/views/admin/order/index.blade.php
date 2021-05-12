@@ -1,5 +1,11 @@
 @extends('layouts.admin')
 
+@php
+    $count = \App\Order::query()->where('ordered_status', '=', \App\Order::STATUS_ORDER_DELIVERED)->count();
+@endphp
+
+@section('title', "($count) " . Lang::get('admin/order.index.title'))
+
 @section('page_title')
     <i class="icon-list"></i>
     @lang('admin/order.index.title')

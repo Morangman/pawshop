@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('title', Lang::get('admin/statistics.breadcrumbs.index'))
+
 @section('page_title')
     <i class="icon-list"></i>
     @lang('admin/statistics.breadcrumbs.index')

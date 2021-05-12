@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ Lang::locale() }}">
     <head>
-        <title>({{ \App\Order::query()->where('ordered_status', '=', \App\Order::STATUS_ORDER_DELIVERED)->count() }}) @lang('common.title')</title>
+        <title>@yield('title')</title>
 
         <link id="favicon" rel="icon" type="image/png" href="{{ asset('client/images/favicon/favicon.png') }}">
         

@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('title', Lang::get('admin/comment.index.title'))
+
 @section('page_title')
     <i class="icon-list"></i>
     @lang('admin/comment.index.title')

@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('title', Lang::get('admin/category.index.title'))
+
 @section('page_title')
     <i class="icon-list"></i>
     @lang('admin/category.index.title')

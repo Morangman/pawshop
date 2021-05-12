@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('title', Lang::get('admin/callback.create.title'))
+
 @section('page_title')
     <i class="icon-add"></i>
     @lang('admin/callback.create.title')

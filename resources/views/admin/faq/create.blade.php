@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('title', Lang::get('admin/faq.create.title'))
+
 @section('page_title')
     <i class="icon-add"></i>
     @lang('admin/faq.create.title')

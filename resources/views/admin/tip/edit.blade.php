@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('title', Lang::get('admin/tip.edit.title'))
+
 @section('page_title')
     <i class="icon-pencil"></i>
     @lang('admin/tip.edit.title')
