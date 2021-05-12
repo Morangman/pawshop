@@ -87,4 +87,14 @@ $(document).ready(function() {
         $('.states-select').click( () => {
             console.log("click!");
         });
+
+		$('#phone-number').keyup(function (e) {
+			let val = $(this).val();
+
+			let x = val.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+
+			let newVal = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+
+			$(this).val(newVal);
+		});
 });

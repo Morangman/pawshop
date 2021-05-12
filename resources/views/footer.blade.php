@@ -19,7 +19,7 @@
                 @csrf
                 <h1>Contact us</h1>
                 <input name="name" type="text" placeholder="Name" required />
-                <input name="phone" type="tel" placeholder="Phone number" />
+                <input id="phone-number" name="phone" type="tel" placeholder="Phone number" />
                 <input name="email" type="email" placeholder="E-mail" required />
                 <textarea name="text" placeholder="Your question"></textarea>
                 <input type="hidden" name="recaptcha" id="recaptcha">
