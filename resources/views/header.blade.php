@@ -25,6 +25,16 @@
                 <div class="header-login">
                     <ul class="header-menu">
                         @if(Auth::check())
+                            @auth
+                                @role('admin')
+                                <li class="nav-item">
+                                    <a href="{{ URL::route('admin.order.index') }}" class="nav-link">
+                                        <i class="icon-vcard"></i>
+                                        <span>{{ Lang::get('common.title') }}</span>
+                                    </a>
+                                </li>
+                                @endrole
+                            @endauth
                             <li>
                                 <a href="" data-title="My account" class="has-drop">My account<img src="{{ asset('client/images/select_arrow.png') }}" alt="" /></a>
                                 <ul class="drop-menu">
