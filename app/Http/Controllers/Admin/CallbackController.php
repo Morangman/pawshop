@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
+use Prophecy\Call\Call;
 
 /**
  * Class CallbackController
@@ -111,12 +112,14 @@ class CallbackController extends Controller
      */
     public function edit(Callback $callback): ViewContract
     {
+        $callback = Callback::query()->whereKey($callback->getKey())->with('messages')->first();
+
         $user = User::query()->where('email', '=', $callback->getAttribute('email'))->first();
 
         return View::make(
             'admin.callback.edit',
             [
-                'callback' => $callback->with('messages')->first(),
+                'callback' => $callback,
                 'user' => $user,
             ]
         );
@@ -168,7 +171,9 @@ class CallbackController extends Controller
      */
     public function get(Callback $callback): JsonResponse
     {
-        return $this->json()->ok($callback->with('messages')->first());
+        $callback = Callback::query()->whereKey($callback->getKey())->with('messages')->first();
+
+        return $this->json()->ok($callback);
     }
 
     /**
