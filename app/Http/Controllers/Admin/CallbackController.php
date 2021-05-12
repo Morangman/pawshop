@@ -69,23 +69,34 @@ class CallbackController extends Controller
      */
     public function sendEmail(Request $request): JsonResponse
     {
+        $lastMessageText = null;
+
         if (Callback::query()->where('email', '=', $request->get('email'))->exists()) {
             $callback = Callback::query()->where('email', '=', $request->get('email'))->first();
+
+            $lastMessage = Message::query()->where('chat_id', '=', $callback->getKey())->where('sender', '=', Callback::SENDER_FROM)->orderBy('created_at', 'desc')->first();
+
+            if ($lastMessage) {
+                $lastMessageText = $lastMessage->getAttribute('text');
+            }
 
             Message::query()->create(
                 array_merge(
                     $request->all(),
                     [
                         'sender' => Callback::SENDER_TO,
-                        'chat_id' => $callback->getKey()
+                        'chat_id' => $callback->getKey(),
                     ]
                 )
             );
         } else {
+            $user = User::query()->where('email', '=', $request->get('email'))->first();
+
             Callback::query()->create(
                 array_merge(
                     $request->all(),
                     [
+                        'name' => $user ? $user->getAttribute('name') : 'Client',
                         'sender' => Callback::SENDER_TO,
                     ]
                 )
@@ -94,7 +105,14 @@ class CallbackController extends Controller
 
         try {
             Mail::to($request->get('email'))
-                ->send(new MessageMail(['text' => $request->get('text')]));
+                ->send(
+                    new MessageMail(
+                        [
+                            'text' => $request->get('text'),
+                            'last_message' => $lastMessageText
+                        ]
+                    )
+                );
         } catch (\Exception $e) {}
 
         Session::flash(

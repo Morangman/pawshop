@@ -3,7 +3,8 @@
         <div class="col-xl-8 col-lg-8 col-md-10 col-sm-10 mx-auto form p-1">
             <div class="card">
                 <div class="card-header header-elements-inline">
-                    <h5 class="card-title">Conversation with <a v-if="user" :href="$r('admin.user.edit', {user: user.id})">{{ model.name }}</a> <p v-if="!user">{{ model.name }}</p> ({{ model.email }})</h5>
+                    <h5 v-if="!model.id" class="card-title"></h5>
+                    <h5 v-if="model.id" class="card-title">Conversation with <a v-if="user" :href="$r('admin.user.edit', {user: user.id})">{{ model.name }}</a> <p v-if="!user">{{ model.name }}</p> ({{ model.email }})</h5>
                     <div class="header-elements">
                         <div class="list-icons">
                             <a class="list-icons-item" v-on:click="reload()" data-action="reload"></a>
