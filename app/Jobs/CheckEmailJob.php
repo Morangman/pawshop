@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Jobs;
 
 use App\Callback;
+use App\Http\Controllers\Traits\TelegramTrait;
 use App\Message;
 use App\User;
 use Illuminate\Bus\Queueable;
@@ -23,7 +24,7 @@ use Illuminate\Support\Facades\Config;
  */
 class CheckEmailJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, TelegramTrait;
 
     /**
      * Execute the job.
@@ -76,6 +77,8 @@ class CheckEmailJob implements ShouldQueue
                             'time' => $time,
                         ]
                     );
+
+                    $this->sendMessage($message ? $message : 'New message', route('admin.callback.edit', ['callback' => $callback->getKey()]));
                 } else {
                     $user = User::query()->where('email', '=', $fromEmail)->first();
         
@@ -98,7 +101,9 @@ class CheckEmailJob implements ShouldQueue
                             'time' => $time,
                         ]
                     );
-                }    
+
+                    $this->sendMessage($message ? $message : 'New message', route('admin.callback.edit', ['callback' => $callback->getKey()]));
+                }
             }
         }
 
