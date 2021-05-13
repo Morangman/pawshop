@@ -9,14 +9,12 @@ require('select2');
 
 $(document).ready(() => {
     let sidebar_items = [
-        'orders-nav',
         'products-nav',
         'statistics-nav',
         'settings-nav',
     ];
 
-    $('#orders-nav').addClass('nav-item-open');
-    $.each(sidebar_items, function( index, value ) {
+    $.each(sidebar_items, function(index, value) {
         let localValue = localStorage.getItem(value);
 
         if (localValue) {
@@ -37,6 +35,8 @@ $(document).ready(() => {
     $('#orders-nav').click(() => {
         let localValue = localStorage.getItem("orders-nav");
 
+        hideMenuItems("orders-nav");
+
         if (localValue){
             localStorage.removeItem("orders-nav");
         } else {
@@ -46,6 +46,8 @@ $(document).ready(() => {
 
     $('#products-nav').click(() => {
         let localValue = localStorage.getItem("products-nav");
+
+        hideMenuItems("products-nav");
 
         if (localValue){
             localStorage.removeItem("products-nav");
@@ -57,6 +59,8 @@ $(document).ready(() => {
     $('#statistics-nav').click(() => {
         let localValue = localStorage.getItem("statistics-nav");
 
+        hideMenuItems("statistics-nav");
+
         if (localValue){
             localStorage.removeItem("statistics-nav");
         } else {
@@ -67,10 +71,24 @@ $(document).ready(() => {
     $('#settings-nav').click(() => {
         let localValue = localStorage.getItem("settings-nav");
 
+        hideMenuItems("settings-nav");
+
         if (localValue){
             localStorage.removeItem("settings-nav");
         } else {
             localStorage.setItem("settings-nav", true);
         }
     });
+
+    function hideMenuItems(excluded = null) {
+        $.each(sidebar_items, function(index, value) {
+            if (excluded && value !== excluded) {
+                localStorage.removeItem(value);
+    
+                $('#'+value).parent('.nav-item-submenu').removeClass('nav-item-open');
+    
+                $('#'+value).parent('.nav-item-submenu').find('.nav-group-sub').hide();
+            }
+        });
+    }
 });

@@ -45,12 +45,12 @@
                         @endif
                     </a>
                 </li>
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" id="orders-nav" class="nav-link"><i class="icon-filter4"></i> <span>@lang('common.sidebar.orders')</span></a>
-                    <ul class="nav nav-group-sub" data-submenu-title="Pickers">
+                <li class="nav-item nav-item-submenu nav-item-open">
+                    <a href="#" id="orders-nav" class="nav-link @active_menu_class('admin.order')"><i class="icon-filter4"></i> <span>@lang('common.sidebar.orders')</span></a>
+                    <ul class="nav nav-group-sub" data-submenu-title="Pickers" style="display: block;">
                         @foreach($statuses as $key => $status)
                         <li class="nav-item">
-                            <a href="{{ $status['url'] }}" class="nav-link order-status_nav @active_menu_class('admin.order')">
+                            <a href="{{ $status['url'] }}" class="nav-link order-status_nav">
                                 <b>{{ $key }}</b> <span style="background-color:{{ $status['color'] }}!important; color: #ffffff;" class="badge badge-primary">{{ $status['count'] }}</span>
                             </a>
                         </li>
@@ -77,7 +77,7 @@
                     <a href="#" id="products-nav" class="nav-link"><i class="icon-drawer"></i><span>@lang('common.sidebar.products')</span></a>
                     <ul class="nav nav-group-sub" data-submenu-title="Pickers" style="display: none;">
                         <li class="nav-item">
-                            <a href="{{ URL::route('admin.product.index') }}" class="nav-link @active_menu_class('admin.category')">
+                            <a href="{{ URL::route('admin.product.index') }}" class="nav-link @active_menu_class('admin.product')">
                                 <i class="icon-drawer"></i>
                                 <span>@lang('common.sidebar.products')</span>
                             </a>
@@ -144,13 +144,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ URL::route('admin.task.index') }}" class="nav-link @active_menu_class('admin.user')">
+                            <a href="{{ URL::route('admin.task.index') }}" class="nav-link @active_menu_class('admin.task')">
                                 <i class="icon-task"></i>
                                 <span>@lang('common.sidebar.tasks')</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ URL::route('admin.comment.index') }}" class="nav-link @active_menu_class('admin.product')">
+                            <a href="{{ URL::route('admin.comment.index') }}" class="nav-link @active_menu_class('admin.comment')">
                                 <i class="icon-bubble"></i>
                                 <span>@lang('common.sidebar.comments')</span>
                             </a>

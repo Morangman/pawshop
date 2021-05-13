@@ -2,6 +2,14 @@
     min-height: calc(100vh - 50px);
 }
 
+.sidebar-dark .nav-sidebar>.nav-item-open>.nav-link:not(.disabled) {
+    background-color: rgba(0,0,0,.15);
+}
+
+.sidebar-content .active {
+    background-color: #26a69a!important;
+}
+
 .vs__clear,
 .vs__open-indicator {
     transform: scale(0.7) !important;
