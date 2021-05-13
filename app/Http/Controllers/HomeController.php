@@ -63,29 +63,6 @@ class HomeController extends Controller
      */
     public function index(): ViewContract
     {
-        // $mailuser='support@rapid-recycle.com';
-        // $mailpass='*i}&(7%&8:13';
-        
-        // $mailhost='{rapid-recycle.com:993/imap/ssl/novalidate-cert}INBOX';
-        
-        // $mailbox = imap_open($mailhost,$mailuser,$mailpass) or die("<br />\nFAILLED! ".imap_last_error());
-
-        // $emails = imap_search($mailbox,'UNSEEN');
-
-        // foreach ($emails as $id) {
-        //     $header = imap_headerinfo($mailbox, $id);
-            
-        //     $fromaddr = $header->from[0]->mailbox . "@" . $header->from[0]->host;
-
-        //     $message = imap_fetchbody($mailbox, $id, '2');
-
-        //     $time = Carbon::parse($header->date)->format('d-M-Y');
-
-        //     dd($message);
-        // }
-
-        // imap_close($mailbox);
-
         $categories = Category::query()
             ->where('is_hidden', false)
             ->whereNull('custom_text')

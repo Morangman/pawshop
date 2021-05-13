@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Console;
 
 use App\Console\Commands\CheckCart;
+use App\Console\Commands\CheckEmail;
 use App\Console\Commands\ClearDailyStatistics;
 use App\Console\Commands\Fedex;
 use App\Console\Commands\FedexLabel;
@@ -35,6 +36,7 @@ class Kernel extends ConsoleKernel
         RecountStatistics::class,
         ClearDailyStatistics::class,
         FedexLabel::class,
+        CheckEmail::class,
     ];
 
     /**
@@ -49,6 +51,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(CheckCart::class)->dailyAt('12:00');
         $schedule->command(Fedex::class)->everyThirtyMinutes();
         $schedule->command(ClearDailyStatistics::class)->daily();
+        $schedule->command(CheckEmail::class)->everyThirtyMinutes();
         $schedule->command(FedexLabel::class)->weeklyOn(1, '12:00');
     }
 }

@@ -39,7 +39,7 @@
                         <li v-for="(message, i) in model.messages" :key="`message_${i}`" class="media" :class="message.sender === 2 ? 'media-chat-item-reverse' : ''">
                             <div class="media-body">
                                 <div class="media-chat-item"><span v-html="message.text"></span></div>
-                                <div class="font-size-sm text-muted mt-2">{{ message.created_at }}</div>
+                                <div class="font-size-sm text-muted mt-2">{{ message.time ? message.time : message.created_at }}</div>
                             </div>
                         </li>
                     </ul>

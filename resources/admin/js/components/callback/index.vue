@@ -100,7 +100,7 @@
                                         </span>
                                     </td>
                                     <td>{{ callback.email }}</td>
-                                    <td>{{ callback.text }}</td>
+                                    <td><span v-html="callback.text.substring(0,30)+'..'"></span></td>
                                     <td>{{ callback.created_at }}</td>
                                     <td>
                                         <a :href="$r('admin.callback.edit', { callback: callback.id })">
@@ -145,7 +145,7 @@
                     page: 1,
                     search: null,
                     by: 'id',
-                    dir: 'asc',
+                    dir: 'desc',
                 },
                 callbacks: [],
                 total: null,

@@ -29,6 +29,7 @@ class Message extends Model
         'text',
         'sender',
         'viewed',
+        'time',
     ];
 
     /**
@@ -42,5 +43,6 @@ class Message extends Model
         'text' => 'string',
         'sender' => 'int',
         'viewed' => 'int',
+        'time' => 'datetime',
     ];
 }

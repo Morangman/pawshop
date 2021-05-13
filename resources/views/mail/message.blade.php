@@ -20,7 +20,7 @@
     <p>{{ $data['text'] }}</p>
 
     @if(isset($data['last_message']))
-        <div class="quote">{{ $data['last_message'] }}</div>
+        <div class="quote">{!! $data['last_message'] !!}</div>
     @endif
 
     <div id="signature">

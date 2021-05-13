@@ -133,4 +133,9 @@ return [
 
     'log_channel' => env('MAIL_LOG_CHANNEL'),
 
+    
+    'imap' => [
+        'user' => env('MAIL_IMAP_USER'),
+        'password' => env('MAIL_IMAP_PASSWORD'),
+    ],
 ];

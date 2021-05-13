@@ -27,6 +27,7 @@ class CreateMessagesTable extends Migration
             $table->text('text')->nullable();
             $table->tinyInteger('sender')->unsigned()->nullable();
             $table->tinyInteger('viewed')->unsigned()->default(1);
+            $table->timestamp('time')->nullable();
             $table->timestamps();
         });
     }

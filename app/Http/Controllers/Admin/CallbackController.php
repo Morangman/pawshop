@@ -75,7 +75,7 @@ class CallbackController extends Controller
         if (Callback::query()->where('email', '=', $request->get('email'))->exists()) {
             $callback = Callback::query()->where('email', '=', $request->get('email'))->first();
 
-            $lastMessage = Message::query()->where('chat_id', '=', $callback->getKey())->where('sender', '=', Callback::SENDER_FROM)->orderBy('created_at', 'desc')->first();
+            $lastMessage = Message::query()->where('chat_id', '=', $callback->getKey())->where('sender', '=', Callback::SENDER_FROM)->orderBy('created_at', 'desc')->orderBy('time', 'desc')->first();
 
             if ($lastMessage) {
                 $lastMessageText = $lastMessage->getAttribute('text');
