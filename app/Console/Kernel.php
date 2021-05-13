@@ -51,7 +51,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(CheckCart::class)->dailyAt('12:00');
         $schedule->command(Fedex::class)->everyThirtyMinutes();
         $schedule->command(ClearDailyStatistics::class)->daily();
-        //$schedule->command(CheckEmail::class)->everyThirtyMinutes();
+        $schedule->command(CheckEmail::class)->everyThirtyMinutes();
         $schedule->command(FedexLabel::class)->weeklyOn(1, '12:00');
     }
 }
