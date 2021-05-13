@@ -235,7 +235,7 @@
                 filters: {
                     page: 1,
                     search: null,
-                    order_status: null,
+                    order_status: this.ordersstatus,
                     fedex_status: null,
                     by: 'id',
                     dir: 'desc',
@@ -259,10 +259,6 @@
             getOrders() {
                 this.isLoading = true;
 
-                if (this.ordersstatus) {
-                    this.filters.order_status = this.ordersstatus;
-                }
-
                 axios.get(
                     Router.route(
                         'admin.order.all',
@@ -279,9 +275,6 @@
             },
 
             sort(field, direction) {
-                if (this.ordersstatus) {
-                    this.filters.order_status = this.ordersstatus;
-                }
                 this.filters.by = field;
                 this.filters.dir = direction;
             },
