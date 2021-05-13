@@ -259,6 +259,10 @@
             getOrders() {
                 this.isLoading = true;
 
+                if (this.ordersstatus) {
+                    this.filters.order_status = this.ordersstatus;
+                }
+
                 axios.get(
                     Router.route(
                         'admin.order.all',
