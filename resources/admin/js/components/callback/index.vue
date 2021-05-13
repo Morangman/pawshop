@@ -100,7 +100,7 @@
                                         </span>
                                     </td>
                                     <td>{{ callback.email }}</td>
-                                    <td><span v-html="callback.text.substring(0,30)+'..'"></span></td>
+                                    <td><span v-html="callback.text ? callback.text.substring(0,30)+'..' : ''"></span></td>
                                     <td>{{ callback.created_at }}</td>
                                     <td>
                                         <a :href="$r('admin.callback.edit', { callback: callback.id })">
