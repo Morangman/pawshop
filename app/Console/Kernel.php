@@ -15,6 +15,7 @@ use App\Console\Commands\PullPrices;
 use App\Console\Commands\PullFailedPrices;
 use App\Console\Commands\RecountStatistics;
 use App\Console\Commands\Reminder;
+use App\Console\Commands\SetProductsInWarehouse;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -37,6 +38,7 @@ class Kernel extends ConsoleKernel
         ClearDailyStatistics::class,
         FedexLabel::class,
         CheckEmail::class,
+        SetProductsInWarehouse::class,
     ];
 
     /**

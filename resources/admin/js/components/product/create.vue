@@ -187,9 +187,10 @@
                                                         </label>
                                                         <model-list-select :list="steps"
                                                                         v-model="stepsByCategory[index]"
+                                                                        v-on:input="selectStepEvent(index)"
                                                                         option-value="id"
                                                                         :custom-text="name"
-                                                                            placeholder="select item">
+                                                                        placeholder="select item">
                                                         </model-list-select>
 
                                                         <div class="mt-3">
@@ -199,6 +200,7 @@
                                                     <div class="form-group">
                                                         <multiselect
                                                             v-model="item.items"
+                                                            v-on:input="selectStepItemEvent(index)"
                                                             :options="item.items_variations ? item.items_variations : []"
                                                             :multiple="true"
                                                             class="multiselect1"
@@ -406,6 +408,18 @@
                 if (this.stepCount > 4) {
                     this.store();
                 }
+            },
+
+            selectStepEvent(index) {
+                this.stepsByCategory[index]['items'] = [];
+
+                if (this.stepsByCategory[index].items_variations.length <= 5) {
+                    _.each(this.stepsByCategory[index].items_variations, (step, i) => {
+                        this.stepsByCategory[index]['items'].push(step);
+                    });
+                }
+
+                this.$forceUpdate();
             },
 
             backStep() {

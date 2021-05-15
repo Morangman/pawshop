@@ -60,7 +60,6 @@ class ProductController extends Controller
             'category' => null,
             'categories' => Category::query()
                 ->whereNull('custom_text')
-                ->whereNull('subcategory_id')
                 ->get(),
             'faqs' => Faq::all(),
             'steps' => $stepsByName,

@@ -14,6 +14,7 @@ use App\StepName;
 use App\Task;
 use App\Tip;
 use App\User;
+use App\Warehouse;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Route;
@@ -105,6 +106,7 @@ class RouteServiceProvider extends ServiceProvider
             'setting' => Setting::class,
             'nitification' => Notification::class,
             'callback' => Callback::class,
+            'warehouse' => Warehouse::class,
         ];
 
         foreach ($models as $key => $class) {

@@ -4,8 +4,12 @@ declare(strict_types = 1);
 
 namespace App\Console\Commands;
 
+use App\Cart;
 use App\Jobs\CartJob;
+use App\Mail\CartMail;
+use App\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 
 class CheckCart extends Command
 {
