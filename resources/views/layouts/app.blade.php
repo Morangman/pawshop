@@ -9,7 +9,7 @@
     <!--[if IE]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
     <![endif]-->
-    <title>Phone Repairs</title>
+    <title>@yield('home-title')</title>
 
     <link rel="icon" type="image/x-icon" href="{{ asset('client/images/favicon/favicon.ico') }}">
     <link rel="icon" type="image/png" href="{{ asset('client/images/favicon/favicon.png') }}">

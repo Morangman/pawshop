@@ -40,8 +40,7 @@ trait SettingTrait
 
         Meta::registerPackage($og);
 
-        Meta::prependTitle($seoTitle)
-            ->setKeywords(isset($settings) ? $settings->getAttribute('general_settings')['seo_keywords'] : '')
+        Meta::setKeywords(isset($settings) ? $settings->getAttribute('general_settings')['seo_keywords'] : '')
             ->setDescription($seoTitle);
 
         return $settings;

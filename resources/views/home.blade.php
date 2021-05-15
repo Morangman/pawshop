@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('home-title', (array) $category ? $category->getAttribute('name') : $settings->getAttribute('general_settings')['seo_title'])
+
 @section('content')
     @yield('header', View::make('header', ['categories' => $categories, 'settings' => $settings]))
     @if($isMainPage)
