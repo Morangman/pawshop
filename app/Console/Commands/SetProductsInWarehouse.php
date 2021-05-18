@@ -42,6 +42,8 @@ class SetProductsInWarehouse extends Command
      */
     public function handle(): void
     {
+        Warehouse::query()->truncate();
+        
         $orders = Order::query()->where('ordered_status', '=', Order::STATUS_PAID)->get();
 
         foreach($orders as $order) {
