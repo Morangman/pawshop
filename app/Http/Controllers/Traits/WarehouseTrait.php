@@ -41,7 +41,7 @@ trait WarehouseTrait
             unset($serialNumberArr[0]);
 
             for ($i = 1; $i <= $ctn; $i++) {
-                $orderTotalSumm = $orderProduct['total'] / $ctn;
+                $orderTotalSumm = isset($orderProduct['total']) ? isset($orderProduct['total']) / $ctn : 21;
 
                 if ($order->getAttribute('exp_service')) {
                     (float) $orderTotalSumm -= $expShipping;
