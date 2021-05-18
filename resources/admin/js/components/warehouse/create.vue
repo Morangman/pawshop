@@ -1,6 +1,7 @@
 <template>
     <warehouse-form
         :model.sync="model"
+        :categories.sync="categories"
         :errors.sync="errors"
         @submit="store"
     >
@@ -14,6 +15,13 @@
     export default {
         components: {
             WarehouseForm: WarehouseFormComponent,
+        },
+
+        props: {
+            categories: {
+                type: Array,
+                required: true,
+            },
         },
 
         mixins: [FormHelper],
@@ -34,7 +42,7 @@
                     repair_price: null,
                     sell_price: null,
                     steps: null,
-                    images: [],
+                    media: null,
                 },
                 errors: {},
                 formData: null,

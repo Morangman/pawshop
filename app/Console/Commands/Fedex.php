@@ -4,17 +4,14 @@ declare(strict_types = 1);
 
 namespace App\Console\Commands;
 
-use App\Cart;
-use App\Jobs\CartJob;
 use App\Jobs\FedexJob;
-use App\Mail\CartMail;
-use App\Order;
-use App\Services\FedexService;
-use App\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Mail;
 
+/**
+ * Class Fedex
+ *
+ * @package App\Console\Commands
+ */
 class Fedex extends Command
 {
     /**

@@ -17,7 +17,7 @@
                         v-model="filters.order_status"
                         required
                     >
-                        <option :value="null">{{ $t('admin.order.index.search.all') }}</option>
+                        <option :value="0">{{ $t('admin.order.index.search.all') }}</option>
                         <option v-for="(status, key) in statuses" :value="status.id">{{ status.name }}</option>
                     </select>
                 </div>

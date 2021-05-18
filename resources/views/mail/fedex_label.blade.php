@@ -121,7 +121,7 @@
                           </tr>
                         </tbody>
                       </table>
-                      <h2 class="o_heading o_text-dark o_mb-xxs" style="font-family: Helvetica, Arial, sans-serif;font-weight: bold;margin-top: 0px;margin-bottom: 4px;color: #242b3d;font-size: 30px;line-height: 39px;">The last step left for ordering.</h2>
+                      <h2 class="o_heading o_text-dark o_mb-xxs" style="font-family: Helvetica, Arial, sans-serif;font-weight: bold;margin-top: 0px;margin-bottom: 4px;color: #242b3d;font-size: 30px;line-height: 39px;">One last step to finish your order.</h2>
                       <p style="margin-top: 0px;margin-bottom: 0px;"></p>
                     </div>
                     <!--[if mso]></td></tr></table><![endif]-->
@@ -165,7 +165,7 @@
                     <!--[if mso]><table width="584" cellspacing="0" cellpadding="0" border="0" role="presentation"><tbody><tr><td align="center"><![endif]-->
                     <div class="o_col-6s o_sans o_text o_text-secondary o_center" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;max-width: 584px;color: #424651;text-align: center;">
                       <h4 class="o_heading o_text-dark o_mb-xs" style="font-family: Helvetica, Arial, sans-serif;font-weight: bold;margin-top: 0px;margin-bottom: 8px;color: #242b3d;font-size: 18px;line-height: 23px;">Hello, {{ $data['user_name'] }}</h4>
-                      <p class="o_mb-md" style="margin-top: 0px;margin-bottom: 24px;">Thank you for ordering from Rapid Recycle. The last step left for ordering. To place an order, it remains to print the FedEx label. To do this, go to your order.</p>
+                      <p class="o_mb-md" style="margin-top: 0px;margin-bottom: 24px;">Thank you for placing an order with Rapid-Recycle. <br> Thank you for placing an order with Rapid-Recycle. To complete your order please print a prepaid shipping label from FedEx - print button is available in this e-mail or under your orders tab on our website.</p>
                       <table align="center" cellspacing="0" cellpadding="0" border="0" role="presentation">
                         <tbody>
                           <tr>

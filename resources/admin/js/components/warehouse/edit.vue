@@ -2,6 +2,7 @@
     <warehouse-form
         v-if="model"
         :model.sync="model"
+        :categories.sync="categories"
         :errors.sync="errors"
         @submit="update"
         @delete="deleteWarehouse"
@@ -21,6 +22,10 @@
         props: {
             warehouse: {
                 type: Object,
+                required: true,
+            },
+            categories: {
+                type: Array,
                 required: true,
             },
         },

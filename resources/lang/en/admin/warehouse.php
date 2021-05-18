@@ -27,7 +27,7 @@ return [
         'images' => 'Product images',
     ],
     'index' => [
-        'title' => 'Products',
+        'title' => 'Warehouse',
         'header_btn' => 'Add product',
         'filters' => [
             'search' => 'Search by typing product name, imei or serial number',
@@ -53,7 +53,6 @@ return [
         Warehouse::STATUS_PAID => 'Paid',
         Warehouse::STATUS_IN_REPAIR => 'In repair',
         Warehouse::STATUS_FOR_SALE => 'For sale',
-        Warehouse::STATUS_SALED => 'For sale',
         Warehouse::STATUS_SALED => 'Saled',
     ],
     'create' => [

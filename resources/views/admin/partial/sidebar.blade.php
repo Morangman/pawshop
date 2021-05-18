@@ -20,6 +20,8 @@
 
                     $statuses = [];
 
+                    $warehouseStatuses = [];
+
                     foreach (\App\OrderStatus::query()->orderBy('order')->get() as $status) {
                         $ordersCount = \App\Order::query()->where('ordered_status', '=', $status->getKey())->count();
 
@@ -30,9 +32,25 @@
                         ];
                     }
 
+                    foreach (\App\WarehouseStatus::query()->orderBy('order')->get() as $status) {
+                        $ordersCount = \App\Warehouse::query()->where('status', '=', $status->getKey())->count();
+
+                        $warehouseStatuses[$status->getAttribute('name')] = [
+                            'url' => URL::route('admin.warehouse.index', ['status' => $status->getKey()]),
+                            'count' => $ordersCount,
+                            'color' => $status->getAttribute('color'),
+                        ];
+                    }
+
                     $statuses['All'] = [
                         'url' => URL::route('admin.order.index'),
                         'count' => \App\Order::query()->get()->count(),
+                        'color' => '',
+                    ];
+
+                    $warehouseStatuses['All'] = [
+                        'url' => URL::route('admin.warehouse.index'),
+                        'count' => \App\Warehouse::query()->get()->count(),
                         'color' => '',
                     ];
                 @endphp
@@ -72,6 +90,18 @@
                             <span class="badge badge-pill bg-warning-400 ml-auto ml-md-0" style="margin-left: auto!important;">{{ $chatMessageCount }}</span>
                         @endif
                     </a>
+                </li>
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" id="warehouse-nav" class="nav-link @active_menu_class('admin.warehouse')"><i class="icon-home7"></i> <span>@lang('common.sidebar.warehouse')</span></a>
+                    <ul class="nav nav-group-sub" data-submenu-title="Pickers">
+                        @foreach($warehouseStatuses as $key => $status)
+                        <li class="nav-item">
+                            <a href="{{ $status['url'] }}" class="nav-link order-status_nav">
+                                <b>{{ $key }}</b> <span style="background-color:{{ $status['color'] }}!important; color: #ffffff;" class="badge badge-primary">{{ $status['count'] }}</span>
+                            </a>
+                        </li>
+                        @endforeach
+                    </ul>
                 </li>
                 <li class="nav-item nav-item-submenu">
                     <a href="#" id="products-nav" class="nav-link"><i class="icon-drawer"></i><span>@lang('common.sidebar.products')</span></a>
@@ -141,6 +171,12 @@
                             <a href="{{ URL::route('admin.order-status.index') }}" class="nav-link @active_menu_class('admin.order-status')">
                                 <i class="icon-checkmark"></i>
                                 <span>@lang('common.sidebar.statuses')</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ URL::route('admin.warehouse-status.index') }}" class="nav-link @active_menu_class('admin.warehouse-status')">
+                                <i class="icon-checkmark"></i>
+                                <span>@lang('common.sidebar.warehouse_statuses')</span>
                             </a>
                         </li>
                         <li class="nav-item">

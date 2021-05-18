@@ -26278,6 +26278,113 @@ __webpack_require__.r(__webpack_exports__);
           "update": "User has been successfully updated",
           "delete": "User has been successfully deleted"
         }
+      },
+      "warehouse-status": {
+        "breadcrumbs": {
+          "index": "Warehouse statuses",
+          "create": "Create status",
+          "edit": "Edit status"
+        },
+        "form": {
+          "name": "Name*",
+          "color": "Bage color",
+          "order": "Order"
+        },
+        "index": {
+          "title": "Warehouse statuses",
+          "header_btn": "Create status",
+          "filters": {
+            "search": "Search statuses by typing one of these fields: name"
+          },
+          "table": {
+            "headers": {
+              "id": "ID",
+              "name": "Name",
+              "created_at": "Created date"
+            }
+          }
+        },
+        "create": {
+          "title": "Create status"
+        },
+        "edit": {
+          "title": "Edit status"
+        },
+        "delete": {
+          "title": "Delete status"
+        },
+        "messages": {
+          "create": "Status has been successfully created",
+          "update": "Status has been successfully updated",
+          "delete": "Status has been successfully deleted"
+        }
+      },
+      "warehouse": {
+        "breadcrumbs": {
+          "index": "Warehouse",
+          "create": "Add product",
+          "edit": "Edit product"
+        },
+        "form": {
+          "category_id": "Product ID",
+          "order_id": "Order ID",
+          "status": "Status",
+          "product_name": "Device name",
+          "imei": "Device IMEI",
+          "serial_number": "Device Serial Number",
+          "price": "Device Price",
+          "clear_price": "Device deducted price",
+          "is_locked": "Is device locked",
+          "delivery_price": "Delivery price",
+          "repair_price": "Repair price",
+          "sell_price": "Sell price",
+          "steps": "Selected steps",
+          "images": "Product images"
+        },
+        "index": {
+          "title": "Warehouse",
+          "header_btn": "Add product",
+          "filters": {
+            "search": "Search by typing product name, imei or serial number"
+          },
+          "table": {
+            "headers": {
+              "photo": "Photo",
+              "product_name": "Device name",
+              "status": "Status",
+              "imei": "IMEI",
+              "serial_number": "Device Serial Number",
+              "clear_price": "Device price",
+              "delivery_price": "Delivery price",
+              "repair_price": "Repair price",
+              "sell_price": "Sell price"
+            }
+          },
+          "search": {
+            "all": "All"
+          }
+        },
+        "product_statuses": {
+          "1": "Paid",
+          "2": "In repair",
+          "3": "For sale",
+          "4": "Saled"
+        },
+        "create": {
+          "title": "Add product"
+        },
+        "edit": {
+          "title": "Edit product"
+        },
+        "delete": {
+          "title": "Delete product"
+        },
+        "messages": {
+          "create": "Product has been successfully created",
+          "update": "Product has been successfully updated",
+          "delete": "Product has been successfully deleted",
+          "media-delete": "Image has been successfully deleted"
+        }
       }
     },
     "auth": {
@@ -26452,6 +26559,7 @@ __webpack_require__.r(__webpack_exports__);
         "statistics": "Statistics",
         "daily_statistics": "Daily Statistics",
         "statuses": "Order statuses",
+        "warehouse_statuses": "Warehouse statuses",
         "steps": "Steps",
         "callbacks": "Conversations",
         "tips": "Tips",
@@ -26459,6 +26567,7 @@ __webpack_require__.r(__webpack_exports__);
         "orders": "Orders",
         "faqs": "Faqs",
         "comments": "Comments",
+        "warehouse": "Warehouse",
         "notifications": "Notifications",
         "settings": "Settings"
       },

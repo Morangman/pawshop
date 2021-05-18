@@ -4,11 +4,12 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin;
 
-use App\Faq;
+use App\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Warehouse\StoreRequest;
 use App\Http\Requests\Admin\Warehouse\UpdateRequest;
 use App\Warehouse;
+use App\WarehouseStatus;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,11 +27,26 @@ use Spatie\MediaLibrary\Models\Media;
 class WarehouseController extends Controller
 {
     /**
+     * @param \Illuminate\Http\Request $request
+     * 
      * @return \Illuminate\Contracts\View\View
      */
-    public function index(): ViewContract
+    public function index(Request $request): ViewContract
     {
-        return View::make('admin.warehouse.index');
+        if ($request->get('status')) {
+            $products = Warehouse::query()->where('status', '=', $request->get('status'))
+                ->with(['warehouseStatus', 'media'])
+                ->orderBy('id', 'desc')
+                ->paginate(20);
+        } else {
+            $products = null;
+        }
+
+        return View::make('admin.warehouse.index', [
+            'products' => $products,
+            'statuses' => WarehouseStatus::query()->orderBy('order', 'asc')->get(),
+            'status' => (int) $request->get('status'),
+        ]);
     }
 
     /**
@@ -38,7 +54,13 @@ class WarehouseController extends Controller
      */
     public function create(): ViewContract
     {
-        return View::make('admin.warehouse.create');
+        return View::make('admin.warehouse.create', [
+            'categories' => Category::query()
+                ->whereNotNull('custom_text')
+                ->whereNotNull('subcategory_id')
+                ->get(),
+            'statuses' => WarehouseStatus::query()->orderBy('order', 'asc')->get(),
+        ]);
     }
 
     /**
@@ -49,7 +71,19 @@ class WarehouseController extends Controller
      */
     public function store(StoreRequest $request): JsonResponse
     {
-        $warehouse = Warehouse::create($request->all());
+        $category = Category::query()->whereKey((int) $request->get('category_id'))->first();
+
+        $data = $request->except(
+            [
+                'product_name',
+                'steps',
+            ]
+        ) + [
+            'product_name' => $category->getAttribute('name'),
+            'steps' => [],
+        ];
+
+        $warehouse = Warehouse::create($data);
 
         $this->handleDocuments($request, $warehouse);
 
@@ -71,7 +105,12 @@ class WarehouseController extends Controller
         return View::make(
             'admin.warehouse.edit',
             [
-                'warehouse' => $warehouse,
+                'warehouse' => $warehouse->append('warehouse_images'),
+                'statuses' => WarehouseStatus::query()->orderBy('order', 'asc')->get(),
+                'categories' => Category::query()
+                    ->whereNotNull('custom_text')
+                    ->whereNotNull('subcategory_id')
+                    ->get(),
             ]
         );
     }
@@ -85,7 +124,17 @@ class WarehouseController extends Controller
      */
     public function update(UpdateRequest $request, Warehouse $warehouse): JsonResponse
     {
-        $warehouse->update($request->all());
+        $category = Category::query()->whereKey((int) $request->get('category_id'))->first();
+
+        $data = $request->except(
+            [
+                'product_name',
+            ]
+        ) + [
+            'product_name' => $category->getAttribute('name'),
+        ];
+
+        $warehouse->update($data);
 
         $this->handleDocuments($request, $warehouse);
 
@@ -135,7 +184,16 @@ class WarehouseController extends Controller
      */
     public function getAll(Request $request): JsonResponse
     {
+        $productStatus = $request->get('status');
+
         $products = Warehouse::query()
+            ->with(['warehouseStatus', 'media'])
+            ->when(
+                $productStatus,
+                function ($q) use ($productStatus) {
+                    $q->where('status', $productStatus);
+                }
+            )
             ->when(
                 $request->get('search'),
                 function ($query, $search) {
@@ -167,7 +225,7 @@ class WarehouseController extends Controller
      */
     protected function handleDocuments(Request $request, Warehouse $warehouse): void
     {
-        $images = $request->file('product_images', []);
+        $images = $request->file('media', []);
 
         foreach ($images as $image) {
             $warehouse->addMedia($image)

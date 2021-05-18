@@ -34,7 +34,7 @@ class UpdateRequest extends FormRequest
                 'integer',
             ],
             'product_name' => [
-                'required',
+                'nullable',
                 'string',
                 'max:255',
             ],
@@ -49,15 +49,11 @@ class UpdateRequest extends FormRequest
                 'max:255',
             ],
             'price' => [
-                'nullable',
+                'required',
                 'numeric',
             ],
             'clear_price' => [
-                'nullable',
-                'numeric',
-            ],
-            'clear_price' => [
-                'nullable',
+                'required',
                 'numeric',
             ],
             'delivery_price' => [

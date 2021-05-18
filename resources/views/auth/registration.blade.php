@@ -48,8 +48,7 @@
                                                    class="input-text with-border @error('phone') is-invalid @enderror"
                                                    placeholder="{{ Lang::get('auth.register.form.fields.phone.label') }}"
                                                    name="phone"
-                                                   value="{{ Request::old('phone') }}"
-                                                   required/>
+                                                   value="{{ Request::old('phone') }}"/>
 
                                             @error('phone')
                                             <div class="invalid-feedback">

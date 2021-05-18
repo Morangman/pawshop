@@ -8,6 +8,19 @@
                         {{ $t('admin.warehouse.index.header_btn') }}
                     </a>
                 </div>
+                <div class="form-group col-md-auto" v-if="!status">
+                    <label for="pStatus" class="d-inline-block">{{ $t('admin.warehouse.index.table.headers.status') }} :</label>
+                    <select
+                            id="pStatus"
+                            class="form-control form-control-sm d-inline-block"
+                            style="width: auto;"
+                            v-model="filters.status"
+                            required
+                    >
+                        <option :value="0">{{ $t('admin.order.index.search.all') }}</option>
+                        <option v-for="(status, key) in $t('admin.warehouse.product_statuses')" :value="key">{{ status }}</option>
+                    </select>
+                </div>
                 <div class="col col-md-5">
                     <input
                         v-model="filters.search"
@@ -44,27 +57,100 @@
                             </th>
                             <th>
                                 {{ $t('admin.warehouse.index.table.headers.clear_price') }}
+                                <span>
+                                    <i
+                                            v-if="filters.by === 'clear_price' && filters.dir === 'desc'"
+                                            @click.prevent="sort('clear_price', 'asc')"
+                                            class="icon-arrow-down8 cursor-pointer"
+                                    ></i>
+                                    <i
+                                            v-if="filters.by === 'clear_price' && filters.dir === 'asc'"
+                                            @click.prevent="sort('clear_price', 'desc')"
+                                            class="icon-arrow-up8 cursor-pointer"
+                                    ></i>
+                                    <span v-if="filters.by !== 'clear_price'" @click.prevent="sort('clear_price', 'asc')">
+                                        <i class="icon-arrow-up8 cursor-pointer"></i>
+                                        <i class="icon-arrow-down8 cursor-pointer"></i>
+                                    </span>
+                                </span>
                             </th>
                             <th>
                                 {{ $t('admin.warehouse.index.table.headers.delivery_price') }}
+                                 <span>
+                                    <i
+                                            v-if="filters.by === 'delivery_price' && filters.dir === 'desc'"
+                                            @click.prevent="sort('delivery_price', 'asc')"
+                                            class="icon-arrow-down8 cursor-pointer"
+                                    ></i>
+                                    <i
+                                            v-if="filters.by === 'delivery_price' && filters.dir === 'asc'"
+                                            @click.prevent="sort('delivery_price', 'desc')"
+                                            class="icon-arrow-up8 cursor-pointer"
+                                    ></i>
+                                    <span v-if="filters.by !== 'delivery_price'" @click.prevent="sort('delivery_price', 'asc')">
+                                        <i class="icon-arrow-up8 cursor-pointer"></i>
+                                        <i class="icon-arrow-down8 cursor-pointer"></i>
+                                    </span>
+                                </span>
                             </th>
                             <th>
                                 {{ $t('admin.warehouse.index.table.headers.repair_price') }}
+                                 <span>
+                                    <i
+                                            v-if="filters.by === 'repair_price' && filters.dir === 'desc'"
+                                            @click.prevent="sort('repair_price', 'asc')"
+                                            class="icon-arrow-down8 cursor-pointer"
+                                    ></i>
+                                    <i
+                                            v-if="filters.by === 'repair_price' && filters.dir === 'asc'"
+                                            @click.prevent="sort('repair_price', 'desc')"
+                                            class="icon-arrow-up8 cursor-pointer"
+                                    ></i>
+                                    <span v-if="filters.by !== 'repair_price'" @click.prevent="sort('repair_price', 'asc')">
+                                        <i class="icon-arrow-up8 cursor-pointer"></i>
+                                        <i class="icon-arrow-down8 cursor-pointer"></i>
+                                    </span>
+                                </span>
                             </th>
                             <th>
                                 {{ $t('admin.warehouse.index.table.headers.sell_price') }}
+                                 <span>
+                                    <i
+                                            v-if="filters.by === 'sell_price' && filters.dir === 'desc'"
+                                            @click.prevent="sort('sell_price', 'asc')"
+                                            class="icon-arrow-down8 cursor-pointer"
+                                    ></i>
+                                    <i
+                                            v-if="filters.by === 'sell_price' && filters.dir === 'asc'"
+                                            @click.prevent="sort('sell_price', 'desc')"
+                                            class="icon-arrow-up8 cursor-pointer"
+                                    ></i>
+                                    <span v-if="filters.by !== 'sell_price'" @click.prevent="sort('sell_price', 'asc')">
+                                        <i class="icon-arrow-up8 cursor-pointer"></i>
+                                        <i class="icon-arrow-down8 cursor-pointer"></i>
+                                    </span>
+                                </span>
                             </th>
                             <th>{{ $t('common.word.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <template v-if="!isLoading">
-                            <tr v-for="(product, i) in products" :key="`faq_${i}`">
-                                    <td>{{ model.images }}</td>
+                            <tr v-for="(product, i) in products" :key="`product_${i}`">
+                                    <td>
+                                        <a :href="$r('admin.warehouse.edit', { warehouse: product.id })">
+                                            <img width="auto"
+                                                height="100"
+                                                class="center-image"
+                                                v-if="product.media[0]"
+                                                :src="'/media/' + product.media[0].id + '/' + product.media[0].file_name"
+                                            >
+                                        </a>
+                                    </td>
                                     <td><a :href="$r('admin.warehouse.edit', { warehouse: product.id })">{{ product.product_name }}</a></td>
-                                    <td>{{ product.status }}</td>
-                                    <td v-html="highlightSearchResult(product.imei, filters.search)"></td>
-                                    <td v-html="highlightSearchResult(product.serial_number, filters.search)"></td>
+                                    <td>{{ product.warehouse_status.name }}</td>
+                                    <td v-html="highlightSearchResult(product.imei ? product.imei : '', filters.search)"></td>
+                                    <td v-html="highlightSearchResult(product.serial_number ? product.serial_number : '', filters.search)"></td>
                                     <td>{{ product.clear_price }}</td>
                                     <td>{{ product.delivery_price }}</td>
                                     <td>{{ product.repair_price }}</td>
@@ -100,6 +186,21 @@
     import InfiniteLoading from 'vue-infinite-loading';
 
     export default {
+        props: {
+            searched: {
+                type: Object,
+                required: false,
+            },
+            statuses: {
+                type: Array,
+                required: false,
+            },
+            status: {
+                type: Number,
+                required: false,
+            },
+        },
+
         components: {
             InfiniteLoading,
         },
@@ -111,6 +212,7 @@
                 filters: {
                     page: 1,
                     search: null,
+                    status: this.status,
                     by: 'id',
                     dir: 'asc',
                 },
@@ -155,7 +257,15 @@
         },
 
         created() {
-            this.getProducts();
+            if (this.searched) {
+                this.products = this.searched.data;
+
+                this.total = this.searched.total;
+
+                this.isLoading = false;
+            } else {
+                this.getProducts();
+            }
 
             this.debouncedGetProducts =_.debounce(this.getProducts, 500);
         },

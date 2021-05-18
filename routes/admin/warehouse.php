@@ -17,7 +17,7 @@ Route::get('create', [
     'uses' => 'WarehouseController@create',
 ]);
 
-Route::post('', [
+Route::post('store', [
     'as' => '.store',
     'uses' => 'WarehouseController@store',
 ]);

@@ -34,7 +34,7 @@ class StoreRequest extends FormRequest
                 'integer',
             ],
             'product_name' => [
-                'required',
+                'nullable',
                 'string',
                 'max:255',
             ],
@@ -49,10 +49,6 @@ class StoreRequest extends FormRequest
                 'max:255',
             ],
             'price' => [
-                'nullable',
-                'numeric',
-            ],
-            'clear_price' => [
                 'nullable',
                 'numeric',
             ],

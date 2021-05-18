@@ -10,6 +10,11 @@
     background-color: #26a69a!important;
 }
 
+.product-images {
+    display: flex;
+    justify-content: center;
+}
+
 .vs__clear,
 .vs__open-indicator {
     transform: scale(0.7) !important;

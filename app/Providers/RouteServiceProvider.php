@@ -15,6 +15,7 @@ use App\Task;
 use App\Tip;
 use App\User;
 use App\Warehouse;
+use App\WarehouseStatus;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Route;
@@ -100,6 +101,7 @@ class RouteServiceProvider extends ServiceProvider
             'stepName' => StepName::class,
             'media' => Media::class,
             'status' => OrderStatus::class,
+            'warehouse_status' => WarehouseStatus::class,
             'comment' => Comment::class,
             'faq' => Faq::class,
             'task' => Task::class,

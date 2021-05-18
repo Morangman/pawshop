@@ -38,9 +38,17 @@ import StatusIndex from './components/status/index';
 import StatusCreate from './components/status/create';
 import StatusEdit from './components/status/edit';
 
+import WarehouseStatusIndex from './components/warehouse-status/index';
+import WarehouseStatusCreate from './components/warehouse-status/create';
+import WarehouseStatusEdit from './components/warehouse-status/edit';
+
 import CommentIndex from './components/comment/index';
 import CommentCreate from './components/comment/create';
 import CommentEdit from './components/comment/edit';
+
+import WarehouseIndex from './components/warehouse/index';
+import WarehouseCreate from './components/warehouse/create';
+import WarehouseEdit from './components/warehouse/edit';
 
 import CallbackIndex from './components/callback/index';
 import CallbackCreate from './components/callback/create';
@@ -96,5 +104,11 @@ export default {
     NotificationView,
     SettingIndex,
     StatisticsIndex,
-    DailyStatisticsIndex
+    DailyStatisticsIndex,
+    WarehouseIndex,
+    WarehouseEdit,
+    WarehouseCreate,
+    WarehouseStatusIndex,
+    WarehouseStatusCreate,
+    WarehouseStatusEdit
 };

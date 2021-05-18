@@ -39,7 +39,7 @@ class RegisterRequest extends FormRequest
                 'confirmed'
             ],
             'phone' => [
-                'required',
+                'nullable',
                 'min:11',
                 'numeric',
             ],

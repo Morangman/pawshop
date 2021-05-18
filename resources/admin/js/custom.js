@@ -12,6 +12,7 @@ $(document).ready(() => {
         'products-nav',
         'statistics-nav',
         'settings-nav',
+        'warehouse-nav',
     ];
 
     $.each(sidebar_items, function(index, value) {
@@ -41,6 +42,18 @@ $(document).ready(() => {
             localStorage.removeItem("orders-nav");
         } else {
             localStorage.setItem("orders-nav", true);
+        }
+    });
+
+    $('#warehouse-nav').click(() => {
+        let localValue = localStorage.getItem("warehouse-nav");
+
+        hideMenuItems("warehouse-nav");
+
+        if (localValue){
+            localStorage.removeItem("warehouse-nav");
+        } else {
+            localStorage.setItem("warehouse-nav", true);
         }
     });
 

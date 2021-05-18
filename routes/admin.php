@@ -121,6 +121,15 @@ Route::group(
 
 Route::group(
     [
+        'as' => '.warehouse-status',
+        'prefix' => 'warehouse-status',
+        'middleware' => ['anyrole:admin|manager']
+    ],
+    __DIR__.'/admin/warehouse-status.php'
+);
+
+Route::group(
+    [
         'as' => '.order-status',
         'prefix' => 'order-status',
         'middleware' => ['anyrole:admin|manager']

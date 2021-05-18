@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\Models\Media;
@@ -48,6 +49,8 @@ class Warehouse extends Model implements HasMedia
         'repair_price',
         'sell_price',
         'steps',
+        'exp_service',
+        'insurance',
     ];
 
     /**
@@ -67,7 +70,22 @@ class Warehouse extends Model implements HasMedia
         'repair_price' => 'float',
         'sell_price' => 'float',
         'steps' => 'array',
+        'exp_service' => 'bool',
+        'insurance' => 'bool',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function warehouseStatus(): BelongsTo
+    {
+        return $this->belongsTo(
+            WarehouseStatus::class,
+            'status',
+            'id',
+            'warehouseStatus'
+        );
+    }
 
     /**
      * @return array

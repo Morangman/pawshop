@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Category;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\WarehouseTrait;
 use App\Http\Requests\Admin\Order\StoreRequest;
 use App\Http\Requests\Admin\Order\UpdateRequest;
 use App\Mail\OrderReceivedMail;
@@ -38,6 +39,8 @@ use Milon\Barcode\DNS1D;
  */
 class OrderController extends Controller
 {
+    use WarehouseTrait;
+
     /**
      * @param \Illuminate\Http\Request $request
      * 
@@ -569,6 +572,8 @@ class OrderController extends Controller
             $order->update([
                 'paid_date' => Carbon::now()
             ]);
+
+            $this->setProductsToWarehouse($order);
         }
 
         Session::flash(
