@@ -31,7 +31,7 @@
                             'color' => $status->getAttribute('color'),
                         ];
                     }
-
+                    
                     foreach (\App\WarehouseStatus::query()->orderBy('order')->get() as $status) {
                         $ordersCount = \App\Warehouse::query()->where('status', '=', $status->getKey())->count();
 
@@ -55,7 +55,7 @@
                     ];
                 @endphp
                 <li class="nav-item">
-                    <a href="{{ URL::route('admin.notification.index') }}" class="nav-link @active_menu_class('admin.notification')">
+                    <a href="{{ URL::route('admin.notification.index') }}" class="nav-link sidebar-link @active_menu_class('admin.notification')">
                         <i class="icon-bell3"></i>
                         <span>@lang('common.sidebar.notifications')</span>
                         @if($user && $user->unreadNotifications->count())
@@ -64,11 +64,11 @@
                     </a>
                 </li>
                 <li class="nav-item nav-item-submenu nav-item-open">
-                    <a href="#" id="orders-nav" class="nav-link @active_menu_class('admin.order')"><i class="icon-filter4"></i> <span>@lang('common.sidebar.orders')</span></a>
+                    <a href="#" id="orders-nav" class="nav-link"><i class="icon-filter4"></i> <span>@lang('common.sidebar.orders')</span></a>
                     <ul class="nav nav-group-sub" data-submenu-title="Pickers" style="display: block;">
                         @foreach($statuses as $key => $status)
                         <li class="nav-item">
-                            <a href="{{ $status['url'] }}" class="nav-link order-status_nav">
+                            <a href="{{ $status['url'] }}" class="nav-link sidebar-link order-status_nav @active($status['url'])">
                                 <b>{{ $key }}</b> <span style="background-color:{{ $status['color'] }}!important; color: #ffffff;" class="badge badge-primary">{{ $status['count'] }}</span>
                             </a>
                         </li>
@@ -77,13 +77,13 @@
                 </li>
                 @role('admin')
                 <li class="nav-item">
-                    <a href="{{ URL::route('admin.user.index') }}" class="nav-link @active_menu_class('admin.user')">
+                    <a href="{{ URL::route('admin.user.index') }}" class="nav-link sidebar-link @active_menu_class('admin.user')">
                         <i class="icon-users2"></i>
                         <span>@lang('common.sidebar.users')</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ URL::route('admin.callback.index') }}" class="nav-link @active_menu_class('admin.callback')">
+                    <a href="{{ URL::route('admin.callback.index') }}" class="nav-link sidebar-link @active_menu_class('admin.callback')">
                         <i class="icon-bubbles3"></i>
                         <span>@lang('common.sidebar.callbacks')</span>
                         @if($chatMessageCount > 0)
@@ -92,11 +92,11 @@
                     </a>
                 </li>
                 <li class="nav-item nav-item-submenu">
-                    <a href="#" id="warehouse-nav" class="nav-link @active_menu_class('admin.warehouse')"><i class="icon-home7"></i> <span>@lang('common.sidebar.warehouse')</span></a>
+                    <a href="#" id="warehouse-nav" class="nav-link"><i class="icon-home7"></i> <span>@lang('common.sidebar.warehouse')</span></a>
                     <ul class="nav nav-group-sub" data-submenu-title="Pickers">
                         @foreach($warehouseStatuses as $key => $status)
                         <li class="nav-item">
-                            <a href="{{ $status['url'] }}" class="nav-link order-status_nav">
+                            <a href="{{ $status['url'] }}" class="nav-link order-status_nav @active($status['url'])">
                                 <b>{{ $key }}</b> <span style="background-color:{{ $status['color'] }}!important; color: #ffffff;" class="badge badge-primary">{{ $status['count'] }}</span>
                             </a>
                         </li>

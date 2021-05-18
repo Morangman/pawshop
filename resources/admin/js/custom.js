@@ -93,9 +93,13 @@ $(document).ready(() => {
         }
     });
 
+    $('.sidebar-link').click(() => {
+        hideMenuItems();
+    });
+
     function hideMenuItems(excluded = null) {
         $.each(sidebar_items, function(index, value) {
-            if (excluded && value !== excluded) {
+            if (value !== excluded) {
                 localStorage.removeItem(value);
     
                 $('#'+value).parent('.nav-item-submenu').removeClass('nav-item-open');

@@ -37,5 +37,12 @@ class ExtensionServiceProvider extends ServiceProvider
                 return "<?php echo Request::routeIs({$route}.'.*') ? '{$class}' : ''; ?>";
             }
         );
+
+        Blade::directive(
+            'active',
+            function (string $route, string $class = 'active') {
+                return "<?php echo request()->fullUrlIs($route) ? '{$class}' : ''; ?>";
+            }
+        );
     }
 }
