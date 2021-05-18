@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('home-title', $settings->getAttribute('general_settings')['seo_title'])
+@section('home-title', 'Password reset success')
 
 @section('content')
     @yield('header', View::make('header', ['categories' => $categories, 'settings' => $settings]))
