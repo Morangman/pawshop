@@ -67,7 +67,7 @@ class SetProductsInWarehouse extends Command
                 unset($serialNumberArr[0]);
 
                 for ($i = 1; $i <= $ctn; $i++) {
-                    $orderTotalSumm = isset($orderProduct['total']) ? isset($orderProduct['total']) / $ctn : 21;
+                    $orderTotalSumm = isset($orderProduct['total']) ? isset($orderProduct['total']) / $ctn : 5;
 
                     if ($order->getAttribute('exp_service')) {
                         (float) $orderTotalSumm -= $expShipping;
@@ -84,7 +84,7 @@ class SetProductsInWarehouse extends Command
                         'product_name' => $orderProduct['device']['name'],
                         'imei' => isset($imeiArr[$i]) ? $imeiArr[$i] : null,
                         'serial_number' => isset($serialNumberArr[$i]) ? $serialNumberArr[$i] : null,
-                        'price' => $orderProduct['total'] / $ctn,
+                        'price' => isset($orderProduct['total']) ? $orderProduct['total'] / $ctn : 5,
                         'clear_price' => $orderTotalSumm,
                         'is_locked' => isset($orderProduct['is_locked']),
                         'delivery_price' => isset($orderProduct['delivery_price']) ? $orderProduct['delivery_price'] : 0,
