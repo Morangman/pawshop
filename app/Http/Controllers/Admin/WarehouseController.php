@@ -201,7 +201,8 @@ class WarehouseController extends Controller
 
                     $query->where('imei', 'like', $keyword)
                         ->orWhere('product_name', 'like', $keyword)
-                        ->orWhere('serial_number', 'like', $keyword);
+                        ->orWhere('serial_number', 'like', $keyword)
+                        ->orWhere('order_id', 'like', $keyword);
                 }
             )
             ->when(

@@ -30,7 +30,7 @@ return [
         'title' => 'Warehouse',
         'header_btn' => 'Add product',
         'filters' => [
-            'search' => 'Search by typing product name, imei or serial number',
+            'search' => 'Search by typing product name, order ID, imei or serial number',
         ],
         'table' => [
             'headers' => [
