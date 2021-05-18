@@ -214,7 +214,7 @@
                     search: null,
                     status: this.status,
                     by: 'id',
-                    dir: 'asc',
+                    dir: 'desc',
                 },
                 products: [],
                 total: null,
