@@ -43,7 +43,7 @@ class SetProductsInWarehouse extends Command
     public function handle(): void
     {
         Warehouse::query()->truncate();
-        
+
         $orders = Order::query()->where('ordered_status', '=', Order::STATUS_PAID)->get();
 
         foreach($orders as $order) {
@@ -69,7 +69,7 @@ class SetProductsInWarehouse extends Command
                 unset($serialNumberArr[0]);
 
                 for ($i = 1; $i <= $ctn; $i++) {
-                    $orderTotalSumm = isset($orderProduct['total']) ? isset($orderProduct['total']) / $ctn : 5;
+                    $orderTotalSumm = isset($orderProduct['total']) ? $orderProduct['total'] / $ctn : 5;
 
                     if ($order->getAttribute('exp_service')) {
                         (float) $orderTotalSumm -= $expShipping;
