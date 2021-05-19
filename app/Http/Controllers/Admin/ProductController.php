@@ -177,7 +177,7 @@ class ProductController extends Controller
                     $step['value'] === 'Brand New' ? $steps[$key]['value'] = 'Flawless' : $step['value'];
                 }
 
-                if (isset($step['step_name']['is_functional']) && $step['value'] === 'No') {
+                if (isset($step['step_name']['is_functional']) && (int) $step['step_name']['is_functional'] !== 0 && $step['value'] === 'No') {
                     $isBroken = true;
                 }
             }
@@ -226,7 +226,7 @@ class ProductController extends Controller
                         $step['value'] === 'Brand New' ? $steps[$key]['value'] = 'Flawless' : $step['value'];
                     }
     
-                    if (isset($step['step_name']['is_functional']) && $step['value'] === 'No') {
+                    if (isset($step['step_name']['is_functional']) && (int) $step['step_name']['is_functional'] !== 0 && $step['value'] === 'No') {
                         $isBroken = true;
                     }
                 }
@@ -263,7 +263,7 @@ class ProductController extends Controller
                         $step['value'] === 'Brand New' ? $steps[$i]['value'] = 'Flawless' : $step['value'];
                     }
     
-                    if (isset($step['step_name']['is_functional']) && $step['value'] === 'No') {
+                    if (isset($step['step_name']['is_functional']) && (int) $step['step_name']['is_functional'] !== 0 && $step['value'] === 'No') {
                         $isBroken = true;
                     }
                 }
