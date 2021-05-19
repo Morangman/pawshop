@@ -527,7 +527,8 @@ class HomeController extends Controller
         $userData = array_merge(
             $request->only(['name', 'phone', 'email', 'addresses']),
             [
-                'addresses' => $request->get('addresses') ?? []
+                'addresses' => $request->get('addresses') ?? [],
+                'mail_subscription' => $request->get('mail_subscription') ? 1 : 0,
             ]
         );
 

@@ -27,6 +27,7 @@ class CreateUsersTable extends Migration
             $table->json('addresses')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('is_active')->default(false);
+            $table->boolean('mail_subscription')->default(1);
             $table->unsignedMediumInteger('register_code')->nullable();
             $table->string('password');
             $table->rememberToken();

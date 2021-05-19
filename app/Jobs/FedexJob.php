@@ -89,19 +89,21 @@ class FedexJob implements ShouldQueue
                             try {
                                 $user = User::query()->whereKey($order->getAttribute('user_id'))->first();
 
-                                Mail::to($order->getAttribute('user_email'))
-                                    ->send(new OrderInTransitMail(
-                                        array_merge(
-                                            $order->toArray(),
-                                            [
-                                                'user_name' => $user->getAttribute('name'),
-                                            ]
-                                        )
-                                    ));
+                                if ($user && $user->getAttribute('mail_subscription')) {
+                                    Mail::to($order->getAttribute('user_email'))
+                                        ->send(new OrderInTransitMail(
+                                            array_merge(
+                                                $order->toArray(),
+                                                [
+                                                    'user_name' => $user->getAttribute('name'),
+                                                ]
+                                            )
+                                        ));
+                                }
 
-                                    $order->update([
-                                        'is_transit_notify' => 1,
-                                    ]);
+                                $order->update([
+                                    'is_transit_notify' => 1,
+                                ]);
                             } catch (\Exception $e) {}
                         }
 

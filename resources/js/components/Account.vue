@@ -94,6 +94,14 @@
                                                     <strong>{{ error }}</strong>
                                                 </div>
                                             </div>
+                                            <div class="form-group">
+                                                <custom-checkbox
+                                                    style="margin-top: 20px;"
+                                                    :name="'Send me important mail notifications about my trade-ins'"
+                                                    :option="model.mail_subscription ? '1' : '0'"
+                                                    v-model="model.mail_subscription"
+                                                ></custom-checkbox>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
