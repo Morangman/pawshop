@@ -209,7 +209,7 @@ class CategoryController extends Controller
 
             $category->update([
                 'image' => $media->getFullUrl(),
-                'compressed_image' => $media->getFullUrl('thumb'),
+                'compressed_image' => $media->getAttribute('mime_type') === 'image/svg' || $media->getAttribute('mime_type') === 'image/svg+xml' ? $media->getFullUrl() : $media->getFullUrl('thumb'),
             ]);
         }
 
@@ -219,7 +219,7 @@ class CategoryController extends Controller
 
             $category->update([
                 'image' => $media->getFullUrl(),
-                'compressed_image' => $media->getFullUrl('thumb'),
+                'compressed_image' => $media->getAttribute('mime_type') === 'image/svg' || $media->getAttribute('mime_type') === 'image/svg+xml' ? $media->getFullUrl() : $media->getFullUrl('thumb'),
             ]);
         }
     }
