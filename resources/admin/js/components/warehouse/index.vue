@@ -142,8 +142,7 @@
                                             <img width="auto"
                                                 height="100"
                                                 class="center-image"
-                                                v-if="product.media[0]"
-                                                :src="'/media/' + product.media[0].id + '/' + product.media[0].file_name"
+                                                :src="product.category.image"
                                             >
                                         </a>
                                     </td>

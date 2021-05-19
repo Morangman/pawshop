@@ -35,7 +35,7 @@ class WarehouseController extends Controller
     {
         if ($request->get('status')) {
             $products = Warehouse::query()->where('status', '=', $request->get('status'))
-                ->with(['warehouseStatus', 'media'])
+                ->with(['warehouseStatus', 'media', 'category'])
                 ->orderBy('id', 'desc')
                 ->paginate(20);
         } else {
@@ -187,7 +187,7 @@ class WarehouseController extends Controller
         $productStatus = $request->get('status');
 
         $products = Warehouse::query()
-            ->with(['warehouseStatus', 'media'])
+            ->with(['warehouseStatus', 'media', 'category'])
             ->when(
                 $productStatus,
                 function ($q) use ($productStatus) {
