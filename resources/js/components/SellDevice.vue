@@ -18,7 +18,7 @@
                 <div class="name"><span>{{ category.name }}</span></div>
             </div>
             <ul id="options" class="selected-list" v-if="selectedSteps.length">
-                <li v-for="option in selectedSteps" v-if="option">{{ option ? option.value : '' }}</li>
+                <li v-for="option in selectedSteps" v-if="option">{{ option ? option.step_name.name + ': ' + option.value : '' }}</li>
                 <li v-for="option in selectedAccesories" v-if="option && selectedAccesories.length">{{ option ? option.value : '' }}</li>
             </ul>
         </div>
