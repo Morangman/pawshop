@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\Models\Media;
 
 /**
  * Class Category
@@ -40,6 +41,7 @@ class Category extends Model implements HasMedia
         'name',
         'slug',
         'image',
+        'compressed_image',
         'custom_text',
         'premium_price',
         'price_for_broken',
@@ -59,6 +61,7 @@ class Category extends Model implements HasMedia
         'name' => 'string',
         'slug' => 'string',
         'image' => 'string',
+        'compressed_image' => 'string',
         'custom_text' => 'string',
         'premium_price' => 'string',
         'price_for_broken' => 'string',
@@ -87,5 +90,17 @@ class Category extends Model implements HasMedia
     public function steps(): BelongsToMany
     {
         return $this->belongsToMany(Step::class, CategoryStep::class)->withPivot('sort_order');
+    }
+
+    /**
+     * @return void
+     */
+    public function registerMediaConversions(Media $media = null): void
+    {
+       $this->addMediaConversion('thumb')
+          ->width(130)
+          ->height(130)
+          ->sharpen(10)
+          ->nonOptimized();
     }
 }

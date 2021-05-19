@@ -207,14 +207,20 @@ class CategoryController extends Controller
             $media = $category->addMedia($categoryPreviewImage)
                 ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
 
-            $category->update(['image' => $media->getFullUrl()]);
+            $category->update([
+                'image' => $media->getFullUrl(),
+                'compressed_image' => $media->getFullUrl('thumb'),
+            ]);
         }
 
         if ($productImageUrl = $request->get('image_url')) {
             $media = $category->addMediaFromUrl($productImageUrl)
                 ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
 
-            $category->update(['image' => $media->getFullUrl()]);
+            $category->update([
+                'image' => $media->getFullUrl(),
+                'compressed_image' => $media->getFullUrl('thumb'),
+            ]);
         }
     }
 }
