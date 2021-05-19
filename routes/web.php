@@ -45,6 +45,8 @@ Route::get('/order/{order_uuid}/thanks', 'HomeController@thanks')->name('thanks'
 
 Route::get('/order/{order_uuid}/confirm-order', 'HomeController@confirmOrder')->name('confirm-order');
 
+Route::get('/order/{order_uuid}/decline-order', 'HomeController@declineOrder')->name('decline-order');
+
 Route::get('/{order}/fedex-label', 'HomeController@getFedexLabel')->name('fedex-label');
 
 Route::get('/redirect-google', 'Auth\LoginController@redirectToGoogleProvider')->name('redirect-google');

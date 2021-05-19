@@ -25958,7 +25958,8 @@ __webpack_require__.r(__webpack_exports__);
         },
         "confirm_statuses": {
           "1": "Pending decision",
-          "2": "Confirmed"
+          "2": "Confirmed",
+          "3": "Declined"
         },
         "fedex_statuses": {
           "OC": "Shipment created",

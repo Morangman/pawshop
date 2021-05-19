@@ -77,6 +77,7 @@ return [
         Order::STATUS_CHANGED => 'Changed',
         Order::STATUS_NOT_CONFIRMED => 'Pending decision',
         Order::STATUS_CONFIRMED => 'Confirmed',
+        Order::STATUS_DECLINED => 'Declined',
     ],
     'fedex_statuses' => [
         Order::STATUS_SHIPMENT_CREATED => 'Shipment created',

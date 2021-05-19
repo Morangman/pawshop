@@ -40,6 +40,7 @@ use Illuminate\Support\Facades\View;
 use App\Mail\OrderConfirmationMail;
 use App\Message;
 use App\Notifications\OrderConfirmNotification;
+use App\Notifications\OrderDeclineNotification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Lang;
@@ -428,7 +429,7 @@ class HomeController extends Controller
     {
         $order = Order::query()->where('uuid', $order_uuid)->first();
 
-        if ($order->getAttribute('orders')['confirmed'] !== Order::STATUS_CONFIRMED) {
+        if ((int) $order->getAttribute('orders')['confirmed'] !== Order::STATUS_CONFIRMED && (int) $order->getAttribute('orders')['confirmed'] !== Order::STATUS_DECLINED) {
             Notification::send(
                 User::query()->scopes(['notifiableUsers'])->get(),
                 new OrderConfirmNotification($order->toArray())
@@ -438,6 +439,47 @@ class HomeController extends Controller
     
             $order->forceFill([
                 'orders->confirmed' => Order::STATUS_CONFIRMED
+            ])->save();
+        }
+
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
+
+        return View::make('thanks', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'order' => $order,
+            'category' => new stdClass(),
+            'steps' => [],
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
+            'status' => $order->orderStatus()->first(),
+            'states' => Lang::get('states'),
+        ]);
+    }
+
+    /**
+     * @param string $order_uuid
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function declineOrder(string $order_uuid): ViewContract
+    {
+        $order = Order::query()->where('uuid', $order_uuid)->first();
+
+        if ((int) $order->getAttribute('orders')['confirmed'] !== Order::STATUS_CONFIRMED && (int) $order->getAttribute('orders')['confirmed'] !== Order::STATUS_DECLINED) {
+            Notification::send(
+                User::query()->scopes(['notifiableUsers'])->get(),
+                new OrderDeclineNotification($order->toArray())
+            );
+    
+            $order->unsetEventDispatcher();
+    
+            $order->forceFill([
+                'orders->confirmed' => Order::STATUS_DECLINED
             ])->save();
         }
 

@@ -59,6 +59,7 @@ class OrderObserver
     
                                 $diff[] = [
                                     'step' => $step,
+                                    'old_step' => $oldValues['order'][$keyOrder]['steps'][$keyStep],
                                     'order_id' => $newOrder['id'],
                                     'device' => $newOrder['device'],
                                 ];
@@ -91,6 +92,7 @@ class OrderObserver
                                     $order->toArray(),
                                     [
                                         'insurance_summ' => $insuranceSumm,
+                                        'changed_data' => $diff,
                                     ]
                                 )
                             ));

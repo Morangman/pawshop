@@ -214,7 +214,7 @@ class OrderController extends Controller
         $d->setStorPath(storage_path().'/');
 
         return View::make('admin.order.barcode', [
-            'barcode' => $d->getBarcodeHTML($order->getKey(), 'EAN13', 3.5, 100),
+            'barcode' => $d->getBarcodePNG('11', 'C39', 3.6, 100),
             'order' => $order,
         ]);
     }

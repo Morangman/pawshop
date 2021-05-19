@@ -35,6 +35,7 @@ class Order extends Model implements HasMedia
     public const STATUS_CHANGED = 1;
     public const STATUS_NOT_CONFIRMED = 1;
     public const STATUS_CONFIRMED = 2;
+    public const STATUS_DECLINED = 3;
 
     public const STATUS_SHIPMENT_CREATED = 'OC';
     public const STATUS_SHIPMENT_SCHEDULED = 'SS';
