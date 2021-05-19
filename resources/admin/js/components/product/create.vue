@@ -262,14 +262,12 @@
                             <table class="table">
                             <thead>
                                 <tr>
-                                <th scope="col">#</th>
                                 <th scope="col" v-for="(step, index) in priceVariations.length ? priceVariations[0].steps : []" :key="`step_table__${index}`">{{ step.step_name.name }}</th>
                                 <th scope="col">Price</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(price, index) in priceVariations" :key="`variation__${index}`">
-                                    <th scope="row"> {{ price.id }} </th>
                                     <td v-for="(step, index) in price.steps" :key="`step_price__${index}`">
                                         <div class="flex flex-row steps-row">
                                             <p>{{ step.value }}</p>
