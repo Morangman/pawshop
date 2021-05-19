@@ -137,10 +137,10 @@ class LoginController extends Controller
 
             $createdUser->attachRole('user');
 
-            Mail::to($createdUser->getAttribute('email'))
-                ->send(new VerificationMail(
-                    $createdUser->toArray(),
-                ));
+            // Mail::to($createdUser->getAttribute('email'))
+            //     ->send(new VerificationMail(
+            //         $createdUser->toArray(),
+            //     ));
 
             Auth::login($createdUser);
         }
@@ -199,10 +199,10 @@ class LoginController extends Controller
 
             $createdUser->attachRole('user');
 
-            Mail::to($createdUser->getAttribute('email'))
-                ->send(new VerificationMail(
-                    $createdUser->toArray(),
-                ));
+            // Mail::to($createdUser->getAttribute('email'))
+            //     ->send(new VerificationMail(
+            //         $createdUser->toArray(),
+            //     ));
 
             Auth::login($createdUser);
         }

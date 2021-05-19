@@ -11,6 +11,7 @@ use App\User;
 use Auth;
 use Carbon\Carbon;
 use App\Mail\VerificationMail;
+use App\Order;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\RedirectResponse;
@@ -21,6 +22,7 @@ use Notification;
 use Session;
 use URL;
 use View;
+use stdClass;
 
 class RegisterController extends Controller
 {
@@ -37,7 +39,7 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+    use RegistersUsers, SettingTrait;
 
     /**
      * Where to redirect users after registration.
@@ -49,27 +51,51 @@ class RegisterController extends Controller
     /**
      * @param \App\Http\Requests\Auth\RegisterRequest $request
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Contracts\View\View
      */
-    public function register(RegisterRequest $request): RedirectResponse
+    public function register(RegisterRequest $request): ViewContract
     {
         /** @var \App\User $user */
         $user = \App\User::query()->create($request->all());
 
         $user->attachRole('user');
 
-        Mail::to($user->getAttribute('email'))
-            ->send(new VerificationMail(
-                $user->toArray(),
-            ));
+        User::query()->whereKey($user->getKey())->update([
+            'is_active' => true,
+            'register_code' => null,
+            'email_verified_at' => Carbon::now(),
+        ]);
 
-        if ($request->get('is_guest')) {
-            Auth::login($user);
-        }
+        // Mail::to($user->getAttribute('email'))
+        //     ->send(new VerificationMail(
+        //         $user->toArray(),
+        //     ));
 
-        Session::flash('status', Lang::get('auth.register.verify.title'));
+        Auth::login($user);
 
-        return new RedirectResponse(URL::route('web.login.show'), 302);
+        //Session::flash('status', Lang::get('auth.register.verify.title'));
+
+        //return new RedirectResponse(URL::route('web.login.show'), 302);
+
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
+
+        return \Illuminate\Support\Facades\View::make('account', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'category' => new stdClass(),
+            'steps' => [],
+            'user' => \Illuminate\Support\Facades\Auth::user(),
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
+            'states' => Lang::get('states'),
+            'statuses' => Lang::get('admin/order.order_statuses'),
+            'orders' => Order::query()->where('user_id', Auth::id())->with('orderStatus')->get() ?? [],
+            'tab' => ''
+        ]);
     }
 
     /**
