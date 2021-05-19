@@ -41,6 +41,7 @@ class CreateOrdersTable extends Migration
             $table->timestamp('estimate_date')->nullable();
             $table->timestamp('delivered_date')->nullable();
             $table->timestamp('paid_date')->nullable();
+            $table->unsignedBigInteger('send_ctn')->default(0);
             $table->timestamps();
 
             $table->foreign('user_id')

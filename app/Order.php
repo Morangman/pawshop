@@ -79,6 +79,7 @@ class Order extends Model implements HasMedia
         'paid_date',
         'is_transit_notify',
         'is_received_notify',
+        'send_ctn',
     ];
 
     /**
@@ -105,6 +106,7 @@ class Order extends Model implements HasMedia
         'paid_date' => 'datetime',
         'is_transit_notify' => 'int',
         'is_received_notify' => 'int',
+        'send_ctn' => 'int',
     ];
 
     /**
