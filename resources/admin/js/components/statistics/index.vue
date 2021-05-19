@@ -77,9 +77,6 @@
                             <th>
                                 {{ $t('admin.statistics.form.result_price') }}
                             </th>
-                            <th>
-                                {{ $t('admin.statistics.form.product_price') }}
-                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -97,7 +94,6 @@
                                     <td>{{ product.steps_view_count }}</td>
                                     <td>{{ product.steps_coefficient }}</td>
                                     <td>{{ product.price }}</td>
-                                    <td>{{ product.custom_text }}</td>
                                 </tr>
                         </template>
                     </tbody>

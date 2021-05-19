@@ -43,7 +43,6 @@ class CategoryController extends Controller
             'category' => null,
             'categories' => Category::query()
                 ->whereNull('custom_text')
-                ->whereNull('subcategory_id')
                 ->get(),
             'faqs' => Faq::all(),
         ]);
@@ -88,7 +87,6 @@ class CategoryController extends Controller
                 'category' => $category,
                 'categories' => Category::query()
                     ->whereNull('custom_text')
-                    ->whereNull('subcategory_id')
                     ->get(),
                 'faqs' => Faq::all(),
             ]
