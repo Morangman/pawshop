@@ -61,6 +61,9 @@
                                 </span>
                             </th>
                             <th>
+                                {{ $t('admin.order.index.table.headers.image') }}
+                            </th>
+                            <th>
                                 {{ $t('admin.order.index.table.headers.name') }}
                             </th>
                             <th>{{ $t('admin.order.index.table.headers.contacts') }}</th>
@@ -149,6 +152,19 @@
                         <template v-if="!isLoading">
                             <tr v-for="(order, i) in orders" :key="`order${i}`">
                                     <td><a :href="$r('admin.order.edit', { order: order.id })">{{ order.id }}</a></td>
+                                    <td>
+                                        <a :href="$r('admin.order.edit', { order: order.id })">
+                                            <img width="auto"
+                                                height="100"
+                                                :src="order.orders.order[0].device.image"
+                                            >
+                                        </a>
+                                        <a v-if="order.orders.order.length > 1" 
+                                            :href="$r('admin.order.edit', { order: order.id })" 
+                                            class="badge badge-primary" style="color: rgb(255, 255, 255);">
+                                            + {{ order.orders.order.length - 1 }}
+                                        </a>
+                                    </td>
                                     <td v-html="highlightSearchResult(order.address.name, filters.search)"></td>
                                     <td>{{ order.address.phone }}</td>
                                     <td>

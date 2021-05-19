@@ -25938,6 +25938,7 @@ __webpack_require__.r(__webpack_exports__);
             "headers": {
               "id": "ID",
               "name": "Name",
+              "image": "Image",
               "contacts": "Contacts",
               "status": "Status",
               "label_status": "Label created",

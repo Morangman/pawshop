@@ -55,6 +55,7 @@ return [
             'headers' => [
                 'id' => 'ID',
                 'name' => 'Name',
+                'image' => 'Image',
                 'contacts' => 'Contacts',
                 'status' => 'Status',
                 'label_status' => 'Label created',
