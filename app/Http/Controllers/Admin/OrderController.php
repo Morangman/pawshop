@@ -781,6 +781,8 @@ class OrderController extends Controller
             ->when(
                 $request->get('search'),
                 function ($query, $search) {
+                    $search = ucwords($search);
+                    
                     $keyword = "%{$search}%";
 
                     $query->where('address->name', 'like', $keyword)
@@ -837,6 +839,8 @@ class OrderController extends Controller
             ->when(
                 $request->get('search'),
                 function ($query, $search) {
+                    $search = ucwords($search);
+
                     $keyword = "%{$search}%";
 
                     $query->where('address->name', 'like', $keyword)
