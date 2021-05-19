@@ -747,15 +747,13 @@ class HomeController extends Controller
         $prices = Price::query()->where('category_id', $request->get('category_id'))->get();
 
         foreach ($prices as $price) {
-            if ( $price->getAttribute('is_parsed')) {
-                $similar = array_intersect($ids, $price->getAttribute('steps_ids'));
+            $similar = array_intersect($ids, $price->getAttribute('steps_ids'));
 
-                if (sizeof($ids) === sizeof($similar)) {
-                    if ($customPrice = $price->getAttribute('custom_price')) {
-                        $resultPrice = $customPrice;
-                    } else {
-                        $resultPrice = $price->getAttribute('price');
-                    }
+            if (sizeof($ids) === sizeof($similar)) {
+                if ($customPrice = $price->getAttribute('custom_price')) {
+                    $resultPrice = $customPrice;
+                } else {
+                    $resultPrice = $price->getAttribute('price');
                 }
             }
         }
