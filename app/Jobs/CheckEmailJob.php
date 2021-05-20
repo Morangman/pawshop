@@ -75,6 +75,10 @@ class CheckEmailJob implements ShouldQueue
             }
 
             if ($message === "") {
+                $message = imap_fetchbody($mailbox, $id, "1");
+            }
+
+            if ($message === "") {
                 $message = imap_fetchbody($mailbox, $id, "2");
             }
 
