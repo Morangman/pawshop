@@ -33,80 +33,93 @@ class CheckEmailJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $config = Config::get('mail.imap');
+        $imapConfig = Config::get('mail.imap');
 
-        $mailuser= Arr::get($config, 'user');
-        $mailpass = Arr::get($config, 'password');
-        
-        $mailhost='{rapid-recycle.com:993/imap/ssl/novalidate-cert}INBOX';
-        
-        $mailbox = imap_open($mailhost,$mailuser,$mailpass) or die("<br />\nFAILLED! ".imap_last_error());
+        foreach($imapConfig as $config) {
+            $mailuser= $config['user'];
+            $mailpass = $config['password'];
 
-        $emails = imap_search($mailbox,'UNSEEN');
+            $mailhost='{rapid-recycle.com:993/imap/ssl/novalidate-cert}INBOX';
 
-        if ($emails) {
-            foreach ($emails as $id) {
-                $header = imap_headerinfo($mailbox, $id);
-                
-                $fromEmail = $header->from[0]->mailbox . "@" . $header->from[0]->host;
-    
-                $fromName = $header->from[0]->personal;
-    
-                $message = imap_fetchbody($mailbox, $id, "1.2");
-    
-                if ($message === "") {
-                    $message = imap_fetchbody($mailbox, $id, "1.1");
-                }
-    
-                if ($message === "") {
-                    $message = imap_fetchbody($mailbox, $id, "2");
-                }
-    
-                $time = Carbon::parse($header->date);
-    
-                if (Callback::query()->where('email', '=', $fromEmail)->exists()) {
-                    $callback = Callback::query()->where('email', '=', $fromEmail)->first();
-        
-                    Message::query()->create(
-                        [
-                            'name' => $fromName,
-                            'email' => $fromEmail,
-                            'text' => $message,
-                            'sender' => Callback::SENDER_FROM,
-                            'chat_id' => $callback->getKey(),
-                            'time' => $time,
-                        ]
-                    );
+            $mailbox = imap_open($mailhost,$mailuser,$mailpass) or die("<br />\nFAILLED! ".imap_last_error());
 
-                    $this->sendMessage($message ? $message : 'New message', route('admin.callback.edit', ['callback' => $callback->getKey()]));
-                } else {
-                    $user = User::query()->where('email', '=', $fromEmail)->first();
-        
-                    $callback = Callback::query()->create(
-                        [
-                            'name' => $user ? $user->getAttribute('name') : $fromName,
-                            'email' => $fromEmail,
-                            'text' => $message,
-                            'sender' => Callback::SENDER_FROM,
-                        ]
-                    );
-        
-                    Message::query()->create(
-                        [
-                            'name' => $fromName,
-                            'email' => $fromEmail,
-                            'text' => $message,
-                            'sender' => Callback::SENDER_FROM,
-                            'chat_id' => $callback->getKey(),
-                            'time' => $time,
-                        ]
-                    );
+            $emails = imap_search($mailbox,'UNSEEN');
 
-                    $this->sendMessage($message ? $message : 'New message', route('admin.callback.edit', ['callback' => $callback->getKey()]));
-                }
+            if ($emails) {
+                $this->getMassages($mailbox, $emails);
+            }
+    
+            imap_close($mailbox);
+        }
+    }
+
+    /**
+     * @param $mailbox
+     * @param $emails
+     *
+     * @return void
+     */
+    public function getMassages($mailbox, $emails)
+    {
+        foreach ($emails as $id) {
+            $header = imap_headerinfo($mailbox, $id);
+            
+            $fromEmail = $header->from[0]->mailbox . "@" . $header->from[0]->host;
+
+            $fromName = $header->from[0]->personal;
+
+            $message = imap_fetchbody($mailbox, $id, "1.2");
+
+            if ($message === "") {
+                $message = imap_fetchbody($mailbox, $id, "1.1");
+            }
+
+            if ($message === "") {
+                $message = imap_fetchbody($mailbox, $id, "2");
+            }
+
+            $time = Carbon::parse($header->date);
+
+            if (Callback::query()->where('email', '=', $fromEmail)->exists()) {
+                $callback = Callback::query()->where('email', '=', $fromEmail)->first();
+    
+                Message::query()->create(
+                    [
+                        'name' => $fromName,
+                        'email' => $fromEmail,
+                        'text' => $message,
+                        'sender' => Callback::SENDER_FROM,
+                        'chat_id' => $callback->getKey(),
+                        'time' => $time,
+                    ]
+                );
+
+                //$this->sendMessage($message ? $message : 'New message', route('admin.callback.edit', ['callback' => $callback->getKey()]));
+            } else {
+                $user = User::query()->where('email', '=', $fromEmail)->first();
+    
+                $callback = Callback::query()->create(
+                    [
+                        'name' => $user ? $user->getAttribute('name') : $fromName,
+                        'email' => $fromEmail,
+                        'text' => $message,
+                        'sender' => Callback::SENDER_FROM,
+                    ]
+                );
+    
+                Message::query()->create(
+                    [
+                        'name' => $fromName,
+                        'email' => $fromEmail,
+                        'text' => $message,
+                        'sender' => Callback::SENDER_FROM,
+                        'chat_id' => $callback->getKey(),
+                        'time' => $time,
+                    ]
+                );
+
+                //$this->sendMessage($message ? $message : 'New message', route('admin.callback.edit', ['callback' => $callback->getKey()]));
             }
         }
-
-        imap_close($mailbox);
     }
 }

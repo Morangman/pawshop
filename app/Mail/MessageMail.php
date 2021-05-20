@@ -33,7 +33,7 @@ class MessageMail extends Mailable
      */
     public function build()
     {
-        return $this->from('info@rapid-recycle.com', 'rapid-recycle.com')
+        return $this->from('support@rapid-recycle.com', 'rapid-recycle.com')
             ->subject('New message')
             ->view('mail.message');
     }
