@@ -135,10 +135,10 @@ return [
 
     
     'imap' => [
-        // 'support' => [
-        //     'user' => env('MAIL_SUPPORT_IMAP_USER'),
-        //     'password' => env('MAIL_SUPPORT_IMAP_PASSWORD'),
-        // ],
+        'support' => [
+            'user' => env('MAIL_SUPPORT_IMAP_USER'),
+            'password' => env('MAIL_SUPPORT_IMAP_PASSWORD'),
+        ],
         'info' => [
             'user' => env('MAIL_INFO_IMAP_USER'),
             'password' => env('MAIL_INFO_IMAP_PASSWORD'),
