@@ -78,6 +78,7 @@ class HomeController extends Controller
             'relatedCategories' => $categories,
             'faqs' => new stdClass(),
             'isMainPage' => true,
+            'breadcrumbs' => [],
         ]);
     }
 
@@ -975,12 +976,38 @@ class HomeController extends Controller
 
     /**
      * @param string $slug
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function getByCategory(string $slug): ViewContract
+    public function getByCategory(string $slug, Request $request): ViewContract
     {
+        $breadcrumbs = [];
+
         $category = Category::query()->where('slug', $slug)->first();
+
+        if ($category->getAttribute('subcategory_id')) {
+            $subCategory = Category::query()->whereKey((int) $category->getAttribute('subcategory_id'))->first();
+
+            if ($subCategory->getAttribute('subcategory_id')) {
+                $subSubCategory = Category::query()->whereKey((int) $subCategory->getAttribute('subcategory_id'))->first();
+    
+                $breadcrumbs[] = [
+                    'slug' => $subSubCategory->getAttribute('slug'),
+                    'name' => $subSubCategory->getAttribute('name'),
+                ];    
+            }
+
+            $breadcrumbs[] = [
+                'slug' => $subCategory->getAttribute('slug'),
+                'name' => $subCategory->getAttribute('name'),
+            ];
+        }
+
+        $breadcrumbs[] = [
+            'slug' => $slug,
+            'name' => $category->getAttribute('name'),
+        ];
 
         $relatedCategories = Category::query()
             ->where('subcategory_id', '=', $category->getKey())
@@ -1033,6 +1060,7 @@ class HomeController extends Controller
             'relatedCategories' => $relatedCategories,
             'faqs' => $faqs ?? new stdClass(),
             'isMainPage' => false,
+            'breadcrumbs' => $breadcrumbs,
         ]);
     }
 

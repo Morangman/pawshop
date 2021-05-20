@@ -72,7 +72,7 @@
             <div class="footer-info">
                 <a href="tel:+{{ preg_replace('/\D+/', '', $phone) }}" class="tel">{{ $phone }}</a>
                 <p>Mon-Sun 9:00AM-8:00PM</p>
-                <a href="#sell-device-section" class="btn go-sell">Sell Your Device</a>
+                <a href="/#sell-device-section" class="btn">Sell Your Device</a>
             </div>
         </div>
     </div>

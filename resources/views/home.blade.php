@@ -47,6 +47,7 @@
                         :steps="{{ json_encode($steps) }}"
                         :categories="{{ json_encode($relatedCategories) }}"
                         :faqs="{{ json_encode($faqs) }}"
+                        :breadcrumbs="{{ json_encode($breadcrumbs) }}"
                     ></sell-device>
                   </div>
                   

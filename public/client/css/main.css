@@ -841,6 +841,7 @@ header {
 .order-list {
   display: -ms-flexbox;
   display: flex;
+  justify-content: center;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   margin: 0 -15px;
@@ -911,6 +912,78 @@ header {
 
 .order-list.models-list h5 {
   font-weight: 300;
+}
+
+.order-content h4{
+  text-align: center;
+}
+
+.page-header .breadcrumb-line-component {
+  margin-bottom: 20px;
+}
+
+.breadcrumb-line-light.breadcrumb-line-component {
+  border-color: #ddd;
+}
+
+.breadcrumb-line-component {
+  border: 1px solid transparent;
+  border-radius: .1875rem;
+}
+
+.breadcrumb-line-light {
+  background-color: #fafafa;
+  border-color: #ddd;
+  color: #333;
+}
+
+.breadcrumb-line {
+  position: relative;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}
+
+.breadcrumb {
+  display: -ms-flexbox;
+  display: flex;
+  align-items: center;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding: .625rem 0;
+  line-height: 1.5;
+  margin-bottom: 0;
+  list-style: none;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+.breadcrumb-item+.breadcrumb-item {
+  padding-left: .625rem;
+}
+
+a.breadcrumb-elements-item, a.breadcrumb-item {
+  display: inline-block;
+  color: inherit;
+  transition: opacity ease-in-out .15s;
+}
+
+.breadcrumb-item:last-child {
+  color: #999;
+}
+
+.breadcrumb-line-light {
+  background-color: #fafafa;
+  border-color: #ddd;
+  color: #333;
+}
+
+.breadcrumb-item+.breadcrumb-item::before {
+  display: inline-block;
+  padding-right: .625rem;
+  color: inherit;
+  content: "/";
 }
 
 .order-search-outer {

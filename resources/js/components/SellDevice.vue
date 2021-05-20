@@ -2,6 +2,18 @@
 <div>
     <h1 class="center-text">Start Selling</h1>
     <div class="description center-text">Find the product you'd like to trade-in for cash</div>
+
+    <div class="page-header page-header-light" v-if="breadcrumbs && breadcrumbs.length">
+        <div class="breadcrumb-line breadcrumb-line-light breadcrumb-line-component header-elements-md-inline">
+            <div class="d-flex">
+                <div class="breadcrumb">
+                    <a href="/#sell-device-section" class="breadcrumb-item"><img width="12" height="12" src="../../client/images/home.svg"/> Home</a>
+                    <a v-for="(breadcrumb, index) in breadcrumbs" :href="$r('get-category', { slug: breadcrumb.slug })" class="breadcrumb-item">{{ breadcrumb.name }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <ul id="scrolled" class="order-steps-list" v-if="steps.length">
         <li v-for="(step, index) in steps" :class="stepIndex === index ? 'active-step' : ''">
             <a href="javascript:void(0)"><i>{{ index + 1 }}</i> <span>{{ index + 1 }}</span></a>
@@ -234,6 +246,10 @@
                 type: Object,
                 required: false,
             },
+            breadcrumbs: {
+                type: Array,
+                required: false,
+            },
         },
 
         mixins: [FormHelper],
@@ -356,7 +372,7 @@
                     });
                 }
 
-                let offset = 125; // sticky nav height
+                let offset = 160; // sticky nav height
                 let el = document.querySelector('#step-title'); // element you are scrolling to
                 window.scroll({ top: (el.offsetTop - offset), left: 0, behavior: 'smooth' });
             },
