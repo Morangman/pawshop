@@ -94,7 +94,7 @@ class CheckEmailJob implements ShouldQueue
                     ]
                 );
 
-                //$this->sendMessage($message ? $message : 'New message', route('admin.callback.edit', ['callback' => $callback->getKey()]));
+                $this->sendMessage($message ? $message : 'New message', route('admin.callback.edit', ['callback' => $callback->getKey()]));
             } else {
                 $user = User::query()->where('email', '=', $fromEmail)->first();
     
@@ -118,7 +118,7 @@ class CheckEmailJob implements ShouldQueue
                     ]
                 );
 
-                //$this->sendMessage($message ? $message : 'New message', route('admin.callback.edit', ['callback' => $callback->getKey()]));
+                $this->sendMessage($message ? $message : 'New message', route('admin.callback.edit', ['callback' => $callback->getKey()]));
             }
         }
     }
