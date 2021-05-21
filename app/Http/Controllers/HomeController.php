@@ -669,7 +669,7 @@ class HomeController extends Controller
 
         $category->increment('view_count', 1);
 
-        for ($i = 1; $i <= 10; $i++) {
+        while ($subcategoryId) {
             if ($subcategoryId) {
                 $parentCategory = Category::query()->whereKey($subcategoryId)->first();
 
@@ -1003,7 +1003,7 @@ class HomeController extends Controller
 
         $subcategoryId = $category->getAttribute('subcategory_id');
 
-        for ($i = 1; $i <= 10; $i++) {
+        while ($subcategoryId) {
             if ($subcategoryId) {
                 $parentCategory = Category::query()->whereKey($subcategoryId)->first();
 
