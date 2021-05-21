@@ -13,7 +13,7 @@
                                 type="text"
                                 v-model="model.name"
                                 class="form-control"
-                                :class="{ 'border-danger': errors.name }"
+                                :class="{ 'border-danger': errors.name || nameError }"
                             >
                             <div v-for="(error, i) in errors.name"
                                 :key="`name__error__${i}`"
@@ -387,6 +387,7 @@
                 searchText: null,
                 errors: {},
                 formData: null,
+                nameError: false,
             };
         },
 
@@ -401,7 +402,13 @@
 
         methods: {
             nextStep() {
-                this.stepCount++;
+                if (this.model.name) {
+                    this.nameError = false;
+
+                    this.stepCount++;
+                } else {
+                    this.nameError = true;
+                }
 
                 if (this.stepCount > 4) {
                     this.store();

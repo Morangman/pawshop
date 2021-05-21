@@ -12,6 +12,7 @@ use App\Http\Requests\Admin\Category\UpdateRequest;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Session;
@@ -56,7 +57,7 @@ class CategoryController extends Controller
      */
     public function store(StoreRequest $request): JsonResponse
     {
-        $category = Category::create($request->all());
+        $category = Category::create(array_merge($request->all(), ['user_id' => Auth::id()]));
 
         if (!$request->get('slug')) {
             $category->update([

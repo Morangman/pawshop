@@ -3,6 +3,14 @@
         <div class="col-xl-8 col-lg-8 col-md-10 col-sm-10 mx-auto form p-1">
             <div class="card">
                 <div class="card-body">
+                    <div class="form-group" v-if="model.user_id">
+                        <label>
+                            <strong>
+                                {{ $t('admin.product.form.user') }}
+                            </strong>
+                        </label>
+                        <a :href="$r('admin.user.edit', { user: model.user_id })">{{ model.user_id }}</a>
+                    </div>
                     <div class="form-group">
                         <label>
                             <strong>{{ $t('admin.category.form.name') }}</strong>

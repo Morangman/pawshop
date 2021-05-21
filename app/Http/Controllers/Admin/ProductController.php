@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class ProductController
@@ -112,7 +113,7 @@ class ProductController extends Controller
      */
     public function generatePrices(StoreRequest $request): JsonResponse
     {
-        $category = Category::create($request->all());
+        $category = Category::create(array_merge($request->all(), ['user_id' => Auth::id()]));
 
         if ($requestSteps = $request->get('steps')) {
             $stepsIds = [];

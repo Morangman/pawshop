@@ -25998,6 +25998,7 @@ __webpack_require__.r(__webpack_exports__);
           "edit": "Edit product"
         },
         "form": {
+          "user": "User ID",
           "name": "Name*",
           "image": "Image*",
           "faq": "FAQ",
