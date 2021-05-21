@@ -665,9 +665,25 @@ class HomeController extends Controller
 
         $category = Category::query()->whereKey($request->get('category_id'))->first();
 
+        $subcategoryId = $category->getAttribute('subcategory_id');
+
         $category->increment('view_count', 1);
 
-        Category::query()->whereKey($category->getAttribute('subcategory_id'))->increment('view_count', 1);
+        for ($i = 1; $i <= 10; $i++) {
+            if ($subcategoryId) {
+                $parentCategory = Category::query()->whereKey($subcategoryId)->first();
+
+                if ($parentCategory) {
+                    $parentCategory->increment('view_count', 1);
+    
+                    if ($subId = $parentCategory->getAttribute('subcategory_id')) {
+                        $subcategoryId = $subId;
+                    } else {
+                        $subcategoryId = null;
+                    }
+                }
+            }
+        }
 
         $ids = [];
 
@@ -976,33 +992,37 @@ class HomeController extends Controller
 
     /**
      * @param string $slug
-     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function getByCategory(string $slug, Request $request): ViewContract
+    public function getByCategory(string $slug): ViewContract
     {
         $breadcrumbs = [];
 
         $category = Category::query()->where('slug', $slug)->first();
 
-        if ($category->getAttribute('subcategory_id')) {
-            $subCategory = Category::query()->whereKey((int) $category->getAttribute('subcategory_id'))->first();
+        $subcategoryId = $category->getAttribute('subcategory_id');
 
-            if ($subCategory->getAttribute('subcategory_id')) {
-                $subSubCategory = Category::query()->whereKey((int) $subCategory->getAttribute('subcategory_id'))->first();
+        for ($i = 1; $i <= 10; $i++) {
+            if ($subcategoryId) {
+                $parentCategory = Category::query()->whereKey($subcategoryId)->first();
+
+                if ($parentCategory) {
+                    $breadcrumbs[] = [
+                        'slug' => $parentCategory->getAttribute('slug'),
+                        'name' => $parentCategory->getAttribute('name'),
+                    ];
     
-                $breadcrumbs[] = [
-                    'slug' => $subSubCategory->getAttribute('slug'),
-                    'name' => $subSubCategory->getAttribute('name'),
-                ];    
+                    if ($subId = $parentCategory->getAttribute('subcategory_id')) {
+                        $subcategoryId = $subId;
+                    } else {
+                        $subcategoryId = null;
+                    }
+                }
             }
-
-            $breadcrumbs[] = [
-                'slug' => $subCategory->getAttribute('slug'),
-                'name' => $subCategory->getAttribute('name'),
-            ];
         }
+
+        $breadcrumbs = array_reverse($breadcrumbs);
 
         $breadcrumbs[] = [
             'slug' => $slug,
