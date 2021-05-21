@@ -15,6 +15,10 @@
     justify-content: center;
 }
 
+.price-input {
+    width: 200px!important;
+}
+
 .vs__clear,
 .vs__open-indicator {
     transform: scale(0.7) !important;

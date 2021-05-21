@@ -71,16 +71,16 @@
                                 {{ $t('admin.callback.index.table.headers.created_at') }}
                                 <span>
                                     <i
-                                            v-if="filters.by === 'created_at' && filters.dir === 'desc'"
-                                            @click.prevent="sort('created_at', 'asc')"
+                                            v-if="filters.by === 'updated_at' && filters.dir === 'desc'"
+                                            @click.prevent="sort('updated_at', 'asc')"
                                             class="icon-arrow-down8 cursor-pointer"
                                     ></i>
                                     <i
-                                            v-if="filters.by === 'created_at' && filters.dir === 'asc'"
-                                            @click.prevent="sort('created_at', 'desc')"
+                                            v-if="filters.by === 'updated_at' && filters.dir === 'asc'"
+                                            @click.prevent="sort('updated_at', 'desc')"
                                             class="icon-arrow-up8 cursor-pointer"
                                     ></i>
-                                    <span v-if="filters.by !== 'created_at'" @click.prevent="sort('created_at', 'asc')">
+                                    <span v-if="filters.by !== 'updated_at'" @click.prevent="sort('updated_at', 'asc')">
                                         <i class="icon-arrow-up8 cursor-pointer"></i>
                                         <i class="icon-arrow-down8 cursor-pointer"></i>
                                     </span>
@@ -101,7 +101,7 @@
                                     </td>
                                     <td>{{ callback.email }}</td>
                                     <td><span v-html="callback.text ? callback.text.substring(0,30)+'..' : ''"></span></td>
-                                    <td>{{ callback.created_at }}</td>
+                                    <td>{{ callback.updated_at }}</td>
                                     <td>
                                         <a :href="$r('admin.callback.edit', { callback: callback.id })">
                                             <i class="icon-pencil"></i>
@@ -144,7 +144,7 @@
                 filters: {
                     page: 1,
                     search: null,
-                    by: 'id',
+                    by: 'updated_at',
                     dir: 'desc',
                 },
                 callbacks: [],

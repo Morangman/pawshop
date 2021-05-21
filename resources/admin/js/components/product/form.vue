@@ -289,8 +289,8 @@
                         <thead>
                             <tr>
                             <th scope="col" v-for="(step, index) in priceVariations.length ? priceVariations[0].steps : []" :key="`step_table__${index}`">{{ step.step_name.name }}</th>
-                            <th scope="col" v-if="model.is_parsed">parsed price</th>
-                            <th scope="col">custom price</th>
+                            <th scope="col" class="price-input" v-if="model.is_parsed">parsed price</th>
+                            <th scope="col" class="price-input">custom price</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -308,6 +308,7 @@
                                         v-model="price.price"
                                         class="form-control"
                                         v-on:keyup="updatePrice(price)"
+                                        disabled
                                     >
                                 </td>
                                 <td>
