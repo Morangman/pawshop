@@ -25910,6 +25910,8 @@ __webpack_require__.r(__webpack_exports__);
           "ordered_status": "Ordered status",
           "created_at": "Created date",
           "updated_at": "Updated date",
+          "received_date": "Received date",
+          "cancelled_date": "Cancelled date",
           "summ": "The amount of ordered products",
           "custom_summ": "Custom amount of ordered products",
           "order_number": "Order number",
@@ -25946,6 +25948,8 @@ __webpack_require__.r(__webpack_exports__);
               "created_at": "Created date",
               "estimate_date": "Estimate date",
               "delivered_date": "Delivered date",
+              "received_date": "Received date",
+              "cancelled_date": "Cancelled date",
               "payed_date": "Pay day"
             }
           },

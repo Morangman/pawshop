@@ -126,6 +126,44 @@
                                     </span>
                                 </span>
                             </th>
+                            <th v-if="isreceived">
+                                {{ $t('admin.order.index.table.headers.received_date') }}
+                                <span>
+                                    <i
+                                            v-if="filters.by === 'received_date' && filters.dir === 'desc'"
+                                            @click.prevent="sort('received_date', 'asc')"
+                                            class="icon-arrow-down8 cursor-pointer"
+                                    ></i>
+                                    <i
+                                            v-if="filters.by === 'received_date' && filters.dir === 'asc'"
+                                            @click.prevent="sort('received_date', 'desc')"
+                                            class="icon-arrow-up8 cursor-pointer"
+                                    ></i>
+                                    <span v-if="filters.by !== 'received_date'" @click.prevent="sort('received_date', 'asc')">
+                                        <i class="icon-arrow-up8 cursor-pointer"></i>
+                                        <i class="icon-arrow-down8 cursor-pointer"></i>
+                                    </span>
+                                </span>
+                            </th>
+                            <th v-if="iscancelled">
+                                {{ $t('admin.order.index.table.headers.cancelled_date') }}
+                                <span>
+                                    <i
+                                            v-if="filters.by === 'cancelled_date' && filters.dir === 'desc'"
+                                            @click.prevent="sort('cancelled_date', 'asc')"
+                                            class="icon-arrow-down8 cursor-pointer"
+                                    ></i>
+                                    <i
+                                            v-if="filters.by === 'cancelled_date' && filters.dir === 'asc'"
+                                            @click.prevent="sort('cancelled_date', 'desc')"
+                                            class="icon-arrow-up8 cursor-pointer"
+                                    ></i>
+                                    <span v-if="filters.by !== 'cancelled_date'" @click.prevent="sort('cancelled_date', 'asc')">
+                                        <i class="icon-arrow-up8 cursor-pointer"></i>
+                                        <i class="icon-arrow-down8 cursor-pointer"></i>
+                                    </span>
+                                </span>
+                            </th>
                             <th>
                                 {{ $t('admin.order.index.table.headers.created_at') }}
                                 <span>
@@ -176,6 +214,8 @@
                                     <td v-if="istransit"><span v-if="order.estimate_date">{{ normalizeDate(order.estimate_date) }}</span></td>
                                     <td v-if="isdelivered"><span v-if="order.delivered_date">{{ normalizeDate(order.delivered_date) }}</span></td>
                                     <td v-if="ispayed"><span v-if="order.paid_date">{{ normalizeDate(order.paid_date) }}</span></td>
+                                    <td v-if="isreceived"><span v-if="order.received_date">{{ normalizeDate(order.received_date) }}</span></td>
+                                    <td v-if="iscancelled"><span v-if="order.cancelled_date">{{ normalizeDate(order.cancelled_date) }}</span></td>
                                     <td>{{ normalizeDate(order.created_at) }}</td>
                                     <td>
                                         <a :href="$r('admin.order.edit', { order: order.id })">
@@ -227,6 +267,14 @@
                 required: false,
             },
             ispayed: {
+                type: Boolean,
+                required: false,
+            },
+            isreceived: {
+                type: Boolean,
+                required: false,
+            },
+            iscancelled: {
                 type: Boolean,
                 required: false,
             },

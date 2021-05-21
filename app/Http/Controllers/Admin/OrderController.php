@@ -65,6 +65,8 @@ class OrderController extends Controller
             'is_transit' => (int) $request->get('status') === Order::STATUS_TRANSIT,
             'is_delivered' => (int) $request->get('status') === Order::STATUS_ORDER_DELIVERED,
             'is_payed' => (int) $request->get('status') === Order::STATUS_PAID,
+            'is_received' => (int) $request->get('status') === Order::STATUS_RECEIVED,
+            'is_cancelled' => (int) $request->get('status') === Order::STATUS_CANCELLED,
         ]);
     }
 
@@ -566,6 +568,7 @@ class OrderController extends Controller
 
                 $order->update([
                     'is_received_notify' => 1,
+                    'received_date' => Carbon::now(),
                 ]);
             } catch (\Exception $e) {}
         }
@@ -576,6 +579,12 @@ class OrderController extends Controller
             ]);
 
             $this->setProductsToWarehouse($order);
+        }
+
+        if ((int) $request->get('ordered_status') === Order::STATUS_CANCELLED) {
+            $order->update([
+                'cancelled_date' => Carbon::now()
+            ]);
         }
 
         Session::flash(
@@ -800,6 +809,8 @@ class OrderController extends Controller
             'is_transit' => false,
             'is_delivered' => false,
             'is_payed' => false,
+            'is_received' => false,
+            'is_cancelled' => false,
         ]);
     }
 

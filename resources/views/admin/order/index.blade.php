@@ -26,5 +26,7 @@
         :isdelivered="{{ json_encode($is_delivered, true) }}"
         :ordersstatus="{{ json_encode($orders_status, true) }}"
         :ispayed="{{ json_encode($is_payed, true) }}"
+        :isreceived="{{ json_encode($is_received, true) }}"
+        :iscancelled="{{ json_encode($is_cancelled, true) }}"
     ></order-index>
 @endsection
