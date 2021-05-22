@@ -134,7 +134,7 @@ class CheckEmailJob implements ShouldQueue
                     [
                         'name' => $user ? $user->getAttribute('name') : $fromName,
                         'email' => $fromEmail,
-                        'text' => $simpleMessage,
+                        'text' => strip_tags($simpleMessage),
                         'sender' => Callback::SENDER_FROM,
                     ]
                 );
