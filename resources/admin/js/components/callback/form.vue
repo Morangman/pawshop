@@ -38,8 +38,12 @@
                 
                         <li v-for="(message, i) in model.messages" :key="`message_${i}`" class="media" :class="message.sender === 2 ? 'media-chat-item-reverse' : ''">
                             <div class="media-body">
-                                <div class="media-chat-item"><span v-html="message.text"></span></div>
-                                <div class="font-size-sm text-muted mt-2">{{ message.time ? message.time : message.created_at }}</div>
+                                <div class="media-chat-item"><span v-html="message.simple_text ? message.simple_text : message.text"></span></div>
+                                <div class="font-size-sm text-muted mt-2">
+                                    {{ message.time ? message.time : message.created_at }}
+                                    <a href="javascript:0" v-if="message.simple_text && !message.simple_text_copy" v-on:click="showMore(i)">Show more</a>
+                                    <a href="javascript:0" v-if="message.simple_text && message.simple_text_copy" v-on:click="hide(i)">Hide</a>
+                                </div>
                             </div>
                         </li>
                     </ul>
@@ -82,7 +86,7 @@
                     email: this.model.email,
                     name: this.model.name,
                     text: null,
-                }
+                },
             };
         },
 
@@ -93,6 +97,18 @@
 
             reload() {
                 location.reload();
+            },
+
+            showMore(i) {
+                this.model.messages[i].simple_text_copy = this.model.messages[i].simple_text;
+                
+                this.model.messages[i].simple_text = this.model.messages[i].text;
+            },
+
+            hide(i) {
+                this.model.messages[i].simple_text = this.model.messages[i].simple_text_copy;
+
+                this.model.messages[i].simple_text_copy = null;
             },
 
             sendMessage() {

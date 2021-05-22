@@ -25,6 +25,7 @@ class CreateMessagesTable extends Migration
             $table->string('email');
             $table->string('phone')->nullable();
             $table->text('text')->nullable();
+            $table->text('simple_text')->nullable();
             $table->tinyInteger('sender')->unsigned()->nullable();
             $table->tinyInteger('viewed')->unsigned()->default(1);
             $table->timestamp('time')->nullable();

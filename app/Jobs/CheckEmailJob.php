@@ -89,16 +89,18 @@ class CheckEmailJob implements ShouldQueue
                 }
             }
 
+            $simpleMessage = '';
+
             $supportIsset = strpos($message, 'support@rapid-recycle.com');
 
             $infoIsset = strpos($message, 'info@rapid-recycle.com');
             
             if ($supportIsset) {
-                $message = substr($message, 0, strpos($message, 'support@rapid-recycle.com'));
+                $simpleMessage = substr($message, 0, strpos($message, 'support@rapid-recycle.com'));
             }
             
             if ($infoIsset) {
-                $message = substr($message, 0, strpos($message, 'info@rapid-recycle.com'));
+                $simpleMessage = substr($message, 0, strpos($message, 'info@rapid-recycle.com'));
             }
             
             $fromEmail = $header->from[0]->mailbox . "@" . $header->from[0]->host;
@@ -117,13 +119,14 @@ class CheckEmailJob implements ShouldQueue
                         'name' => $fromName,
                         'email' => $fromEmail,
                         'text' => $message,
+                        'simple_text' => $simpleMessage,
                         'sender' => Callback::SENDER_FROM,
                         'chat_id' => $callback->getKey(),
                         'time' => $time,
                     ]
                 );
 
-                $this->sendMessage($message ? $message : 'New message', route('admin.callback.edit', ['callback' => $callback->getKey()]));
+                $this->sendMessage($simpleMessage ? $simpleMessage : 'New message', route('admin.callback.edit', ['callback' => $callback->getKey()]));
             } else {
                 $user = User::query()->where('email', '=', $fromEmail)->first();
     
@@ -131,7 +134,7 @@ class CheckEmailJob implements ShouldQueue
                     [
                         'name' => $user ? $user->getAttribute('name') : $fromName,
                         'email' => $fromEmail,
-                        'text' => $message,
+                        'text' => $simpleMessage,
                         'sender' => Callback::SENDER_FROM,
                     ]
                 );
@@ -141,13 +144,14 @@ class CheckEmailJob implements ShouldQueue
                         'name' => $fromName,
                         'email' => $fromEmail,
                         'text' => $message,
+                        'simple_text' => $simpleMessage,
                         'sender' => Callback::SENDER_FROM,
                         'chat_id' => $callback->getKey(),
                         'time' => $time,
                     ]
                 );
 
-                $this->sendMessage($message ? $message : 'New message', route('admin.callback.edit', ['callback' => $callback->getKey()]));
+                $this->sendMessage($simpleMessage ? $simpleMessage : 'New message', route('admin.callback.edit', ['callback' => $callback->getKey()]));
             }
         }
     }
