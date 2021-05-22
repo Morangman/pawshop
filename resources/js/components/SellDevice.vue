@@ -175,7 +175,7 @@
         <ul class="order-list">
             <li v-for="(category, index) in categories" :key="`device_${index}`">
                 <a :href="$r('get-category', { slug: category.slug })">
-                    <div class="image"><img :src="category.image" alt="" /></div>
+                    <div class="image"><img :src="category.compressed_image ? category.compressed_image : category.image" alt="" /></div>
                     <h5>{{ category.name }}</h5>
                     <div v-if="category.custom_text" class="price">Cash in up to ${{ category.custom_text }}</div>
                 </a>
