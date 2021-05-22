@@ -22,6 +22,8 @@
     <link href="{{ asset('client/css/app.css') }}" rel="stylesheet" type="text/css">
 
     {!! $settings->getAttribute('code_insert') !!}
+
+    <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.sitekey') }}"></script>
 </head>
 <body>
     <div id="app">
@@ -37,7 +39,6 @@
     <script src="{{ URL::asset('client/js/jquery-1.12.4.min.js') }}"></script>
     <script src="{{ URL::asset('client/js/jquery.magnific-popup.min.js') }}"></script>
     <script src="{{ URL::asset('client/js/common.js') }}"></script>
-    <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.sitekey') }}"></script>
     <script>
         $('.go-sell').click(function(e) {
             e.preventDefault();
@@ -45,7 +46,7 @@
             let top = $(id).offset().top - 30;
             $('body, html').animate({scrollTop: top}, 600);
         });
-
+        
         grecaptcha.ready(function() {
             grecaptcha.execute('{{ config('services.recaptcha.sitekey') }}', {action: 'contact'}).then(function(token) {
             if (token) {
