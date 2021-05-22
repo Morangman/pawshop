@@ -175,7 +175,7 @@
         <ul class="order-list">
             <li v-for="(category, index) in categories" :key="`device_${index}`">
                 <a :href="$r('get-category', { slug: category.slug })">
-                    <div class="image"><img :src="category.compressed_image ? category.compressed_image : category.image" alt="" /></div>
+                    <div class="image"><img :src="category.image" alt="" /></div>
                     <h5>{{ category.name }}</h5>
                     <div v-if="category.custom_text" class="price">Cash in up to ${{ category.custom_text }}</div>
                 </a>
@@ -192,7 +192,7 @@
     </div>
 
     <!--Condition -->
-    <div id="condition-popup" class="popup-modal mfp-hide mfp-with-anim">
+    <div id="condition-popup" class="popup-modal mfp-hide mfp-with-anim" v-if="steps.length">
         <div class="popup-content">
             <div class="condition-popup-content">
                 <h4>Condition Examples</h4>
@@ -373,7 +373,7 @@
                 }
 
                 let offset = 160; // sticky nav height
-                let el = document.querySelector('#step-title'); // element you are scrolling to
+                let el = document.querySelector('#step-title');
                 window.scroll({ top: (el.offsetTop - offset), left: 0, behavior: 'smooth' });
             },
 
