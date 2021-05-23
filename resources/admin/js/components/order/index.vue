@@ -222,10 +222,12 @@
                                             <i class="icon-pencil"></i>
                                         </a>
                                         <delete-confirmation
+                                            v-if="iscancelled"
                                             :route-path="$r('admin.order.delete', { order: order.id })"
                                             :redirect-path="$r('admin.order.index')"
                                             :title="$t('common.word.delete')"
                                         />
+                                        <a href="javascript:0" v-if="!iscancelled" v-on:click="cancelOrder(order.id)" title="Cancel order" class="text-danger"><i class="icon-cancel-circle2"></i></a>
                                     </td>
                                 </tr>
                         </template>
@@ -335,6 +337,16 @@
                     notify.error(_.head(errors));
                 }).finally(() => {
                     this.isLoading = false;
+                });
+            },
+
+            cancelOrder(id) {
+                axios.get(
+                    Router.route('admin.order.set-cancel-status', { order: id }),
+                ).then(() => {
+                    location.reload();
+                }).catch(({ response: { data: { errors } } }) => {
+                    console.log(errors);
                 });
             },
 

@@ -519,6 +519,25 @@ class OrderController extends Controller
         return $this->json()->noContent();
     }
 
+    /**
+     * @param \App\Order $order
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function setCancelStatus(Order $order): JsonResponse
+    {
+        $order->update([
+            'ordered_status' => Order::STATUS_CANCELLED,
+        ]);
+
+        Session::flash(
+            'success',
+            Lang::get('admin/order.messages.update')
+        );
+
+        return $this->json()->noContent();
+    }
+
 
     /**
      * @param \App\Http\Requests\Admin\Order\UpdateRequest $request
