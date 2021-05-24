@@ -46,6 +46,7 @@ use Illuminate\Support\Facades\Mail;
 use Lang;
 use Session;
 use stdClass;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class HomeController
@@ -1000,6 +1001,10 @@ class HomeController extends Controller
         $breadcrumbs = [];
 
         $category = Category::query()->where('slug', $slug)->first();
+
+        if (!$category) {
+            throw new NotFoundHttpException();
+        }
 
         $subcategoryId = $category->getAttribute('subcategory_id');
 
