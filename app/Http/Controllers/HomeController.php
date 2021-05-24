@@ -921,6 +921,10 @@ class HomeController extends Controller
      */
     public function addToBox(string $slug, Request $request): JsonResponse
     {
+        $slug = explode('/', $slug);
+
+        $slug = end($slug);
+        
         if(Auth::check()) {
             if (Cart::query()->where('user_id', '=', Auth::id())->exists()) {
                 Cart::query()->where('user_id', '=', Auth::id())->update([

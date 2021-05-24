@@ -39,7 +39,10 @@ Route::get('/account', [
 
 Route::get('/header-search', 'HomeController@headerSearchDevice')->name('header-search');
 
-Route::get('/{slug}', 'HomeController@getByCategory')->name('get-category');
+Route::get('/sell-tech{slug}', [
+    'as' => 'get-category',
+    'uses' => 'HomeController@getByCategory',
+])->where('slug', '[a-zA-Z0-9/_-]+');
 
 Route::get('/order/{order_uuid}/thanks', 'HomeController@thanks')->name('thanks');
 
