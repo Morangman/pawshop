@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Console;
 
+use App\Console\Commands\CheckCardsAvailable;
 use App\Console\Commands\CheckCart;
 use App\Console\Commands\CheckEmail;
 use App\Console\Commands\ClearDailyStatistics;
@@ -13,6 +14,7 @@ use App\Console\Commands\OrderNormalizeStatus;
 use App\Console\Commands\PullData;
 use App\Console\Commands\PullPrices;
 use App\Console\Commands\PullFailedPrices;
+use App\Console\Commands\PullGraphicCards;
 use App\Console\Commands\RecountStatistics;
 use App\Console\Commands\Reminder;
 use App\Console\Commands\SetProductsInWarehouse;
@@ -39,6 +41,8 @@ class Kernel extends ConsoleKernel
         FedexLabel::class,
         CheckEmail::class,
         SetProductsInWarehouse::class,
+        CheckCardsAvailable::class,
+        PullGraphicCards::class,
     ];
 
     /**
@@ -55,5 +59,6 @@ class Kernel extends ConsoleKernel
         $schedule->command(ClearDailyStatistics::class)->daily();
         $schedule->command(CheckEmail::class)->everyThirtyMinutes();
         $schedule->command(FedexLabel::class)->dailyAt('12:00');
+        //$schedule->command(CheckCardsAvailable::class)->everyFiveMinutes();
     }
 }
