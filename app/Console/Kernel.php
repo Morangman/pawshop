@@ -59,6 +59,6 @@ class Kernel extends ConsoleKernel
         $schedule->command(ClearDailyStatistics::class)->daily();
         $schedule->command(CheckEmail::class)->everyThirtyMinutes();
         $schedule->command(FedexLabel::class)->dailyAt('12:00');
-        //$schedule->command(CheckCardsAvailable::class)->everyFiveMinutes();
+        $schedule->command(CheckCardsAvailable::class)->everyFiveMinutes();
     }
 }
