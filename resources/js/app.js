@@ -29,6 +29,8 @@ if (token) {
 
 Vue.component('search-header', require('./components/SearchHeader.vue').default);
 
+Vue.component('search', require('./components/Search.vue').default);
+
 Vue.component('sell-device', require('./components/SellDevice.vue').default);
 
 Vue.component('cart', require('./components/Cart.vue').default);
@@ -40,6 +42,8 @@ Vue.component('header-cart', require('./components/HeaderCart.vue').default);
 Vue.component('checkout', require('./components/Checkout.vue').default);
 
 Vue.component('thanks', require('./components/Thanks.vue').default);
+
+Vue.component('breadcrumbs', require('./components/Breadcrumbs.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

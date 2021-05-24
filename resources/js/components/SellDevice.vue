@@ -1,19 +1,5 @@
 <template>
 <div>
-    <h1 class="center-text">Start Selling</h1>
-    <div class="description center-text">Find the product you'd like to trade-in for cash</div>
-
-    <div class="page-header page-header-light" v-if="breadcrumbs && breadcrumbs.length">
-        <div class="breadcrumb-line breadcrumb-line-light breadcrumb-line-component header-elements-md-inline">
-            <div class="d-flex">
-                <div class="breadcrumb">
-                    <a href="/#sell-device-section" class="breadcrumb-item"><img width="12" height="12" src="../../client/images/home.svg"/> Home</a>
-                    <a v-for="(breadcrumb, index) in breadcrumbs" :href="$r('get-category', { slug: breadcrumb.slug })" class="breadcrumb-item">{{ breadcrumb.name }}</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <ul id="scrolled" class="order-steps-list" v-if="steps.length">
         <li v-for="(step, index) in steps" :class="stepIndex === index ? 'active-step' : ''">
             <a href="javascript:void(0)"><i>{{ index + 1 }}</i> <span>{{ index + 1 }}</span></a>
@@ -149,40 +135,6 @@
         </div>
     </div>
 
-    <div class="order-search-outer" v-if="!steps.length">
-        <h5>Search the device:</h5>
-        <div class="order-search">
-            <div class="order-search-form">
-                <input v-on:keyup="searchDevice" v-model="name" type="text" placeholder="Write text for search">
-                <a href="javascript:void(0)" v-on:click="searchDevice" class="btn red-btn">Search</a>
-            </div>
-            <div class="order-search-popup" v-if="searchDevices.length">
-                <ul class="order-search-popup-list">
-                    <li v-for="(device, index) in searchDevices" :key="`device_${index}`">
-                        <a :href="$r('get-category', { slug: device.slug })" class="link">
-                            <div class="image"><img :src="device.image" alt=""></div>
-                            <span class="name">{{ device.name }}</span>
-                        </a>
-                        <div class="price">up to <strong>{{ device.custom_text }}</strong></div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="order-content" v-if="!steps.length">
-        <h4>Or choose the device for sell:</h4>
-        <ul class="order-list">
-            <li v-for="(category, index) in categories" :key="`device_${index}`">
-                <a :href="$r('get-category', { slug: category.slug })">
-                    <div class="image"><img :src="category.image" alt="" /></div>
-                    <h5>{{ category.name }}</h5>
-                    <div v-if="category.custom_text" class="price">Cash in up to ${{ category.custom_text }}</div>
-                </a>
-            </li>
-        </ul>
-    </div>
-
     <div class="faqs-content" v-if="!faqsIsset">
         <h2>FAQs</h2>
         <div class="faqs-block" v-for="(faq, index) in faqs.data" :key="`faq_${index}`">
@@ -238,16 +190,8 @@
                 type: Array,
                 required: false,
             },
-            categories: {
-                type: Array,
-                required: false,
-            },
             faqs: {
                 type: Object,
-                required: false,
-            },
-            breadcrumbs: {
-                type: Array,
                 required: false,
             },
         },
@@ -257,7 +201,6 @@
         data() {
             return {
                 name: '',
-                searchDevices: {},
                 faqsIsset: false,
                 priceError: false,
                 priceLoaded: false,
@@ -273,18 +216,6 @@
         },
 
         methods: {
-            searchDevice() {
-                this.searchDevices = {};
-
-                axios.get(
-                    Router.route('header-search', { name: this.name }),
-                ).then((data) => {
-                    this.searchDevices = data.data;
-                }).catch(({ response: { data: { errors } } }) => {
-                    console.log(errors);
-                });
-            },
-
             backStep(){
                 if (this.stepIndex > 0) {
                     let isNew = false;

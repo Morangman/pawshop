@@ -41,14 +41,41 @@
         <!-- ========= order-section ============ -->
         <section class="order-section">
             <div class="container">
+                <h1 class="center-text">Start Selling</h1>
+                <div class="description center-text">Find the product you'd like to trade-in for cash</div>
                 <div v-cloak>
-                    <sell-device
-                        :category="{{ json_encode($category) }}"
-                        :steps="{{ json_encode($steps) }}"
-                        :categories="{{ json_encode($relatedCategories) }}"
-                        :faqs="{{ json_encode($faqs) }}"
+                    @if(empty($steps))
+                        <search></search>
+                    @endif
+
+                    <breadcrumbs
                         :breadcrumbs="{{ json_encode($breadcrumbs) }}"
-                    ></sell-device>
+                    ></breadcrumbs>
+
+                    @if(empty($steps))
+                        <div class="order-content">
+                            <h4>Or choose the device for sell:</h4>
+                            <ul class="order-list">
+                                @foreach($relatedCategories as $category)
+                                <li>
+                                    <a href="{{ URL::route('get-category', ['slug' => $category->getAttribute('slug')]) }}">
+                                        <div class="image"><img src="{{ $category->getAttribute('image') }}" alt="" /></div>
+                                        <h5>{{ $category->getAttribute('name') }}</h5>
+                                        @if($category->getAttribute('custom_text'))
+                                            <div class="price">Cash in up to ${{ $category->getAttribute('custom_text') }}</div>
+                                        @endif
+                                    </a>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @else
+                        <sell-device
+                            :category="{{ json_encode($category) }}"
+                            :steps="{{ json_encode($steps) }}"
+                            :faqs="{{ json_encode($faqs) }}"
+                        ></sell-device>
+                    @endif
                   </div>
                   
                   <div v-if="!$data">
