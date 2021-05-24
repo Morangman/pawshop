@@ -79,11 +79,20 @@ class Category extends Model implements HasMedia
      */
     public function subcategory(): BelongsTo
     {
-        return $this->belongsTo(
-            Category::class,
-            'subcategory_id',
-            $this->primaryKey
-        );
+        return $this->belongsTo(self::class);
+    }
+
+    public function getUrl()
+    { 
+        $url = $this->slug;
+    
+        $category = $this;
+    
+        while ($category = $category->subcategory) {
+            $url = $category->slug.'/'.$url;
+        }
+    
+        return '/'.$url;
     }
 
     /**

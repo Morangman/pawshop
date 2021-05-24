@@ -998,6 +998,10 @@ class HomeController extends Controller
      */
     public function getByCategory(string $slug): ViewContract
     {
+        $slug = explode('/', $slug);
+
+        $slug = end($slug);
+
         $breadcrumbs = [];
 
         $category = Category::query()->where('slug', $slug)->first();
@@ -1014,7 +1018,7 @@ class HomeController extends Controller
 
                 if ($parentCategory) {
                     $breadcrumbs[] = [
-                        'slug' => $parentCategory->getAttribute('slug'),
+                        'slug' => $parentCategory->getUrl(),
                         'name' => $parentCategory->getAttribute('name'),
                     ];
     

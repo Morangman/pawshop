@@ -58,7 +58,7 @@
                             <ul class="order-list">
                                 @foreach($relatedCategories as $category)
                                 <li>
-                                    <a href="{{ URL::route('get-category', ['slug' => $category->getAttribute('slug')]) }}">
+                                    <a href="{{ URL::route('get-category', ['slug' => $category->getUrl()]) }}">
                                         <div class="image"><img src="{{ $category->getAttribute('image') }}" alt="" /></div>
                                         <h5>{{ $category->getAttribute('name') }}</h5>
                                         @if($category->getAttribute('custom_text'))
