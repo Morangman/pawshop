@@ -87,12 +87,12 @@ class Category extends Model implements HasMedia
         $url = $this->slug;
     
         $category = $this;
-    
+
         while ($category = $category->subcategory) {
             $url = $category->slug.'/'.$url;
         }
     
-        return '/'.$url;
+        return $url;
     }
 
     /**
