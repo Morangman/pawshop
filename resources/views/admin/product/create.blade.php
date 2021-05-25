@@ -26,5 +26,7 @@
         :prices="{{ json_encode($prices) }}"
         :premiumprices="{{ json_encode($premiumPrices) }}"
         :subcategory="{{ json_encode($subcategory) }}"
+        :catimage="{{ json_encode($catImage) }}"
+        :productimages="{{ json_encode($productImages) }}"
     ></product-create>
 @endsection

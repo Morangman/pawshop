@@ -15,6 +15,7 @@
                                 class="form-control"
                                 :class="{ 'border-danger': errors.name || nameError }"
                             >
+                            <a href="javascript:0" v-for="(data, i) in productimages" :key="`changed_name_${i}`" v-on:click="model.name = data.name"><span v-if="data.name">{{ data.name }} <br></span></a>
                             <div v-for="(error, i) in errors.name"
                                 :key="`name__error__${i}`"
                                 class="text-danger error"
@@ -33,6 +34,7 @@
                                 class="form-control"
                                 :class="{ 'border-danger': errors.prod_year }"
                             >
+                            <a href="javascript:0" v-for="(data, i) in productimages" :key="`changed_prod_year_${i}`" v-on:click="model.prod_year = data.prod_year"><span v-if="data.prod_year">{{ data.prod_year }} <br></span></a>
                             <div v-for="(error, i) in errors.prod_year"
                                 :key="`prod_year__error__${i}`"
                                 class="text-danger error"
@@ -111,6 +113,38 @@
                                 :src="categoryPreviewImage"
                                 v-on:click="deleteCategoryImage"
                             >
+
+
+                            <div class="form-group overflow-box" v-if="!categoryPreviewImage">
+                                <div class="row">
+                                    <div
+                                        v-for="(data, i) in productimages"
+                                        :key="`changed_image_${i}`"
+                                        class="col-sm-6 product-images"
+                                    >
+                                        <a href="javascript:0" v-if="data.image" v-on:click="selectRecommendedImage(data.image)" style="margin-bottom: 20px;">
+                                            <img width="auto"
+                                                height="100"
+                                                class="center-image"
+                                                :src="data.image"
+                                            >
+                                        </a>
+                                    </div>
+                                    <div
+                                        v-if="!productimages"
+                                        class="col-sm-6 product-images"
+                                    >
+                                        <a href="javascript:0" v-if="catimage" v-on:click="selectRecommendedImage(catimage)" style="margin-bottom: 20px;">
+                                            <img width="auto"
+                                                height="100"
+                                                class="center-image"
+                                                :src="catimage"
+                                            >
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
 
                         <div class="text-right">
@@ -356,6 +390,14 @@
                 type: Number,
                 required: false,
             },
+            catimage: {
+                type: Array,
+                required: false,
+            },
+            productimages: {
+                type: Array,
+                required: false,
+            },
         },
 
         mixins: [FormHelper],
@@ -413,6 +455,12 @@
                 if (this.stepCount > 4) {
                     this.store();
                 }
+            },
+
+            selectRecommendedImage(image) {
+                this.model.image_url = image;
+
+                this.categoryPreviewImage = image;
             },
 
             selectStepEvent(index) {
@@ -584,7 +632,11 @@
         },
 
         created() {
-            this.stepsByCategory = [this.steps[0], this.steps[8]];
+            if (this.categorysteps.length) {
+                this.stepsByCategory = this.categorysteps;
+            } else {
+                this.stepsByCategory = [this.steps[0], this.steps[8]];
+            }
 
             if (this.subcategory) {
                 this.model.subcategory_id = this.subcategory;

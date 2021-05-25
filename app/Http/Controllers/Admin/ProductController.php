@@ -46,6 +46,11 @@ class ProductController extends Controller
     public function create(Request $request): ViewContract
     {
         $stepsByName = [];
+        $stepsArr = [];
+        $resultArr = [];
+        $subcategory = null;
+        $catImage = null;
+        $productImages = null;
 
         foreach (StepName::all() as $stepName) {
             $stepsByName[] = array_merge(
@@ -57,6 +62,45 @@ class ProductController extends Controller
             );
         }
 
+        if ($request->has('category')) {
+            $subcategory = (int) $request->get('category');
+
+            $category = Category::query()->whereKey($subcategory)->first();
+
+            $lastProduct = Category::query()->where('subcategory_id', '=', $subcategory)->latest()->first();
+
+            $productImages = Category::query()->where('subcategory_id', '=', $subcategory)->latest()->take(5)->get(['image', 'name', 'prod_year']);
+
+            if (!$productImages || empty($productImages->toArray())) {
+                $productImages = null;
+
+                $catImage = $category->getAttribute('image');
+            }
+
+            if ($steps = $lastProduct->steps()->get()) {
+                foreach ($steps as $key => $step) {
+                    $stepsArr[$step->stepName->id]['id'] = $step->stepName->id;
+                    $stepsArr[$step->stepName->id]['items'][] = $step->toArray();
+                    $stepsArr[$step->stepName->id]['is_condition'] = $step->stepName->is_condition;
+                    $stepsArr[$step->stepName->id]['is_checkbox'] = $step->stepName->is_checkbox;
+                    $stepsArr[$step->stepName->id]['is_functional'] = $step->stepName->is_functional;
+                    $stepsArr[$step->stepName->id]['title'] = $step->stepName->title;
+                }
+            }
+
+            foreach ($stepsArr as $stepArr) {
+                $resultArr[] = [
+                    'id' => $stepArr['id'],
+                    'title' => $stepArr['title'],
+                    'items' => $stepArr['items'],
+                    'items_variations' => $stepArr['items'],
+                    'is_condition' => $stepArr['is_condition'],
+                    'is_checkbox' => $stepArr['is_checkbox'],
+                    'is_functional' => $stepArr['is_functional'],
+                ];
+            }
+        }
+
         return View::make('admin.product.create', [
             'category' => null,
             'categories' => Category::query()
@@ -64,10 +108,12 @@ class ProductController extends Controller
                 ->get(),
             'faqs' => Faq::all(),
             'steps' => $stepsByName,
-            'categorysteps' => [],
+            'categorysteps' => $resultArr,
             'prices' => [],
             'premiumPrices' => [],
-            'subcategory' => $request->has('category') ? (int) $request->get('category') : null,
+            'catImage' => $catImage,
+            'productImages' => $productImages,
+            'subcategory' => $subcategory,
         ]);
     }
 
