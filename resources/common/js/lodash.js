@@ -21,6 +21,7 @@ import startsWith from 'lodash/startsWith';
 import sortBy from 'lodash/sortBy';
 import truncate from 'lodash/truncate';
 import unset from 'lodash/unset';
+import set from 'lodash/set';
 import upperCase from 'lodash/upperCase';
 import upperFirst from 'lodash/upperFirst';
 
@@ -48,6 +49,7 @@ window._ = {
     sortBy,
     truncate,
     unset,
+    set,
     upperCase,
     upperFirst,
 };

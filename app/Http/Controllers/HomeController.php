@@ -1038,7 +1038,7 @@ class HomeController extends Controller
         $breadcrumbs = array_reverse($breadcrumbs);
 
         $breadcrumbs[] = [
-            'slug' => $slug,
+            'slug' => $category->getUrl(),
             'name' => $category->getAttribute('name'),
         ];
 
