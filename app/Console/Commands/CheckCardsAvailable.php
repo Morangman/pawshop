@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Console\Commands;
 
 use App\Jobs\BestBuyCheckCardsAvailableJob;
+use App\Jobs\EvgaCheckCardsAvailableJob;
 use App\Jobs\NeweggCheckCardsAvailableJob;
 use Illuminate\Console\Command;
 
@@ -43,5 +44,6 @@ class CheckCardsAvailable extends Command
     {
         BestBuyCheckCardsAvailableJob::dispatch();
         NeweggCheckCardsAvailableJob::dispatch();
+        EvgaCheckCardsAvailableJob::dispatch();
     }
 }

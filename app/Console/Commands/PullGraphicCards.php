@@ -48,8 +48,24 @@ class PullGraphicCards extends Command
         
         $bestbuy = false;
         $newegg = false;
+        $evga = false;
 
-        $client = new Client(HttpClient::create(['timeout' => 30 * 30 * 24]));
+        //$client = new Client(HttpClient::create(['timeout' => 30 * 30 * 24]));
+
+        $client = new Client(HttpClient::create(
+            array(
+            'headers' => array(
+                'user-agent' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:73.0) Gecko/20100101 Firefox/73.0', // will be forced using 'Symfony BrowserKit' in executing
+                'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Language' => 'en-US,en;q=0.5',
+                'Upgrade-Insecure-Requests' => '1',
+                'Save-Data' => 'on',
+                'Pragma' => 'no-cache',
+                'Cache-Control' => 'no-cache',
+            ),
+        )));
+
+        $client->setServerParameter('HTTP_USER_AGENT', 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:73.0) Gecko/20100101 Firefox/73.0');
 
         if ($clearTable) {
             Schema::disableForeignKeyConstraints();
@@ -153,6 +169,38 @@ class PullGraphicCards extends Command
             }
 
             $this->line('Newegg graphics cards was parsed...');
+        }
+
+        if ($evga) {
+            $evgaBasicPath = 'https://www.evga.com';
+
+            $this->line('Start parsing graphics cards from https://www.evga.com...');
+
+            $evgaPoint = "https://www.evga.com/products/productlist.aspx?type=0&family=GeForce+30+Series+Family&chipset=RTX+3090";
+
+            $evgaCrawler = $client->request('GET', $evgaPoint);
+
+            try {
+                $evgaCrawler->filter('.list-item')->each(function (Crawler $nodeCrawler) use ($evgaBasicPath, $client) {
+                    $name = $nodeCrawler->filter('.pl-list-pname a')->text();
+    
+                    DB::table('cards')->insert([
+                        'image' => $nodeCrawler->filter('.pl-list-image a img')->attr('data-src'),
+                        'href' => $evgaBasicPath . $nodeCrawler->filter('.pl-list-pname a')->attr('href'),
+                        'name' => $name,
+                        'sku_id' => $nodeCrawler->filter('.pl-list-pn')->text(),
+                        'price' => $nodeCrawler->filter('.pl-list-price strong')->text() . $nodeCrawler->filter('.pl-list-price sup')->text(),
+                        'available' => $nodeCrawler->filter('.btnBigAddCart')->count() === 1,
+                        'site' => 'evga',
+                    ]);
+
+                    $this->line("$name was parsed...");
+                });
+            } catch (\Exception $e) {
+                dd($e);
+            }
+
+            $this->line('Evga graphics cards was parsed...');
         }
     }
 }
