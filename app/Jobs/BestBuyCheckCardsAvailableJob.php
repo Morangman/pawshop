@@ -37,7 +37,7 @@ class BestBuyCheckCardsAvailableJob implements ShouldQueue
         $pageCount = 1;
 
         while ($pageCount) {
-            $bestBuyPoint = "https://www.bestbuy.com/site/computer-cards-components/video-graphics-cards/abcat0507002.c?cp=$pageCount&id=abcat0507002&intl=nosplash";
+            $bestBuyPoint = "https://www.bestbuy.com/site/computer-cards-components/video-graphics-cards/abcat0507002.c?cp=$pageCount&id=abcat0507002&intl=nosplash&qp=gpusv_facet%3DGraphics%20Processing%20Unit%20(GPU)~NVIDIA%20GeForce%20RTX%203060%5Egpusv_facet%3DGraphics%20Processing%20Unit%20(GPU)~NVIDIA%20GeForce%20RTX%203060%20Ti%5Egpusv_facet%3DGraphics%20Processing%20Unit%20(GPU)~NVIDIA%20GeForce%20RTX%203070%5Egpusv_facet%3DGraphics%20Processing%20Unit%20(GPU)~NVIDIA%20GeForce%20RTX%203080%5Egpusv_facet%3DGraphics%20Processing%20Unit%20(GPU)~NVIDIA%20GeForce%20RTX%203090";
 
             $bestBuyCrawler= $client->request('GET', $bestBuyPoint);
 

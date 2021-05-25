@@ -46,8 +46,8 @@ class PullGraphicCards extends Command
     {
         $clearTable = false;
         
-        $bestbuy = true;
-        $newegg = true;
+        $bestbuy = false;
+        $newegg = false;
 
         $client = new Client(HttpClient::create(['timeout' => 30 * 30 * 24]));
 
@@ -67,7 +67,7 @@ class PullGraphicCards extends Command
             $pageCount = 1;
 
             while ($pageCount) {
-                $bestBuyPoint = "https://www.bestbuy.com/site/computer-cards-components/video-graphics-cards/abcat0507002.c?cp=$pageCount&id=abcat0507002&intl=nosplash";
+                $bestBuyPoint = "https://www.bestbuy.com/site/computer-cards-components/video-graphics-cards/abcat0507002.c?cp=$pageCount&id=abcat0507002&intl=nosplash&qp=gpusv_facet%3DGraphics%20Processing%20Unit%20(GPU)~NVIDIA%20GeForce%20RTX%203060%5Egpusv_facet%3DGraphics%20Processing%20Unit%20(GPU)~NVIDIA%20GeForce%20RTX%203060%20Ti%5Egpusv_facet%3DGraphics%20Processing%20Unit%20(GPU)~NVIDIA%20GeForce%20RTX%203070%5Egpusv_facet%3DGraphics%20Processing%20Unit%20(GPU)~NVIDIA%20GeForce%20RTX%203080%5Egpusv_facet%3DGraphics%20Processing%20Unit%20(GPU)~NVIDIA%20GeForce%20RTX%203090";
 
                 $bestBuyCrawler = $client->request('GET', $bestBuyPoint);
 
@@ -106,10 +106,10 @@ class PullGraphicCards extends Command
 
             $this->line('Start parsing graphics cards from www.newegg.com...');
 
-            $pageCount = 23;
+            $pageCount = 3;
 
             for ($page = 1; $page <= $pageCount; $page++) {
-                $neweggPoint = "https://www.newegg.com/p/pl?Submit=Property&Subcategory=48&N=100007709%20601361654%20601357247%20601327179%20601341631%20601321492%20601359422%20601350459%20601332298%20601346498%20601273503%20601296396%20601296377%20600536049%20600565061%20601359415%20601357248%20601341616%20601321493%20601362404%20601359957%20601350460%20601349617%20601329884%20601205646%20601305993%20601294835%20601296397%20600582123%20600536050%20601357250%20601330988%20601273511%20601202919%20601194948%20601341484%20601350068%20601359427%20601341621%20601321556&IsPowerSearch=1&page=$page";
+                $neweggPoint = "https://www.newegg.com/p/pl?Submit=Property&Subcategory=48&N=100007709%20601357282&IsPowerSearch=1&page=$page";
 
                 $neweggCrawler = $client->request('GET', $neweggPoint);
 
