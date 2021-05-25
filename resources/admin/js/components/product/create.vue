@@ -34,7 +34,7 @@
                                 class="form-control"
                                 :class="{ 'border-danger': errors.prod_year }"
                             >
-                            <a href="javascript:0" v-for="(data, i) in productimages" :key="`changed_prod_year_${i}`" v-on:click="model.prod_year = data.prod_year"><span v-if="data.prod_year">{{ data.prod_year }} <br></span></a>
+                            <a href="javascript:0" v-for="(data, i) in productimages" :key="`changed_prod_year_${i}`" v-on:click="selectProdYear(data.prod_year)"><span v-if="data.prod_year">{{ data.prod_year }} <br></span></a>
                             <div v-for="(error, i) in errors.prod_year"
                                 :key="`prod_year__error__${i}`"
                                 class="text-danger error"
@@ -234,7 +234,6 @@
                                                     <div class="form-group">
                                                         <multiselect
                                                             v-model="item.items"
-                                                            v-on:input="selectStepItemEvent(index)"
                                                             :options="item.items_variations ? item.items_variations : []"
                                                             :multiple="true"
                                                             class="multiselect1"
@@ -461,6 +460,12 @@
                 this.model.image_url = image;
 
                 this.categoryPreviewImage = image;
+            },
+
+            selectProdYear(year) {
+                this.model.prod_year = year;
+
+                this.$forceUpdate();
             },
 
             selectStepEvent(index) {
