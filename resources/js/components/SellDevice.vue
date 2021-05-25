@@ -158,13 +158,13 @@
                     <div class="image"><img src="../../client/images/phone_icons-01.png" alt=""></div>
                 </div>
                 <div id="condition-2" class="condition-tabs-content">
-                    <div class="image"><img src="../../client/images/phone_icons-02.png" alt=""></div>
+                    <div class="image"><img src="../../client/images/phone_icons-04.png" alt=""></div>
                 </div>
                 <div id="condition-3" class="condition-tabs-content">
                     <div class="image"><img src="../../client/images/phone_icons-03.png" alt=""></div>
                 </div>
                 <div id="condition-4" class="condition-tabs-content">
-                    <div class="image"><img src="../../client/images/phone_icons-04.png" alt=""></div>
+                    <div class="image"><img src="../../client/images/phone_icons-02.png" alt=""></div>
                 </div>
                 <div class="note">*Scratches may be enhanced to show detail</div>
             </div>
