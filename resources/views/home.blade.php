@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('home-title', (array) $category ? $category->getAttribute('name') : $settings->getAttribute('general_settings')['seo_title'])
+@section('home-title', (array) $category ? str_replace('Sell', 'Sell My', $category->getAttribute('name')) . ' | Rapid-Recycle.com' : $settings->getAttribute('general_settings')['seo_title'])
 
 @section('content')
     @yield('header', View::make('header', ['categories' => $categories, 'settings' => $settings]))
