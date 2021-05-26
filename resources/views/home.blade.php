@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('home-title', (array) $category ? str_replace('Sell', 'Sell My', $category->getAttribute('name')) . ' | Rapid-Recycle.com' : $settings->getAttribute('general_settings')['seo_title'])
+@section('home-title', (array) $category ? str_replace('Sell', 'Sell My', 'Sell ' . str_replace('Sell ', '', $category->getAttribute('name'))) . ' | Rapid-Recycle.com' : $settings->getAttribute('general_settings')['seo_title'])
 
 @section('content')
     @yield('header', View::make('header', ['categories' => $categories, 'settings' => $settings]))
@@ -56,13 +56,13 @@
                         <div class="order-content">
                             <h4>Or choose the device for sell:</h4>
                             <ul class="order-list">
-                                @foreach($relatedCategories as $category)
+                                @foreach($relatedCategories as $subCategory)
                                 <li>
-                                    <a href="{{ URL::route('get-category', ['slug' => $category->getUrl()]) }}">
-                                        <div class="image"><img src="{{ $category->getAttribute('image') }}" alt="" /></div>
-                                        <h5>{{ $category->getAttribute('name') }}</h5>
-                                        @if($category->getAttribute('custom_text'))
-                                            <div class="price">Cash in up to ${{ $category->getAttribute('custom_text') }}</div>
+                                    <a href="{{ URL::route('get-category', ['slug' => $subCategory->getUrl()]) }}">
+                                        <div class="image"><img src="{{ $subCategory->getAttribute('image') }}" alt="" /></div>
+                                        <h5>{{ $subCategory->getAttribute('name') }}</h5>
+                                        @if($subCategory->getAttribute('custom_text'))
+                                            <div class="price">Cash in up to ${{ $subCategory->getAttribute('custom_text') }}</div>
                                         @endif
                                     </a>
                                 </li>
