@@ -331,8 +331,6 @@
                         }
                     });
 
-                    axios.baseURL = "https://rapid-recycle.com";
-
                     axios.post(
                         Router.route('get-price', {steps: JSON.stringify(steps), category_id: this.category.id}),
                     ).then((data) => {
