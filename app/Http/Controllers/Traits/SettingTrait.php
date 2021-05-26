@@ -31,7 +31,7 @@ trait SettingTrait
 
         $og = new OpenGraphPackage('home_og');
 
-        $og->setType('article')
+        $og->setType('product')
             ->setSiteName($seoTitle)
             ->setTitle($seoTitle)
             ->addImage($seoImage);

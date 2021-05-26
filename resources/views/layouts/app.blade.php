@@ -7,8 +7,7 @@
 
     <meta property="og:image:width" content="600">
     <meta property="og:image:height" content="315">
-    <meta property="og:type" content="product">
-    
+
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!--[if IE]>
