@@ -336,39 +336,39 @@ class HomeController extends Controller
             ->whereNull('subcategory_id')
             ->get();
 
-        $url = 'https://www.google.com/recaptcha/api/siteverify';
-        $remoteip = $_SERVER['REMOTE_ADDR'];
+        // $url = 'https://www.google.com/recaptcha/api/siteverify';
+        // $remoteip = $_SERVER['REMOTE_ADDR'];
         
-        $data = [
-            'secret' => config('services.recaptcha.secretkey'),
-            'response' => $request->get('recaptcha'),
-            'remoteip' => $remoteip
-        ];
+        // $data = [
+        //     'secret' => config('services.recaptcha.secretkey'),
+        //     'response' => $request->get('recaptcha'),
+        //     'remoteip' => $remoteip
+        // ];
 
-        $options = [
-            'http' => [
-                'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-                'method' => 'POST',
-                'content' => http_build_query($data)
-            ]
-        ];
+        // $options = [
+        //     'http' => [
+        //         'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+        //         'method' => 'POST',
+        //         'content' => http_build_query($data)
+        //     ]
+        // ];
 
-        $context = stream_context_create($options);
-        $result = file_get_contents($url, false, $context);
-        $resultJson = json_decode($result);
+        // $context = stream_context_create($options);
+        // $result = file_get_contents($url, false, $context);
+        // $resultJson = json_decode($result);
 
-        if ($resultJson->success != true) {
-            return View::make('support', [
-                'settings' => $this->getSettings() ?? [],
-                'categories' => $categories,
-                'category' => new stdClass(),
-                'steps' => [],
-                'relatedCategories' => $categories,
-                'faqs' => new stdClass(),
-            ]);
-        }
+        // if ($resultJson->success != true) {
+        //     return View::make('support', [
+        //         'settings' => $this->getSettings() ?? [],
+        //         'categories' => $categories,
+        //         'category' => new stdClass(),
+        //         'steps' => [],
+        //         'relatedCategories' => $categories,
+        //         'faqs' => new stdClass(),
+        //     ]);
+        // }
 
-        if ($resultJson->score >= 0.3) {
+        // if ($resultJson->score >= 0.3) {
             if (Callback::query()->where('email', '=', $request->get('email'))->exists()) {
                 $callback = Callback::query()->where('email', '=', $request->get('email'))->first();
 
@@ -410,16 +410,16 @@ class HomeController extends Controller
                 'relatedCategories' => $categories,
                 'faqs' => new stdClass(),
             ]);
-        } else {
-            return View::make('support', [
-                'settings' => $this->getSettings() ?? [],
-                'categories' => $categories,
-                'category' => new stdClass(),
-                'steps' => [],
-                'relatedCategories' => $categories,
-                'faqs' => new stdClass(),
-            ]);
-        }
+        // } else {
+        //     return View::make('support', [
+        //         'settings' => $this->getSettings() ?? [],
+        //         'categories' => $categories,
+        //         'category' => new stdClass(),
+        //         'steps' => [],
+        //         'relatedCategories' => $categories,
+        //         'faqs' => new stdClass(),
+        //     ]);
+        // }
     }
 
     /**

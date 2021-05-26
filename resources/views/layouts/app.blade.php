@@ -37,7 +37,7 @@
 
     {!! $settings->getAttribute('code_insert') !!}
 
-    <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.sitekey') }}"></script>
+    {{-- <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.sitekey') }}"></script> --}}
 </head>
 <body>
     <div id="app">
@@ -61,13 +61,13 @@
             $('body, html').animate({scrollTop: top}, 600);
         });
         
-        grecaptcha.ready(function() {
-            grecaptcha.execute('{{ config('services.recaptcha.sitekey') }}', {action: 'contact'}).then(function(token) {
-            if (token) {
-                document.getElementById('recaptcha').value = token;
-            }
-            });
-        });
+        // grecaptcha.ready(function() {
+        //     grecaptcha.execute('{{ config('services.recaptcha.sitekey') }}', {action: 'contact'}).then(function(token) {
+        //     if (token) {
+        //         document.getElementById('recaptcha').value = token;
+        //     }
+        //     });
+        // });
     </script>
     @yield('scripts')
 </body>
