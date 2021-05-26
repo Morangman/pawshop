@@ -31,6 +31,9 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!--[if IE]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
+    <![endif]-->
 
     <!-- Fonts -->
     <link href="{{ asset('client/css/app.css') }}" rel="stylesheet" type="text/css">
