@@ -970,6 +970,8 @@ a.breadcrumb-elements-item, a.breadcrumb-item {
 }
 
 .breadcrumb-item:last-child {
+  pointer-events: none;
+  cursor: default;
   color: #999;
 }
 
