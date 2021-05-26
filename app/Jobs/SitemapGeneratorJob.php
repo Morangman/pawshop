@@ -53,6 +53,6 @@ class SitemapGeneratorJob implements ShouldQueue
             }
 
             return $url;
-        })->writeToFile(public_path('sitemap.xml'));
+        })->writeToFile(public_path('sitemap-test.xml'));
     }
 }
