@@ -9,7 +9,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Carbon;
 use Spatie\Sitemap\SitemapGenerator;
+use Spatie\Sitemap\Tags\Url;
 
 /**
  * Class SitemapGeneratorJob
@@ -27,6 +29,30 @@ class SitemapGeneratorJob implements ShouldQueue
      */
     public function handle(): void
     {
-        SitemapGenerator::create('https://rapid-recycle.com')->getSitemap()->writeToFile(public_path('sitemap.xml'));
+        SitemapGenerator::create('https://rapid-recycle.com')->hasCrawled(function (Url $url) {
+            if ($url->path() === '/') {
+                $url->setPriority(1)
+                    ->setLastModificationDate(Carbon::now());
+            }
+
+            if ($url->path() === '/redirect-facebook' ||
+                $url->path() === '/redirect-google' ||
+                $url->path() === '/support' ||
+                $url->path() === '/web/login' ||
+                $url->path() === '/web/password/reset' ||
+                $url->path() === '/web/register' ||
+                $url->path() === '/account' ||
+                $url->path() === '/callback' ||
+                $url->path() === '/user_agreement' ||
+                $url->path() === '/privacy_policy' ||
+                $url->path() === '/terms' ||
+                $url->path() === '/law_enforcement' ||
+                $url->path() === '/cart'
+            ) {
+                return;
+            }
+
+            return $url;
+        })->writeToFile(public_path('sitemap.xml'));
     }
 }
