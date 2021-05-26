@@ -22,6 +22,8 @@
     <meta property="product:price:amount" content="{{ $category->getAttribute('custom_text') }}">
     <meta property="product:price:currency" content="USD">
     <meta property="og:type" content="product">
+    @else
+    <meta property="og:type" content="website" />
     @endif
 
     <link rel="icon" type="image/x-icon" href="{{ asset('client/images/favicon/favicon.ico') }}">
