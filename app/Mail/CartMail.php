@@ -34,7 +34,7 @@ class CartMail extends Mailable
     public function build()
     {
         return $this->from('info@rapid-recycle.com', 'rapid-recycle.com')
-            ->subject('Come back sooner!')
+            ->subject('Come back soon!')
             ->view('mail.cart');
     }
 }
