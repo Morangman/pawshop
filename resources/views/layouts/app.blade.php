@@ -11,8 +11,8 @@
     <![endif]-->
     <title>@yield('home-title')</title>
 
-    <link rel="icon" type="image/x-icon" href="{{ asset('client/images/favicon/favicon.ico') }}">
-    <link rel="icon" type="image/png" href="{{ asset('client/images/favicon/favicon.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ Config::get('app.url') . asset('client/images/favicon/favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ Config::get('app.url') . asset('client/images/favicon/favicon.png') }}">
 
     <meta name="image" property="image" content="{{ isset($settings->getAttribute('general_settings')['seo_image']) ? $settings->getAttribute('general_settings')['seo_image'] : '' }}">
 
