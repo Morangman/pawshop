@@ -35,8 +35,8 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
     <![endif]-->
 
-    <!-- Fonts -->
-    <link href="{{ asset('client/css/all.css') }}" rel="stylesheet" type="text/css">
+    <!-- Styles -->
+    <link rel="preload" href="{{ asset('client/css/all.css') }}" as="style" onload="this.rel='stylesheet'">
 
     {!! $settings->getAttribute('code_insert') !!}
 </head>
