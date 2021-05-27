@@ -36,6 +36,55 @@
     <![endif]-->
 
     <!-- Styles -->
+    <style type="text/css">
+        @font-face {
+            font-display: swap;
+            font-family: "GothamPro";
+            src: url(client/fonts/GothamPro-Regular/GothamPro-Regular.woff2) format("woff2"),
+            url("client/fonts/GothamPro-Regular/GothamPro-Regular.woff2") format("woff");
+            font-style: normal;
+            font-weight: 400;
+        }
+
+        @font-face {
+            font-display: swap;
+            font-family: "GothamPro";
+            src: url(client/fonts/GothamPro-Light/GothamPro-Light.woff2) format("woff2"),
+            url("client/fonts/GothamPro-Light/GothamPro-Light.woff") format("woff");
+            font-style: normal;
+            font-weight: 300;
+        }
+
+        @font-face {
+            font-display: swap;
+            font-family: "GothamPro";
+            src: url(client/fonts/GothamPro-Medium/GothamPro-Medium.woff2) format("woff2"),
+            url("client/fonts/GothamPro-Medium/GothamPro-Medium.woff") format("woff");
+            font-style: normal;
+            font-weight: 500;
+        }
+
+        @font-face {
+            font-display: swap;
+            font-family: "GothamPro";
+            src: url(client/fonts/GothamPro-Bold/GothamPro-Bold.woff2) format("woff2"),
+            url("client/fonts/GothamPro-Bold/GothamPro-Bold.woff") format("woff");
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        @font-face {
+            font-display: swap;
+            font-family: "HeliosCondBold";
+            src: url("client/fonts/HeliosCondBold/HeliosCondBold.eot");
+            src: url("client/fonts/HeliosCondBold/HeliosCondBold.eot?#iefix")format("embedded-opentype"),
+            url("client/fonts/HeliosCondBold/HeliosCondBold.woff") format("woff"),
+            url("client/fonts/HeliosCondBold/HeliosCondBold.ttf") format("truetype");
+            font-style: normal;
+            font-weight: normal;
+        }
+    </style>
+
     <link href="{{ asset('client/css/all.css') }}" rel="stylesheet" type="text/css">
 
     {!! $settings->getAttribute('code_insert') !!}

@@ -16,7 +16,6 @@ mix.js('resources/js/app.js', 'public/js')
 
 
 mix.styles([
-    'resources/client/css/stylename.css',
     'resources/client/css/grid.css',
     'resources/client/css/magnific-popup.css',
     'resources/client/css/main.css',
