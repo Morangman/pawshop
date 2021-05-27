@@ -36,7 +36,7 @@
     <![endif]-->
 
     <!-- Fonts -->
-    <link href="{{ asset('client/css/app.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('client/css/all.css') }}" rel="stylesheet" type="text/css">
 
     {!! $settings->getAttribute('code_insert') !!}
 </head>
