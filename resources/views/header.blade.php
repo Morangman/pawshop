@@ -59,10 +59,22 @@
                         @endif
                     </ul>
                 </div>
-                <search-header></search-header>
+                <div class="header-search">
+                    <div class="header-search-form">
+                        <input id="header-search-input" type="text" placeholder="Write text">
+                        <a href="javascript:void(0)"></a>
+                    </div>
+                    <div class="header-search-popup">
+                        <ul class="header-search-popup-list" id="header-search-popup-list"></ul>
+                    </div>
+                    <div class="header-search-toggle"><img src="../../client/images/icon_search.svg" alt=""></div>
+                </div>
                 <div class="header-close"><img src="{{ asset('client/images/close.png') }}" alt="" /></div>
             </div>
-            <header-cart></header-cart>
+            <a href="{{ Url::route('cart') }}" class="header-cart">
+                <div id="header-cart-count" class="count">0</div>
+                <span>My box</span>
+            </a>
         </div>
     </div>
 </header>

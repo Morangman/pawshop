@@ -6,16 +6,16 @@
                 <div class="checkout-content">
                     <ul class="order-steps-list">
                         <li :class="stepIndex === 1 ? 'active-step' : ''">
-                            <a href=""><i>1.</i> <span>Account</span></a>
+                            <a href="javascript:0"><i>1.</i> <span>Account</span></a>
                         </li>
                         <li :class="stepIndex === 2 ? 'active-step' : ''">
-                            <a href=""><i>2.</i> <span>Payment</span></a>
+                            <a href="javascript:0"><i>2.</i> <span>Payment</span></a>
                         </li>
                         <li :class="stepIndex === 3 ? 'active-step' : ''">
-                            <a href=""><i>3.</i> <span>Shipping</span></a>
+                            <a href="javascript:0"><i>3.</i> <span>Shipping</span></a>
                         </li>
                         <li :class="stepIndex === 4 ? 'active-step' : ''">
-                            <a href=""><i>4.</i> <span>Options & Terms</span></a>
+                            <a href="javascript:0"><i>4.</i> <span>Options & Terms</span></a>
                         </li>
                     </ul>
 
@@ -70,7 +70,7 @@
                                             <strong>{{ emailError }}</strong>
                                         </div>
                                     </div>
-                                    <a href="#" v-if="orderData.user_email" v-on:click="validateEmail" class="btn red-btn">Continue as Guest</a>
+                                    <a href="javascript:0" v-if="orderData.user_email" v-on:click="validateEmail" class="btn red-btn">Continue as Guest</a>
                                 </div>
                             </div>
                         </div>
@@ -155,8 +155,8 @@
                             </div>
                         </div>
                         <div class="order-options-links">
-                            <a href="#" v-if="!this.user.id" v-on:click="backStep" class="btn gray-btn">Back</a>
-                            <a href="#" v-on:click="validatePayment" class="btn red-btn">Next step</a>
+                            <a href="javascript:0" v-if="!this.user.id" v-on:click="backStep" class="btn gray-btn">Back</a>
+                            <a href="javascript:0" v-on:click="validatePayment" class="btn red-btn">Next step</a>
                         </div>
                     </div>
 
@@ -244,8 +244,8 @@
                             </div>
                         </div>
                         <div class="order-options-links">
-                            <a href="#" v-on:click="backStep" class="btn gray-btn">Back</a>
-                            <a href="#" v-on:click="validateAddress" class="btn red-btn">Next step</a>
+                            <a href="javascript:0" v-on:click="backStep" class="btn gray-btn">Back</a>
+                            <a href="javascript:0" v-on:click="validateAddress" class="btn red-btn">Next step</a>
                         </div>
                     </div>
 
@@ -304,8 +304,8 @@
                             </ul>
                         </div>
                         <div class="order-options-links">
-                            <a href="#" v-on:click="backStep" class="btn gray-btn">Back</a>
-                            <a href="#" v-if="showCheckout" v-on:click="validateTerms" class="btn red-btn">Checkout</a>
+                            <a href="javascript:0" v-on:click="backStep" class="btn gray-btn">Back</a>
+                            <a href="javascript:0" v-if="showCheckout" v-on:click="validateTerms" class="btn red-btn">Checkout</a>
                         </div>
                     </div>
 
@@ -313,7 +313,7 @@
                 <div class="cart-total checkout-summary">
                     <h5>Trade-in summary</h5>
                     <div class="cart-total-product" v-for="(order, index) in orders['order']" :key="`device_${index}`">
-                        <a href="" class="image"><img :src="order.device.image" alt=""></a>
+                        <a href="javascript:0" class="image"><img :src="order.device.image" alt=""></a>
                         <div class="inner">
                             <div class="name"><a :href="$r('get-category', { slug:  order.device.slug })">{{ order.device.name }}</a></div>
                             <div class="price">${{ order.total }}</div>

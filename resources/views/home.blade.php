@@ -43,46 +43,72 @@
             <div class="container">
                 <h1 class="center-text">Start Selling</h1>
                 <div class="description center-text">Find the product you'd like to trade-in for cash</div>
-                <div v-cloak>
-                    @if(empty($steps))
-                        <search></search>
-                    @endif
+                @if(empty($steps))
+                    <div class="order-search-outer">
+                        <h5>Search the device:</h5>
+                        <div class="order-search">
+                            <div class="order-search-form">
+                                <input id="main-search-input" type="text" placeholder="Write text for search">
+                                <a href="javascript:void(0)" class="btn red-btn">Search</a>
+                            </div>
+                            <div class="order-search-popup">
+                                <ul id="order-search-popup-list" class="order-search-popup-list"></ul>
+                            </div>
+                        </div>
+                    </div>
+                @endif
 
-                    <breadcrumbs
-                        :breadcrumbs="{{ json_encode($breadcrumbs) }}"
-                    ></breadcrumbs>
-
-                    @if(empty($steps))
-                        <div class="order-content">
-                            <h4>Or choose the device for sell:</h4>
-                            <ul class="order-list">
-                                @foreach($relatedCategories as $subCategory)
-                                <li>
-                                    <a href="{{ URL::route('get-category', ['slug' => $subCategory->getUrl()]) }}">
-                                        <div class="image"><img src="{{ $subCategory->getAttribute('image') }}" alt="" /></div>
-                                        <h5>{{ $subCategory->getAttribute('name') }}</h5>
-                                        @if($subCategory->getAttribute('custom_text'))
-                                            <div class="price">Cash in up to ${{ $subCategory->getAttribute('custom_text') }}</div>
-                                        @endif
-                                    </a>
+                @if($breadcrumbs)
+                <div class="page-header page-header-light">
+                    <div class="breadcrumb-line breadcrumb-line-light breadcrumb-line-component header-elements-md-inline">
+                        <div class="d-flex">
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="/#sell-device-section"><img width="12" height="12" src="../../client/images/home.svg"/> Home</a>
                                 </li>
+                                @foreach ($breadcrumbs as $breadcrumb)
+                                    <li class="breadcrumb-item">
+                                        <a href="{{ Url::route('get-category', ['slug' => $breadcrumb['slug']]) }}">{{ $breadcrumb['name'] }}</a>
+                                    </li>
                                 @endforeach
                             </ul>
                         </div>
-                    @else
-                        <sell-device
-                            :category="{{ json_encode($category) }}"
-                            :steps="{{ json_encode($steps) }}"
-                            :faqs="{{ json_encode($faqs) }}"
-                        ></sell-device>
-                    @endif
-                  </div>
-                  
-                  <div v-if="!$data">
+                    </div>
+                </div>
+                @endif
+
+                @if(empty($steps))
+                    <div class="order-content">
+                        <h4>Or choose the device for sell:</h4>
+                        <ul class="order-list">
+                            @foreach($relatedCategories as $subCategory)
+                            <li>
+                                <a href="{{ URL::route('get-category', ['slug' => $subCategory->getUrl()]) }}">
+                                    <div class="image"><img src="{{ $subCategory->getAttribute('image') }}" alt="" /></div>
+                                    <h5>{{ $subCategory->getAttribute('name') }}</h5>
+                                    @if($subCategory->getAttribute('custom_text'))
+                                        <div class="price">Cash in up to ${{ $subCategory->getAttribute('custom_text') }}</div>
+                                    @endif
+                                </a>
+                            </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @else
+                <div v-cloak>
+                    <sell-device
+                        :category="{{ json_encode($category) }}"
+                        :steps="{{ json_encode($steps) }}"
+                        :faqs="{{ json_encode($faqs) }}"
+                    ></sell-device>
+                </div>
+
+                <div v-if="!$data">
                     <div class="device-preloader">
                         <p>LOADING...</p>
                     </div>
-                  </div>
+                </div>
+                @endif
             </div>
         </section>
     </div>

@@ -3,8 +3,8 @@
         <div class="container">
             <div class="cart-section-title">
                 <h1>Your box</h1>
-                <a href="" v-if="orders && orders['order'].length" v-on:click="clearCart" class="empty-cart-link">Empty your box</a>
-                <a href="/" v-if="!orders || !orders['order'].length" class="empty-cart-link">Sell Your Device</a>
+                <a href="javascript:0" v-if="orders && orders['order'].length" v-on:click="clearCart" class="empty-cart-link">Empty your box</a>
+                <a href="/#sell-device-section" v-if="!orders || !orders['order'].length" class="empty-cart-link">Sell Your Device</a>
             </div>
 
             <form class="cart-form" v-if="orders">
@@ -44,7 +44,7 @@
                                 <div class="price">${{ order.total }}</div>
                             </td>
                             <td>
-                                <a href="" v-on:click="removeFromCart(index)" class="remove"><img src="../../client/images/remove_product.svg" alt=""></a>
+                                <a href="javascript:0" v-on:click="removeFromCart(index)" class="remove"><img src="../../client/images/remove_product.svg" alt=""></a>
                             </td>
                         </tr>
 

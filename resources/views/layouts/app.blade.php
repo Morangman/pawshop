@@ -49,19 +49,13 @@
         </main>
     </div>
 
-    <script src="{{ URL::asset('common/js/routes.js') }}"></script>
-    <script src="{{ URL::asset('js/app.js') }}"></script>
+    @if($steps)
+        <script src="{{ URL::asset('common/js/routes.js') }}"></script>
+        <script src="{{ URL::asset('js/app.js') }}"></script>
+    @endif
+    @yield('scripts')
     <script src="{{ URL::asset('client/js/jquery-1.12.4.min.js') }}"></script>
     <script src="{{ URL::asset('client/js/jquery.magnific-popup.min.js') }}"></script>
     <script src="{{ URL::asset('client/js/common.js') }}"></script>
-    <script>
-        $('.go-sell').click(function(e) {
-            e.preventDefault();
-            let id = $(this).attr('href');
-            let top = $(id).offset().top - 30;
-            $('body, html').animate({scrollTop: top}, 600);
-        });
-    </script>
-    @yield('scripts')
 </body>
 </html>

@@ -1,5 +1,16 @@
 $(document).ready(function() {
 
+	let ctn = 0;
+	let orders = JSON.parse(localStorage.getItem("orders"));
+
+	$.each(orders.order, (key, value) => {
+		if (value) {
+			ctn += parseInt(value.ctn);
+		}
+	});
+
+	$('#header-cart-count').html(ctn);
+
 	/*Запрет перехода по ссылке*/
 	$(".has-drop").click(function(e){
 		e.preventDefault();
@@ -39,7 +50,6 @@ $(document).ready(function() {
 	// Работа поиска в шапке
 	$('.header-search-toggle').click(function(){
 	    $(".header-search").addClass('opened');
-        $('.header-search-popup').show();
 	});
 
 	$(document).mouseup(function (e) {
@@ -84,17 +94,120 @@ $(document).ready(function() {
 	});
 
     // Кастомизация селекта
-        $('.states-select').click( () => {
-            console.log("click!");
-        });
+	$('.states-select').click( () => {
+		console.log("click!");
+	});
 
-		$('#phone-number').keyup(function (e) {
-			let val = $(this).val();
+	$('#phone-number').keyup(function (e) {
+		let val = $(this).val();
 
-			let x = val.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+		let x = val.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
 
-			let newVal = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+		let newVal = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
 
-			$(this).val(newVal);
-		});
+		$(this).val(newVal);
+	});
+
+	$('.go-sell').click(function(e) {
+		e.preventDefault();
+		let id = $(this).attr('href');
+		let top = $(id).offset().top - 30;
+		$('body, html').animate({scrollTop: top}, 600);
+	});
+
+	$("#header-search-input").keyup(function (e) {
+		$value = $(this).val();
+		
+		if ($value) {
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+				}
+			});
+
+			e.preventDefault();
+
+			let formData = {
+				name: $value,
+			};
+
+			let type = 'GET';
+			let ajaxurl = 'header-search';
+
+			let htmlData = '';
+
+			$.ajax({
+				type: type,
+				url: ajaxurl,
+				data: formData,
+				dataType: 'json',
+				success: function (data) {
+					htmlData = '';
+
+					if (data.length) {
+						$.each(data, (index, value) => {
+							htmlData += '<li style="margin-bottom: 10px;">' + '<a href="/sell-my-' + value.slug + '" class="link"><span class="name">' + value.name + '</span></a></li>'
+						});
+					} else {
+						htmlData = 'No results';
+					}
+
+					$('#header-search-popup-list').html(htmlData);
+
+					$('.header-search-popup').show();
+				},
+				error: function (data) {
+					console.log(data);
+				}
+			});
+		}
+    });
+
+	$("#main-search-input").keyup(function (e) {
+		$value = $(this).val();
+		
+		if ($value) {
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+				}
+			});
+
+			e.preventDefault();
+
+			let formData = {
+				name: $value,
+			};
+
+			let type = 'GET';
+			let ajaxurl = 'header-search';
+
+			let htmlData = '';
+
+			$.ajax({
+				type: type,
+				url: ajaxurl,
+				data: formData,
+				dataType: 'json',
+				success: function (data) {
+					htmlData = '';
+
+					if (data.length) {
+						$.each(data, (index, value) => {
+							htmlData += '<li><a href="/sell-my-' + value.slug + '" class="link">' + '<div class="image"><img src="' + value.image +'" alt=""></div><span class="name">' + value.name + '</span></a><div class="price">up to <strong>' + value.custom_text + '</strong></div></li>'
+						});
+					} else {
+						htmlData = '<li>No results</li>';
+					}
+
+					$('#order-search-popup-list').html(htmlData);
+
+					$('.order-search-popup').show();
+				},
+				error: function (data) {
+					console.log(data);
+				}
+			});
+		}
+    });
 });
