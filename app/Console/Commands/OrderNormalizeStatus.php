@@ -75,24 +75,30 @@ class OrderNormalizeStatus extends Command
         // }
 
         foreach (Category::query()->get() as $category) {
-            $extension = getimagesize($category->getAttribute('image'));
+            try {
+                $extension = getimagesize($category->getAttribute('image'));
 
-            $name =  str_replace(' ', '_', strtolower($category->getAttribute('name')));
+                $name =  str_replace(' ', '_', strtolower($category->getAttribute('name')));
 
-            if ($extension) {
-                $path = '/media/' . Category::MEDIA_COLLECTION_CATEGORY . '_' . str_replace('/', '_', $name) . '.webp';
+                if ($extension) {
+                    $path = '/media/' . Category::MEDIA_COLLECTION_CATEGORY . '_' . str_replace('/', '_', $name) . '.webp';
 
-                $fullPath = Config::get('app.url') . $path;
-    
-                Image::make($category->getAttribute('image'))->encode('webp', 90)->resize(260, 260)->save(public_path($path));
-    
-                $category->update([
-                    'compressed_image' => $fullPath,
-                ]);
-            } else {
-                $category->update([
-                    'compressed_image' => $category->getAttribute('image'),
-                ]);
+                    $fullPath = Config::get('app.url') . $path;
+        
+                    Image::make($category->getAttribute('image'))->encode('webp', 90)->resize(260, 260)->save(public_path($path));
+        
+                    $category->update([
+                        'compressed_image' => $fullPath,
+                    ]);
+                } else {
+                    $category->update([
+                        'compressed_image' => $category->getAttribute('image'),
+                    ]);
+                }
+            } catch (\Exception $e) {
+                $this->line('Error for ' . $category->getKey());
+
+                continue;
             }
         }
     }
