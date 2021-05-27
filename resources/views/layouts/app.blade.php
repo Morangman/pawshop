@@ -11,7 +11,7 @@
 
     <meta property="og:title" content="@yield('home-title')">
     <meta name="description" property="og:description" content="{{ (array) $category ? View::getSection('home-title', $settings->getAttribute('general_settings')['seo_meta']) : $settings->getAttribute('general_settings')['seo_meta'] }}">
-    <meta name="keywords" name="og:keywords" content="{{ (array) $category ? 'sell ' . strtolower(str_replace('Sell ', '', $category->getAttribute('name'))) : $settings->getAttribute('general_settings')['seo_keywords'] }}">
+    <meta name="keywords" property="og:keywords" content="{{ (array) $category ? 'sell ' . strtolower(str_replace('Sell ', '', $category->getAttribute('name'))) : $settings->getAttribute('general_settings')['seo_keywords'] }}">
     <meta property="og:url" content="{{ Request::url() }}">
     <meta property="og:image" content="{{ (array) $category ? $category->getAttribute('image') : $settings->getAttribute('general_settings')['seo_image'] }}">
     <meta property="og:image:width" content="300">
