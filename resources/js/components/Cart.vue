@@ -92,6 +92,8 @@
                 this.valuate();
 
                 this.updateDBCart();
+
+                location.reload();
             },
 
             clearCart() {
@@ -106,7 +108,7 @@
                 axios.post(
                     Router.route('delete-cart'),
                 ).then((data) => {
-                    //console.log(data);
+                    location.reload();
                 }).catch(({ response: { data: { errors } } }) => {
                     // notify.success(
                     //     errors
