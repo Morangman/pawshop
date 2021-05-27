@@ -3,7 +3,7 @@
     <section class="support-section">
         <div class="container">
             <div class="support-content">
-                <img width="598" height="633" class="support-image" src="{{ asset('client/images/footer_girl.png') }}" alt="" />
+                <img width="598" height="633" class="support-image" src="{{ asset('client/images/footer_girl.webp') }}" alt="" />
                 <div class="support-block">
                     <h1>Still have questions?</h1>
                     <div class="text">Use this form to get answers.</div>

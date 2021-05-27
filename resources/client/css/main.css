@@ -652,7 +652,7 @@ header {
 
 .support-section {
   border-top: 70px solid #fff;
-  background: url("../images/support_bg.jpg") center center no-repeat;
+  background: url("../images/support_bg.webp") center center no-repeat;
   background-size: cover;
 }
 
@@ -3147,7 +3147,7 @@ h2 {
 
 .hero {
   position: relative;
-  background: #717171 url(/images/background.jpeg) no-repeat center center;
+  background: #717171 url(/client/images/background.webp) no-repeat center center;
   background-size: cover;
   text-align: center;
 }
