@@ -75,15 +75,23 @@ class OrderNormalizeStatus extends Command
         // }
 
         foreach (Category::query()->get() as $category) {
-            $path = '/media/' . Category::MEDIA_COLLECTION_CATEGORY . '_' . str_replace(' ', '_', strtolower($category->getAttribute('name'))) . '.webp';
+            $extension = getimagesize($category->getAttribute('image'));
 
-            $fullPath = Config::get('app.url') . $path;
+            if ($extension) {
+                $path = '/media/' . Category::MEDIA_COLLECTION_CATEGORY . '_' . str_replace(' ', '_', strtolower($category->getAttribute('name'))) . '.webp';
 
-            Image::make($category->getAttribute('image'))->encode('webp', 90)->resize(260, 260)->save(public_path($path));
-
-            $category->update([
-                'compressed_image' => $fullPath,
-            ]);
+                $fullPath = Config::get('app.url') . $path;
+    
+                Image::make($category->getAttribute('image'))->encode('webp', 90)->resize(260, 260)->save(public_path($path));
+    
+                $category->update([
+                    'compressed_image' => $fullPath,
+                ]);
+            } else {
+                $category->update([
+                    'compressed_image' => $category->getAttribute('image'),
+                ]);
+            }
         }
     }
 }
