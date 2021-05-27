@@ -36,7 +36,7 @@
     <![endif]-->
 
     <!-- Styles -->
-    <link rel="preload" href="{{ asset('client/css/all.css') }}" as="style" onload="this.rel='stylesheet'">
+    <link href="{{ asset('client/css/all.css') }}" rel="stylesheet" type="text/css">
 
     {!! $settings->getAttribute('code_insert') !!}
 </head>
