@@ -86,6 +86,7 @@ $(document).ready(function() {
 	/*Табы повреждений*/
 	$(".condition-popup-tabs a").click(function(e){
 		e.preventDefault();
+		
 		var $searchId = $( $(this).attr("href") );
 		$(".condition-popup-tabs a").not($(this)).removeClass("active-tab");
 		$(this).addClass("active-tab");

@@ -113,8 +113,8 @@ class Category extends Model implements HasMedia
     public function registerMediaConversions(Media $media = null): void
     {
        $this->addMediaConversion('thumb')
-          ->width(130)
-          ->height(130)
-          ->nonOptimized();
+            ->format('webp')
+            ->width(260)
+            ->height(260);
     }
 }

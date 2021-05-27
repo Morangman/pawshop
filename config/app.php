@@ -170,6 +170,7 @@ return [
         MartinLindhe\VueInternationalizationGenerator\GeneratorProvider::class,
         McMatters\Helpers\ServiceProvider::class,
         McMatters\LaravelRoles\ServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -235,6 +236,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
+        'Image' => Intervention\Image\Facades\Image::class,
 
     ],
 

@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+use Intervention\Image\ImageManagerStatic as Image;
 
 /**
  * Class ProductController
@@ -667,22 +669,34 @@ class ProductController extends Controller
     protected function handleDocuments(Request $request, Category $category): void
     {
         if ($categoryPreviewImage = $request->file('image')) {
+            $path = '/media/' . Category::MEDIA_COLLECTION_CATEGORY . '_' . $category->getKey() . '_' . str_replace(' ', '_', strtolower($category->getAttribute('name'))) . '.webp';
+
+            $fullPath = Config::get('app.url') . $path;
+
+            Image::make($categoryPreviewImage)->encode('webp', 90)->resize(260, 260)->save(public_path($path));
+
             $media = $category->addMedia($categoryPreviewImage)
                 ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
 
             $category->update([
                 'image' => $media->getFullUrl(),
-                'compressed_image' => $media->getAttribute('mime_type') === 'image/svg' || $media->getAttribute('mime_type') === 'image/svg+xml' ? $media->getFullUrl() : $media->getFullUrl('thumb'),
+                'compressed_image' => $fullPath,
             ]);
         }
 
         if ($productImageUrl = $request->get('image_url')) {
+            $path = '/media/' . Category::MEDIA_COLLECTION_CATEGORY . '_' . str_replace(' ', '_', strtolower($category->getAttribute('name'))) . '.webp';
+
+            $fullPath = Config::get('app.url') . $path;
+
+            Image::make($productImageUrl)->encode('webp', 90)->resize(260, 260)->save(public_path($path));
+            
             $media = $category->addMediaFromUrl($productImageUrl)
                 ->toMediaCollection(Category::MEDIA_COLLECTION_CATEGORY);
 
             $category->update([
                 'image' => $media->getFullUrl(),
-                'compressed_image' => $media->getAttribute('mime_type') === 'image/svg' || $media->getAttribute('mime_type') === 'image/svg+xml' ? $media->getFullUrl() : $media->getFullUrl('thumb'),
+                'compressed_image' => $fullPath,
             ]);
         }
     }
