@@ -31,7 +31,7 @@ class SitemapGeneratorJob implements ShouldQueue
     public function handle(): void
     {
         SitemapGenerator::create('https://rapid-recycle.com')->hasCrawled(function (Url $url) {
-            if ($url->path() === '/') {
+            if ($url->path() === '') {
                 $url->setPriority(1)
                     ->setLastModificationDate(Carbon::now());
             }
@@ -48,7 +48,8 @@ class SitemapGeneratorJob implements ShouldQueue
                 $url->path() === '/privacy_policy' ||
                 $url->path() === '/terms' ||
                 $url->path() === '/law_enforcement' ||
-                $url->path() === '/cart'
+                $url->path() === '/cart' ||
+                $url->path() === '/'
             ) {
                 return;
             }
