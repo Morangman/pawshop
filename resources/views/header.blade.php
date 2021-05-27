@@ -67,7 +67,7 @@
                     <div class="header-search-popup">
                         <ul class="header-search-popup-list" id="header-search-popup-list"></ul>
                     </div>
-                    <div class="header-search-toggle"><img src="../../client/images/icon_search.svg" alt=""></div>
+                    <div class="header-search-toggle"><img width="14" height="14" src="../../client/images/icon_search.svg" alt=""></div>
                 </div>
                 <div class="header-close"><img src="{{ asset('client/images/close.png') }}" alt="" /></div>
             </div>
