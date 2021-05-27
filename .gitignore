@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /public/sitemap.xml
+/public/sitemap-test.xml
 /public/common/js/routes.js
 /storage/*.key
 /vendor
