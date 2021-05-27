@@ -77,8 +77,10 @@ class OrderNormalizeStatus extends Command
         foreach (Category::query()->get() as $category) {
             $extension = getimagesize($category->getAttribute('image'));
 
+            $name =  str_replace(' ', '_', strtolower($category->getAttribute('name')));
+
             if ($extension) {
-                $path = '/media/' . Category::MEDIA_COLLECTION_CATEGORY . '_' . str_replace(' ', '_', strtolower($category->getAttribute('name'))) . '.webp';
+                $path = '/media/' . Category::MEDIA_COLLECTION_CATEGORY . '_' . str_replace('/', '_', $name) . '.webp';
 
                 $fullPath = Config::get('app.url') . $path;
     
