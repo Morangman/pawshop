@@ -437,7 +437,6 @@ header {
 .main-logo img {
   -ms-flex-negative: 0;
   flex-shrink: 0;
-  width: 28px;
   margin-right: 16px;
 }
 
@@ -3265,8 +3264,6 @@ h2 {
 }
 
 .header-steps_step img{
-  width: 95px;
-  height: auto;
   padding-bottom: 2rem;
 }
 

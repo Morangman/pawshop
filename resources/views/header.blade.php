@@ -7,7 +7,7 @@
                 <span></span>
             </div>
             <a class="main-logo" href="/">
-                <img src="{{ asset('client/images/mail_logo.png') }}" alt="" />
+                <img width="28" height="32" src="{{ asset('client/images/mail_logo.png') }}" alt="" />
                 <span>Rapid <i>Recycle</i></span>
             </a>
             <div class="header-flex">

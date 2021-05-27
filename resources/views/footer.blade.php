@@ -3,7 +3,7 @@
     <section class="support-section">
         <div class="container">
             <div class="support-content">
-                <img class="support-image" src="{{ asset('client/images/footer_girl.png') }}" alt="" />
+                <img width="598" height="633" class="support-image" src="{{ asset('client/images/footer_girl.png') }}" alt="" />
                 <div class="support-block">
                     <h1>Still have questions?</h1>
                     <div class="text">Use this form to get answers.</div>
@@ -23,12 +23,12 @@
                 <input name="email" type="email" placeholder="E-mail" required />
                 <textarea name="text" placeholder="Your question" required></textarea>
                 <input type="hidden" name="recaptcha" id="recaptcha">
-                <button type="submit" class="btn red-btn ">Send <img src="{{ asset('client/images/white_arrow.png') }}" alt="" /></button>
+                <button type="submit" class="btn red-btn ">Send <img width="17" height="12" src="{{ asset('client/images/white_arrow.png') }}" alt="" /></button>
                 <div class="recaptcha-block">
                     <p>This site is protected by ReCaptcha</p>
                 </div>
             </form>
-            <button class="mfp-close" type="button" title="Close (Esc)"><img src="{{ asset('client/images/close.png') }}" alt="" /><img class="sm-only" src="{{ asset('client/images/close_popup.png') }}" alt="" /></button>
+            <button class="mfp-close" type="button" title="Close (Esc)"><img width="21" height="22" src="{{ asset('client/images/close.png') }}" alt="" /><img width="21" height="22" class="sm-only" src="{{ asset('client/images/close_popup.png') }}" alt="" /></button>
         </div>
     </div>
 <footer>
