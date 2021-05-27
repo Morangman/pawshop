@@ -13,7 +13,7 @@
     <meta name="description" property="og:description" content="{{ (array) $category ? View::getSection('home-title', $settings->getAttribute('general_settings')['seo_meta']) : $settings->getAttribute('general_settings')['seo_meta'] }}">
     <meta name="keywords" property="og:keywords" content="{{ (array) $category ? 'sell ' . strtolower(str_replace('Sell ', '', $category->getAttribute('name'))) : $settings->getAttribute('general_settings')['seo_keywords'] }}">
     <meta property="og:url" content="{{ Request::url() }}">
-    <meta property="og:image" content="{{ (array) $category ? $category->getAttribute('image') : $settings->getAttribute('general_settings')['seo_image'] }}">
+    <meta property="og:image" content="{{ (array) $category ? $category->getAttribute('compressed_image') : $settings->getAttribute('general_settings')['seo_image'] }}">
     <meta property="og:image:width" content="300">
     <meta property="og:image:height" content="300">
 	<meta property="og:site_name" content="RapidRecycle">
