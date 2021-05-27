@@ -7,7 +7,7 @@
                 <div class="support-block">
                     <h1>Still have questions?</h1>
                     <div class="text">Use this form to get answers.</div>
-                    <a href="#contact-popup" class="btn red-btn popup-open" data-effect="mfp-zoom-in">Contact us <img src="{{ asset('client/images/white_arrow.png') }}" alt="" /></a>
+                    <a href="#contact-popup" class="btn red-btn popup-open" data-effect="mfp-zoom-in">Contact us <img width="17" height="12" src="{{ asset('client/images/white_arrow.png') }}" alt="" /></a>
                 </div>
             </div>
         </div>
