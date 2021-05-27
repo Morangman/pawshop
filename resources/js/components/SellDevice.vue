@@ -12,7 +12,7 @@
     <div class="order-options-content" v-if="steps.length">
         <div class="order-options-product">
             <div class="product-image">
-                <img :src="category.image" :alt="category.name">
+                <img width="400" height="400" :src="category.image" :alt="category.name">
                 <div class="name"><span>{{ category.name }}</span></div>
             </div>
             <ul id="options" class="selected-list" v-if="selectedSteps.length">
