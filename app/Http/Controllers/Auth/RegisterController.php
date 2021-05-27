@@ -111,7 +111,9 @@ class RegisterController extends Controller
 
         return View::make('auth.registration', [
             'settings' => $this->getSettings() ?? [],
-            'categories' => $categories
+            'categories' => $categories,
+            'category' => [],
+            'steps' => [],
         ]);
     }
 

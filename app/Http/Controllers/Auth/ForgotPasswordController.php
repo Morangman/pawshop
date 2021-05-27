@@ -51,7 +51,9 @@ class ForgotPasswordController extends Controller
 
         return View::make('auth.forgot', [
             'settings' => $this->getSettings() ?? [],
-            'categories' => $categories
+            'categories' => $categories,
+            'category' => [],
+            'steps' => [],
         ]);
     }
 
@@ -97,7 +99,7 @@ class ForgotPasswordController extends Controller
         return View::make('auth.reset_success', [
             'settings' => $this->getSettings() ?? [],
             'categories' => $categories,
-            'category' => new stdClass(),
+            'category' => [],
             'steps' => [],
             'relatedCategories' => $categories,
             'faqs' => new stdClass(),

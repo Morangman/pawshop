@@ -66,7 +66,7 @@ class LoginController extends Controller
         return \Illuminate\Support\Facades\View::make('account', [
             'settings' => $this->getSettings() ?? [],
             'categories' => $categories,
-            'category' => new stdClass(),
+            'category' => [],
             'steps' => [],
             'user' => \Illuminate\Support\Facades\Auth::user(),
             'relatedCategories' => $categories,
@@ -116,7 +116,9 @@ class LoginController extends Controller
         } catch (\Exception $e) {
             return View::make('auth.login', [
                 'settings' => $this->getSettings() ?? [],
-                'categories' => $categories
+                'categories' => $categories,
+                'category' => [],
+                'steps' => [],
             ]);
         }
 
@@ -148,7 +150,7 @@ class LoginController extends Controller
         return \Illuminate\Support\Facades\View::make('account', [
             'settings' => $this->getSettings() ?? [],
             'categories' => $categories,
-            'category' => new stdClass(),
+            'category' => [],
             'steps' => [],
             'user' => \Illuminate\Support\Facades\Auth::user(),
             'relatedCategories' => $categories,
@@ -178,7 +180,9 @@ class LoginController extends Controller
         } catch (\Exception $e) {
             return View::make('auth.login', [
                 'settings' => $this->getSettings() ?? [],
-                'categories' => $categories
+                'categories' => $categories,
+                'category' => [],
+                'steps' => [],
             ]);
         }
 
@@ -210,7 +214,7 @@ class LoginController extends Controller
         return \Illuminate\Support\Facades\View::make('account', [
             'settings' => $this->getSettings() ?? [],
             'categories' => $categories,
-            'category' => new stdClass(),
+            'category' => [],
             'steps' => [],
             'user' => \Illuminate\Support\Facades\Auth::user(),
             'relatedCategories' => $categories,
@@ -235,7 +239,9 @@ class LoginController extends Controller
 
         return View::make('auth.login', [
             'settings' => $this->getSettings() ?? [],
-            'categories' => $categories
+            'categories' => $categories,
+            'category' => [],
+            'steps' => [],
         ]);
     }
 

@@ -101,6 +101,8 @@ class ResetPasswordController extends Controller
             'email' => $request->get('email'),
             'settings' => $this->getSettings() ?? [],
             'categories' => $categories,
+            'category' => [],
+            'steps' => [],
         ]);
     }
 }
