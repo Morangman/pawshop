@@ -423,7 +423,7 @@
             valuate(){
                 this.totalSumm = 0;
 
-                if (this.orders['order'].length) {
+                if (this.orders && this.orders['order'].length) {
                     _.each(this.orders['order'], (key, value) => {
                         if(key) {
                             this.totalSumm += parseFloat(key.total);

@@ -3,13 +3,15 @@ $(document).ready(function() {
 	let ctn = 0;
 	let orders = JSON.parse(localStorage.getItem("orders"));
 
-	$.each(orders.order, (key, value) => {
-		if (value) {
-			ctn += parseInt(value.ctn);
-		}
-	});
-
-	$('#header-cart-count').html(ctn);
+	if (orders) {
+		$.each(orders.order, (key, value) => {
+			if (value) {
+				ctn += parseInt(value.ctn);
+			}
+		});
+	
+		$('#header-cart-count').html(ctn);
+	}
 
 	/*Запрет перехода по ссылке*/
 	$(".has-drop").click(function(e){
