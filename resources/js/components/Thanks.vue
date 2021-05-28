@@ -38,10 +38,11 @@
                                 <h2>Shipping Information</h2>
                                 <p class="shipping-card-item_row-text">Once your phone is packed nicely you can add the correct shipping label. Be sure the barcode is flat and legible to ensure your package is not delayed. You can drop off your package at the chosen shipping carrier. Your trade-in offer is guaranteed for 14 days, so be sure to ship within that time frame.</p>
                                 <div class="shipping-card-item_buttons">
-                                    <a  v-if="!fedexPdfUrl" href="javascript:void(0)" v-on:click="getFedexLable" class="fedex-button">
+                                    <a  v-if="!fedexPdfUrl && lableLoaded" href="javascript:void(0)" v-on:click="getFedexLable" class="fedex-button">
                                         <img src="../../client/images/fedex-logo.svg" class="shipping-card-item-image_fedex">
                                         <p>Print Label</p>
                                     </a>
+                                    <div v-if="!fedexPdfUrl && !lableLoaded" class="loader"></div>
                                     <a v-if="fedexPdfUrl" class="btn btn-info fedex-pdf-label" :href="fedexPdfUrl" target="_blank">Open PDF</a>
                                 </div>
                             </div>
@@ -111,7 +112,7 @@
                                     <input v-on:keyup="searchDevice" v-model="name" type="text" placeholder="Write text for search">
                                     <a href="javascript:void(0)" v-on:click="searchDevice" class="btn red-btn">Search</a>
                                 </div>
-                                <div class="order-search-popup" v-if="searchDevices.length">
+                                <div class="order-search-popup">
                                     <ul class="order-search-popup-list">
                                         <li v-for="(device, index) in searchDevices" :key="`device_${index}`">
                                             <a :href="$r('get-category', { slug: device.slug })" class="link">
@@ -177,8 +178,9 @@
             <div class="popup-address">
                 <div class="popup-data">
                     <h2>Address Error</h2>
+                    <h5 v-if="fedexErrorMsg" class="fedex-error">{{ fedexErrorMsg }}</h5> <br>
                     <p>Whoops, it appears there was an issue generating your free shipping label. Try double checking your shipping address; if your address is correct and a label won't generate, contact our support team and we'll send you a label right away!</p>
-                    <a v-on:click="fedexError = false" class="close" href="#">&times;</a>
+                    <a v-on:click="fedexError = false" class="close" href="javascript:0">&times;</a>
                     <div class="content">
                         <form name="contactform" class="simple-form popup-form" autocomplete="on">
                             <div class="input-block width-50">
@@ -248,6 +250,8 @@
                 addressError: false,
                 isPopupOpen: false,
                 fedexPdfUrl: null,
+                fedexErrorMsg: null,
+                lableLoaded: true,
             };
         },
 
@@ -272,16 +276,26 @@
             getFedexLable() {
                 this.addressError = false;
                 this.isPopupOpen = false;
+                this.lableLoaded = false;
+                this.fedexErrorMsg = null;
 
                 axios.get(
                     Router.route('fedex-label', { order: this.order.id }),
                 ).then((data) => {
-                    window.open(data.data.url, '_blank');
+                    if (data.data.error) {
+                        this.fedexError = true;
+                        this.isPopupOpen = true;
+                        this.lableLoaded = true;
 
-                    this.fedexPdfUrl = data.data.url;
+                        this.fedexErrorMsg = data.data.error;
+                    } else {
+                        window.open(data.data.url, '_blank');
 
-                    this.fedexError = false;
-                    this.addressError = false;
+                        this.fedexPdfUrl = data.data.url;
+
+                        this.fedexError = false;
+                        this.addressError = false;
+                    }
                 }).catch(({ response: { data: { errors } } }) => {
                     this.fedexError = true;
                     this.isPopupOpen = true;
@@ -291,6 +305,8 @@
             tryAgainFedex(){
                 this.addressError = false;
                 this.isPopupOpen = false;
+                this.lableLoaded = false;
+                this.fedexErrorMsg = null;
 
                 if (
                     this.order.address.name &&
@@ -314,12 +330,20 @@
                             },
                         },
                     ).then((data) => {
-                        window.open(data.data.url, '_blank');
+                        if (data.data.error) {
+                            this.fedexError = true;
+                            this.isPopupOpen = true;
+                            this.lableLoaded = true;
 
-                        this.fedexPdfUrl = data.data.url;
+                            this.fedexErrorMsg = data.data.error;
+                        } else {
+                            window.open(data.data.url, '_blank');
 
-                        this.fedexError = false;
-                        this.addressError = false;
+                            this.fedexPdfUrl = data.data.url;
+
+                            this.fedexError = false;
+                            this.addressError = false;
+                        }
                     }).catch(({ response: { data: { errors } } }) => {
                         this.fedexError = true;
                         this.isPopupOpen = true;

@@ -611,8 +611,8 @@ class HomeController extends Controller
 
         $pdf = $fedexService->ship($order);
 
-        if ($pdf === []) {
-            return $this->json()->badRequest();
+        if (isset($pdf['error'])) {
+            return $this->json()->ok(['error' => $pdf['error']]);
         } else {
             Storage::disk('media')->put("pdf/fedex/{$order->getAttribute('uuid')}/label.pdf", $pdf);
 
@@ -854,8 +854,8 @@ class HomeController extends Controller
 
         $pdf = $fedexService->ship($order);
 
-        if ($pdf === []) {
-            return $this->json()->badRequest();
+        if (isset($pdf['error'])) {
+            return $this->json()->ok(['error' => $pdf['error']]);
         } else {
             Storage::disk('media')->put("pdf/fedex/{$order->getAttribute('uuid')}/label.pdf", $pdf);
 

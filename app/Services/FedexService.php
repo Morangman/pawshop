@@ -237,7 +237,15 @@ class FedexService
 
             return $result->CompletedShipmentDetail->CompletedPackageDetails[0]->Label->Parts[0]->Image;
         } else {
-            return [];
+            $error = 'Error';
+
+            if (isset($arrayResult['Notifications']) && isset($arrayResult['Notifications'][0]) && isset($arrayResult['Notifications'][0]['Message'])) {
+                $error = $arrayResult['Notifications'][0]['Message'];
+            }
+
+            return [
+                'error' => $error,
+            ];
         }
     }
 
