@@ -96,11 +96,11 @@ class CheckEmailJob implements ShouldQueue
             $infoIsset = strpos($message, 'info@rapid-recycle.com');
             
             if ($supportIsset) {
-                $simpleMessage = substr($message, 0, strpos($message, 'support@rapid-recycle.com'));
+                $simpleMessage = strip_tags(substr($message, 0, strpos($message, 'gmail_quote')));
             }
             
             if ($infoIsset) {
-                $simpleMessage = substr($message, 0, strpos($message, 'info@rapid-recycle.com'));
+                $simpleMessage = strip_tags(substr($message, 0, strpos($message, 'gmail_quote')));
             }
             
             $fromEmail = $header->from[0]->mailbox . "@" . $header->from[0]->host;
@@ -134,7 +134,7 @@ class CheckEmailJob implements ShouldQueue
                     [
                         'name' => $user ? $user->getAttribute('name') : $fromName,
                         'email' => $fromEmail,
-                        'text' => strip_tags($simpleMessage),
+                        'text' => $simpleMessage,
                         'sender' => Callback::SENDER_FROM,
                     ]
                 );
