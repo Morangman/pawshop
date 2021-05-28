@@ -79,7 +79,7 @@
                             <li>Display is free of defects such as dead pixels, white spots, or burn-in.</li>
                         </ol>
                         <div class="links">
-                            <a href="#condition-popup" class="btn popup-open" data-effect="mfp-zoom-in">Condition Examples</a>
+                            <button  class="btn" @click="openModal">Condition Examples</button>
                             <!-- <a href="/" class="play-link popup-youtube"><img src="../../client/images/play.svg" alt=""></a> -->
                         </div>
                     </div>
@@ -143,42 +143,43 @@
         </div>
     </div>
 
-    <!--Condition -->
-    <div id="condition-popup" class="popup-modal mfp-hide mfp-with-anim" v-if="steps.length">
-        <div class="popup-content">
-            <div class="condition-popup-content">
-                <h4>Condition Examples</h4>
-                <ul class="condition-popup-tabs">
-                    <li><a href="#condition-1" class="active-tab">Flawless</a></li>
-                    <li><a href="#condition-2">Good</a></li>
-                    <li><a href="#condition-3">Fair</a></li>
-                    <li><a href="#condition-4">Broken</a></li>
-                </ul>
-                <div id="condition-1" class="condition-tabs-content visible">
-                    <div class="image"><img src="../../client/images/phone_icons-01.webp" alt=""></div>
-                </div>
-                <div id="condition-2" class="condition-tabs-content">
-                    <div class="image"><img src="../../client/images/phone_icons-04.webp" alt=""></div>
-                </div>
-                <div id="condition-3" class="condition-tabs-content">
-                    <div class="image"><img src="../../client/images/phone_icons-03.webp" alt=""></div>
-                </div>
-                <div id="condition-4" class="condition-tabs-content">
-                    <div class="image"><img src="../../client/images/phone_icons-02.webp" alt=""></div>
-                </div>
-                <div class="note">*Scratches may be enhanced to show detail</div>
-            </div>
-            <button class="mfp-close" type="button" title="Close (Esc)">
-                <img src="../../client/images/close.png" alt="" />
+    <magnific-popup-modal :show="false" :config="{closeOnBgClick:true}" ref="modal">
+
+        <!-- Put whatever content you want in here -->
+        <div class="condition-popup-content" style="background: white;">
+            <h4>Condition Examples</h4>
+            <button class="mfp-close" v-on:click="closeModal" type="button" title="Close (Esc)">
+                <img class="big-only" src="../../client/images/close.png" alt="" />
                 <img class="sm-only" src="../../client/images/close_popup.png" alt="" />
             </button>
+            <ul class="condition-popup-tabs">
+                <li><a href="#condition-1" class="active-tab">Flawless</a></li>
+                <li><a href="#condition-2">Good</a></li>
+                <li><a href="#condition-3">Fair</a></li>
+                <li><a href="#condition-4">Broken</a></li>
+            </ul>
+            <div id="condition-1" class="condition-tabs-content visible">
+                <div class="image"><img src="../../client/images/phone_icons-01.webp" alt=""></div>
+            </div>
+            <div id="condition-2" class="condition-tabs-content">
+                <div class="image"><img src="../../client/images/phone_icons-04.webp" alt=""></div>
+            </div>
+            <div id="condition-3" class="condition-tabs-content">
+                <div class="image"><img src="../../client/images/phone_icons-03.webp" alt=""></div>
+            </div>
+            <div id="condition-4" class="condition-tabs-content">
+                <div class="image"><img src="../../client/images/phone_icons-02.webp" alt=""></div>
+            </div>
+            <div class="note">*Scratches may be enhanced to show detail</div>
         </div>
-    </div>
+
+    </magnific-popup-modal>
 </div>
 </template>
 
 <script>
     import FormHelper from '../../admin/js/mixins/form_helper';
+    import MagnificPopupModal from './MagnificPopupModal';
 
     export default {
         props: {
@@ -195,6 +196,9 @@
                 required: false,
             },
         },
+
+        name: 'profile',
+        components: {MagnificPopupModal},
 
         mixins: [FormHelper],
 
@@ -216,6 +220,14 @@
         },
 
         methods: {
+            openModal () {
+                this.$refs.modal.open()
+            },
+
+            closeModal () {
+                this.$refs.modal.close()
+            },
+
             backStep(){
                 if (this.stepIndex > 0) {
                     let isNew = false;
@@ -254,6 +266,17 @@
                         this.selectedStep = null;
                     }
                 }
+
+                $('.popup-open').magnificPopup({
+                    removalDelay: 300,
+                    fixedContentPos: true,
+                    callbacks: {
+                        beforeOpen: function() {
+                        this.st.mainClass = this.st.el.attr('data-effect');
+                        }
+                    },
+                    midClick: true
+                });
 
                 this.valuate();
 
