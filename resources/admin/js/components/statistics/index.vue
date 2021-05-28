@@ -6,9 +6,6 @@
                     <thead>
                         <tr class="bg-blue">
                             <th>
-                                {{ $t('admin.statistics.form.id') }}
-                            </th>
-                            <th>
                                 {{ $t('admin.statistics.form.image') }}
                             </th>
                             <th>
@@ -82,7 +79,6 @@
                     <tbody>
                         <template v-if="!isLoading">
                             <tr v-for="(product, i) in products" :key="`status_${i}`">
-                                    <td><a :href="$r('admin.product.edit', { category: product.id })">{{ product.id }}</a></td>
                                     <td><img style="width: 100px; height: auto;" :src="product.image"/></td>
                                     <td><a :href="$r('admin.product.edit', { category: product.id })">{{ product.name }}</a></td>
                                     <td>

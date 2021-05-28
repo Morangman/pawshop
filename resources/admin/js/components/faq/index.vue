@@ -28,25 +28,6 @@
                     <thead>
                         <tr class="bg-blue">
                             <th>
-                                {{ $t('admin.faq.index.table.headers.id') }}
-                                <span>
-                                    <i
-                                            v-if="filters.by === 'id' && filters.dir === 'desc'"
-                                            @click.prevent="sort('id', 'asc')"
-                                            class="icon-arrow-down8 cursor-pointer"
-                                    ></i>
-                                    <i
-                                            v-if="filters.by === 'id' && filters.dir === 'asc'"
-                                            @click.prevent="sort('id', 'desc')"
-                                            class="icon-arrow-up8 cursor-pointer"
-                                    ></i>
-                                    <span v-if="filters.by !== 'id'" @click.prevent="sort('id', 'asc')">
-                                        <i class="icon-arrow-up8 cursor-pointer"></i>
-                                        <i class="icon-arrow-down8 cursor-pointer"></i>
-                                    </span>
-                                </span>
-                            </th>
-                            <th>
                                 {{ $t('admin.faq.index.table.headers.name') }}
                                 <span>
                                     <i
@@ -90,8 +71,7 @@
                     <tbody>
                         <template v-if="!isLoading">
                             <tr v-for="(faq, i) in faqs" :key="`faq_${i}`">
-                                    <td><a :href="$r('admin.faq.edit', { faq: faq.id })">{{ faq.id }}</a></td>
-                                    <td v-html="highlightSearchResult(faq.name, filters.search)"></td>
+                                    <td><a :href="$r('admin.faq.edit', { faq: faq.id })">{{ faq.name }}</a></td>
                                     <td>{{ faq.created_at }}</td>
                                     <td>
                                         <a :href="$r('admin.faq.edit', { faq: faq.id })">

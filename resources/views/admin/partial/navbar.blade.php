@@ -1,6 +1,6 @@
 <div class="navbar navbar-expand-md navbar-dark navbar-slide-top fixed-top">
     <div class="navbar-brand" style="margin-right: 0!important;">
-        <a href="{{ URL::route('admin.order.index')}}" class="d-inline-block">
+        <a href="{{ URL::route('home')}}" target="_blank" class="d-inline-block">
             <img src="{{ URL::asset('client/images/white-main-logo.png') }}" alt="">
         </a>
     </div>

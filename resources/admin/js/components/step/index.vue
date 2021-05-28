@@ -28,25 +28,6 @@
                     <thead>
                         <tr class="bg-blue">
                             <th>
-                                {{ $t('admin.step.index.table.headers.id') }}
-                                <span>
-                                    <i
-                                            v-if="filters.by === 'id' && filters.dir === 'desc'"
-                                            @click.prevent="sort('id', 'asc')"
-                                            class="icon-arrow-down8 cursor-pointer"
-                                    ></i>
-                                    <i
-                                            v-if="filters.by === 'id' && filters.dir === 'asc'"
-                                            @click.prevent="sort('id', 'desc')"
-                                            class="icon-arrow-up8 cursor-pointer"
-                                    ></i>
-                                    <span v-if="filters.by !== 'id'" @click.prevent="sort('id', 'asc')">
-                                        <i class="icon-arrow-up8 cursor-pointer"></i>
-                                        <i class="icon-arrow-down8 cursor-pointer"></i>
-                                    </span>
-                                </span>
-                            </th>
-                            <th>
                                 {{ $t('admin.step.index.table.headers.name') }}
                                 <span>
                                     <i
@@ -90,8 +71,7 @@
                     <tbody>
                         <template v-if="!isLoading">
                             <tr v-for="(step, i) in steps" :key="`step_${i}`">
-                                    <td><a :href="$r('admin.step.edit', { stepName: step.id })">{{ step.id }}</a></td>
-                                    <td v-html="highlightSearchResult(step.name, filters.search)"></td>
+                                    <td><a :href="$r('admin.step.edit', { stepName: step.id })">{{ step.name }}</a></td>
                                     <td>{{ step.created_at }}</td>
                                     <td>
                                         <a :href="$r('admin.step.edit', { stepName: step.id })">

@@ -28,25 +28,6 @@
                     <thead>
                         <tr class="bg-blue">
                             <th>
-                                {{ $t('admin.order-status.index.table.headers.id') }}
-                                <span>
-                                    <i
-                                            v-if="filters.by === 'id' && filters.dir === 'desc'"
-                                            @click.prevent="sort('id', 'asc')"
-                                            class="icon-arrow-down8 cursor-pointer"
-                                    ></i>
-                                    <i
-                                            v-if="filters.by === 'id' && filters.dir === 'asc'"
-                                            @click.prevent="sort('id', 'desc')"
-                                            class="icon-arrow-up8 cursor-pointer"
-                                    ></i>
-                                    <span v-if="filters.by !== 'id'" @click.prevent="sort('id', 'asc')">
-                                        <i class="icon-arrow-up8 cursor-pointer"></i>
-                                        <i class="icon-arrow-down8 cursor-pointer"></i>
-                                    </span>
-                                </span>
-                            </th>
-                            <th>
                                 {{ $t('admin.order-status.index.table.headers.name') }}
                                 <span>
                                     <i
@@ -91,8 +72,7 @@
                     <tbody>
                         <template v-if="!isLoading">
                             <tr v-for="(status, i) in statuses" :key="`status_${i}`">
-                                    <td><a :href="$r('admin.order-status.edit', { status: status.id })">{{ status.id }}</a></td>
-                                    <td :style="'color:' + status.color" v-html="highlightSearchResult(status.name, filters.search)"></td>
+                                    <td><a :href="$r('admin.order-status.edit', { status: status.id })" :style="'color:' + status.color">{{ status.name }}</a></td>
                                     <td><input class="form-control col-md-3" v-on:keyup.enter="updateStatusOrder(status)" v-model="status.order"/></td>
                                     <td>{{ status.created_at }}</td>
                                     <td>

@@ -314,7 +314,7 @@
                                         name="parsed_price"
                                         type="text"
                                         v-model="price.price"
-                                        class="form-control"
+                                        class="parsed_price form-control"
                                         v-on:keyup="updatePrice(price)"
                                         disabled
                                     >
@@ -324,7 +324,7 @@
                                         name="custom_price"
                                         type="text"
                                         v-model="price.custom_price"
-                                        class="form-control"
+                                        class="custom_price form-control"
                                         v-on:keyup="updatePrice(price)"
                                     >
                                 </td>

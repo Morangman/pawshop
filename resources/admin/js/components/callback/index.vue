@@ -28,25 +28,6 @@
                     <thead>
                         <tr class="bg-blue">
                             <th>
-                                {{ $t('admin.callback.index.table.headers.id') }}
-                                <span>
-                                    <i
-                                            v-if="filters.by === 'id' && filters.dir === 'desc'"
-                                            @click.prevent="sort('id', 'asc')"
-                                            class="icon-arrow-down8 cursor-pointer"
-                                    ></i>
-                                    <i
-                                            v-if="filters.by === 'id' && filters.dir === 'asc'"
-                                            @click.prevent="sort('id', 'desc')"
-                                            class="icon-arrow-up8 cursor-pointer"
-                                    ></i>
-                                    <span v-if="filters.by !== 'id'" @click.prevent="sort('id', 'asc')">
-                                        <i class="icon-arrow-up8 cursor-pointer"></i>
-                                        <i class="icon-arrow-down8 cursor-pointer"></i>
-                                    </span>
-                                </span>
-                            </th>
-                            <th>
                                 {{ $t('admin.callback.index.table.headers.name') }}
                                 <span>
                                     <i
@@ -92,12 +73,13 @@
                     <tbody>
                         <template v-if="!isLoading">
                             <tr v-for="(callback, i) in callbacks" :key="`callback_${i}`">
-                                    <td><a :href="$r('admin.callback.edit', { callback: callback.id })">{{ callback.id }}</a></td>
                                     <td>
-                                        <span v-html="highlightSearchResult(callback.name, filters.search)"></span>
-                                        <span class="badge badge-pill badge-success" v-if="callback.new_messages.length">
-                                            +{{ callback.new_messages.length }}
-                                        </span>
+                                        <a :href="$r('admin.callback.edit', { callback: callback.id })">
+                                            <span v-html="highlightSearchResult(callback.name, filters.search)"></span>
+                                            <span class="badge badge-pill badge-success" v-if="callback.new_messages.length">
+                                                +{{ callback.new_messages.length }}
+                                            </span>
+                                        </a>
                                     </td>
                                     <td>{{ callback.email }}</td>
                                     <td><span v-html="callback.text ? callback.text.substring(0,30)+'..' : ''"></span></td>

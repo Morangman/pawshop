@@ -146,7 +146,11 @@
                                             >
                                         </a>
                                     </td>
-                                    <td><a :href="$r('admin.warehouse.edit', { warehouse: product.id })">{{ product.product_name }}</a></td>
+                                    <td>
+                                        <a :href="$r('admin.warehouse.edit', { warehouse: product.id })" title="Edit">
+                                            <span v-html="highlightSearchResult(product.product_name, filters.search)"></span>
+                                        </a>
+                                    </td>
                                     <td>{{ product.warehouse_status.name }}</td>
                                     <td v-html="highlightSearchResult(product.imei ? product.imei : '', filters.search)"></td>
                                     <td v-html="highlightSearchResult(product.serial_number ? product.serial_number : '', filters.search)"></td>

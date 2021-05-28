@@ -110,12 +110,14 @@
                             <a href="{{ URL::route('admin.product.index') }}" class="nav-link @active_menu_class('admin.product')">
                                 <i class="icon-drawer"></i>
                                 <span>@lang('common.sidebar.products')</span>
+                                <span class="badge badge-primary badge-pill ml-auto ml-md-0" style="margin-left: auto!important;">{{  \App\Category::query()->whereNotNull('custom_text')->count() }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ URL::route('admin.category.index') }}" class="nav-link @active_menu_class('admin.category')">
                                 <i class="icon-drawer"></i>
                                 <span>@lang('common.sidebar.categories')</span>
+                                <span class="badge badge-primary badge-pill ml-auto ml-md-0" style="margin-left: auto!important;">{{  \App\Category::query()->whereNull('custom_text')->count() }}</span>
                             </a>
                         </li>
                     </ul>

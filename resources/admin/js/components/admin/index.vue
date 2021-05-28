@@ -28,25 +28,6 @@
                     <thead>
                         <tr class="bg-blue">
                             <th>
-                                {{ $t('admin.user.index.table.headers.id') }}
-                                <span>
-                                    <i
-                                            v-if="filters.by === 'id' && filters.dir === 'desc'"
-                                            @click.prevent="sort('id', 'asc')"
-                                            class="icon-arrow-down8 cursor-pointer"
-                                    ></i>
-                                    <i
-                                            v-if="filters.by === 'id' && filters.dir === 'asc'"
-                                            @click.prevent="sort('id', 'desc')"
-                                            class="icon-arrow-up8 cursor-pointer"
-                                    ></i>
-                                    <span v-if="filters.by !== 'id'" @click.prevent="sort('id', 'asc')">
-                                        <i class="icon-arrow-up8 cursor-pointer"></i>
-                                        <i class="icon-arrow-down8 cursor-pointer"></i>
-                                    </span>
-                                </span>
-                            </th>
-                            <th>
                                 {{ $t('admin.user.index.table.headers.name') }}
                                 <span>
                                     <i
@@ -94,8 +75,9 @@
                     <tbody>
                         <template v-if="!isLoading">
                             <tr v-for="(user, i) in users" :key="`user_${i}`">
-                                    <td><a :href="$r('admin.admin.edit', { user: user.id })">{{ user.id }}</a></td>
-                                    <td v-html="highlightSearchResult(user.name, filters.search)"></td>
+                                    <td>
+                                        <a :href="$r('admin.admin.edit', { user: user.id })">{{ user.name }}</a>
+                                    </td>
                                     <td v-html="highlightSearchResult(user.email, filters.search)"></td>
                                     <td>{{ roleName(user) }}</td>
                                     <td v-html="highlightSearchResult(user.phone, filters.search)"></td>

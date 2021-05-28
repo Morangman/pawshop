@@ -15,8 +15,15 @@
     justify-content: center;
 }
 
-.price-input {
-    width: 200px!important;
+.parsed_price, .custom_price {
+    width: 100px;
+}
+
+
+@media screen and (max-width: 1185px) {
+    .parsed_price, .custom_price, .price-input {
+        width: 100%!important;
+    }
 }
 
 .vs__clear,
@@ -204,9 +211,6 @@
 .date-centered {
     display: flex;
     justify-content: center;
-}
-
-@media screen and (max-width: 1520px) {
 }
 
 .product-title {

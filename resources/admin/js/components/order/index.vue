@@ -42,25 +42,6 @@
                     <thead>
                         <tr class="bg-blue">
                             <th>
-                                {{ $t('admin.order.index.table.headers.id') }}
-                                <span>
-                                    <i
-                                            v-if="filters.by === 'id' && filters.dir === 'desc'"
-                                            @click.prevent="sort('id', 'asc')"
-                                            class="icon-arrow-down8 cursor-pointer"
-                                    ></i>
-                                    <i
-                                            v-if="filters.by === 'id' && filters.dir === 'asc'"
-                                            @click.prevent="sort('id', 'desc')"
-                                            class="icon-arrow-up8 cursor-pointer"
-                                    ></i>
-                                    <span v-if="filters.by !== 'id'" @click.prevent="sort('id', 'asc')">
-                                        <i class="icon-arrow-up8 cursor-pointer"></i>
-                                        <i class="icon-arrow-down8 cursor-pointer"></i>
-                                    </span>
-                                </span>
-                            </th>
-                            <th>
                                 {{ $t('admin.order.index.table.headers.image') }}
                             </th>
                             <th>
@@ -189,7 +170,6 @@
                     <tbody>
                         <template v-if="!isLoading">
                             <tr v-for="(order, i) in orders" :key="`order${i}`">
-                                    <td><a :href="$r('admin.order.edit', { order: order.id })">{{ order.id }}</a></td>
                                     <td>
                                         <a :href="$r('admin.order.edit', { order: order.id })">
                                             <img width="auto"
