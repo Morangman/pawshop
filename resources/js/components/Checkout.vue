@@ -2,7 +2,7 @@
     <section class="checkout-section">
         <div class="container">
             <h1>Checkout</h1>
-            <div class="checkout-flex">
+            <div id="to-top" class="checkout-flex">
                 <div class="checkout-content">
                     <ul class="order-steps-list">
                         <li :class="stepIndex === 1 ? 'active-step' : ''">
@@ -285,7 +285,7 @@
                             <h4>Order comment</h4>
                             <textarea style="border-radius: 9px; margin-bottom: 20px;" v-model="orderData.comment"></textarea>
                         </div>
-                        <div class="checkout-simple-block">
+                        <div class="checkout-simple-block" style="display: none;">
                             <h4>Terms & Conditions</h4>
                             <div class="desc">
                                 <p>Please carefully read our terms and conditions before placing your offer.</p>
@@ -415,7 +415,7 @@
                 insurancePrice: 0,
                 registerErrors: [],
                 loginErrors: [],
-                accept_terms: false,
+                accept_terms: true,
             };
         },
 
@@ -454,6 +454,10 @@
 
             nextStep() {
                 this.stepIndex++;
+
+                let offset = 160; // sticky nav height
+                let el = document.querySelector('#to-top');
+                window.scroll({ top: (el.offsetTop - offset), left: 0, behavior: 'smooth' });
             },
 
             login(){
@@ -552,6 +556,10 @@
                 )
                 {
                     this.stepIndex++;
+
+                    let offset = 160; // sticky nav height
+                    let el = document.querySelector('#to-top');
+                    window.scroll({ top: (el.offsetTop - offset), left: 0, behavior: 'smooth' });
                 } else {
                     this.paymentError = true;
                 }
@@ -600,6 +608,10 @@
                 )
                 {
                     this.stepIndex++;
+
+                    let offset = 160; // sticky nav height
+                    let el = document.querySelector('#to-top');
+                    window.scroll({ top: (el.offsetTop - offset), left: 0, behavior: 'smooth' });
                 }
             },
 

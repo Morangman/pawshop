@@ -989,6 +989,51 @@ class HomeController extends Controller
         return $this->json()->noContent();
     }
 
+
+    /**
+     * @param \App\Category $category
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getCategory(Category $category): JsonResponse
+    {
+        $faqs = Faq::query()->whereKey($category->getAttribute('faq_id'))->first();
+
+        $stepsArr = [];
+
+        if ($steps = $category->steps()->get()) {
+            foreach ($steps as $key => $step) {
+                $stepsArr[$step->stepName->id]['items'][] = $step->toArray();
+                $stepsArr[$step->stepName->id]['is_condition'] = $step->stepName->is_condition;
+                $stepsArr[$step->stepName->id]['is_checkbox'] = $step->stepName->is_checkbox;
+                $stepsArr[$step->stepName->id]['is_functional'] = $step->stepName->is_functional;
+                $stepsArr[$step->stepName->id]['title'] = $step->stepName->title;
+                if ($step->stepName->tip_id) {
+                    $stepsArr[$step->stepName->id]['tip'] = Tip::query()->whereKey($step->stepName->tip_id)->first()->toArray() ?? [];
+                }
+            }
+        }
+
+        $resultArr = [];
+
+        foreach ($stepsArr as $stepArr) {
+            $resultArr[] = [
+                'title' => $stepArr['title'],
+                'items' => $stepArr['items'],
+                'is_condition' => $stepArr['is_condition'],
+                'is_checkbox' => $stepArr['is_checkbox'],
+                'is_functional' => $stepArr['is_functional'],
+                'tip' => isset($stepArr['tip']) ? $stepArr['tip'] : null,
+            ];
+        }
+
+        return $this->json()->ok([
+            'category' => $category,
+            'steps' => $resultArr ?? [],
+            'faqs' => $faqs ?? [],
+        ]);
+    }
+
     /**
      * @param string $slug
      *
