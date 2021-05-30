@@ -4,6 +4,7 @@ namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use App\Http\Middleware\CheckUserActivity;
+use App\Http\Middleware\CaheckRole;
 
 class Kernel extends HttpKernel
 {
@@ -45,6 +46,10 @@ class Kernel extends HttpKernel
 
         'common' => [
             CheckUserActivity::class,
+        ],
+
+        'check_role' => [
+            CaheckRole::class,
         ],
     ];
 
