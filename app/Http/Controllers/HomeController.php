@@ -15,6 +15,7 @@ use App\Http\Requests\Admin\Order\UpdateRequest;
 use App\Http\Requests\Client\Account\StoreRequest as UpdateAccountInfoRequest;
 use App\Http\Requests\Client\Callback\StoreRequest as CallbackRequest;
 use App\Http\Requests\Client\Order\StoreRequest as ClientOrderStoreRequest;
+use App\Jobs\OrderConfirmationMailJob;
 use App\Jobs\SendToMailLabelJob;
 use App\Notifications\CommentNotification;
 use App\Notifications\ContactNotification;
@@ -307,18 +308,11 @@ class HomeController extends Controller
             }
         }
 
-        try {
-            Mail::to($order->getAttribute('user_email'))
-                ->send(new OrderConfirmationMail(
-                    array_merge(
-                        $order->toArray(),
-                        [
-                            'user_name' => Auth::user()->getAttribute('name'),
-                            'insurance_summ' => $insuranceSumm,
-                        ]
-                    )
-                ));
-        } catch (\Exception $e) {}
+        OrderConfirmationMailJob::dispatch([
+            'user_name' => Auth::user()->getAttribute('name'),
+            'order' => $order->toArray(),
+            'insurance_summ' => $insuranceSumm,
+        ]);
 
         return $this->json()->ok(['order_uuid' => $order->getAttribute('uuid')]);
     }
