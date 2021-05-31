@@ -19,6 +19,15 @@
     width: 100px;
 }
 
+.order-table-item {
+    cursor: pointer;
+}
+
+
+.order-table-item:hover .order-table-hovered { 
+    opacity: .3;
+} 
+
 
 @media screen and (max-width: 1185px) {
     .parsed_price, .custom_price, .price-input {

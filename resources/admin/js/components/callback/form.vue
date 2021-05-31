@@ -134,7 +134,7 @@
             },
 
             scrollToEnd () {
-                var content = this.$refs.container;
+                let content = this.$refs.container;
                 content.scrollTop = content.scrollHeight;
             }
         },

@@ -6,6 +6,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Message;
 
 /**
  * Class Callback
@@ -24,6 +26,15 @@ class Callback extends Model
      * @var string
      */
     protected $table = 'callbacks';
+
+     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'is_answered',
+    ];
 
     /**
      * @var array
@@ -72,7 +83,31 @@ class Callback extends Model
             'chat_id',
             'id',
             'messages'
-        )->where('viewed', '=', Callback::NOT_VIEWED);
+        )->where('viewed', '=', $this::NOT_VIEWED);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function message(): HasMany
+    {
+        return $this->hasMany(
+            Message::class,
+            'chat_id',
+            'id',
+            'messages'
+        );
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function getIsAnsweredAttribute(): bool
+    {
+        $lastMsg = $this->messages()->orderBy('created_at', 'desc')->first();
+
+        return $lastMsg->getAttribute('sender') == $this::SENDER_TO;
     }
 
     /**
@@ -82,6 +117,6 @@ class Callback extends Model
      */
     public function messagesCount(): int
     {
-        return $this->messages()->where('viewed', '=', Callback::NOT_VIEWED)->count();
+        return $this->messages()->where('viewed', '=', $this::NOT_VIEWED)->count();
     }
 }

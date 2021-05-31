@@ -606,6 +606,10 @@ class HomeController extends Controller
         $pdf = $fedexService->ship($order);
 
         if (isset($pdf['error'])) {
+            $order->update([
+                'is_label_trouble' => true,
+            ]);
+
             return $this->json()->ok(['error' => $pdf['error']]);
         } else {
             Storage::disk('media')->put("pdf/fedex/{$order->getAttribute('uuid')}/label.pdf", $pdf);
@@ -615,6 +619,7 @@ class HomeController extends Controller
             $paymentData = $order->getAttribute('payment');
 
             $order->update([
+                'is_label_trouble' => false,
                 'payment' => array_merge($paymentData, ['fedexLabel' => $pdfUrl]),
                 'fedex_status' => Order::STATUS_SHIPMENT_CREATED,
             ]);
@@ -849,6 +854,10 @@ class HomeController extends Controller
         $pdf = $fedexService->ship($order);
 
         if (isset($pdf['error'])) {
+            $order->update([
+                'is_label_trouble' => true,
+            ]);
+
             return $this->json()->ok(['error' => $pdf['error']]);
         } else {
             Storage::disk('media')->put("pdf/fedex/{$order->getAttribute('uuid')}/label.pdf", $pdf);
@@ -858,6 +867,7 @@ class HomeController extends Controller
             $paymentData = $order->getAttribute('payment');
 
             $order->update([
+                'is_label_trouble' => false,
                 'payment' => array_merge($paymentData, ['fedexLabel' => $pdfUrl]),
                 'fedex_status' => Order::STATUS_SHIPMENT_CREATED,
             ]);

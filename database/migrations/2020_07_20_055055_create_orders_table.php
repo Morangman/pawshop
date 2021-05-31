@@ -38,6 +38,7 @@ class CreateOrdersTable extends Migration
             $table->tinyInteger('ordered_status')->unsigned()->default(1);
             $table->tinyInteger('is_transit_notify')->unsigned()->nullable();
             $table->tinyInteger('is_received_notify')->unsigned()->nullable();
+            $table->boolean('is_label_trouble')->default(0);
             $table->timestamp('estimate_date')->nullable();
             $table->timestamp('delivered_date')->nullable();
             $table->timestamp('paid_date')->nullable();

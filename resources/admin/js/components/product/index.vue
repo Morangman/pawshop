@@ -66,6 +66,25 @@
                                 </span>
                             </th>
                             <th>
+                                {{ $t('admin.product.form.cart_count') }}
+                                <span>
+                                    <i
+                                            v-if="filters.by === 'box_count' && filters.dir === 'desc'"
+                                            @click.prevent="sort('box_count', 'asc')"
+                                            class="icon-arrow-down8 cursor-pointer"
+                                    ></i>
+                                    <i
+                                            v-if="filters.by === 'box_count' && filters.dir === 'asc'"
+                                            @click.prevent="sort('box_count', 'desc')"
+                                            class="icon-arrow-up8 cursor-pointer"
+                                    ></i>
+                                    <span v-if="filters.by !== 'box_count'" @click.prevent="sort('box_count', 'asc')">
+                                        <i class="icon-arrow-up8 cursor-pointer"></i>
+                                        <i class="icon-arrow-down8 cursor-pointer"></i>
+                                    </span>
+                                </span>
+                            </th>
+                            <th>
                                 {{ $t('admin.product.index.table.headers.created_at') }}
                                 <span>
                                     <i
@@ -96,6 +115,7 @@
                                         </a>
                                     </td>
                                     <td>{{ category.view_count }}</td>
+                                    <td>{{ category.box_count }}</td>
                                     <td>{{ category.created_at }}</td>
                                     <td>
                                         <a :href="$r('admin.product.edit', { category: category.id })">

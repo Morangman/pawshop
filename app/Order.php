@@ -83,6 +83,7 @@ class Order extends Model implements HasMedia
         'is_transit_notify',
         'is_received_notify',
         'send_ctn',
+        'is_label_trouble',
     ];
 
     /**
@@ -112,6 +113,7 @@ class Order extends Model implements HasMedia
         'is_transit_notify' => 'int',
         'is_received_notify' => 'int',
         'send_ctn' => 'int',
+        'is_label_trouble' => 'bool',
     ];
 
     /**

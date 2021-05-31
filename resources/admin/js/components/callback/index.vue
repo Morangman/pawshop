@@ -72,7 +72,7 @@
                     </thead>
                     <tbody>
                         <template v-if="!isLoading">
-                            <tr v-for="(callback, i) in callbacks" :key="`callback_${i}`">
+                            <tr v-for="(callback, i) in callbacks" :key="`callback_${i}`" :style="callback.is_answered ? 'background-color: #ffeae8;' : ''">
                                     <td>
                                         <a :href="$r('admin.callback.edit', { callback: callback.id })">
                                             <span v-html="highlightSearchResult(callback.name, filters.search)"></span>

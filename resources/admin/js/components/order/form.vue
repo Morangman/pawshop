@@ -553,9 +553,9 @@
                     <button
                         type="submit"
                         class="btn btn-danger"
-                        @click.prevent="deleteOrder"
+                        @click.prevent="cancelOrder"
                     >
-                        {{ $t('common.word.delete') }}
+                        {{ $t('common.word.cancel') }}
                     </button>
                 </template>
                 <button
@@ -641,8 +641,6 @@
         methods: {
             submit() {
                 delete this.model.orders;
-
-                console.log(this.model);
 
                 _.assign(this.model, { reminder: this.reminder });
 
@@ -781,6 +779,27 @@
                 }).catch(({ response: { data: { errors } } }) => {
                     this.errors = errors;
                     this.scrollToError();
+                });
+            },
+
+            cancelOrder() {
+                window.swal({
+                    title: this.$t('common.phrase.confirm.title'),
+                    text: 'The order will be canceled',
+                    icon: 'warning',
+                    buttons: [this.$t('common.word.cancel'), this.$t('common.word.confirm')],
+                }).then((result) => {
+                    if (!result) {
+                        return
+                    }
+
+                    axios.get(
+                        Router.route('admin.order.set-cancel-status', { order: this.model.id }),
+                    ).then(() => {
+                        location.reload();
+                    }).catch(({ response: { data: { errors } } }) => {
+                        console.log(errors);
+                    });
                 });
             },
 

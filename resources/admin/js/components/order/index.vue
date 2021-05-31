@@ -169,8 +169,8 @@
                     </thead>
                     <tbody>
                         <template v-if="!isLoading">
-                            <tr v-for="(order, i) in orders" :key="`order${i}`">
-                                    <td>
+                            <tr v-for="(order, i) in orders" :key="`order${i}`" class="order-table-item">
+                                    <td class="order-table-hovered">
                                         <a :href="$r('admin.order.edit', { order: order.id })">
                                             <img width="auto"
                                                 height="100"
@@ -183,20 +183,21 @@
                                             + {{ order.orders.order.length - 1 }}
                                         </a>
                                     </td>
-                                    <td v-html="highlightSearchResult(order.address.name, filters.search)"></td>
-                                    <td>{{ order.address.phone }}</td>
-                                    <td>
+                                    <td class="order-table-hovered" v-on:click="editOrder(order.id)" v-html="highlightSearchResult(order.address.name, filters.search)"></td>
+                                    <td class="order-table-hovered" v-on:click="editOrder(order.id)">{{ order.address.phone }}</td>
+                                    <td class="order-table-hovered" v-on:click="editOrder(order.id)">
                                         <b :style="'color:' + order.order_status.color">{{ order.order_status.name }}</b>
                                     </td>
-                                    <td v-if="isnew">
+                                    <td v-if="isnew" class="order-table-hovered" v-on:click="editOrder(order.id)">
                                         <span v-if="order.tracking_number" class="badge badge-primary">Label created</span>
+                                        <span v-if="order.is_label_trouble" class="badge badge-danger">Label trouble</span>
                                     </td>
-                                    <td v-if="istransit"><span v-if="order.estimate_date">{{ normalizeDate(order.estimate_date) }}</span></td>
-                                    <td v-if="isdelivered"><span v-if="order.delivered_date">{{ normalizeDate(order.delivered_date) }}</span></td>
-                                    <td v-if="ispayed"><span v-if="order.paid_date">{{ normalizeDate(order.paid_date) }}</span></td>
-                                    <td v-if="isreceived"><span v-if="order.received_date">{{ normalizeDate(order.received_date) }}</span></td>
-                                    <td v-if="iscancelled"><span v-if="order.cancelled_date">{{ normalizeDate(order.cancelled_date) }}</span></td>
-                                    <td>{{ normalizeDate(order.created_at) }}</td>
+                                    <td v-if="istransit" v-on:click="editOrder(order.id)" class="order-table-hovered"><span v-if="order.estimate_date">{{ normalizeDate(order.estimate_date) }}</span></td>
+                                    <td v-if="isdelivered" v-on:click="editOrder(order.id)" class="order-table-hovered"><span v-if="order.delivered_date">{{ normalizeDate(order.delivered_date) }}</span></td>
+                                    <td v-if="ispayed" v-on:click="editOrder(order.id)" class="order-table-hovered"><span v-if="order.paid_date">{{ normalizeDate(order.paid_date) }}</span></td>
+                                    <td v-if="isreceived" v-on:click="editOrder(order.id)" class="order-table-hovered"><span v-if="order.received_date">{{ normalizeDate(order.received_date) }}</span></td>
+                                    <td v-if="iscancelled" v-on:click="editOrder(order.id)" class="order-table-hovered"><span v-if="order.cancelled_date">{{ normalizeDate(order.cancelled_date) }}</span></td>
+                                    <td v-on:click="editOrder(order.id)" class="order-table-hovered">{{ normalizeDate(order.created_at) }}</td>
                                     <td>
                                         <a :href="$r('admin.order.edit', { order: order.id })">
                                             <i class="icon-pencil"></i>
@@ -320,13 +321,28 @@
                 });
             },
 
+            editOrder(order) {
+                location.href = Router.route('admin.order.edit', { order: order });
+            },
+
             cancelOrder(id) {
-                axios.get(
-                    Router.route('admin.order.set-cancel-status', { order: id }),
-                ).then(() => {
-                    location.reload();
-                }).catch(({ response: { data: { errors } } }) => {
-                    console.log(errors);
+                window.swal({
+                    title: this.$t('common.phrase.confirm.title'),
+                    text: 'The order will be canceled',
+                    icon: 'warning',
+                    buttons: [this.$t('common.word.cancel'), this.$t('common.word.confirm')],
+                }).then((result) => {
+                    if (!result) {
+                        return
+                    }
+
+                    axios.get(
+                        Router.route('admin.order.set-cancel-status', { order: id }),
+                    ).then(() => {
+                        location.reload();
+                    }).catch(({ response: { data: { errors } } }) => {
+                        console.log(errors);
+                    });
                 });
             },
 
