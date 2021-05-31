@@ -619,7 +619,11 @@ class HomeController extends Controller
                 'is_label_trouble' => true,
             ]);
 
-            return $this->json()->ok(['error' => $pdf['error']]);
+            return $this->json()->internalServerError([
+                'errors' => [
+                    'label' => $pdf['error'],
+                ],
+            ]);
         } else {
             Storage::disk('media')->put("pdf/fedex/{$order->getAttribute('uuid')}/label.pdf", $pdf);
 
@@ -867,7 +871,11 @@ class HomeController extends Controller
                 'is_label_trouble' => true,
             ]);
 
-            return $this->json()->ok(['error' => $pdf['error']]);
+            return $this->json()->internalServerError([
+                'errors' => [
+                    'label' => $pdf['error'],
+                ],
+            ]);
         } else {
             Storage::disk('media')->put("pdf/fedex/{$order->getAttribute('uuid')}/label.pdf", $pdf);
 

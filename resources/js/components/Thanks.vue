@@ -282,23 +282,18 @@
                 axios.get(
                     Router.route('fedex-label', { order: this.order.id }),
                 ).then((data) => {
-                    if (data.data.error) {
-                        this.fedexError = true;
-                        this.isPopupOpen = true;
-                        this.lableLoaded = true;
+                    window.open(data.data.url, '_blank');
 
-                        this.fedexErrorMsg = data.data.error;
-                    } else {
-                        window.open(data.data.url, '_blank');
+                    this.fedexPdfUrl = data.data.url;
 
-                        this.fedexPdfUrl = data.data.url;
-
-                        this.fedexError = false;
-                        this.addressError = false;
-                    }
+                    this.fedexError = false;
+                    this.addressError = false;
                 }).catch(({ response: { data: { errors } } }) => {
                     this.fedexError = true;
                     this.isPopupOpen = true;
+                    this.lableLoaded = true;
+
+                    this.fedexErrorMsg = errors.label;
                 });
             },
 
@@ -330,23 +325,18 @@
                             },
                         },
                     ).then((data) => {
-                        if (data.data.error) {
-                            this.fedexError = true;
-                            this.isPopupOpen = true;
-                            this.lableLoaded = true;
+                        window.open(data.data.url, '_blank');
 
-                            this.fedexErrorMsg = data.data.error;
-                        } else {
-                            window.open(data.data.url, '_blank');
+                        this.fedexPdfUrl = data.data.url;
 
-                            this.fedexPdfUrl = data.data.url;
-
-                            this.fedexError = false;
-                            this.addressError = false;
-                        }
+                        this.fedexError = false;
+                        this.addressError = false;
                     }).catch(({ response: { data: { errors } } }) => {
                         this.fedexError = true;
                         this.isPopupOpen = true;
+                        this.lableLoaded = true;
+
+                        this.fedexErrorMsg = errors.label;
                     });
                 } else {
                     this.isPopupOpen = true;

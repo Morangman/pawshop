@@ -107,7 +107,7 @@ class Callback extends Model
     {
         $lastMsg = $this->messages()->orderBy('created_at', 'desc')->first();
 
-        return $lastMsg->getAttribute('sender') == $this::SENDER_TO;
+        return $lastMsg ? $lastMsg->getAttribute('sender') == $this::SENDER_TO : false;
     }
 
     /**
