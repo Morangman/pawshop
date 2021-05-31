@@ -24,8 +24,8 @@
 }
 
 
-.order-table-item:hover .order-table-hovered { 
-    opacity: .3;
+.order-table-item:hover{ 
+    background: #edf4ff;
 } 
 
 
