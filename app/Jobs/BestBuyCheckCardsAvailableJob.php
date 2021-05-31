@@ -57,7 +57,7 @@ class BestBuyCheckCardsAvailableJob implements ShouldQueue
                         ->first();
                     
                     if ($available) {
-                        if ((bool) $card->available !== $available) {
+                        if ($card && (bool) $card->available !== $available) {
                             $botApiToken = env('TELEGRAM_BOT_API_CHECKER');
                             $chat_id = env('TELEGRAM_CHAT_ID_CHECKER');
                     
@@ -89,7 +89,7 @@ class BestBuyCheckCardsAvailableJob implements ShouldQueue
                                 ]);
                         }
                     } else {
-                        if ((bool) $card->available !== $available) {
+                        if ($card && (bool) $card->available !== $available) {
                             DB::table('cards')
                                 ->where('site', '=', 'bestbuy')
                                 ->where('sku_id', '=', $skuId)

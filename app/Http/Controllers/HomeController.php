@@ -43,6 +43,7 @@ use App\Message;
 use App\Notifications\OrderConfirmNotification;
 use App\Notifications\OrderDeclineNotification;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Lang;
 use Session;
@@ -290,14 +291,18 @@ class HomeController extends Controller
 
         $order = Order::create($orderData);
 
-        $this->sendOffer(
-            'New order',
-            $order->getKey(),
-            route('admin.order.edit', ['order' => $order->getKey()]),
-            $orderData['orders']['order'][0]['device']['image'],
-            $orderData['orders']['order'][0]['device']['name'],
-            round((float) $order->getAttribute('total_summ'), 2),
-        );
+        try {
+            $this->sendOffer(
+                'New order',
+                $order->getKey(),
+                route('admin.order.edit', ['order' => $order->getKey()]),
+                $orderData['orders']['order'][0]['device']['image'],
+                $orderData['orders']['order'][0]['device']['name'],
+                round((float) $order->getAttribute('total_summ'), 2),
+            );
+        } catch (\Exception $e) {
+            Log::info('Telegram error ' . $e);
+        }
 
         foreach($order->getAttribute('orders')['order'] as $item) {
             for ($i = 1; $i <= (int) $item['ctn']; $i++) {
@@ -393,8 +398,12 @@ class HomeController extends Controller
                  User::query()->scopes(['notifiableUsers'])->get(),
                  new ContactNotification($callback->getKey())
             );
-    
-            $this->sendMessage($request->has('text') ? $request->get('text') : 'Callback notification', route('admin.callback.edit', ['callback' => $callback->getKey()]));
+
+            try {
+                $this->sendMessage($request->has('text') ? $request->get('text') : 'Callback notification', route('admin.callback.edit', ['callback' => $callback->getKey()]));
+            } catch (\Exception $e) {
+                Log::info('Telegram error ' . $e);
+            }
     
             return View::make('support', [
                 'settings' => $this->getSettings() ?? [],
