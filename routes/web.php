@@ -39,7 +39,7 @@ Route::get('/account', [
 
 Route::get('/header-search', 'HomeController@headerSearchDevice')->name('header-search');
 
-Route::get('/sell-my-{slug}', 'HomeController@getByCategory')->where('slug', '[a-zA-Z0-9/_-]+')->name('get-category');
+Route::get('/sell-{slug}', 'HomeController@getByCategory')->where('slug', '[a-zA-Z0-9/_-]+')->name('get-category');
 
 Route::get('/get-category-data/{category}', 'HomeController@getCategory')->name('get-category-data');
 
