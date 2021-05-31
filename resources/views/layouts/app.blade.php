@@ -10,7 +10,7 @@
     <base href="{{ Config::get('app.url') }}">
 
     <meta property="og:title" content="@yield('home-title')">
-    <meta name="description" property="og:description" content="{{ (array) $category ? View::getSection('home-title', $settings->getAttribute('general_settings')['seo_meta']) : $settings->getAttribute('general_settings')['seo_meta'] }}">
+    <meta name="description" property="og:description" content="{{ (array) $category ? 'Get paid for your used ' . str_replace('Sell ', '', $category->getAttribute('name')) . ' or any other phone, tablet computer or electronics device. Free shipping and fast payout. Get the most for your device today!' : $settings->getAttribute('general_settings')['seo_meta'] }}">
     <meta name="keywords" property="og:keywords" content="{{ (array) $category ? 'sell ' . strtolower(str_replace('Sell ', '', $category->getAttribute('name'))) : $settings->getAttribute('general_settings')['seo_keywords'] }}">
     <meta property="og:url" content="{{ Request::url() }}">
     <meta property="og:image" content="{{ (array) $category ? $category->getAttribute('image') : $settings->getAttribute('general_settings')['seo_image'] }}">
