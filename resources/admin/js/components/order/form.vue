@@ -16,6 +16,10 @@
                             Print barcode
                         </a>
                         <a class="btn btn-primary" :href="$r('thanks', {order_uuid: model.uuid})" target="_blank">Show Thank Page</a>
+                        <a class="btn btn-info" v-if="!model.tracking_number" href="javascript:0" v-on:click="getFedexLable()">
+                            <span v-if="!fedexLabelLoading">Create FedEx Label</span>
+                            <span v-if="fedexLabelLoading">Loading..</span>
+                        </a>
                     </div>
                     <div class="form-group" v-if="model.user_id">
                         <label>
@@ -621,6 +625,7 @@
                 selectedSteps: [],
                 stepsData: [],
                 stepIndex: 0,
+                fedexLabelLoading: false,
                 reminder: {
                     title: null,
                     text: null,
@@ -779,6 +784,24 @@
                 }).catch(({ response: { data: { errors } } }) => {
                     this.errors = errors;
                     this.scrollToError();
+                });
+            },
+
+            getFedexLable() {
+                this.fedexLabelLoading = true;
+
+                axios.get(
+                    Router.route('fedex-label', { order: this.model.id }),
+                ).then(() => {
+                    this.fedexLabelLoading = false;
+
+                    location.reload();
+                }).catch(({ response: { data: { errors } } }) => {
+                    this.fedexLabelLoading = false;
+
+                    notify.error(
+                        errors.label
+                    );
                 });
             },
 

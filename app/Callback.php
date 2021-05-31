@@ -99,7 +99,6 @@ class Callback extends Model
         );
     }
 
-
     /**
      * @return bool
      */
