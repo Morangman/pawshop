@@ -3,6 +3,7 @@
         v-if="model"
         :model.sync="model"
         :categories.sync="categories"
+        :statuses.sync="statuses"
         :errors.sync="errors"
         @submit="update"
         @delete="deleteWarehouse"
@@ -22,6 +23,10 @@
         props: {
             warehouse: {
                 type: Object,
+                required: true,
+            },
+            statuses: {
+                type: Array,
                 required: true,
             },
             categories: {

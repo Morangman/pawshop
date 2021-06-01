@@ -2,6 +2,7 @@
     <warehouse-form
         :model.sync="model"
         :categories.sync="categories"
+        :statuses.sync="statuses"
         :errors.sync="errors"
         @submit="store"
     >
@@ -19,6 +20,10 @@
 
         props: {
             categories: {
+                type: Array,
+                required: true,
+            },
+            statuses: {
                 type: Array,
                 required: true,
             },

@@ -31,7 +31,7 @@
                             <strong>{{ $t('admin.warehouse.form.status') }}</strong>
                         </label>
                         <select class="form-control" name="ordered_status" v-model="model.status" required :class="{ 'border-danger': errors.status }">
-                            <option v-for="(status, i) in $t('admin.warehouse.product_statuses')" :key="`order_status__${i}`" :value="i">{{ status }}</option>
+                            <option v-for="(status, i) in statuses" :key="`order_status__${i}`" :value="status.id">{{ status.name }}</option>
                         </select>
                         <div v-for="(error, i) in errors.status"
                              :key="`status_product__error__${i}`"
@@ -279,6 +279,10 @@
         props: {
             model: {
                 type: Object,
+                required: true,
+            },
+            statuses: {
+                type: Array,
                 required: true,
             },
             errors: {
