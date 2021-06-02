@@ -23,6 +23,17 @@
     cursor: pointer;
 }
 
+.chat-title {
+    display: flex;
+}
+
+.media-chat-item:before {
+    content: none!important;
+}
+
+.chat-name {
+    margin-left: 5px;
+}
 
 .order-table-item:hover{ 
     background: #edf4ff;

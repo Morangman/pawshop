@@ -873,9 +873,20 @@ class OrderController extends Controller
 
                     $keyword = "%{$search}%";
 
+                    $orderIds = [];
+
+                    foreach ($query->get() as $order) {
+                        foreach ($order->getAttribute('orders')['order'] as $orderData) {
+                            if (strpos(strtolower($orderData['device']['name']), strtolower($search)) !== false) {
+                                $orderIds[] = $order->getKey();
+                            }
+                        }
+                    };
+
                     $query->where('address->name', 'like', $keyword)
                         ->orWhere('id', 'like', $keyword)
-                        ->orWhere('tracking_number', 'like', $keyword);
+                        ->orWhere('tracking_number', 'like', $keyword)
+                        ->orWhereIn('id', $orderIds);
                 }
             )
             ->when(

@@ -4,7 +4,12 @@
             <div class="card">
                 <div class="card-header header-elements-inline">
                     <h5 v-if="!model.id" class="card-title"></h5>
-                    <h5 v-if="model.id" class="card-title">Conversation with <a v-if="user" :href="$r('admin.user.edit', {user: user.id})">{{ model.name }}</a> <p v-if="!user">{{ model.name }}</p> ({{ model.email }})</h5>
+                    <h5 v-if="model.id" class="card-title chat-title">
+                        <p>Conversation with</p>
+                        <a class="chat-name" v-if="user" :href="$r('admin.user.edit', {user: user.id})">{{ model.name }}</a>
+                        <p class="chat-name" v-if="!user">{{ model.name }}</p>
+                        <p class="chat-name">({{ model.email }})</p>
+                    </h5>
                     <div class="header-elements">
                         <div class="list-icons">
                             <a class="list-icons-item" v-on:click="reload()" data-action="reload"></a>
