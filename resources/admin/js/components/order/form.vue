@@ -309,44 +309,6 @@
                                     <input type="checkbox" id="scales" name="scales" v-model="product.is_locked">
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <div class="form-group col-md-6">
-                                    <label>
-                                        <strong>Delivery Price</strong>
-                                    </label>
-                                    <input
-                                        name="delivery_price"
-                                        type="text"
-                                        placeholder="Delivey Price"
-                                        v-model="product.delivery_price"
-                                        class="form-control"
-                                    >
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label>
-                                        <strong>Repairs Price</strong>
-                                    </label>
-                                    <input
-                                        name="repairs_price"
-                                        type="text"
-                                        placeholder="Repairs Price"
-                                        v-model="product.repairs_price"
-                                        class="form-control"
-                                    >
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label>
-                                        <strong>Sell Price</strong>
-                                    </label>
-                                    <input
-                                        name="sell_price"
-                                        type="text"
-                                        placeholder="Sell Price"
-                                        v-model="product.sell_price"
-                                        class="form-control"
-                                    >
-                                </div>
-                            </div>
 
                             <hr>
                             
@@ -438,6 +400,18 @@
                                 name="custom_summ"
                                 type="text"
                                 v-model="model.custom_summ"
+                                class="form-control flex-input"
+                            >
+                        </div>
+                        <div class="flex-row">
+                            <label>
+                                <strong>Delivery Price</strong>
+                            </label>
+                            <input
+                                name="delivery_price"
+                                type="text"
+                                placeholder="Delivey Price"
+                                v-model="model.delivery_price"
                                 class="form-control flex-input"
                             >
                         </div>

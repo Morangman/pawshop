@@ -8,6 +8,20 @@
                         {{ $t('admin.warehouse.index.header_btn') }}
                     </a>
                 </div>
+                <div class="col col-auto">
+                    <div class="csv-file file btn btn-lg btn-primary">
+                        <div v-if="!uploadingFedexPrices">
+                            XML <i class="icon-file-plus2"></i>
+                            <input id="csv-file" type="file" name="file" @change="importFedexPrices"/>
+                        </div>
+                        <div class="d-flex justify-content-center" v-if="uploadingFedexPrices">
+                            <b-spinner
+                                    style="width: 16px; height: 16px;"
+                                    variant="info"
+                            ></b-spinner>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group col-md-auto" v-if="!status">
                     <label for="pStatus" class="d-inline-block">{{ $t('admin.warehouse.index.table.headers.status') }} :</label>
                     <select
@@ -187,6 +201,7 @@
 <script>
     import IndexPageHelper from '../../mixins/index_page_helper';
     import InfiniteLoading from 'vue-infinite-loading';
+    import FormHelper from '../../mixins/form_helper';
 
     export default {
         props: {
@@ -208,7 +223,7 @@
             InfiniteLoading,
         },
 
-        mixins: [IndexPageHelper],
+        mixins: [IndexPageHelper, FormHelper],
 
         data() {
             return {
@@ -222,6 +237,7 @@
                 products: [],
                 total: null,
                 isLoading: true,
+                uploadingFedexPrices: false,
             };
         },
 
@@ -250,6 +266,31 @@
                     notify.error(_.head(errors));
                 }).finally(() => {
                     this.isLoading = false;
+                });
+            },
+
+            importFedexPrices(e) {
+                this.uploadingFedexPrices = true;
+
+                this.file = e.target.files[0];
+
+                let data = new FormData();
+
+                data.append('file', this.file);
+
+                axios.post(
+                    Router.route('admin.warehouse.import'),
+                    data
+                ).then(({ data }) => {
+                    this.uploadingFedexPrices = false;
+
+                    location.href = Router.route('admin.warehouse.index');
+                }).catch(({ response: { data: { errors } } }) => {
+                    this.uploadingFedexPrices = false;
+
+                    notify.error(_.head(errors));
+                }).finally(() => {
+                    this.uploadingFedexPrices = false;
                 });
             },
 

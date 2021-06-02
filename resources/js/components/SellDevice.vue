@@ -326,7 +326,7 @@
                     });
                 }
 
-                let offset = 160; // sticky nav height
+                let offset = 250; // sticky nav height
                 let el = document.querySelector('#step-title');
                 window.scroll({ top: (el.offsetTop - offset), left: 0, behavior: 'smooth' });
             },

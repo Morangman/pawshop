@@ -41,6 +41,7 @@ class CreateOrdersTable extends Migration
             $table->boolean('is_label_trouble')->default(0);
             $table->timestamp('estimate_date')->nullable();
             $table->timestamp('delivered_date')->nullable();
+            $table->decimal('delivery_price', 10, 2)->default(0);
             $table->timestamp('paid_date')->nullable();
             $table->timestamp('received_date')->nullable();
             $table->timestamp('cancelled_date')->nullable();

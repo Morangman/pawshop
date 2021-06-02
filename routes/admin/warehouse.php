@@ -22,6 +22,11 @@ Route::post('store', [
     'uses' => 'WarehouseController@store',
 ]);
 
+Route::post('import', [
+    'as' => '.import',
+    'uses' => 'WarehouseController@importXml',
+]);
+
 Route::post('', [
     'as' => '.search',
     'uses' => 'WarehouseController@search',

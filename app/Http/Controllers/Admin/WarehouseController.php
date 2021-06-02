@@ -8,7 +8,9 @@ use App\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Warehouse\StoreRequest;
 use App\Http\Requests\Admin\Warehouse\UpdateRequest;
+use App\Order;
 use App\Warehouse;
+use Illuminate\Support\Str;
 use App\WarehouseStatus;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
@@ -129,9 +131,13 @@ class WarehouseController extends Controller
         $data = $request->except(
             [
                 'product_name',
+                'imei',
+                'serial_number',
             ]
         ) + [
             'product_name' => $category->getAttribute('name'),
+            'imei' => $request->get('imei') ?? '',
+            'serial_number' => $request->get('serial_number') ?? '',
         ];
 
         $warehouse->update($data);
@@ -251,6 +257,60 @@ class WarehouseController extends Controller
         } catch (\Throwable $e) {
             return $this->json()->badRequest(['message' => $e->getMessage()]);
         }
+
+        return $this->json()->noContent();
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function importXml(Request $request): JsonResponse
+    {
+        $xml_object = simplexml_load_file($request->file('file')->getRealPath());
+
+        $json = json_encode($xml_object);
+
+        $array = json_decode($json,TRUE);
+
+        foreach ($array['Invoice_Download'] as $invoice) {
+            $deliveryPrice = (float) $invoice['net_charge_amount'];
+
+            $order = Order::query()->where('tracking_number', '=', $invoice['express_ground_tracking_id'])->first();
+
+            if ($order) {
+                $order->unsetEventDispatcher();
+
+                $order->update([
+                    'delivery_price' => $deliveryPrice,
+                ]);
+
+                $products = Warehouse::query()->where('order_id', '=', $order->getKey())->get();
+
+                $count = $products->count();
+
+                if ($count) {
+                    $price = $deliveryPrice / $products->count();
+        
+                    foreach ($products as $product) {
+                        if (!$product->getAttribute('delivery_price') || $product->getAttribute('delivery_price') === 0) {
+                            $devicePrice = (float) $product->getAttribute('clear_price') + $price;
+
+                            $product->update([
+                                'delivery_price' => $deliveryPrice,
+                                'clear_price' => (float) number_format($devicePrice, 2, '.', ''),
+                            ]);
+                        }
+                    }
+                }
+            }
+        }
+
+        Session::flash(
+            'success',
+            Lang::get('admin/warehouse.messages.import')
+        );
 
         return $this->json()->noContent();
     }

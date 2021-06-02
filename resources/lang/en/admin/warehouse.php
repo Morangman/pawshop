@@ -69,5 +69,6 @@ return [
         'update' => 'Product has been successfully updated',
         'delete' => 'Product has been successfully deleted',
         'media-delete' => 'Image has been successfully deleted',
+        'import' => 'File has been successfully imported',
     ],
 ];
