@@ -294,13 +294,14 @@ class WarehouseController extends Controller
                     $price = $deliveryPrice / $products->count();
         
                     foreach ($products as $product) {
-                        //if (!$product->getAttribute('delivery_price') || $product->getAttribute('delivery_price') === 0) {
-                            //$devicePrice = (float) $product->getAttribute('clear_price') + $price;
+                        if (!$product->getAttribute('delivery_price') || $product->getAttribute('delivery_price') === 0) {
+                            $devicePrice = (float) $product->getAttribute('clear_price') + $price;
 
                             $product->update([
                                 'delivery_price' => (float) number_format($price, 2, '.', ''),
+                                'clear_price' => (float) number_format($devicePrice, 2, '.', ''),
                             ]);
-                        //}
+                        }
                     }
                 }
             }
