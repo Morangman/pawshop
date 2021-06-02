@@ -21,6 +21,8 @@ Route::get('/cart', 'HomeController@cart')->name('cart');
 
 Route::get('/support', 'HomeController@support')->name('support');
 
+Route::get('/unsubscribe/{email}', 'HomeController@unsubscribe')->name('unsubscribe');
+
 Route::get('/terms', 'HomeController@terms')->name('terms');
 
 Route::get('/user_agreement', 'HomeController@userAgreement')->name('user_agreement');

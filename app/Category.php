@@ -82,6 +82,21 @@ class Category extends Model implements HasMedia
         return $this->belongsTo(self::class);
     }
 
+    /**
+     * Get orders by device id
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function orders(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Order::class,
+            'order_device',
+            'category_id',
+            'id'
+        );
+    }
+
     public function getUrl()
     { 
         $url = $this->slug;

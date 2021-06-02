@@ -304,6 +304,9 @@
                     <p style="margin-top: 0px;margin-bottom: 0px;">
                       <a class="o_text-xxs o_text-dark_light o_underline" href="{{ URL::route('support') }}" style="text-decoration: underline;outline: none;font-size: 12px;line-height: 19px;color: #a0a3ab;">Support</a>
                     </p>
+                    <p style="margin-top: 0px;margin-bottom: 0px;">
+                      <a class="o_text-xxs o_text-dark_light o_underline" href="{{ URL::route('unsubscribe', ['email' => $data['user_email']]) }}" style="text-decoration: underline;outline: none;font-size: 12px;line-height: 19px;color: #a0a3ab;">Unsubscribe</a>
+                    </p>
                   </td>
                 </tr>
               </tbody>

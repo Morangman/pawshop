@@ -119,6 +119,31 @@ class HomeController extends Controller
     }
 
     /**
+     * @param string $email
+     * 
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function unsubscribe(string $email): ViewContract
+    {
+        User::query()->where('email', '=', $email)->update(['mail_subscription' => 0]);
+
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
+
+        return View::make('unsubscribe', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'category' => new stdClass(),
+            'steps' => [],
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
+        ]);
+    }
+
+    /**
      * @return \Illuminate\Contracts\View\View
      */
     public function support(): ViewContract

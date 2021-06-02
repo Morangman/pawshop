@@ -49,6 +49,7 @@ class SitemapGeneratorJob implements ShouldQueue
                 $url->path() === '/terms' ||
                 $url->path() === '/law_enforcement' ||
                 $url->path() === '/cart' ||
+                $url->path() === '/unsubscribe' ||
                 $url->path() === '/'
             ) {
                 return;

@@ -107,6 +107,12 @@
                             {{ error }}
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label>
+                            <strong>Subscribed</strong>
+                        </label>
+                        <p>{{ model.mail_subscription ? 'Yes' : 'No' }}</p>
+                    </div>
                 </div>
             </div>
             <div class="text-right">

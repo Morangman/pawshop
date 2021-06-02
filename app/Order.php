@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Lang;
 use Spatie\MediaLibrary\Models\Media;
 use Str;
@@ -128,6 +129,21 @@ class Order extends Model implements HasMedia
             'ordered_status',
             'id',
             'orderStatus'
+        );
+    }
+
+    /**
+     * Get categories by order id
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Category::class,
+            'order_device',
+            'order_id',
+            'id'
         );
     }
 
