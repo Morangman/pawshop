@@ -24,15 +24,9 @@
                 </div>
                 <div class="form-group col-md-auto" v-if="!status">
                     <label for="pStatus" class="d-inline-block">{{ $t('admin.warehouse.index.table.headers.status') }} :</label>
-                    <select
-                            id="pStatus"
-                            class="form-control form-control-sm d-inline-block"
-                            style="width: auto;"
-                            v-model="filters.status"
-                            required
-                    >
+                    <select id="pStatus" class="form-control form-control-sm d-inline-block" style="width: auto;" name="ordered_status" v-model="filters.status" required>
                         <option :value="0">{{ $t('admin.order.index.search.all') }}</option>
-                        <option v-for="(status, key) in $t('admin.warehouse.product_statuses')" :value="key">{{ status }}</option>
+                        <option v-for="(status, i) in statuses" :key="`warehouse_status__${i}`" :value="status.id">{{ status.name }}</option>
                     </select>
                 </div>
                 <div class="col col-md-5">

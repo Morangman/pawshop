@@ -528,6 +528,7 @@ class OrderController extends Controller
     {
         $order->update([
             'ordered_status' => Order::STATUS_CANCELLED,
+            'cancelled_date' => Carbon::now(),
         ]);
 
         Session::flash(

@@ -202,12 +202,6 @@
                                         <a :href="$r('admin.order.edit', { order: order.id })">
                                             <i class="icon-pencil"></i>
                                         </a>
-                                        <delete-confirmation
-                                            v-if="iscancelled"
-                                            :route-path="$r('admin.order.delete', { order: order.id })"
-                                            :redirect-path="$r('admin.order.index')"
-                                            :title="$t('common.word.delete')"
-                                        />
                                         <a href="javascript:0" v-if="!iscancelled" v-on:click="cancelOrder(order.id)" title="Cancel order" class="text-danger"><i class="icon-cancel-circle2"></i></a>
                                     </td>
                                 </tr>
