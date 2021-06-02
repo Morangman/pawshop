@@ -39,6 +39,10 @@
     background: #edf4ff;
 } 
 
+.order-table-item:hover, .order-table-hovered img{ 
+    border-radius: 15px;
+} 
+
 
 @media screen and (max-width: 1185px) {
     .parsed_price, .custom_price, .price-input {

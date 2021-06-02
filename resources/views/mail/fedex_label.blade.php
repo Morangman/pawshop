@@ -170,7 +170,7 @@
                         <tbody>
                           <tr>
                             <td width="300" class="o_btn o_bg-success o_br o_heading o_text" align="center" style="font-family: Helvetica, Arial, sans-serif;font-weight: bold;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;mso-padding-alt: 12px 24px;background-color: #0ec06e;border-radius: 4px;">
-                              <a class="o_text-white" href="{{ URL::route('thanks', [ 'order_uuid' => $data['uuid'] ]) }}" style="text-decoration: none;outline: none;color: #ffffff;display: block;padding: 12px 24px;mso-text-raise: 3px;">Show My Offer</a>
+                              <a class="o_text-white" href="{{ URL::route('thanks', [ 'order_uuid' => $data['uuid'] ]) }}" style="text-decoration: none;outline: none;color: #ffffff;display: block;padding: 12px 24px;mso-text-raise: 3px;">Print Label</a>
                             </td>
                           </tr>
                         </tbody>

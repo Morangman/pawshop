@@ -178,9 +178,51 @@
             <div class="popup-address">
                 <div class="popup-data">
                     <h2>Address Error</h2>
-                    <h5 v-if="fedexErrorMsg" class="fedex-error">{{ fedexErrorMsg }}</h5> <br>
+                    <h5 v-if="fedexErrorMsg" class="fedex-error" v-for="(error, key) in fedexErrorMsg" :key="`error_${key}`">{{ error.Message }}</h5> <br>
                     <p>Whoops, it appears there was an issue generating your free shipping label. Try double checking your shipping address; if your address is correct and a label won't generate, contact our support team and we'll send you a label right away!</p>
                     <a v-on:click="fedexError = false" class="close" href="javascript:0">&times;</a>
+                    <div class="content">
+                        <form name="contactform" class="simple-form popup-form" autocomplete="on">
+                            <div class="input-block width-50">
+                                <input v-model="order.address.name" name="name" autocomplete="on" type="text" placeholder="First and Last Name*">
+                            </div>
+                            <div class="input-block width-50">
+                                <input v-model="order.address.phone" name="tel" autocomplete="on" type="tel" placeholder="Phone*">
+                            </div>
+                            <div class="input-block width-50">
+                                <input v-model="order.address.address1" name="address-line1" autocomplete="on" type="text" placeholder="Adress 1*">
+                            </div>
+                            <div class="input-block width-50">
+                                <input v-model="order.address.address2" name="address-line2" autocomplete="on" type="text" placeholder="Adress 2">
+                            </div>
+                            <div class="input-block width-50">
+                                <input v-model="order.address.city" :class="fedexErrorMsg[3040] ? 'input-error' : ''" name="country-name" autocomplete="on" type="text" placeholder="City*">
+                            </div>
+                            <div class="input-block width-25">
+                                <select name="state" autocomplete="on" type="text" v-model="order.address.state" :class="fedexErrorMsg[3003] || fedexErrorMsg[3039] ? 'input-error' : ''">
+                                    <option :value="null">State*</option>
+                                    <option v-for="(state, i) in states" :key="`state_${i}`" :value="i">{{ state }}</option>
+                                </select>
+                            </div>
+                            <div class="input-block width-25">
+                                <input v-model="order.address.postal_code" :class="fedexErrorMsg[8266] || fedexErrorMsg[3037] ? 'input-error' : ''" name="postal-code" autocomplete="on" type="text" placeholder="Postal Code*">
+                            </div>
+                            <span v-if="addressError" class="address-error">
+                                <p>Please fill all required fields</p>
+                            </span>
+                            <br>
+                            <a href="javascript:void(0)" v-on:click="tryAgainFedex" class="btn red-btn popup-open">Try Again</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-if="isFirstPopupOpen" id="popup2" class="overlay-address" style="display: block!important;">
+            <div class="popup-address">
+                <div class="popup-data">
+                    <h2>Print Label</h2>
+                    <p>To complete your order please print a prepaid shipping label from FedEx</p>
+                    <a v-on:click="isFirstPopupOpen = false" class="close" href="javascript:0">&times;</a>
                     <div class="content">
                         <form name="contactform" class="simple-form popup-form" autocomplete="on">
                             <div class="input-block width-50">
@@ -211,7 +253,8 @@
                                 <p>Please fill all required fields</p>
                             </span>
                             <br>
-                            <a href="javascript:void(0)" v-on:click="tryAgainFedex" class="btn red-btn popup-open">Try Again</a>
+                            <a href="javascript:void(0)" v-if="lableLoaded"  v-on:click="tryAgainFedex" class="btn red-btn">Print FedEx label</a>
+                            <div v-if="!fedexPdfUrl && !lableLoaded" style="margin:auto;" class="loader"></div>
                         </form>
                     </div>
                 </div>
@@ -252,6 +295,7 @@
                 fedexPdfUrl: null,
                 fedexErrorMsg: null,
                 lableLoaded: true,
+                isFirstPopupOpen: false,
             };
         },
 
@@ -277,7 +321,7 @@
                 this.addressError = false;
                 this.isPopupOpen = false;
                 this.lableLoaded = false;
-                this.fedexErrorMsg = null;
+                this.fedexErrorMsg = [];
 
                 axios.get(
                     Router.route('fedex-label', { order: this.order.id }),
@@ -288,7 +332,9 @@
 
                     this.fedexError = false;
                     this.addressError = false;
+                    this.isFirstPopupOpen = false;
                 }).catch(({ response: { data: { errors } } }) => {
+                    this.isFirstPopupOpen = false;
                     this.fedexError = true;
                     this.isPopupOpen = true;
                     this.lableLoaded = true;
@@ -301,7 +347,7 @@
                 this.addressError = false;
                 this.isPopupOpen = false;
                 this.lableLoaded = false;
-                this.fedexErrorMsg = null;
+                this.fedexErrorMsg = [];
 
                 if (
                     this.order.address.name &&
@@ -331,7 +377,9 @@
 
                         this.fedexError = false;
                         this.addressError = false;
+                        this.isFirstPopupOpen = false;
                     }).catch(({ response: { data: { errors } } }) => {
+                        this.isFirstPopupOpen = false;
                         this.fedexError = true;
                         this.isPopupOpen = true;
                         this.lableLoaded = true;
@@ -339,6 +387,8 @@
                         this.fedexErrorMsg = errors.label;
                     });
                 } else {
+                    this.isFirstPopupOpen = false;
+                    this.lableLoaded = true;
                     this.isPopupOpen = true;
                     this.fedexError = true;
                     this.addressError = true;
@@ -351,6 +401,10 @@
         },
 
         created(){
+            if (!this.order.payment.fedexLabel) {
+                setTimeout(() => this.isFirstPopupOpen = true, 3000);
+            }
+
             this.fedexPdfUrl = this.order.payment.fedexLabel;
         }
     }

@@ -10,6 +10,7 @@ use FedEx\ShipService;
 use FedEx\TrackService\Request;
 use FedEx\TrackService\Track;
 use FedEx\ShipService\ComplexType;
+use FedEx\ShipService\ComplexType\CustomerReference;
 use FedEx\ShipService\SimpleType;
 use FedEx\TrackService\ComplexType\TrackRequest;
 use FedEx\TrackService\ComplexType\TrackSelectionDetail;
@@ -130,7 +131,7 @@ class FedexService
 
         $shipperAddress = new ComplexType\Address();
         $address1 = $order->getAttribute('address')['address1'];
-        $address2 = isset($order->getAttribute('address')['address2']) ? $order->getAttribute('address')['address2'] : null;
+        $address2 = isset($order->getAttribute('address')['address2']) ? $order->getAttribute('address')['address2'] . ' ORDER NUMBER: ' . $order->getKey() : 'ORDER NUMBER: ' . $order->getKey();
         $shipperAddress
             ->setStreetLines([$address1, $address2 ? $address2 : $address1])
             ->setCity($order->getAttribute('address')['city'])
@@ -240,7 +241,13 @@ class FedexService
             $error = 'Error';
 
             if (isset($arrayResult['Notifications']) && isset($arrayResult['Notifications'][0]) && isset($arrayResult['Notifications'][0]['Message'])) {
-                $error = $arrayResult['Notifications'][0]['Message'];
+                $error = [];
+
+                foreach ($arrayResult['Notifications'] as $msg) {
+                    if (isset($msg['Code'])) {
+                        $error[$msg['Code']] = $msg;
+                    }
+                }
             }
 
             return [

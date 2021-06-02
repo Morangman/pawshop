@@ -312,7 +312,7 @@
                             <div class="form-group row">
                                 <div class="form-group col-md-6">
                                     <label>
-                                        <strong>Delivey Price</strong>
+                                        <strong>Delivery Price</strong>
                                     </label>
                                     <input
                                         name="delivery_price"
@@ -799,9 +799,13 @@
                 }).catch(({ response: { data: { errors } } }) => {
                     this.fedexLabelLoading = false;
 
-                    notify.error(
-                        errors.label
-                    );
+                    let html = [];
+                    
+                    _.each(errors.label, (error, key) => {
+                        html.push(error.Message);
+                    });
+
+                    notify.error(html.join('<br>'));
                 });
             },
 
