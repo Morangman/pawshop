@@ -774,14 +774,16 @@ class OrderController extends Controller
      */
     public function delete(Order $order): JsonResponse
     {
-        DB::table('order_device')->where('order_id', $order->getKey())->delete();
+        // ToDo: make soft delete
+        
+        // DB::table('order_device')->where('order_id', $order->getKey())->delete();
 
-        $order->delete();
+        // $order->delete();
 
-        Session::flash(
-            'success',
-            Lang::get('admin/order.messages.delete')
-        );
+        // Session::flash(
+        //     'success',
+        //     Lang::get('admin/order.messages.delete')
+        // );
 
         return $this->json()->noContent();
     }
