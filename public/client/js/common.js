@@ -149,7 +149,7 @@ $(document).ready(function() {
 
 					if (data.length) {
 						$.each(data, (index, value) => {
-							htmlData += '<li style="margin-bottom: 10px;">' + '<a href="/sell-my-' + value.slug + '" class="link"><span class="name">' + value.name + '</span></a></li>'
+							htmlData += '<li style="margin-bottom: 10px;">' + '<a href="/sell-' + value.slug + '" class="link"><span class="name">' + value.name + '</span></a></li>'
 						});
 					} else {
 						htmlData = 'No results';
@@ -197,7 +197,7 @@ $(document).ready(function() {
 
 					if (data.length) {
 						$.each(data, (index, value) => {
-							htmlData += '<li><a href="/sell-my-' + value.slug + '" class="link">' + '<div class="image"><img src="' + value.image +'" alt=""></div><span class="name">' + value.name + '</span></a><div class="price">up to <strong>' + value.custom_text + '</strong></div></li>'
+							htmlData += '<li><a href="/sell-' + value.slug + '" class="link">' + '<div class="image"><img src="' + value.image +'" alt=""></div><span class="name">' + value.name + '</span></a><div class="price">up to <strong>' + value.custom_text + '</strong></div></li>'
 						});
 					} else {
 						htmlData = '<li>No results</li>';
