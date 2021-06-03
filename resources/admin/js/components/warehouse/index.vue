@@ -144,8 +144,8 @@
                     </thead>
                     <tbody>
                         <template v-if="!isLoading">
-                            <tr v-for="(product, i) in products" :key="`product_${i}`">
-                                    <td>
+                            <tr v-for="(product, i) in products" :key="`product_${i}`" class="order-table-item">
+                                    <td class="order-table-hovered">
                                         <a :href="$r('admin.warehouse.edit', { warehouse: product.id })">
                                             <img width="auto"
                                                 height="100"
@@ -159,13 +159,13 @@
                                             <span v-html="highlightSearchResult(product.product_name, filters.search)"></span>
                                         </a>
                                     </td>
-                                    <td>{{ product.warehouse_status.name }}</td>
-                                    <td v-html="highlightSearchResult(product.imei ? product.imei : '', filters.search)"></td>
-                                    <td v-html="highlightSearchResult(product.serial_number ? product.serial_number : '', filters.search)"></td>
-                                    <td>{{ product.clear_price }}</td>
-                                    <td>{{ product.delivery_price }}</td>
-                                    <td>{{ product.repair_price }}</td>
-                                    <td>{{ product.sell_price }}</td>
+                                    <td v-on:click="editDevice(product.id)">{{ product.warehouse_status.name }}</td>
+                                    <td v-on:click="editDevice(product.id)" v-html="highlightSearchResult(product.imei ? product.imei : '', filters.search)"></td>
+                                    <td v-on:click="editDevice(product.id)" v-html="highlightSearchResult(product.serial_number ? product.serial_number : '', filters.search)"></td>
+                                    <td v-on:click="editDevice(product.id)">{{ product.clear_price }}</td>
+                                    <td v-on:click="editDevice(product.id)">{{ product.delivery_price }}</td>
+                                    <td v-on:click="editDevice(product.id)">{{ product.repair_price }}</td>
+                                    <td v-on:click="editDevice(product.id)">{{ product.sell_price }}</td>
                                     <td>
                                         <a :href="$r('admin.warehouse.edit', { warehouse: product.id })">
                                             <i class="icon-pencil"></i>
@@ -261,6 +261,10 @@
                 }).finally(() => {
                     this.isLoading = false;
                 });
+            },
+
+            editDevice(device) {
+                location.href = Router.route('admin.warehouse.edit', { warehouse: device });
             },
 
             importFedexPrices(e) {

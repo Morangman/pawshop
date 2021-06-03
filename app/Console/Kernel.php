@@ -17,6 +17,8 @@ use App\Console\Commands\PullFailedPrices;
 use App\Console\Commands\PullGraphicCards;
 use App\Console\Commands\RecountStatistics;
 use App\Console\Commands\Reminder;
+use App\Console\Commands\SendMailToCancelledOrder;
+use App\Console\Commands\SetCancelledOrder;
 use App\Console\Commands\SetProductsInWarehouse;
 use App\Console\Commands\SitemapGenerator;
 use Illuminate\Console\Scheduling\Schedule;
@@ -45,6 +47,8 @@ class Kernel extends ConsoleKernel
         CheckCardsAvailable::class,
         PullGraphicCards::class,
         SitemapGenerator::class,
+        SetCancelledOrder::class,
+        SendMailToCancelledOrder::class,
     ];
 
     /**
@@ -61,6 +65,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(ClearDailyStatistics::class)->daily();
         $schedule->command(CheckEmail::class)->everyThirtyMinutes();
         $schedule->command(FedexLabel::class)->dailyAt('12:00');
+        $schedule->command(SetCancelledOrder::class)->dailyAt('12:00');
         $schedule->command(CheckCardsAvailable::class)->everyFiveMinutes();
         $schedule->command(SitemapGenerator::class)->daily();
     }

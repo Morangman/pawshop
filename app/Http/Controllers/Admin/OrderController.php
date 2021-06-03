@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\WarehouseTrait;
 use App\Http\Requests\Admin\Order\StoreRequest;
 use App\Http\Requests\Admin\Order\UpdateRequest;
+use App\Jobs\OrderCancelledMailJob;
+use App\Jobs\OrderRestoredMailJob;
 use App\Mail\OrderReceivedMail;
 use App\Order;
 use App\OrderStatus;
@@ -526,9 +528,17 @@ class OrderController extends Controller
      */
     public function setCancelStatus(Order $order): JsonResponse
     {
+        $order->unsetEventDispatcher();
+        
         $order->update([
             'ordered_status' => Order::STATUS_CANCELLED,
+            'is_restored' => false,
             'cancelled_date' => Carbon::now(),
+        ]);
+
+        OrderCancelledMailJob::dispatch([
+            'user_name' => $order->user->getAttribute('name'),
+            'order' => $order->toArray(),
         ]);
 
         Session::flash(
@@ -539,6 +549,32 @@ class OrderController extends Controller
         return $this->json()->noContent();
     }
 
+    /**
+     * @param \App\Order $order
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function restoreOrder(Order $order): JsonResponse
+    {
+        $order->unsetEventDispatcher();
+        
+        $order->update([
+            'ordered_status' => Order::STATUS_RESTORED,
+            'is_restored' => true,
+        ]);
+
+        OrderRestoredMailJob::dispatch([
+            'user_name' => $order->user->getAttribute('name'),
+            'order' => $order->toArray(),
+        ]);
+
+        Session::flash(
+            'success',
+            Lang::get('admin/order.messages.update')
+        );
+
+        return $this->json()->noContent();
+    }
 
     /**
      * @param \App\Http\Requests\Admin\Order\UpdateRequest $request
@@ -603,7 +639,26 @@ class OrderController extends Controller
 
         if ((int) $request->get('ordered_status') === Order::STATUS_CANCELLED) {
             $order->update([
-                'cancelled_date' => Carbon::now()
+                'ordered_status' => Order::STATUS_CANCELLED,
+                'is_restored' => false,
+                'cancelled_date' => Carbon::now(),
+            ]);
+    
+            OrderCancelledMailJob::dispatch([
+                'user_name' => $order->user->getAttribute('name'),
+                'order' => $order->toArray(),
+            ]);
+        }
+
+        if ((int) $request->get('ordered_status') === Order::STATUS_RESTORED) {
+            $order->update([
+                'ordered_status' => Order::STATUS_RESTORED,
+                'is_restored' => true,
+            ]);
+    
+            OrderRestoredMailJob::dispatch([
+                'user_name' => $order->user->getAttribute('name'),
+                'order' => $order->toArray(),
             ]);
         }
 

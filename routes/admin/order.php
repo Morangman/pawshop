@@ -32,6 +32,11 @@ Route::get('{order}/set-cancel-status', [
     'uses' => 'OrderController@setCancelStatus',
 ]);
 
+Route::get('{order}/restore-order', [
+    'as' => '.restore-order',
+    'uses' => 'OrderController@restoreOrder',
+]);
+
 Route::post('', [
     'as' => '.store',
     'uses' => 'OrderController@store',

@@ -42,6 +42,7 @@ use App\Mail\OrderConfirmationMail;
 use App\Message;
 use App\Notifications\OrderConfirmNotification;
 use App\Notifications\OrderDeclineNotification;
+use App\Notifications\OrderRestoreNotification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -511,6 +512,49 @@ class HomeController extends Controller
             $order->forceFill([
                 'orders->confirmed' => Order::STATUS_DECLINED
             ])->save();
+        }
+
+        $categories = Category::query()
+            ->where('is_hidden', false)
+            ->whereNull('custom_text')
+            ->whereNull('subcategory_id')
+            ->get();
+
+        return View::make('thanks', [
+            'settings' => $this->getSettings() ?? [],
+            'categories' => $categories,
+            'order' => $order,
+            'category' => new stdClass(),
+            'steps' => [],
+            'relatedCategories' => $categories,
+            'faqs' => new stdClass(),
+            'status' => $order->orderStatus()->first(),
+            'states' => Lang::get('states'),
+        ]);
+    }
+
+
+    /**
+     * @param string $order_uuid
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function restoreOrder(string $order_uuid): ViewContract
+    {
+        $order = Order::query()->where('uuid', $order_uuid)->first();
+
+        if ((int) $order->getAttribute('ordered_status') !== Order::STATUS_RESTORED && !$order->getAttribute('is_restored')) {
+            Notification::send(
+                User::query()->scopes(['notifiableUsers'])->get(),
+                new OrderRestoreNotification($order->toArray())
+            );
+    
+            $order->unsetEventDispatcher();
+    
+            $order->update([
+                'ordered_status' => Order::STATUS_RESTORED,
+                'is_restored' => true,
+            ]);
         }
 
         $categories = Category::query()

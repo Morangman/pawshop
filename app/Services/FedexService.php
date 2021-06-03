@@ -131,7 +131,7 @@ class FedexService
 
         $shipperAddress = new ComplexType\Address();
         $address1 = $order->getAttribute('address')['address1'];
-        $address2 = isset($order->getAttribute('address')['address2']) ? $order->getAttribute('address')['address2'] . ' ORDER NUMBER: ' . $order->getKey() : 'ORDER NUMBER: ' . $order->getKey();
+        $address2 = isset($order->getAttribute('address')['address2']) ? $order->getAttribute('address')['address2'] . ' № ' . $order->getKey() : '№ ' . $order->getKey();
         $shipperAddress
             ->setStreetLines([$address1, $address2 ? $address2 : $address1])
             ->setCity($order->getAttribute('address')['city'])

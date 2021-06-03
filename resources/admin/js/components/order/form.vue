@@ -388,7 +388,7 @@
                                 name="total_summ"
                                 type="text"
                                 v-model="model.total_summ"
-                                class="form-control flex-input"
+                                class="form-control flex-input order-price-input"
                             >
                         </div>
                         <div class="flex-row">
@@ -400,19 +400,20 @@
                                 name="custom_summ"
                                 type="text"
                                 v-model="model.custom_summ"
-                                class="form-control flex-input"
+                                class="form-control flex-input order-price-input"
                             >
                         </div>
-                        <div class="flex-row">
+                        <div class="flex-row" v-if="model.delivery_price">
                             <label>
                                 <strong>Delivery Price</strong>
                             </label>
                             <input
                                 name="delivery_price"
                                 type="text"
+                                disabled
                                 placeholder="Delivey Price"
                                 v-model="model.delivery_price"
-                                class="form-control flex-input"
+                                class="form-control flex-input order-price-input"
                             >
                         </div>
                     </div>
@@ -532,8 +533,17 @@
                         type="submit"
                         class="btn btn-danger"
                         @click.prevent="cancelOrder"
+                        v-if="!model.is_cancelled"
                     >
                         {{ $t('common.word.cancel') }}
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn btn-info"
+                        @click.prevent="restoreOrder"
+                        v-if="model.is_cancelled"
+                    >
+                        Restore
                     </button>
                 </template>
                 <button
@@ -796,6 +806,27 @@
 
                     axios.get(
                         Router.route('admin.order.set-cancel-status', { order: this.model.id }),
+                    ).then(() => {
+                        location.reload();
+                    }).catch(({ response: { data: { errors } } }) => {
+                        console.log(errors);
+                    });
+                });
+            },
+
+            restoreOrder() {
+                window.swal({
+                    title: this.$t('common.phrase.confirm.title'),
+                    text: 'The order will be restored',
+                    icon: 'warning',
+                    buttons: [this.$t('common.word.cancel'), this.$t('common.word.confirm')],
+                }).then((result) => {
+                    if (!result) {
+                        return
+                    }
+
+                    axios.get(
+                        Router.route('admin.order.restore-order', { order: this.model.id }),
                     ).then(() => {
                         location.reload();
                     }).catch(({ response: { data: { errors } } }) => {

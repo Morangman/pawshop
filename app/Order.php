@@ -31,7 +31,8 @@ class Order extends Model implements HasMedia
     public const STATUS_ORDER_DELIVERED = 4;
     public const STATUS_RECEIVED = 5;
     public const STATUS_PAID = 6;
-    public const STATUS_SOLD = 7;
+    public const STATUS_RESTORED = 7;
+    // public const STATUS_SOLD = 8;
 
     public const STATUS_CHANGED = 1;
     public const STATUS_NOT_CONFIRMED = 1;
@@ -56,6 +57,15 @@ class Order extends Model implements HasMedia
      * @var string
      */
     protected $table = 'orders';
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'is_cancelled',
+    ];
 
     /**
      * @var array
@@ -86,6 +96,7 @@ class Order extends Model implements HasMedia
         'is_received_notify',
         'send_ctn',
         'is_label_trouble',
+        'is_restored',
     ];
 
     /**
@@ -117,6 +128,7 @@ class Order extends Model implements HasMedia
         'is_received_notify' => 'int',
         'send_ctn' => 'int',
         'is_label_trouble' => 'bool',
+        'is_restored' => 'bool',
     ];
 
     /**
@@ -133,6 +145,19 @@ class Order extends Model implements HasMedia
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(
+            User::class,
+            'user_id',
+            'id',
+            'user'
+        );
+    }
+
+    /**
      * Get categories by order id
      * 
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -145,6 +170,14 @@ class Order extends Model implements HasMedia
             'order_id',
             'id'
         );
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsCancelledAttribute(): bool
+    {
+        return $this->ordered_status === $this::STATUS_CANCELLED;
     }
 
     /**

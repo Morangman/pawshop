@@ -39,6 +39,7 @@ class CreateOrdersTable extends Migration
             $table->tinyInteger('is_transit_notify')->unsigned()->nullable();
             $table->tinyInteger('is_received_notify')->unsigned()->nullable();
             $table->boolean('is_label_trouble')->default(0);
+            $table->boolean('is_restored')->default(0);
             $table->timestamp('estimate_date')->nullable();
             $table->timestamp('delivered_date')->nullable();
             $table->decimal('delivery_price', 10, 2)->default(0);

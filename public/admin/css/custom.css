@@ -41,8 +41,11 @@
 
 .order-table-item:hover, .order-table-hovered img{ 
     border-radius: 15px;
-} 
+}
 
+.order-price-input {
+    width: 200px;
+}
 
 @media screen and (max-width: 1185px) {
     .parsed_price, .custom_price, .price-input {

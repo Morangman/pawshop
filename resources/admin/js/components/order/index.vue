@@ -203,6 +203,7 @@
                                             <i class="icon-pencil"></i>
                                         </a>
                                         <a href="javascript:0" v-if="!iscancelled" v-on:click="cancelOrder(order.id)" title="Cancel order" class="text-danger"><i class="icon-cancel-circle2"></i></a>
+                                        <a href="javascript:0" v-if="iscancelled" v-on:click="restoreOrder(order.id)" title="Restore order" class="text-info"><i class="icon-reset"></i></a>
                                     </td>
                                 </tr>
                         </template>
@@ -332,6 +333,27 @@
 
                     axios.get(
                         Router.route('admin.order.set-cancel-status', { order: id }),
+                    ).then(() => {
+                        location.reload();
+                    }).catch(({ response: { data: { errors } } }) => {
+                        console.log(errors);
+                    });
+                });
+            },
+
+            restoreOrder(id) {
+                window.swal({
+                    title: this.$t('common.phrase.confirm.title'),
+                    text: 'The order will be restored',
+                    icon: 'warning',
+                    buttons: [this.$t('common.word.cancel'), this.$t('common.word.confirm')],
+                }).then((result) => {
+                    if (!result) {
+                        return
+                    }
+
+                    axios.get(
+                        Router.route('admin.order.restore-order', { order: id }),
                     ).then(() => {
                         location.reload();
                     }).catch(({ response: { data: { errors } } }) => {
