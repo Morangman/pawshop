@@ -84,7 +84,7 @@ class ProductController extends Controller
                 $catImage = $category->getAttribute('image');
             }
 
-            if ($steps = $lastProduct->steps()->get()) {
+            if ($lastProduct && $steps = $lastProduct->steps()->get()) {
                 foreach ($steps as $key => $step) {
                     $stepsArr[$step->stepName->id]['id'] = $step->stepName->id;
                     $stepsArr[$step->stepName->id]['items'][] = $step->toArray();
