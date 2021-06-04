@@ -792,7 +792,9 @@ class HomeController extends Controller
                                 ->where('category_id', $request->get('category_id'))
                                 ->first();
 
-                            $addToPrice += $premiumPriceForAccesory->price_plus;
+                            if ($premiumPriceForAccesory) {
+                                $addToPrice += $premiumPriceForAccesory->price_plus;
+                            }
                         }
                     }
                 }
@@ -834,9 +836,9 @@ class HomeController extends Controller
                 }
             } else {
                 $id = $step['id'];
-                if ($step['value'] === 'Flawless') {
-                    $id = Step::query()->where('value', 'Brand New')->first()->getKey();
-                }
+                // if ($step['value'] === 'Flawless') {
+                //     $id = Step::query()->where('value', 'Brand New')->first()->getKey();
+                // }
                 $ids[] = $id;
             }
         }

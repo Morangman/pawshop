@@ -50,6 +50,7 @@ class ProductController extends Controller
         $stepsByName = [];
         $stepsArr = [];
         $resultArr = [];
+        $productYears = [];
         $subcategory = null;
         $catImage = null;
         $productImages = null;
@@ -69,9 +70,13 @@ class ProductController extends Controller
 
             $category = Category::query()->whereKey($subcategory)->first();
 
-            $lastProduct = Category::query()->where('subcategory_id', '=', $subcategory)->latest()->first();
+            $lastProduct = Category::query()->where('subcategory_id', '=', $subcategory)->whereNotNull('custom_text')->latest()->first();
 
-            $productImages = Category::query()->where('subcategory_id', '=', $subcategory)->latest()->take(5)->get(['image', 'name', 'prod_year']);
+            $productImages = Category::query()->where('subcategory_id', '=', $subcategory)->latest()->take(5)->get(['image', 'name']);
+
+            $productYears = Category::query()->where('subcategory_id', '=', $subcategory)->whereNotNull('prod_year')->latest()->take(5)->get('prod_year');
+
+            $productYears = $productYears->unique('prod_year')->toArray();
 
             if (!$productImages || empty($productImages->toArray())) {
                 $productImages = null;
@@ -115,6 +120,7 @@ class ProductController extends Controller
             'premiumPrices' => [],
             'catImage' => $catImage,
             'productImages' => $productImages,
+            'productYears' => $productYears,
             'subcategory' => $subcategory,
         ]);
     }

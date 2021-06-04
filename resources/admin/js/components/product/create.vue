@@ -3,7 +3,30 @@
         <div class="col-xl-8 col-lg-8 col-md-10 col-sm-10 mx-auto form p-1">
             <div class="card">
                 <div class="card-body">
-                    <template v-if="stepCount === 0">
+                <template v-if="stepCount === 0">
+                        <div class="form-group">
+                            <label>
+                                <strong>{{ $t('admin.product.form.subcategory') }}</strong>
+                            </label>
+
+                            <model-list-select :list="categories"
+                                            v-model="model.subcategory_id"
+                                            v-on:input="selectStep"
+                                            option-value="id"
+                                            :custom-text="name"
+                                            placeholder="select item">
+                            </model-list-select>
+                        </div>
+
+                        <div class="text-right">
+                            <button
+                                v-on:click="nextStep()"
+                                class="btn btn-primary margin-top-10"
+                            >Next -></button>
+                        </div>
+                    </template>
+                    
+                    <template v-if="stepCount === 1">
                         <div class="form-group">
                             <label>
                                 <strong>{{ $t('admin.product.form.name') }}</strong>
@@ -34,7 +57,7 @@
                                 class="form-control"
                                 :class="{ 'border-danger': errors.prod_year }"
                             >
-                            <a href="javascript:0" v-for="(data, i) in productimages" :key="`changed_prod_year_${i}`" v-on:click="selectProdYear(data.prod_year)"><span v-if="data.prod_year">{{ data.prod_year }} <br></span></a>
+                            <a href="javascript:0" v-for="(data, i) in productyears" :key="`changed_prod_year_${i}`" v-on:click="selectProdYear(data.prod_year)"><span>{{ data.prod_year }} <br></span></a>
                             <div v-for="(error, i) in errors.prod_year"
                                 :key="`prod_year__error__${i}`"
                                 class="text-danger error"
@@ -81,13 +104,17 @@
 
                         <div class="text-right">
                             <button
+                                v-on:click="backStep()"
+                                class="btn btn-primary margin-top-10"
+                            > <- Back</button>
+                            <button
                                 v-on:click="nextStep()"
                                 class="btn btn-primary margin-top-10"
                             >Next -></button>
                         </div>
                     </template>
 
-                    <template v-if="stepCount === 1">
+                    <template v-if="stepCount === 2">
                         <div class="form-group">
                             <label>
                                 <strong>{{ $t('admin.product.form.image') }}</strong>
@@ -145,44 +172,19 @@
                                 </div>
                             </div>
 
-                        </div>
+                            <div class="form-group">
+                                <label>
+                                    <strong>{{ $t('admin.product.form.faq') }}</strong>
+                                </label>
 
-                        <div class="text-right">
-                            <button
-                                v-on:click="backStep()"
-                                class="btn btn-primary margin-top-10"
-                            > <- Back</button>
-                            <button
-                                v-on:click="nextStep()"
-                                class="btn btn-primary margin-top-10"
-                            >Next -></button>
-                        </div>
-                    </template>
+                                <model-list-select :list="faqs"
+                                                v-model="model.faq_id"
+                                                option-value="id"
+                                                :custom-text="name"
+                                                placeholder="select item">
+                                </model-list-select>
+                            </div>
 
-                    <template v-if="stepCount === 2">
-                        <div class="form-group">
-                            <label>
-                                <strong>{{ $t('admin.product.form.subcategory') }}</strong>
-                            </label>
-
-                            <model-list-select :list="categories"
-                                            v-model="model.subcategory_id"
-                                            option-value="id"
-                                            :custom-text="name"
-                                            placeholder="select item">
-                            </model-list-select>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <strong>{{ $t('admin.product.form.faq') }}</strong>
-                            </label>
-
-                            <model-list-select :list="faqs"
-                                            v-model="model.faq_id"
-                                            option-value="id"
-                                            :custom-text="name"
-                                            placeholder="select item">
-                            </model-list-select>
                         </div>
 
                         <div class="text-right">
@@ -397,6 +399,10 @@
                 type: Array,
                 required: false,
             },
+            productyears: {
+                type: Object,
+                required: false,
+            },
         },
 
         mixins: [FormHelper],
@@ -442,13 +448,21 @@
         },
 
         methods: {
-            nextStep() {
-                if (this.model.name) {
-                    this.nameError = false;
+            selectStep() {
+                location.href = Router.route('admin.product.create', {category: this.model.subcategory_id});
+            },
 
-                    this.stepCount++;
+            nextStep() {
+                if (this.stepCount === 1) {
+                    if (this.model.name) {
+                        this.nameError = false;
+
+                        this.stepCount++;
+                    } else {
+                        this.nameError = true;
+                    }
                 } else {
-                    this.nameError = true;
+                    this.stepCount++;
                 }
 
                 if (this.stepCount > 4) {
@@ -603,6 +617,7 @@
 
             deleteCategoryImage() {
                 this.model.image = null;
+                this.model.image_url = null;
                 this.categoryPreviewImage = null;
 
                 notify.success(

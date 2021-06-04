@@ -9,7 +9,7 @@
                     </a>
                 </div>
                 <div class="col col-auto">
-                    <div class="csv-file file btn btn-lg btn-primary">
+                    <div class="csv-file file btn col col-auto btn-primary">
                         <div v-if="!uploadingFedexPrices">
                             XML <i class="icon-file-plus2"></i>
                             <input id="csv-file" type="file" name="file" @change="importFedexPrices"/>

@@ -266,18 +266,7 @@
                         this.selectedStep = null;
                     }
                 }
-
-                $('.popup-open').magnificPopup({
-                    removalDelay: 300,
-                    fixedContentPos: true,
-                    callbacks: {
-                        beforeOpen: function() {
-                        this.st.mainClass = this.st.el.attr('data-effect');
-                        }
-                    },
-                    midClick: true
-                });
-
+                
                 this.valuate();
 
                 this.stepSelected = true;
@@ -288,15 +277,17 @@
             nextStep() {
                 let isNew = false;
 
-                _.each(this.selectedSteps, (value, key) => {
-                    if (value) {
-                        if (value.value === "Brand New") {
-                            isNew = true;
+                if (this.category.is_parsed) {
+                    _.each(this.selectedSteps, (value, key) => {
+                        if (value) {
+                            if (value.value === "Brand New") {
+                                isNew = true;
 
-                            this.selectedAccesories = [];
+                                this.selectedAccesories = [];
+                            }
                         }
-                    }
-                });
+                    });
+                }
 
                 this.stepIndex++;
 

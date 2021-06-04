@@ -28,5 +28,6 @@
         :subcategory="{{ json_encode($subcategory) }}"
         :catimage="{{ json_encode($catImage) }}"
         :productimages="{{ json_encode($productImages) }}"
+        :productyears="{{ json_encode($productYears) }}"
     ></product-create>
 @endsection
