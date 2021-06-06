@@ -314,7 +314,7 @@
                             
                             <div class="form-group" v-if="product.steps && !stepsData[index+product.id]">
                                 <div v-for="(step, stepKey) in product.steps" class="form-group" :key="`product_step__${stepKey}`">
-                                    <div v-if="step" class="lex-row">
+                                    <div v-if="step && parseInt(step.id) !== 1111" class="lex-row">
                                         <label>
                                             <strong>{{ step.step_name ? step.step_name.name + ': ' : '' }}</strong>
                                         </label>
@@ -324,6 +324,11 @@
                                             </select>
                                             <a v-if="step.step_name ? step.step_name.is_checkbox : false" style="margin-left: 10px;" class="text-danger"  href="javascript:0" v-on:click="deleteProductStep(index, stepKey)"><i class="icon-bin"></i></a>
                                         </div>
+                                    </div>
+                                    <div v-if="step && parseInt(step.id) === 1111" class="lex-row">
+                                        <label>
+                                            <strong>{{ step.value }}</strong>
+                                        </label>
                                     </div>
                                 </div>
                             </div>

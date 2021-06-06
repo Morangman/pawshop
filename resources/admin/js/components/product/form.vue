@@ -211,6 +211,51 @@
                             {{ error }}
                         </div>
                     </div>
+                    <div class="form-group">
+                        <b-form-checkbox
+                            v-model="model.is_recycle"
+                            value="1"
+                            unchecked-value="0"
+                        >
+                            For recycle
+                        </b-form-checkbox>
+                        <div v-for="(error, i) in errors.is_recycle"
+                             :key="`is_recycle__error__${i}`"
+                             class="text-danger error"
+                        >
+                            {{ error }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <b-form-checkbox
+                            v-model="model.icloud_locked"
+                            value="1"
+                            unchecked-value="0"
+                        >
+                            ICloud locked step
+                        </b-form-checkbox>
+                        <div v-for="(error, i) in errors.icloud_locked"
+                             :key="`icloud_locked__error__${i}`"
+                             class="text-danger error"
+                        >
+                            {{ error }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <b-form-checkbox
+                            v-model="model.google_locked"
+                            value="1"
+                            unchecked-value="0"
+                        >
+                            Google account locked step
+                        </b-form-checkbox>
+                        <div v-for="(error, i) in errors.google_locked"
+                             :key="`google_locked__error__${i}`"
+                             class="text-danger error"
+                        >
+                            {{ error }}
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <strong>
@@ -642,6 +687,12 @@
         created() {
             if (this.model.id) {
                 this.model.is_hidden = Number(this.model.is_hidden);
+
+                this.model.is_recycle = Number(this.model.is_recycle);
+
+                this.model.icloud_locked = Number(this.model.icloud_locked);
+
+                this.model.google_locked = Number(this.model.google_locked);
 
                 this.stepsByCategory = this.categorysteps;
 

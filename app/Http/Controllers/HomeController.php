@@ -777,6 +777,10 @@ class HomeController extends Controller
 
         $isBroken = false;
 
+        $isRecycle = false;
+
+        $isLocked = false;
+
         foreach ($steps as $step) {
             $premiumPrice = DB::table('premium_price')
                 ->where('step_id', $step['id'])
@@ -804,6 +808,15 @@ class HomeController extends Controller
             //     $isBroken = true;
             // }
 
+
+            if ($step['id'] === 1111) {
+                $isRecycle = true;
+            }
+
+            if (isset($step['is_device_locked']) && $step['value'] === 'Yes') {
+                $isLocked = true;
+            }
+
             if ($premiumPrice) {
                 if ($pricePlus = $premiumPrice->price_plus) {
                     $addToPrice += $pricePlus;
@@ -816,11 +829,11 @@ class HomeController extends Controller
 
             $stepCategory = StepName::query()->whereKey($step['name_id'])->first();
 
-            if (!$stepCategory->getAttribute('is_checkbox')) {
+            if ($stepCategory && !$stepCategory->getAttribute('is_checkbox')) {
                 $allStepsIds[] = $step['id'];
             }
 
-            if ($stepCategory->getAttribute('is_functional')) {
+            if ($stepCategory && $stepCategory->getAttribute('is_functional')) {
                 if ($step['value'] === 'No') {
                     $isBroken = true;
                 }
@@ -877,6 +890,14 @@ class HomeController extends Controller
             if ($priceForBroken = $category->getAttribute('price_for_broken')) {
                 $resultPrice = $priceForBroken;
             }
+        }
+
+        if ($isRecycle) {
+            $resultPrice = 0.1;
+        }
+
+        if ($isLocked) {
+            $resultPrice = 0;
         }
         
         if (DB::table('statistics')->where('category_id', $category->getKey())->whereJsonContains('steps_ids', $allStepsIds)->exists()) {

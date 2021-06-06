@@ -231,11 +231,17 @@
             backStep(){
                 if (this.stepIndex > 0) {
                     let isNew = false;
+                    let isRecycle = false;
 
                     _.each(this.selectedSteps, (value, key) => {
                         if (value) {
                             if (value.value === "Brand New") {
                                 isNew = true;
+
+                                this.selectedAccesories = [];
+                            }
+                            if (value.id === 1111) {
+                                isRecycle = true;
 
                                 this.selectedAccesories = [];
                             }
@@ -265,6 +271,12 @@
                     } else {
                         this.selectedStep = null;
                     }
+
+                    if (isRecycle) {
+                        this.stepIndex = 0;
+
+                        this.selectedStep = this.steps[this.stepIndex];
+                    }
                 }
                 
                 this.valuate();
@@ -276,12 +288,18 @@
 
             nextStep() {
                 let isNew = false;
+                let isRecycle = false;
 
                 if (this.category.is_parsed) {
                     _.each(this.selectedSteps, (value, key) => {
                         if (value) {
                             if (value.value === "Brand New") {
                                 isNew = true;
+
+                                this.selectedAccesories = [];
+                            }
+                            if (value.id === 1111) {
+                                isRecycle = true;
 
                                 this.selectedAccesories = [];
                             }
@@ -302,6 +320,12 @@
                         this.selectedStep = selectedStepValue;
                     }
                 } else {
+                    this.selectedStep = null;
+                }
+
+                if (isRecycle) {
+                    this.stepIndex = this.steps.length;
+
                     this.selectedStep = null;
                 }
 
@@ -441,6 +465,78 @@
 
             if(this.steps.length) {
                 this.selectedStep = _.head(this.steps);
+
+                if (this.category.is_recycle) {
+                    this.selectedStep.items.push({
+                        id: 1111,
+                        name_id: 1,
+                        value: 'For recycle',
+                        step_name: {
+                            id: 1,
+                            name: 'Condition'
+                        }
+                    });
+                }
+
+                if (this.category.icloud_locked) {
+                    this.steps.push({
+                        is_checkbox: false,
+                        is_condition: false,
+                        is_functional: false,
+                        title: "Is the iCloud locked?",
+                        items: [
+                            {
+                                id: 2222,
+                                name_id: 2222,
+                                value: 'Yes',
+                                is_device_locked: true,
+                                step_name: {
+                                    id: 2222,
+                                    name: 'iCloud locked'
+                                }
+                            },
+                            {
+                                id: 2223,
+                                name_id: 2222,
+                                value: 'No',
+                                step_name: {
+                                    id: 2222,
+                                    name: 'iCloud locked'
+                                }
+                            },
+                        ]
+                    });
+                }
+
+                if (this.category.google_locked) {
+                    this.steps.push({
+                        is_checkbox: false,
+                        is_condition: false,
+                        is_functional: false,
+                        title: "Is the Google account locked?",
+                        items: [
+                            {
+                                id: 2222,
+                                name_id: 2222,
+                                value: 'Yes',
+                                is_device_locked: true,
+                                step_name: {
+                                    id: 2222,
+                                    name: 'Google account locked'
+                                }
+                            },
+                            {
+                                id: 2223,
+                                name_id: 2222,
+                                value: 'No',
+                                step_name: {
+                                    id: 2222,
+                                    name: 'Google account locked'
+                                }
+                            },
+                        ]
+                    });
+                }
             }
         }
     }

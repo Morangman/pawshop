@@ -36,6 +36,9 @@ class CreateCategoriesTable extends Migration
             $table->unsignedBigInteger('prod_year')->nullable();
             $table->boolean('is_hidden')->default(0);
             $table->boolean('is_parsed')->default(0);
+            $table->boolean('is_recycle')->default(1);
+            $table->boolean('icloud_locked')->default(0);
+            $table->boolean('google_locked')->default(0);
             $table->timestamps();
         });
     }
