@@ -103,6 +103,15 @@ Route::group(
 
 Route::group(
     [
+        'as' => '.coupon',
+        'prefix' => 'coupon',
+        'middleware' => ['anyrole:admin|manager']
+    ],
+    __DIR__.'/admin/coupon.php'
+);
+
+Route::group(
+    [
         'as' => '.order',
         'prefix' => 'order',
         'middleware' => ['anyrole:admin|manager']

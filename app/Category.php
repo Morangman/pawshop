@@ -33,6 +33,16 @@ class Category extends Model implements HasMedia
     protected $table = 'categories';
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'url',
+        'coupon',
+    ];
+
+    /**
      * @var array
      */
     protected $fillable = [
@@ -103,8 +113,11 @@ class Category extends Model implements HasMedia
         );
     }
 
-    public function getUrl()
-    { 
+    /**
+     * @return string
+     */
+    public function getUrlAttribute(): string
+    {
         $url = $this->slug;
     
         $category = $this;
@@ -118,6 +131,24 @@ class Category extends Model implements HasMedia
         }
     
         return !empty($urlArr) ? end($urlArr).'/'.$url : $url;
+    }
+
+    /**
+     * @return null|array
+     */
+    public function getCouponAttribute()
+    {
+        $category = $this;
+
+        $coupon = [];
+
+        while ($category = $category->subcategory) {
+            if ($coupon = Coupon::query()->where('category_id', '=', $category->id)->where('is_hidden', false)->first()) {
+                return $coupon->toArray();
+            }
+        }
+    
+        return $coupon;
     }
 
     /**

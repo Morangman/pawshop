@@ -182,6 +182,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ URL::route('admin.coupon.index') }}" class="nav-link @active_menu_class('admin.coupon')">
+                                <i class="icon-ticket"></i>
+                                <span>@lang('common.sidebar.coupons')</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ URL::route('admin.task.index') }}" class="nav-link @active_menu_class('admin.task')">
                                 <i class="icon-task"></i>
                                 <span>@lang('common.sidebar.tasks')</span>

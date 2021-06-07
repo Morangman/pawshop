@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Callback;
 use App\Category;
 use App\Comment;
+use App\Coupon;
 use App\Faq;
 use App\Order;
 use App\OrderStatus;
@@ -109,6 +110,7 @@ class RouteServiceProvider extends ServiceProvider
             'nitification' => Notification::class,
             'callback' => Callback::class,
             'warehouse' => Warehouse::class,
+            'coupon' => Coupon::class,
         ];
 
         foreach ($models as $key => $class) {

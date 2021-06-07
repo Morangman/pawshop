@@ -3,7 +3,16 @@
 @section('home-title', (array) $category ? 'Sell ' . str_replace('Sell ', '', $category->getAttribute('name')) . ' - Trade in and get cash | Rapid-Recycle' : $settings->getAttribute('general_settings')['seo_title'])
 
 @section('content')
-    @yield('header', View::make('header', ['categories' => $categories, 'settings' => $settings]))
+    @yield('header',
+        View::make(
+            'header',
+            [
+                'cat' => $category,
+                'categories' => $categories,
+                'settings' => $settings
+            ]
+        )
+    )
     @if($isMainPage)
     <section class="hero">
         <div class="flex-column">
@@ -35,6 +44,9 @@
             </div>
         </div>
     </section>
+    @endif
+    @if((array) $category && $category->getAttribute('coupon'))
+        <div class="padding-block"></div>
     @endif
     <!--main-content-->
     <div id="sell-device-section" class="main-content">
@@ -83,7 +95,7 @@
                         <ul class="order-list">
                             @foreach($relatedCategories as $subCategory)
                             <li>
-                                <a href="{{ URL::route('get-category', ['slug' => $subCategory->getUrl()]) }}">
+                                <a href="{{ URL::route('get-category', ['slug' => $subCategory->getAttribute('url') ]) }}">
                                     <div class="image" alt="{{ $subCategory->getAttribute('name') }}"><img width="130" height="130" src="{{ $subCategory->getAttribute('compressed_image') ? $subCategory->getAttribute('compressed_image') : $subCategory->getAttribute('image') }}" alt="" /></div>
                                     <h5>{{ $subCategory->getAttribute('name') }}</h5>
                                     @if($subCategory->getAttribute('custom_text'))

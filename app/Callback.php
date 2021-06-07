@@ -27,7 +27,7 @@ class Callback extends Model
      */
     protected $table = 'callbacks';
 
-     /**
+    /**
      * The accessors to append to the model's array form.
      *
      * @var array

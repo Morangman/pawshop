@@ -858,6 +858,8 @@ class HomeController extends Controller
 
         $resultPrice = 0;
 
+        $couponPrice = 0;
+
         $prices = Price::query()->where('category_id', $request->get('category_id'))->get();
 
         foreach ($prices as $price) {
@@ -884,6 +886,12 @@ class HomeController extends Controller
 
         if ($premiumPriceForDevice = $category->getAttribute('premium_price')) {
             $resultPrice += (float) $premiumPriceForDevice;
+        }
+
+        if ($coupon = $category->getAttribute('coupon')) {
+            $couponPrice = $resultPrice;
+
+            $resultPrice = $resultPrice - (((float) $resultPrice * (float) $coupon['percent_value']) / 100);
         }
 
         if ($isBroken) {
@@ -942,7 +950,7 @@ class HomeController extends Controller
             ]);
         }
 
-        return $this->json()->ok(['price' => $resultPrice]);
+        return $this->json()->ok(['price' => $resultPrice, 'couponPrice' => $couponPrice]);
     }
 
     /**
@@ -1180,7 +1188,7 @@ class HomeController extends Controller
 
                 if ($parentCategory) {
                     $breadcrumbs[] = [
-                        'slug' => $parentCategory->getUrl(),
+                        'slug' => $parentCategory->getAttribute('url'),
                         'name' => $parentCategory->getAttribute('name'),
                     ];
     
@@ -1196,7 +1204,7 @@ class HomeController extends Controller
         $breadcrumbs = array_reverse($breadcrumbs);
 
         $breadcrumbs[] = [
-            'slug' => $category->getUrl(),
+            'slug' => $category->getAttribute('url'),
             'name' => $category->getAttribute('name'),
         ];
 

@@ -38,6 +38,10 @@ import StatusIndex from './components/status/index';
 import StatusCreate from './components/status/create';
 import StatusEdit from './components/status/edit';
 
+import CouponIndex from './components/coupon/index';
+import CouponCreate from './components/coupon/create';
+import CouponEdit from './components/coupon/edit';
+
 import WarehouseStatusIndex from './components/warehouse-status/index';
 import WarehouseStatusCreate from './components/warehouse-status/create';
 import WarehouseStatusEdit from './components/warehouse-status/edit';
@@ -110,5 +114,8 @@ export default {
     WarehouseCreate,
     WarehouseStatusIndex,
     WarehouseStatusCreate,
-    WarehouseStatusEdit
+    WarehouseStatusEdit,
+    CouponIndex,
+    CouponCreate,
+    CouponEdit
 };

@@ -93,13 +93,27 @@
             <div class="order-options-block" v-if="!selectedStep">
                 <h4>Your device is valued at</h4>
                 <img v-if="!priceLoaded" style="display: block; margin-left: auto; margin-right: auto; width: 50%;" src="../../client/images/spinner.gif">
-                <div v-if="priceLoaded" class="order-total-block">
-                    <div class="price">${{ summ }}</div>
-                    <div class="order-options-links">
-                        <button class="btn gray-btn" v-on:click="backStep">Back</button>
-                        <button v-on:click="addToBox" class="btn red-btn">Add to box</button>
+                <span v-if="priceLoaded">
+                    <div class="order-total-block">
+                        <div class="price">${{ summ }}</div>
+                        <div class="order-options-links">
+                            <button class="btn gray-btn" v-on:click="backStep">Back</button>
+                            <button v-on:click="addToBox" class="btn red-btn">Add to box</button>
+                        </div>
                     </div>
-                </div>
+                    <div class="order-total-block" v-if="category.coupon && summ > 5 && !couponEntered">
+                        <div class="coupon-input-block">
+                            <input v-model="coupon" class="coupon-input" type="code" placeholder="Coupon code">
+                        </div>
+                        <div class="order-options-links">
+                            <button v-on:click="enterCoupon" class="btn red-btn">Enter</button>
+                        </div>
+                    </div>
+                    <div class="order-total-block" style="justify-content: center;" v-if="category.coupon && couponEntered">
+                        <h4>Coupon activated!</h4>
+                    </div>
+                </span>
+
                 <ul class="order-advantages-list">
                     <li>
                         <div class="pic"><img src="../../client/images/order_advantage_1.svg" alt=""></div>
@@ -209,12 +223,15 @@
                 priceError: false,
                 priceLoaded: false,
                 stepSelected: false,
+                couponEntered: false,
                 selectedStep: null,
                 selectedSteps: [],
                 selectedAccesories: [],
                 stepIndex: 0,
+                coupon: null,
                 options: [],
                 summ: parseFloat(this.category.custom_text),
+                couponPrice: 0,
                 helpingPopup: false,
             };
         },
@@ -226,6 +243,14 @@
 
             closeModal () {
                 this.$refs.modal.close()
+            },
+
+            enterCoupon() {
+                if (this.coupon === this.category.coupon.code) {
+                    this.summ = this.couponPrice;
+
+                    this.couponEntered = true;
+                }
             },
 
             backStep(){
@@ -372,7 +397,11 @@
                     axios.post(
                         Router.route('get-price', {steps: JSON.stringify(steps), category_id: this.category.id}),
                     ).then((data) => {
+                        this.couponEntered = false;
+
                         this.summ = data.data.price;
+
+                        this.couponPrice = data.data.couponPrice;
 
                         setTimeout(() => this.priceLoaded = true, 1000);
                     }).catch(({ response: { data: { errors } } }) => {

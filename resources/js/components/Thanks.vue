@@ -115,7 +115,7 @@
                                 <div class="order-search-popup">
                                     <ul class="order-search-popup-list">
                                         <li v-for="(device, index) in searchDevices" :key="`device_${index}`">
-                                            <a :href="$r('get-category', { slug: device.slug })" class="link">
+                                            <a :href="$r('get-category', { slug: device.url })" class="link">
                                                 <div class="image"><img :src="device.image" alt=""></div>
                                                 <span class="name">{{ device.name }}</span>
                                             </a>

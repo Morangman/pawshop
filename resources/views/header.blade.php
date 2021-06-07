@@ -1,4 +1,13 @@
 <header>
+    @if(isset($cat) && (array) $cat && $coupon = $cat->getAttribute('coupon'))
+        <a href="javascript:0" class="promo">
+            <p class="coupon-text">{{ $coupon['text'] }} End date: {{ Illuminate\Support\Carbon::now()->addDay(1)->format('d F') }}</p>
+            <p class="coupon-code">Your coupon code: {{ $coupon['code'] }}</p>
+        </a>
+        <div class="promo-margin">
+            <p>{{ $coupon['text'] }}</p>
+        </div>
+    @endif
     <div class="container">
         <div class="header-content">
             <div class="mobile-buter">

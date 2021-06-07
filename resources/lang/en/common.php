@@ -23,6 +23,7 @@ return [
         'tips' => 'Tips',
         'products' => 'Products',
         'orders' => 'Orders',
+        'coupons' => 'Coupons',
         'faqs' => 'Faqs',
         'comments' => 'Comments',
         'warehouse' => 'Warehouse',
