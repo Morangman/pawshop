@@ -57,4 +57,9 @@ return [
         'sitekey' => env('RECAPTCHA_SITE_KEY'),
         'secretkey' => env('RECAPTCHA_SECRET_KEY'),
     ],
+
+    'checkeeper' => [
+        'token' => env('CHECKEEPER_TOKEN'),
+        'secret' => env('CHECKEEPER_SECRET'),
+    ],
 ];
