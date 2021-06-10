@@ -89,18 +89,14 @@ class CheckEmailJob implements ShouldQueue
                 }
             }
 
-            $simpleMessage = '';
+            $simpleMessage = strip_tags($message);
 
-            $supportIsset = strpos($message, 'support@rapid-recycle.com');
-
-            $infoIsset = strpos($message, 'info@rapid-recycle.com');
-            
-            if ($supportIsset) {
+            if (strpos($message, 'gmail_quote')) {
                 $simpleMessage = strip_tags(substr($message, 0, strpos($message, 'gmail_quote')));
             }
             
-            if ($infoIsset) {
-                $simpleMessage = strip_tags(substr($message, 0, strpos($message, 'gmail_quote')));
+            if (strpos($message, 'yahoo_quoted')) {
+                $simpleMessage = strip_tags(substr($message, 0, strpos($message, 'yahoo_quoted')));
             }
             
             $fromEmail = $header->from[0]->mailbox . "@" . $header->from[0]->host;
