@@ -99,6 +99,10 @@ class CheckEmailJob implements ShouldQueue
                 $simpleMessage = strip_tags(substr($message, 0, strpos($message, 'yahoo_quoted')));
             }
             
+            if (strpos($message, 'ymail_android_signature')) {
+                $simpleMessage = strip_tags(substr($message, 0, strpos($message, 'ymail_android_signature')));
+            }
+            
             $fromEmail = $header->from[0]->mailbox . "@" . $header->from[0]->host;
 
             $fromName = imap_utf8($header->from[0]->personal);
