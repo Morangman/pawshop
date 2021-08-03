@@ -24,7 +24,7 @@
             </form>
         </div>
         <div class="col col-md-2">
-            <p style="margin: 0;">Paid amount: {{ \App\Warehouse::query()->where('status', 1)->sum('price') }} $</p>
+            <p style="margin: 0;">Paid amount: {{ \App\Warehouse::query()->sum('price') }} $</p>
         </div>
         <div class="col col-md-2">
             <p style="margin: 0;">Sold amount: {{ \App\Warehouse::query()->where('status', 4)->sum('price') }} $</p>

@@ -568,10 +568,10 @@ class ProductController extends Controller
     public function addpercent(): RedirectResponse
     {
         foreach (Price::query()->get() as $price) {
-            $p = ((float) $price->getAttribute('price') / 100) * 20;
+            //$p = ((float) $price->getAttribute('price') / 100) * 20;
             $price->update([
-                'price' => number_format((float) $price->getAttribute('price') + $p, 2, '.', ''),
-                'custom_price' => $price->getAttribute('custom_price') ? number_format((float) $price->getAttribute('custom_price') + $p, 2, '.', '') : null,
+                'price' => number_format((float) $price->getAttribute('price') * 0.83334, 2, '.', ''),
+                'custom_price' => $price->getAttribute('custom_price') ? number_format((float) $price->getAttribute('custom_price') * 0.83334, 2, '.', '') : null,
             ]);
         }
 
