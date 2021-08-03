@@ -9,6 +9,7 @@ use App\Faq;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Product\StoreRequest;
 use App\Http\Requests\Admin\Product\UpdateRequest;
+use App\Price;
 use App\Step;
 use App\StepName;
 use Illuminate\Contracts\View\View as ViewContract;
@@ -19,6 +20,8 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Support\Facades\Redirect;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -557,6 +560,48 @@ class ProductController extends Controller
         );
 
         return $this->json()->noContent();
+    }
+
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function addpercent(): RedirectResponse
+    {
+        foreach (Price::query()->get() as $price) {
+            $p = ((float) $price->getAttribute('price') / 100) * 20;
+            $price->update([
+                'price' => number_format((float) $price->getAttribute('price') + $p, 2, '.', ''),
+                'custom_price' => $price->getAttribute('custom_price') ? number_format((float) $price->getAttribute('custom_price') + $p, 2, '.', '') : null,
+            ]);
+        }
+
+        Session::flash(
+            'success',
+            Lang::get('admin/product.messages.update')
+        );
+
+        return Redirect::back();
+    }
+
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function minuspercent(): RedirectResponse
+    {
+        foreach (Price::query()->get() as $price) {
+            $p = ((float) $price->getAttribute('price') / 100) * 20;
+            $price->update([
+                'price' => number_format((float) $price->getAttribute('price') - $p, 2, '.', ''),
+                'custom_price' => $price->getAttribute('custom_price') ? number_format((float) $price->getAttribute('custom_price') + $p, 2, '.', '') : null,
+            ]);
+        }
+
+        Session::flash(
+            'success',
+            Lang::get('admin/product.messages.update')
+        );
+
+        return Redirect::back();
     }
 
     /**

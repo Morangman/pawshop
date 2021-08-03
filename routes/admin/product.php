@@ -17,6 +17,16 @@ Route::get('create', [
     'uses' => 'ProductController@create',
 ]);
 
+Route::get('addpercent', [
+    'as' => '.addpercent',
+    'uses' => 'ProductController@addpercent',
+]);
+
+Route::get('minuspercent', [
+    'as' => '.minuspercent',
+    'uses' => 'ProductController@minuspercent',
+]);
+
 Route::post('', [
     'as' => '.store',
     'uses' => 'ProductController@store',

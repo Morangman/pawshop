@@ -8,6 +8,14 @@
                         {{ $t('admin.product.index.header_btn') }}
                     </a>
                 </div>
+                <div class="col col-md-2">
+                    <a :href="$r('admin.product.addpercent')" class="btn btn-primary" style="color: #fff;">
+                        +20%
+                    </a>
+                    <a :href="$r('admin.product.minuspercent')" class="btn btn-primary" style="color: #fff;">
+                        -20%
+                    </a>
+                </div>
                 <div class="col col-md-5">
                     <input
                         v-model="filters.search"
