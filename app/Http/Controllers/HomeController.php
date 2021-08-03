@@ -888,10 +888,12 @@ class HomeController extends Controller
             $resultPrice += (float) $premiumPriceForDevice;
         }
 
+        $resultPrice = number_format($resultPrice - ($resultPrice / 100 * 20), 2, '.', '');
+
         if ($coupon = $category->getAttribute('coupon')) {
             $couponPrice = $resultPrice;
 
-            $resultPrice = $resultPrice - (((float) $resultPrice * (float) $coupon['percent_value']) / 100);
+            $resultPrice = number_format($resultPrice - (((float) $resultPrice * (float) $coupon['percent_value']) / 100), 2, '.', '');
         }
 
         if ($isBroken) {
