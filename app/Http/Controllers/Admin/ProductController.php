@@ -9,6 +9,7 @@ use App\Faq;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Product\StoreRequest;
 use App\Http\Requests\Admin\Product\UpdateRequest;
+use App\Jobs\PriceJob;
 use App\Price;
 use App\Step;
 use App\StepName;
@@ -567,13 +568,7 @@ class ProductController extends Controller
      */
     public function addpercent(): RedirectResponse
     {
-        foreach (Price::query()->get() as $price) {
-            //$p = ((float) $price->getAttribute('price') / 100) * 20;
-            $price->update([
-                'price' => number_format((float) $price->getAttribute('price') * 0.83334, 2, '.', ''),
-                'custom_price' => $price->getAttribute('custom_price') ? number_format((float) $price->getAttribute('custom_price') * 0.83334, 2, '.', '') : null,
-            ]);
-        }
+        PriceJob::dispatch();
 
         Session::flash(
             'success',
