@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('home-title', 'User Agreement')
+@section('home-title', 'User Agreement | Sell Used Device with Rapid Recycle')
+
+@section('home-description', 'User Agreement the Rapid Recycle website ✓ Free shipping and fast payout ✓ Get paid for your device today! ☎ +1 (602) 706-2575')
 
 @section('content')
     @yield('header', View::make('header', ['categories' => $categories, 'settings' => $settings]))

@@ -2,6 +2,8 @@
 
 @section('home-title', (array) $category ? 'Sell ' . str_replace('Sell ', '', $category->getAttribute('name')) . ' - Trade in and get cash | Rapid-Recycle' : $settings->getAttribute('general_settings')['seo_title'])
 
+@section('home-description', (array) $category ? 'Sell your Used ' . str_replace('Sell ', '', $category->getAttribute('name')) . ' with Rapid Recycle ✓ Free shipping and fast payout ✓ Get paid for your device today! ☎ +1 (602) 706-2576' : $settings->getAttribute('general_settings')['seo_meta'])
+
 @section('content')
     @yield('header',
         View::make(

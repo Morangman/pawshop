@@ -2,6 +2,8 @@
 
 @section('home-title', 'Unsubscribed')
 
+@section('home-description', 'Unsubscribed')
+
 @section('content')
     @yield('header', View::make('header', ['categories' => $categories, 'settings' => $settings]))
 

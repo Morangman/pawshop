@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('home-title', 'Password reset success')
+@section('home-title', 'Password reset success | Sell Used Device with Rapid Recycle')
+
+@section('home-description', 'Password reset success the Rapid Recycle website ✓ Free shipping and fast payout ✓ Get paid for your device today! ☎ +1 (602) 706-2575')
 
 @section('content')
     @yield('header', View::make('header', ['categories' => $categories, 'settings' => $settings]))

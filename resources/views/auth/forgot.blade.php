@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('home-title', 'Forgot password')
+@section('home-title', 'Forgot password | Sell Used Device with Rapid Recycle')
 
 @section('content')
     @yield('header', View::make('header', ['categories' => $categories, 'settings' => $settings]))
