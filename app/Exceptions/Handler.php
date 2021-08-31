@@ -2,11 +2,17 @@
 
 namespace App\Exceptions;
 
+use App\Category;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Lang;
+use stdClass;
+use App\Http\Controllers\Traits\SettingTrait;
 
 class Handler extends ExceptionHandler
 {
+    use SettingTrait;
+
     /**
      * A list of the exception types that are not reported.
      *
@@ -46,6 +52,29 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) 
+        {
+            $categories = Category::query()
+                ->where('is_hidden', false)
+                ->whereNull('custom_text')
+                ->whereNull('subcategory_id')
+                ->get();
+
+            return response()->make(view('404', [
+                'settings' => $this->getSettings() ?? [],
+                'categories' => $categories,
+                'category' => [],
+                'steps' => [],
+                'user' => \Illuminate\Support\Facades\Auth::user(),
+                'relatedCategories' => $categories,
+                'faqs' => new stdClass(),
+                'states' => Lang::get('states'),
+                'statuses' => Lang::get('admin/order.order_statuses'),
+                'orders' => [],
+                'tab' => ''
+            ]), 404);
+        } 
+
         return parent::render($request, $exception);
     }
 }

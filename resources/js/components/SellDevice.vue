@@ -27,7 +27,7 @@
                 <h4 id="step-title">{{ selectedStep.title }}</h4>
                 <div class="helping-block" v-if="selectedStep.tip">
                     <a href="javascript:void(0)" v-on:click="helpingPopup = true" data-effect="mfp-zoom-in">
-                        <img src="../../client/images/icon_help.svg" alt="">
+                        <img src="../../client/images/icon_help.svg" alt="icon_help">
                         <span>{{ selectedStep.tip ? selectedStep.tip.name : '' }}</span>
                     </a>
                     
@@ -43,8 +43,8 @@
                                                 <p v-html="selectedStep.tip ? selectedStep.tip.text : ''"></p>
                                             </div>
                                             <button v-on:click="helpingPopup = false" type="button" title="Close (Esc)" class="mfp-close">
-                                                <img src="/images/close.png?3365377fd075715b06b6510224785880" alt="">
-                                                <img src="/images/close_popup.png?c75e43c6a14689556029439fe821d637" alt="" class="sm-only">
+                                                <img src="/images/close.png?3365377fd075715b06b6510224785880" alt="close-png">
+                                                <img src="/images/close_popup.png?c75e43c6a14689556029439fe821d637" alt="close-popup" class="sm-only">
                                             </button>
                                         </div>
                                     </div>
@@ -116,28 +116,28 @@
 
                 <ul class="order-advantages-list">
                     <li>
-                        <div class="pic"><img src="../../client/images/order_advantage_1.svg" alt=""></div>
+                        <div class="pic"><img src="../../client/images/order_advantage_1.svg" alt="order-advantage-1"></div>
                         <div>
                             <p>No selling fees</p>
                             <div class="desc">Save up to 15% on marketplace selling fees.</div>
                         </div>
                     </li>
                     <li>
-                        <div class="pic"><img src="../../client/images/order_advantage_2.svg" alt=""></div>
+                        <div class="pic"><img src="../../client/images/order_advantage_2.svg" alt="order-advantage-2"></div>
                         <div>
                             <p>Zero fraud risk</p>
                             <div class="desc">We handle the bad guys.</div>
                         </div>
                     </li>
                     <li>
-                        <div class="pic"><img src="../../client/images/order_advantage_3.svg" alt=""></div>
+                        <div class="pic"><img src="../../client/images/order_advantage_3.svg" alt="order-advantage-3"></div>
                         <div>
                             <p>Free and Convenient shipping via FedEx or UPS</p>
                             <div class="desc">There's a drop-off around the corner.</div>
                         </div>
                     </li>
                     <li>
-                        <div class="pic"><img src="../../client/images/order_advantage_4.svg" alt=""></div>
+                        <div class="pic"><img src="../../client/images/order_advantage_4.svg" alt="order-advantage-4"></div>
                         <div>
                             <p>Optional 2-Day shipping and 24-Hour processing</p>
                             <div class="desc">We get it. Sometimes you just can't wait!</div>
@@ -163,8 +163,8 @@
         <div class="condition-popup-content" style="background: white;">
             <h4>Condition Examples</h4>
             <button class="mfp-close" v-on:click="closeModal" type="button" title="Close (Esc)">
-                <img class="big-only" src="../../client/images/close.png" alt="" />
-                <img class="sm-only" src="../../client/images/close_popup.png" alt="" />
+                <img class="big-only" src="../../client/images/close.png" alt="close" />
+                <img class="sm-only" src="../../client/images/close_popup.png" alt="close-popup" />
             </button>
             <ul class="condition-popup-tabs">
                 <li><a href="#condition-1" class="active-tab">Flawless</a></li>
@@ -173,16 +173,16 @@
                 <li><a href="#condition-4">Broken</a></li>
             </ul>
             <div id="condition-1" class="condition-tabs-content visible">
-                <div class="image"><img src="../../client/images/phone_icons-01.webp" alt=""></div>
+                <div class="image"><img src="../../client/images/phone_icons-01.webp" alt="phone_icons-01"></div>
             </div>
             <div id="condition-2" class="condition-tabs-content">
-                <div class="image"><img src="../../client/images/phone_icons-04.webp" alt=""></div>
+                <div class="image"><img src="../../client/images/phone_icons-04.webp" alt="phone_icons-04"></div>
             </div>
             <div id="condition-3" class="condition-tabs-content">
-                <div class="image"><img src="../../client/images/phone_icons-03.webp" alt=""></div>
+                <div class="image"><img src="../../client/images/phone_icons-03.webp" alt="phone_icons-03"></div>
             </div>
             <div id="condition-4" class="condition-tabs-content">
-                <div class="image"><img src="../../client/images/phone_icons-02.webp" alt=""></div>
+                <div class="image"><img src="../../client/images/phone_icons-02.webp" alt="phone_icons-02"></div>
             </div>
             <div class="note">*Scratches may be enhanced to show detail</div>
         </div>

@@ -49,10 +49,10 @@
                                         <div class="divider">or</div>
                                         <ul class="socials">
                                             <li>
-                                                <a :href="$r('redirect-google')"><img src="../../client/images/google.svg" alt=""></a>
+                                                <a :href="$r('redirect-google')"><img src="../../client/images/google.svg" alt="google-svg"></a>
                                             </li>
                                             <li>
-                                                <a :href="$r('redirect-facebook')"><img src="../../client/images/facebook.svg" alt=""></a>
+                                                <a :href="$r('redirect-facebook')"><img src="../../client/images/facebook.svg" alt="facebook-svg"></a>
                                             </li>
                                         </ul>
                                     </div>
@@ -85,28 +85,28 @@
                                 <label v-on:click="selectPaymentCheck()" class="payment-radiobox">
                                     <input type="radio" name="payment-radios">
                                     <span>
-                                        <img src="../../client/images/pay_check.svg" alt="">
+                                        <img src="../../client/images/pay_check.svg" alt="pay_check">
                                         <small>Check</small>
                                     </span>
                                 </label>
                                 <label v-on:click="selectPaymentPayPal()" class="payment-radiobox">
                                     <input type="radio" name="payment-radios">
                                     <span>
-                                        <img src="../../client/images/pay_paypal.svg" alt="">
+                                        <img src="../../client/images/pay_paypal.svg" alt="pay_paypal">
                                         <small>PayPal</small>
                                     </span>
                                 </label>
                                 <label v-on:click="selectPaymentZelle()" class="payment-radiobox">
                                     <input type="radio" name="payment-radios">
                                     <span>
-                                        <img src="../../client/images/pay_zelle.png" alt="">
+                                        <img src="../../client/images/pay_zelle.png" alt="pay_zelle">
                                         <small>Zelle</small>
                                     </span>
                                 </label>
                                 <label v-on:click="selectPaymentVenmo()" class="payment-radiobox">
                                     <input type="radio" name="payment-radios">
                                     <span>
-                                        <img src="../../client/images/pay_venmo.png" alt="">
+                                        <img src="../../client/images/pay_venmo.png" alt="pay_venmo">
                                         <small>Venmo</small>
                                     </span>
                                 </label>
@@ -313,7 +313,7 @@
                 <div class="cart-total checkout-summary">
                     <h5>Trade-in summary</h5>
                     <div class="cart-total-product" v-for="(order, index) in orders['order']" :key="`device_${index}`">
-                        <a href="javascript:0" class="image"><img :src="order.device.image" alt=""></a>
+                        <a href="javascript:0" class="image"><img :src="order.device.image" :alt="order.device.name"></a>
                         <div class="inner">
                             <div class="name"><a :href="$r('get-category', { slug:  order.device.slug })">{{ order.device.name }}</a></div>
                             <div class="price">${{ order.total }}</div>

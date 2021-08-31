@@ -26,6 +26,31 @@
     <meta property="og:type" content="website" />
     @endif
 
+    <script type="application/ld+json" data-seo="Organization">
+        {
+            "@context": "http://schema.org",
+            "@type": "Organization",
+            "name": "RapidRecycle",
+            "url": "http://rapid-recycle.com/",
+            "telephone": "+16027062575",
+            "email": "support@rapid-recycle.com"
+        }
+    </script>
+
+    <script type="application/ld+json">{
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "url": "https://rapid-recycle.com/",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://rapid-recycle.com/header-search?name={query}",
+            "query-input": {
+                "@type": "PropertyValueSpecification",
+                "valueName": "query"
+            }
+        }
+    }</script>
+
     <link rel="icon" type="image/x-icon" href="{{ asset('client/images/favicon/favicon.ico') }}">
     <link rel="icon" type="image/png" href="{{ asset('client/images/favicon/favicon.png') }}">
 
@@ -36,7 +61,7 @@
     <![endif]-->
 
     <!-- Styles -->
-    <style type="text/css">
+    <style>
         @font-face {
             font-display: swap;
             font-family: "GothamPro";
@@ -101,6 +126,15 @@
     </script>
 </head>
 <body>
+    <script type="application/ld+json">
+        {
+            "@context": "http://schema.org",
+            "@type": "Organization",
+            "url": "https://rapid-recycle.com/",
+            "logo ": "https://rapid-recycle.com/client/images/mail_logo.png"
+        }
+    </script>
+
     <div id="app">
         <main class="py-4">
             <div class="content">

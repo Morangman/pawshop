@@ -237,6 +237,12 @@ h1 {
   margin-bottom: 32px;
 }
 
+.h1 {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 32px;
+}
+
 .simple-form input,
 .simple-form textarea,
 .simple-form select {
@@ -3240,7 +3246,7 @@ h2 {
 }
 
 .recaptcha-block a{
-  text-decoration: auto;
+  text-decoration: none;
   color: blue;
 }
 
@@ -3755,6 +3761,11 @@ h2 {
   h1 {
     font-size: 45px;
   }
+
+  .h1 {
+    font-size: 45px;
+  }
+
     #scrolled {
         display: none;
     }
@@ -4008,6 +4019,10 @@ h2 {
     font-size: 40px;
   }
 
+  .h1 {
+    font-size: 40px;
+  }
+
   .header-menu {
     margin-bottom: 30px;
   }
@@ -4224,6 +4239,12 @@ h2 {
 
 @media (max-width: 480px) {
   h1 {
+    font-size: 35px;
+    margin-bottom: 24px;
+      text-align: center;
+  }
+
+  .h1 {
     font-size: 35px;
     margin-bottom: 24px;
       text-align: center;

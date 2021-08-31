@@ -19,27 +19,27 @@
                             <p class="shipping-card-subtitle">Shipping your device to us is fast, free, and easy!</p>
                         </div>
                         <div class="shipping-card-item">
-                            <img src="../../client/images/smartphone.svg" class="shipping-card-item-image">
+                            <img src="../../client/images/smartphone.svg" alt="smartphone" class="shipping-card-item-image">
                             <div class="shipping-card-item_row">
                                 <h2>Device Preparation</h2>
                                 <p class="shipping-card-item_row-text">There are a few steps you need to take before your phone is ready to ship. Be sure you have indicated to your carrier that you are deactivating your phone. Turn off the “find my iPhone” option on Apple devices or the google activation lock on Android devices. Remove any SIM or SD cards with data as well. Don’t forget to back up any data you want to keep! Reset your device and make sure it is fully charged.</p>
                             </div>
                         </div>
                         <div class="shipping-card-item">
-                            <img src="../../client/images/package.svg" class="shipping-card-item-image">
+                            <img src="../../client/images/package.svg" alt="package" class="shipping-card-item-image">
                             <div class="shipping-card-item_row">
                                 <h2>Packaging</h2>
                                 <p class="shipping-card-item_row-text">Please be sure to pack your item securely. The better condition your phone arrives in, the better the value of your phone! Some packaging options we recommend are Styrofoam peanuts, air-filled pillows, or crumpled paper. Once you have your phone comfortably set, be sure to firmly tape your box shut! Now you are ready to prepare for shipment.</p>
                             </div>
                         </div>
                         <div class="shipping-card-item">
-                            <img src="../../client/images/information.svg" class="shipping-card-item-image">
+                            <img src="../../client/images/information.svg" alt="information" class="shipping-card-item-image">
                             <div class="shipping-card-item_row">
                                 <h2>Shipping Information</h2>
                                 <p class="shipping-card-item_row-text">Once your phone is packed nicely you can add the correct shipping label. Be sure the barcode is flat and legible to ensure your package is not delayed. You can drop off your package at the chosen shipping carrier. Your trade-in offer is guaranteed for 14 days, so be sure to ship within that time frame.</p>
                                 <div class="shipping-card-item_buttons">
                                     <a  v-if="!fedexPdfUrl && lableLoaded" href="javascript:void(0)" v-on:click="getFedexLable" class="fedex-button">
-                                        <img src="../../client/images/fedex-logo.svg" class="shipping-card-item-image_fedex">
+                                        <img src="../../client/images/fedex-logo.svg" alt="fedex-logo" class="shipping-card-item-image_fedex">
                                         <p>Print Label</p>
                                     </a>
                                     <div v-if="!fedexPdfUrl && !lableLoaded" class="loader"></div>
@@ -48,7 +48,7 @@
                             </div>
                         </div>
                         <div class="shipping-card-item">
-                            <img src="../../client/images/clipboard.svg" class="shipping-card-item-image">
+                            <img src="../../client/images/clipboard.svg" alt="clipboard" class="shipping-card-item-image">
                             <div class="shipping-card-item_row">
                                 <h2>Final Checklist</h2>
                                 <p class="shipping-card-item_row-text">It is important you follow all of the instructions to be sure your phone is delivered safely and securely. Use the checklist below to be sure that you have followed all the steps!</p>
@@ -64,8 +64,8 @@
                                 <p><span>&#9679;</span> Optional: Removed any SIM or SD cards</p>
                             </div>
                             <div class="ready-section-item_arrow">
-                                <img src="../../client/images/down-arrow.svg" class="ready-section-image_arrow-top">
-                                <img src="../../client/images/down-arrow.svg" class="ready-section-image_arrow-bottom">
+                                <img src="../../client/images/down-arrow.svg" alt="down-arrow" class="ready-section-image_arrow-top">
+                                <img src="../../client/images/down-arrow.svg" alt="down-arrow" class="ready-section-image_arrow-bottom">
                             </div>
                             <div class="ready-section-item">
                                 <h2>Packaging</h2>
@@ -76,7 +76,7 @@
                             </div>
                         </div>
                         <div class="ready-section-check">
-                            <img src="../../client/images/checked.svg" class="ready-section-check-image">
+                            <img src="../../client/images/checked.svg" alt="checked" class="ready-section-check-image">
                             <h2>You're ready! Ship it out!</h2>
                         </div>
                     </div>
@@ -116,7 +116,7 @@
                                     <ul class="order-search-popup-list">
                                         <li v-for="(device, index) in searchDevices" :key="`device_${index}`">
                                             <a :href="$r('get-category', { slug: device.url })" class="link">
-                                                <div class="image"><img :src="device.image" alt=""></div>
+                                                <div class="image"><img :src="device.image" :alt="device.name"></div>
                                                 <span class="name">{{ device.name }}</span>
                                             </a>
                                             <div class="price">up to <strong>{{ device.custom_text }}</strong></div>
@@ -144,7 +144,7 @@
                                         <tr v-for="(product, index) in order.orders['order']" :key="`product_${index}`">
                                             <td>
                                                 <div class="product-name">
-                                                    <a class="image" href=""><img alt="" :src="product.device.image"></a>
+                                                    <a class="image" href=""><img alt="device-image" :src="product.device.image"></a>
                                                     <div class="inner">
                                                         <div class="name"><a :href="$r('get-category', { slug:  product.device.slug })">{{ product.device.name }}</a></div>
                                                         <div class="chars" v-if="product.steps">

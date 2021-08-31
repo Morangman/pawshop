@@ -22,7 +22,7 @@
             <p class="hero-title">ELECTRONICS <br class="show-for-small-only"> for <span class="hero-cash">CASH</span></p>
             <p class="hero-text">The simplest and safest <br class="show-for-small-only"> way to sell your old phone <br class="show-for-small-only">  or tablet online</p>
             <a href="#sell-device-section" class="btn red-btn go-sell" data-effect="mfp-zoom-in">SELL YOUR DEVICE</a>
-            <a class="hero-arrow-down go-sell" href="#sell-device-section"><img width="46" height="24" src="{{ asset('client/images/arrow-down.png') }}"/></a>
+            <a class="hero-arrow-down go-sell" href="#sell-device-section"><img width="46" height="24" alt="arrow-down" src="{{ asset('client/images/arrow-down.png') }}"/></a>
         </div>
     </section>
     <section class="header-steps">
@@ -30,17 +30,17 @@
 
         <div class="container header-steps_items">
             <div class="header-steps_step">
-                <img width="95" height="127" src="{{ asset('client/images/phone_icons-22.png') }}"/>
+                <img width="95" height="127" alt="phone-icon-22" src="{{ asset('client/images/phone_icons-22.png') }}"/>
                 <p class="header-steps_step-title">1. Get an Instant Quote</p>
                 <p class="header-steps_step-text">Find your used electronics and get an instant quote based on the condition.</p>
             </div>
             <div class="header-steps_step">
-                <img width="95" height="127" src="{{ asset('client/images/phone_icons-23.png') }}"/>
+                <img width="95" height="127" alt="phone_icons-23" src="{{ asset('client/images/phone_icons-23.png') }}"/>
                 <p class="header-steps_step-title">2. Ship For Free</p>
                 <p class="header-steps_step-text">We provide you with a free, trackable pre-paid shipping label for sending us your item(s).</p>
             </div>
             <div class="header-steps_step">
-                <img width="95" height="127" src="{{ asset('client/images/phone_icons-24.png') }}"/>
+                <img width="95" height="127" alt="phone_icons-24" src="{{ asset('client/images/phone_icons-24.png') }}"/>
                 <p class="header-steps_step-title">3. Get Cash Fast</p>
                 <p class="header-steps_step-text">No need to wait for a buyer, get cash fast through Rapid-Recycle.com.</p>
             </div>
@@ -55,8 +55,8 @@
         <!-- ========= order-section ============ -->
         <section class="order-section">
             <div class="container">
-                <h1 class="center-text">Start Selling</h1>
-                <div class="description center-text">Find the product you'd like to trade-in for cash</div>
+                <h1 class="center-text">{{ (array) $category ? 'Sell ' . str_replace('Sell ', '', $category->getAttribute('name')) : 'TRADE-IN YOUR USED ELECTRONICS FOR CASH' }}</h1>
+                <div class="description center-text">Choose the option you'd like to trade-in for cash</div>
                 @if(empty($steps))
                     <div class="order-search-outer">
                         <h5>Search the device:</h5>
@@ -76,13 +76,44 @@
                 <div class="page-header page-header-light">
                     <div class="breadcrumb-line breadcrumb-line-light breadcrumb-line-component header-elements-md-inline">
                         <div class="d-flex">
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a href="/#sell-device-section"><img width="12" height="12" src="../../client/images/home.svg"/> Home</a>
+                            <ul class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+                                <script type="application/ld+json">
+                                    {
+                                        "@context": "http://schema.org",
+                                        "@type": "BreadcrumbList",
+                                        "ItemListElement": [
+                                            {
+                                                "@type": "ListItem",
+                                                "position": 1,
+                                                "item": {
+                                                    "@id": "{{ Url::route('home') }}",
+                                                    "name": "Home"
+                                                }
+                                            },
+                                            @foreach ($breadcrumbs as $key => $breadcrumb)
+                                                {
+                                                    "@type": "ListItem",
+                                                    "position": {{ $key + 2 }},
+                                                    "item": {
+                                                        "@id": "{{ Url::route('get-category', ['slug' => $breadcrumb['slug']]) }}",
+                                                        "name": "{{ $breadcrumb['name'] }}"
+                                                    }
+                                                } {{ $key + 1 < count ($breadcrumbs) ? ',' : '' }}
+                                            @endforeach
+                                        ]
+                                    }
+                                </script>
+
+                                <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                                    <a href="/#sell-device-section" itemprop="item"><img width="12" height="12" alt="home" src="../../client/images/home.svg"/> <span itemprop="name">Home</span></a>
+                                    <meta itemprop="position" content="1" />
                                 </li>
-                                @foreach ($breadcrumbs as $breadcrumb)
-                                    <li class="breadcrumb-item">
-                                        <a href="{{ Url::route('get-category', ['slug' => $breadcrumb['slug']]) }}">{{ $breadcrumb['name'] }}</a>
+                                @foreach ($breadcrumbs as $key => $breadcrumb)
+                                    <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                                        <a href="{{ Url::route('get-category', ['slug' => $breadcrumb['slug']]) }}" itemprop="item">
+                                            <span itemprop="name">{{ $breadcrumb['name'] }}</span>
+                                        </a>
+                                        <meta itemprop="position" content="{{ $key + 2 }}" />
                                     </li>
                                 @endforeach
                             </ul>
@@ -98,7 +129,7 @@
                             @foreach($relatedCategories as $subCategory)
                             <li>
                                 <a href="{{ URL::route('get-category', ['slug' => $subCategory->getAttribute('url') ]) }}">
-                                    <div class="image" alt="{{ $subCategory->getAttribute('name') }}"><img width="130" height="130" src="{{ $subCategory->getAttribute('compressed_image') ? $subCategory->getAttribute('compressed_image') : $subCategory->getAttribute('image') }}" alt="" /></div>
+                                    <div class="image"><img width="130" height="130" alt="{{ $subCategory->getAttribute('name') }}" src="{{ $subCategory->getAttribute('compressed_image') ? $subCategory->getAttribute('compressed_image') : $subCategory->getAttribute('image') }}" alt="" /></div>
                                     <h5>{{ $subCategory->getAttribute('name') }}</h5>
                                     @if($subCategory->getAttribute('custom_text'))
                                         <div class="price">Cash in up to ${{ $subCategory->getAttribute('custom_text') }}</div>
@@ -109,6 +140,27 @@
                         </ul>
                     </div>
                 @else
+                <script type="application/ld+json">
+                    {
+                        "@context": "http://schema.org",
+                        "@type": "Product",
+                        "sku": "{{ $category->getKey() }}",
+                        "url": "{{ URL::route('get-category', ['slug' => $category->getAttribute('slug') ] ) }}",
+                        "name": "{{ $category->getAttribute('name') }}",
+                        "color": "",
+                        "image": "{{ $category->getAttribute('image') }}",
+                        "description": "{{ 'Sell your Used ' . str_replace('Sell ', '', $category->getAttribute('name')) . ' with Rapid Recycle ✓ Free shipping and fast payout ✓ Get paid for your device today! ☎ +1 (602) 706-2576' }}",
+                        "itemCondition": "https://schema.org/NewCondition",
+                        "offers": {
+                            "@type": "Offer",
+                            "availability": "http://schema.org/InStock",
+                            "url": "{{ URL::route('get-category', ['slug' => $category->getAttribute('slug') ] ) }}",
+                            "price": "{{ $category->getAttribute('custom_text') }}",
+                            "priceCurrency": "USD",
+                            "priceValidUntil": "{{ $category->getAttribute('updated_at') }}"
+                        }
+                    }
+                </script>
                 <div v-cloak>
                     <sell-device
                         :category="{{ json_encode($category) }}"

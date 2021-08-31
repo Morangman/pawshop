@@ -13,7 +13,7 @@
                 </li>
             </ul>
         </div>
-        <div class="header-search-toggle"><img src="../../client/images/icon_search.svg" alt=""></div>
+        <div class="header-search-toggle"><img src="../../client/images/icon_search.svg" alt="icon_search"></div>
     </div>
 </template>
 

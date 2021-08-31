@@ -22,7 +22,7 @@
                         <tr v-for="(order, index) in orders['order']" :key="`device_${index}`">
                             <td>
                                 <div class="product-name">
-                                    <a class="image" href=""><img alt="" :src="order.device.image"></a>
+                                    <a class="image" href=""><img :alt="order.device.name" :src="order.device.image"></a>
                                     <div class="inner">
                                         <div class="name"><a :href="$r('get-category', { slug:  order.device.slug })">{{ order.device.name }}</a></div>
                                         <div class="chars" v-if="order.steps">
@@ -44,7 +44,7 @@
                                 <div class="price">${{ order.total }}</div>
                             </td>
                             <td>
-                                <a href="javascript:0" v-on:click="removeFromCart(index)" class="remove"><img src="../../client/images/remove_product.svg" alt=""></a>
+                                <a href="javascript:0" v-on:click="removeFromCart(index)" class="remove"><img src="../../client/images/remove_product.svg" alt="remove_product"></a>
                             </td>
                         </tr>
 

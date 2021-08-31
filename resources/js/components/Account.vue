@@ -141,7 +141,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="text-right">
-                                                        <a href="javascript:void(0)" v-on:click="deleteAddress(index)" class="remove"><img src="../../client/images/remove_product.svg?e0784a02269348e05e66f882b885e9f2" alt=""></a>
+                                                        <a href="javascript:void(0)" v-on:click="deleteAddress(index)" class="remove"><img src="../../client/images/remove_product.svg?e0784a02269348e05e66f882b885e9f2" alt="remove_product"></a>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12">
@@ -218,7 +218,7 @@
                                         <tr v-for="(order, index) in userOrder.orders['order']" :key="`device_${index}`">
                                             <td>
                                                 <div class="product-name">
-                                                    <a class="image" href=""><img alt="" :src="order.device.image"></a>
+                                                    <a class="image" href=""><img :alt="order.device.name" :src="order.device.image"></a>
                                                     <div class="inner">
                                                         <div class="name"><a :href="$r('get-category', { slug:  order.device.slug })">{{ order.device.name }}</a></div>
                                                         <div class="chars" v-if="order.steps">
