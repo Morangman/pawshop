@@ -34,6 +34,9 @@ class SitemapGeneratorJob implements ShouldQueue
             if ($url->path() === '') {
                 $url->setPriority(1)
                     ->setLastModificationDate(Carbon::now());
+            } else {
+                $url->setPriority(0.6)
+                    ->setLastModificationDate(Carbon::now());
             }
 
             if ($url->path() === '/redirect-facebook' ||
@@ -56,6 +59,6 @@ class SitemapGeneratorJob implements ShouldQueue
             }
 
             return $url;
-        })->writeToFile(public_path('sitemap-test.xml'));
+        })->writeToFile(public_path('sitemap.xml'));
     }
 }

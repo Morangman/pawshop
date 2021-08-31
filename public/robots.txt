@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 Disallow: /admin/*
 Disallow: /cart
+Host: https://rapid-recycle.com/
+Sitemap:https://rapid-recycle.com/sitemap.xml
