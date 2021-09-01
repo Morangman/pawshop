@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Jobs;
 
+use App\Category;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -34,7 +35,13 @@ class SitemapGeneratorJob implements ShouldQueue
             if ($url->path() === '') {
                 $url->setPriority(1)
                     ->setLastModificationDate(Carbon::now());
-            } else {
+            }
+
+            $slug = str_replace('sell-', '', substr($url->path(), strrpos($url->path(), '/') + 1));
+
+            $cat = Category::query()->where('slug', $slug)->first();
+
+            if ($cat && $cat->getAttribute('custom_text') !== null) {
                 $url->setPriority(0.6)
                     ->setLastModificationDate(Carbon::now());
             }
