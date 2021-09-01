@@ -46,19 +46,29 @@ class SitemapGeneratorJob implements ShouldQueue
                     ->setLastModificationDate(Carbon::now());
             }
 
-            if ($url->path() === '/redirect-facebook' ||
-                $url->path() === '/redirect-google' ||
-                $url->path() === '/support' ||
-                $url->path() === '/web/login' ||
-                $url->path() === '/web/password/reset' ||
-                $url->path() === '/web/register' ||
+            if ($url->path() === '/support' ||
                 $url->path() === '/account' ||
-                $url->path() === '/callback' ||
                 $url->path() === '/user_agreement' ||
                 $url->path() === '/privacy_policy' ||
                 $url->path() === '/terms' ||
                 $url->path() === '/law_enforcement' ||
-                $url->path() === '/cart' ||
+                $url->path() === '/cart'
+            ) {
+                $url->setPriority(0.8)
+                    ->setLastModificationDate(Carbon::now());
+            }
+
+            if ($url->path() === '/web/login' ||
+                $url->path() === '/web/password/reset' ||
+                $url->path() === '/web/register'
+            ) {
+                $url->setPriority(0.6)
+                    ->setLastModificationDate(Carbon::now());
+            }
+
+            if ($url->path() === '/redirect-facebook' ||
+                $url->path() === '/redirect-google' ||
+                $url->path() === '/callback' ||
                 $url->path() === '/unsubscribe' ||
                 $url->path() === '/'
             ) {
