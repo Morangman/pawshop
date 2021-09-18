@@ -66,7 +66,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(CheckEmail::class)->everyThirtyMinutes();
         $schedule->command(FedexLabel::class)->dailyAt('12:00');
         $schedule->command(SetCancelledOrder::class)->dailyAt('12:00');
-        //$schedule->command(CheckCardsAvailable::class)->everyFiveMinutes();
+        $schedule->command(CheckCardsAvailable::class)->everyMinute();
         $schedule->command(SitemapGenerator::class)->daily();
     }
 }

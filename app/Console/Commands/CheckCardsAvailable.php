@@ -7,6 +7,7 @@ namespace App\Console\Commands;
 use App\Jobs\BestBuyCheckCardsAvailableJob;
 use App\Jobs\EvgaCheckCardsAvailableJob;
 use App\Jobs\NeweggCheckCardsAvailableJob;
+use App\Jobs\CheckIphoneAvailableJob;
 use Illuminate\Console\Command;
 
 class CheckCardsAvailable extends Command
@@ -42,8 +43,9 @@ class CheckCardsAvailable extends Command
      */
     public function handle(): void
     {
-        BestBuyCheckCardsAvailableJob::dispatch();
-        NeweggCheckCardsAvailableJob::dispatch();
-        EvgaCheckCardsAvailableJob::dispatch();
+        CheckIphoneAvailableJob::dispatch();
+        // BestBuyCheckCardsAvailableJob::dispatch();
+        // NeweggCheckCardsAvailableJob::dispatch();
+        // EvgaCheckCardsAvailableJob::dispatch();
     }
 }
