@@ -87,7 +87,6 @@ class CheckIphoneAvailableJob implements ShouldQueue
             
                     file_get_contents("https://api.telegram.org/bot{$botApiToken}/sendMessage?" . http_build_query($data));
                 } else {
-                    echo ($storeNumber. PHP_EOL);
                     DB::table('cards')->where('sku_id', '=', $storeNumber)->delete();
                 }
             }
