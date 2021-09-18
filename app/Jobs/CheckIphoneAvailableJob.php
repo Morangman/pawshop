@@ -45,6 +45,10 @@ class CheckIphoneAvailableJob implements ShouldQueue
 
                 $storeName = Arr::get($store, 'storeName', null);
 
+                if ($storeName === 'La Encantada') {
+                    continue;
+                }
+
                 $item = Arr::get($store, 'partsAvailability.MLKV3LL/A', null);
 
                 $lat = Arr::get($store, 'storelatitude', null);
@@ -52,43 +56,50 @@ class CheckIphoneAvailableJob implements ShouldQueue
 
                 $check = DB::table('cards')->where('sku_id', '=', $storeNumber)->first();
 
-                if ($item && !$check && Arr::get($item, 'pickupDisplay', '') === 'available') {
-                    $url = "https://www.google.com/maps/place/$lat,$lon";
+                $pickup = Arr::get($item, 'pickupDisplay', null);
 
-                    DB::table('cards')->insert([
-                        'sku_id' => $storeNumber,
-                        'name' => $storeName,
-                        'href' => $url,
-                        'site' => 'apple.com',
-                        'image' => '',
-                        'price' => '',
-                        'available' => 1,
-                    ]);
+                if ($pickup && $pickup === 'available') {
+                    if (!$check) {
+                        $url = "https://www.apple.com/shop/bag";
 
-                    $botApiToken = env('TELEGRAM_BOT_API_CHECKER');
-                    $chat_id = env('TELEGRAM_CHAT_ID_CHECKER');
-
-                    $keyboard = [
-                        'inline_keyboard' => [
-                            [
+                        DB::table('cards')->insert([
+                            'sku_id' => $storeNumber,
+                            'name' => $storeName,
+                            'href' => $url,
+                            'site' => 'apple.com',
+                            'image' => '',
+                            'price' => '',
+                            'available' => 1,
+                        ]);
+    
+                        $botApiToken = env('TELEGRAM_BOT_API_CHECKER');
+                        $chat_id = env('TELEGRAM_CHAT_ID_CHECKER');
+    
+                        $keyboard = [
+                            'inline_keyboard' => [
                                 [
-                                    'text' => "Show",
-                                    'url' => $url,
+                                    [
+                                        'text' => "Show",
+                                        'url' => $url,
+                                    ]
                                 ]
                             ]
-                        ]
-                    ];
-            
-                    $data = [
-                        'chat_id' => $chat_id,
-                        'text' => "Iphone 13 pro is available on $storeName",
-                        'reply_markup' => json_encode($keyboard)
-                    ];
-            
-                    file_get_contents("https://api.telegram.org/bot{$botApiToken}/sendMessage?" . http_build_query($data));
+                        ];
+                
+                        $data = [
+                            'chat_id' => $chat_id,
+                            'text' => "Iphone 13 pro is available on $storeName",
+                            'reply_markup' => json_encode($keyboard)
+                        ];
+                
+                        file_get_contents("https://api.telegram.org/bot{$botApiToken}/sendMessage?" . http_build_query($data));    
+                    }
                 } else {
-                    DB::table('cards')->where('sku_id', '=', $storeNumber)->delete();
+                    if ($check) {
+                        DB::table('cards')->where('sku_id', '=', $storeNumber)->delete();
+                    }
                 }
+
             }
         }
     }
