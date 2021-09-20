@@ -21,6 +21,50 @@
                                         class="form-control"
                                     >
                                 </div>
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Street Line</strong>
+                                    </label>
+                                    <input
+                                        name="street"
+                                        type="text"
+                                        v-model="model.general_settings.street"
+                                        class="form-control"
+                                    >
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <strong>City</strong>
+                                    </label>
+                                    <input
+                                        name="street"
+                                        type="text"
+                                        v-model="model.general_settings.city"
+                                        class="form-control"
+                                    >
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <strong>State code</strong>
+                                    </label>
+                                    <input
+                                        name="code"
+                                        type="text"
+                                        v-model="model.general_settings.code"
+                                        class="form-control"
+                                    >
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <strong>Postal code</strong>
+                                    </label>
+                                    <input
+                                        name="postal_code"
+                                        type="text"
+                                        v-model="model.general_settings.postal_code"
+                                        class="form-control"
+                                    >
+                                </div>
                             </div>
                         </div>
                         <label>
@@ -679,6 +723,10 @@
                         ds_point: null,
                         appleWatch_point: null,
                         band_price: null,
+                        street: null,
+                        city: null,
+                        code: null,
+                        postal_code: null,
                     },
                     terms: null,
                     code_insert: null,

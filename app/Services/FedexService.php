@@ -97,6 +97,11 @@ class FedexService
 
         $phone = isset($settings->getAttribute('general_settings')['phone']) ? $settings->getAttribute('general_settings')['phone'] : '16027062575';
 
+        $recipientStreet = isset($settings->getAttribute('general_settings')['street']) ? $settings->getAttribute('general_settings')['street'] : '1705 W University Dr';
+        $recipientCity = isset($settings->getAttribute('general_settings')['city']) ? $settings->getAttribute('general_settings')['city'] : 'Tempe';
+        $recipientCode = isset($settings->getAttribute('general_settings')['code']) ? $settings->getAttribute('general_settings')['code'] : 'AZ';
+        $recipientPostalCode = isset($settings->getAttribute('general_settings')['postal_code']) ? $settings->getAttribute('general_settings')['postal_code'] : '85281';
+
         $userCredential = new ComplexType\WebAuthenticationCredential();
         $userCredential
             ->setKey($this->key)
@@ -153,10 +158,10 @@ class FedexService
 
         $recipientAddress = new ComplexType\Address();
         $recipientAddress
-            ->setStreetLines(['1730 E Warner Rd, Suite 7'])
-            ->setCity('Tempe')
-            ->setStateOrProvinceCode('AZ')
-            ->setPostalCode('85284')
+            ->setStreetLines([$recipientStreet])
+            ->setCity($recipientCity)
+            ->setStateOrProvinceCode($recipientCode)
+            ->setPostalCode($recipientPostalCode)
             ->setCountryCode('US');
 
         $recipientContact = new ComplexType\Contact();

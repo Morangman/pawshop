@@ -1,5 +1,11 @@
 <div class="footer-container">
-    @php $phone = isset($settings->getAttribute('general_settings')['phone']) ? $settings->getAttribute('general_settings')['phone'] : ''; @endphp
+    @php 
+        $phone = isset($settings->getAttribute('general_settings')['phone']) ? $settings->getAttribute('general_settings')['phone'] : '+1 (602) 706-2575';
+        $recipientStreet = isset($settings->getAttribute('general_settings')['street']) ? $settings->getAttribute('general_settings')['street'] : '1705 W University Dr';
+        $recipientCity = isset($settings->getAttribute('general_settings')['city']) ? $settings->getAttribute('general_settings')['city'] : 'Tempe';
+        $recipientCode = isset($settings->getAttribute('general_settings')['code']) ? $settings->getAttribute('general_settings')['code'] : 'AZ';
+        $recipientPostalCode = isset($settings->getAttribute('general_settings')['postal_code']) ? $settings->getAttribute('general_settings')['postal_code'] : '85281';
+    @endphp
     <section class="support-section">
         <div class="container">
             <div class="support-content">
@@ -60,7 +66,7 @@
                 </ul>
                 <ul>
                     <li class="title">Our Contacts</li>
-                    <li class="location"><img src="{{ asset('client/images/marker_white.png') }}" alt="marker_white" /><a href="https://g.page/rapid-iphone-repair?share" target="_blank">1730 E Warner Rd, Suite 7, Tempe, AZ 85284</a></li>
+                    <li class="location"><img src="{{ asset('client/images/marker_white.png') }}" alt="marker_white" /><a href="https://g.page/rapid-iphone-repair?share" target="_blank">{{ $recipientStreet }}, {{ $recipientCity }}, {{ $recipientCode }}, {{ $recipientPostalCode }}</a></li>
                     <li class="location phone-mobile"><img src="{{ asset('client/images/phone.svg') }}" alt="phone-svg" /><a href="tel:+{{ preg_replace('/\D+/', '', $phone) }}">{{ $phone }}</a></li>
                 </ul>
                 <ul>

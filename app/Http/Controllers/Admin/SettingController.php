@@ -191,6 +191,10 @@ class SettingController extends Controller
                     "switch_point" => $request->get('general_settings')['switch_point'] ?? null,
                     "ds_point" => $request->get('general_settings')['ds_point'] ?? null,
                     "appleWatch_point" => $request->get('general_settings')['appleWatch_point'] ?? null,
+                    "city" => $request->get('general_settings')['city'] ?? null,
+                    "street" => $request->get('general_settings')['street'] ?? null,
+                    "code" => $request->get('general_settings')['code'] ?? null,
+                    "postal_code" => $request->get('general_settings')['postal_code'] ?? null,
                 ]
             ]);
         }
