@@ -145,7 +145,7 @@
                         "@context": "http://schema.org",
                         "@type": "Product",
                         "sku": "{{ $category->getKey() }}",
-                        "url": "{{ URL::route('get-category', ['slug' => $category->getAttribute('slug') ] ) }}",
+                        "url": "{{ Request::url() }}",
                         "name": "{{ $category->getAttribute('name') }}",
                         "color": "",
                         "image": "{{ $category->getAttribute('image') }}",
@@ -154,7 +154,7 @@
                         "offers": {
                             "@type": "Offer",
                             "availability": "http://schema.org/InStock",
-                            "url": "{{ URL::route('get-category', ['slug' => $category->getAttribute('slug') ] ) }}",
+                            "url": "{{ Request::url() }}",
                             "price": "{{ $category->getAttribute('custom_text') }}",
                             "priceCurrency": "USD",
                             "priceValidUntil": "{{ $category->getAttribute('updated_at') }}"
