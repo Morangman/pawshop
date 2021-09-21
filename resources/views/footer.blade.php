@@ -66,7 +66,7 @@
                 </ul>
                 <ul>
                     <li class="title">Our Contacts</li>
-                    <li class="location"><img src="{{ asset('client/images/marker_white.png') }}" alt="marker_white" /><a href="https://g.page/rapid-iphone-repair?share" target="_blank">{{ $recipientStreet }}, {{ $recipientCity }}, {{ $recipientCode }}, {{ $recipientPostalCode }}</a></li>
+                    <li class="location"><img src="{{ asset('client/images/marker_white.png') }}" alt="marker_white" /><a href="https://www.google.com/maps/place/33.4213962,-111.9667345" target="_blank">{{ $recipientStreet }}, {{ $recipientCity }}, {{ $recipientCode }}, {{ $recipientPostalCode }}</a></li>
                     <li class="location phone-mobile"><img src="{{ asset('client/images/phone.svg') }}" alt="phone-svg" /><a href="tel:+{{ preg_replace('/\D+/', '', $phone) }}">{{ $phone }}</a></li>
                 </ul>
                 <ul>
