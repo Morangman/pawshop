@@ -63,6 +63,17 @@ return [
             ]) : [],
         ],
 
+        'rapidrefurb' => [
+            'driver' => env('DB_CONNECTION_RAPIDREFURB'),
+            'host' => env('DB_HOST_RAPIDREFURB'),
+            'port' => env('DB_PORT_RAPIDREFURB'),
+            'database' => env('DB_DATABASE_RAPIDREFURB'),
+            'username' => env('DB_USERNAME_RAPIDREFURB'),
+            'password' => env('DB_PASSWORD_RAPIDREFURB'),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),

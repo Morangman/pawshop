@@ -11,6 +11,7 @@ use App\Console\Commands\ClearDailyStatistics;
 use App\Console\Commands\Fedex;
 use App\Console\Commands\FedexLabel;
 use App\Console\Commands\OrderNormalizeStatus;
+use App\Console\Commands\ParseBuybackPrices;
 use App\Console\Commands\PullData;
 use App\Console\Commands\PullPrices;
 use App\Console\Commands\PullFailedPrices;
@@ -49,6 +50,7 @@ class Kernel extends ConsoleKernel
         SitemapGenerator::class,
         SetCancelledOrder::class,
         SendMailToCancelledOrder::class,
+        ParseBuybackPrices::class,
     ];
 
     /**
@@ -68,5 +70,6 @@ class Kernel extends ConsoleKernel
         $schedule->command(SetCancelledOrder::class)->dailyAt('12:00');
         //$schedule->command(CheckCardsAvailable::class)->everyMinute();
         $schedule->command(SitemapGenerator::class)->daily();
+        $schedule->command(ParseBuybackPrices::class)->daily();
     }
 }
