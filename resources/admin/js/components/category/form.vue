@@ -98,6 +98,9 @@
                         </model-list-select>
                     </div>
                     <div class="form-group">
+                        <vue-editor v-model="model.text"></vue-editor>
+                    </div>
+                    <div class="form-group">
                         <label>
                             <strong>{{ $t('admin.category.form.cart_count') }}</strong>
                         </label>
@@ -154,6 +157,7 @@
 <script>
     import FormHelper from '../../mixins/form_helper';
     import { ModelListSelect } from 'vue-search-select';
+    import { VueEditor } from "vue2-editor";
 
     export default {
         props: {
@@ -195,6 +199,8 @@
 
         components: {
             ModelListSelect,
+            editor: require('vue2-ace-editor'),
+            VueEditor
         },
 
         data() {

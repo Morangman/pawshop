@@ -815,6 +815,14 @@ header {
   padding: 41px 0 31px;
 }
 
+.category-text h2, .category-text h3 {
+  text-align: center;
+  font-weight: 500;
+  font-size: 1.35rem;
+  color: #0D2A54;
+  margin-bottom: 16px;
+}
+
 .account-section label p{
     font-size: 20px;
     font-weight: 300;

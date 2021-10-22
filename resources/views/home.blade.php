@@ -139,6 +139,11 @@
                             @endforeach
                         </ul>
                     </div>
+                    <section class="sprt-section category-text">
+                        <div class="container">
+                            {!! html_entity_decode($category->getAttribute('text')) !!}
+                        </div>
+                    </section>
                 @else
                 <script type="application/ld+json">
                     {

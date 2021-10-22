@@ -25,7 +25,7 @@ class CreateCategoriesTable extends Migration
             $table->unsignedBigInteger('faq_id')->nullable();
             $table->string('name');
             $table->string('slug')->nullable();
-            $table->string('text')->nullable();
+            $table->text('text')->nullable();
             $table->string('image')->nullable();
             $table->string('compressed_image')->nullable();
             $table->decimal('custom_text', 10, 2)->nullable();

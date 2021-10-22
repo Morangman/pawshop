@@ -41,6 +41,7 @@
                     name: null,
                     slug: null,
                     image: null,
+                    text: null,
                     image_url: null,
                     subcategory_id: null,
                     faq_id: null,
