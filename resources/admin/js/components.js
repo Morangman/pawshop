@@ -67,6 +67,8 @@ import StatisticsIndex from './components/statistics/index';
 
 import DailyStatisticsIndex from './components/daily-statistics/index';
 
+import ByDayStatisticsIndex from './components/by-day-statistics/index';
+
 export default {
     UserIndex,
     UserCreate,
@@ -109,6 +111,7 @@ export default {
     SettingIndex,
     StatisticsIndex,
     DailyStatisticsIndex,
+    ByDayStatisticsIndex,
     WarehouseIndex,
     WarehouseEdit,
     WarehouseCreate,

@@ -137,6 +137,12 @@
                                 <span>@lang('common.sidebar.daily_statistics')</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ URL::route('admin.all-daily-statistics.index') }}" class="nav-link @active_menu_class('admin.all-daily-statistics')">
+                                <i class="icon-file-stats"></i>
+                                <span>By day statistics</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 @endrole
