@@ -118,7 +118,7 @@
         watch: {
             filters: {
                 handler() {
-                    this.debouncedGetProducts();
+                    this.debouncedGetAllProducts();
                 },
                 deep: true,
             },
@@ -151,9 +151,9 @@
         },
 
         created() {
-            this.getProducts();
+            //this.getProducts();
 
-            this.debouncedGetProducts =_.debounce(this.getProducts, 500);
+            this.debouncedGetAllProducts =_.debounce(this.getProducts, 500);
         },
     };
 </script>
