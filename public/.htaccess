@@ -13,8 +13,7 @@
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
     # no-www.org/faq.php?q=class_b
-    RewriteCond %{HTTPS} !=on
-    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+    RewriteCond %{HTTP_HOST} ^www.(.+)$ [NC]
     RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
     
     # Redirect Trailing Slashes If Not A Folder...
