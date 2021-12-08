@@ -129,7 +129,7 @@
                             @foreach($relatedCategories as $subCategory)
                             <li>
                                 <a href="{{ URL::route('get-category', ['slug' => $subCategory->getAttribute('url') ]) }}">
-                                    <div class="image"><img width="130" height="130" alt="{{ $subCategory->getAttribute('name') }}" src="{{ $subCategory->getAttribute('compressed_image') ? $subCategory->getAttribute('compressed_image') : $subCategory->getAttribute('image') }}" alt="" /></div>
+                                    <div class="image"><img width="130" height="130" alt="{{ $subCategory->getAttribute('name') }}" src="{{ $subCategory->getAttribute('compressed_image') ? $subCategory->getAttribute('compressed_image') : $subCategory->getAttribute('image') }}" /></div>
                                     <h5>{{ $subCategory->getAttribute('name') }}</h5>
                                     @if($subCategory->getAttribute('custom_text'))
                                         <div class="price">Cash in up to ${{ $subCategory->getAttribute('custom_text') }}</div>
