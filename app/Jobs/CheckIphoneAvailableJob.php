@@ -31,7 +31,9 @@ class CheckIphoneAvailableJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $path = 'https://www.apple.com/shop/fulfillment-messages?pl=true&mt=compact&cppart=UNLOCKED/US&parts.0=MLKV3LL/A&searchNearby=true&store=R031';
+        // $path = 'https://www.apple.com/shop/fulfillment-messages?pl=true&mt=compact&cppart=UNLOCKED/US&parts.0=MLKV3LL/A&searchNearby=true&store=R031';
+
+        $path = 'https://www.apple.com/shop/fulfillment-messages?store=R031&little=false&mt=regular&parts.0=MLKN3LL/A&searchNearby=true&cppart=UNLOCKED/US';
 
         $data = file_get_contents($path);
 
@@ -49,7 +51,7 @@ class CheckIphoneAvailableJob implements ShouldQueue
                     continue;
                 }
 
-                $item = Arr::get($store, 'partsAvailability.MLKV3LL/A', null);
+                $item = Arr::get($store, 'partsAvailability.MLKN3LL/A', null);
 
                 $lat = Arr::get($store, 'storelatitude', null);
                 $lon = Arr::get($store, 'storelongitude', null);
@@ -88,7 +90,7 @@ class CheckIphoneAvailableJob implements ShouldQueue
                 
                         $data = [
                             'chat_id' => $chat_id,
-                            'text' => "Iphone 13 pro is available on $storeName",
+                            'text' => "iPhone 13 Pro Max 128GB Gold is available on $storeName",
                             'reply_markup' => json_encode($keyboard)
                         ];
                 

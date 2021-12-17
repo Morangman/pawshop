@@ -7,6 +7,7 @@ namespace App\Console;
 use App\Console\Commands\CheckCardsAvailable;
 use App\Console\Commands\CheckCart;
 use App\Console\Commands\CheckEmail;
+use App\Console\Commands\CheckIphone;
 use App\Console\Commands\ClearDailyStatistics;
 use App\Console\Commands\Fedex;
 use App\Console\Commands\FedexLabel;
@@ -51,6 +52,7 @@ class Kernel extends ConsoleKernel
         SetCancelledOrder::class,
         SendMailToCancelledOrder::class,
         ParseBuybackPrices::class,
+        CheckIphone::class
     ];
 
     /**
@@ -69,6 +71,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(FedexLabel::class)->dailyAt('12:00');
         $schedule->command(SetCancelledOrder::class)->dailyAt('12:00');
         //$schedule->command(CheckCardsAvailable::class)->everyMinute();
+        $schedule->command(CheckIphone::class)->everyMinute();
         $schedule->command(SitemapGenerator::class)->daily();
         $schedule->command(ParseBuybackPrices::class)->daily();
     }
