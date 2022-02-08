@@ -34,6 +34,11 @@ return [
         'secret' => env('SPARKPOST_SECRET'),
     ],
 
+    'telegram' => [
+        'token' => env('TELEGRAM_BOT_API'),
+        'chat' => env('TELEGRAM_CHAT_ID'),
+    ],
+
     'google' => [
         'client_id'     => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),

@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Traits;
 
 use App\Order;
 use CURLFile;
+use Illuminate\Support\Facades\Config;
 
 /**
  * Trait TelegramTrait
@@ -22,7 +23,7 @@ trait TelegramTrait
      */
     protected function sendMessage(string $title, string $url): void
     {
-        $botApiToken = env('TELEGRAM_BOT_API');
+        $botApiToken = Config::get('services.telegram.token');
 
         $keyboard = [
             'inline_keyboard' => [
@@ -36,7 +37,7 @@ trait TelegramTrait
         ];
 
         $data = [
-            'chat_id' => env('TELEGRAM_CHAT_ID'),
+            'chat_id' => Config::get('services.telegram.chat'),
             'text' => "$title",
             'reply_markup' => json_encode($keyboard)
         ];
@@ -62,8 +63,8 @@ trait TelegramTrait
         float $price = 0
     ): void
     {
-        $botApiToken = env('TELEGRAM_BOT_API');
-        $chat_id = env('TELEGRAM_CHAT_ID');
+        $botApiToken = Config::get('services.telegram.token');
+        $chat_id = Config::get('services.telegram.chat');
 
         $keyboard = [
             'inline_keyboard' => [
