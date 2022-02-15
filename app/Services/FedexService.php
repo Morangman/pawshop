@@ -44,6 +44,11 @@ class FedexService
     protected $accountNumber;
 
     /**
+     * @var bool
+     */
+    protected $isProd;
+
+    /**
      * @var string
      */
     protected $meterNumber;
@@ -67,6 +72,7 @@ class FedexService
         $this->password = Arr::get($config, 'password');
         $this->accountNumber = Arr::get($config, 'account_number');
         $this->meterNumber = Arr::get($config, 'meter_number');
+        $this->isProd = Arr::get($config, 'is_prod', 1);
     }
 
     /**
@@ -225,7 +231,7 @@ class FedexService
         $processShipmentRequest->setRequestedShipment($requestedShipment);
 
         $shipService = new ShipService\Request();
-        if (env('FEDEX_KEY_IS_PROD', 0)) {
+        if ($this->isProd) {
             $shipService->getSoapClient()->__setLocation(ShipService\Request::PRODUCTION_URL); //use production URL
         }
 
@@ -300,7 +306,7 @@ class FedexService
 
         $request = new Request();
 
-        if (env('FEDEX_KEY_IS_PROD', 0)) {
+        if ($this->isProd) {
             $request->getSoapClient()->__setLocation('https://ws.fedex.com:443/web-services/track'); //use production URL
         }
 

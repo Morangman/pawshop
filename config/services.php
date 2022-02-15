@@ -56,6 +56,7 @@ return [
         'password' => env('FEDEX_PASSWORD'),
         'account_number' => env('FEDEX_ACCOUNT_NUMBER'),
         'meter_number' => env('FEDEX_METER_NUMBER'),
+        'is_prod' => env('FEDEX_KEY_IS_PROD'),
     ],
 
     'recaptcha' => [
