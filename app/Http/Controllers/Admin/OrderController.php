@@ -240,10 +240,6 @@ class OrderController extends Controller
         foreach($ordersArray['order'] as $key => $orderData) {
             $ids = [];
 
-            if ($key === 0) {
-                continue;
-            }
-
             $category = Category::query()->whereKey($orderData['device']['id'])->first();
 
             $addToPrice = 0;
