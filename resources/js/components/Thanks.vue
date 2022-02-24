@@ -135,6 +135,7 @@
                                         <thead>
                                         <tr>
                                             <th>Items</th>
+                                            <th>Comment</th>
                                             <th>Quantity</th>
                                             <th>Status</th>
                                             <th>Item value</th>
@@ -152,6 +153,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </td>
+                                            <td>
+                                                <p>{{ product.comment }}</p>
                                             </td>
                                             <td>
                                                 <div class="product-amount">

@@ -379,6 +379,11 @@
                           <span style="color: #424651;">{{ $step['step_name']['name'] }}</span> : {{ $step['value'] }}
                         </p>
                         @endforeach
+                        @if(isset($order['comment']))
+                        <p class="o_text-xs o_mb-xs" style="font-size: 14px;line-height: 21px;margin-top: 0px;margin-bottom: 8px;">
+                          <span style="color: #424651;">Comment</span> : {{ $order['comment'] }}
+                        </p>
+                        @endif
                       </div>
                     </div>
                     <!--[if mso]></td><td width="100" align="right" valign="top" style="padding: 0px 8px;"><![endif]-->

@@ -257,6 +257,15 @@
                                     <option v-for="(item, index) in products" :value="item.id" :key="`product_item__${index}`">{{ item.name }}</option>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <textarea
+                                    name="product_comment"
+                                    type="text"
+                                    placeholder="Comment"
+                                    v-model="product.comment"
+                                    class="form-control"
+                                ></textarea>
+                            </div>
                             <div class="form-group row">
                                 <div class="form-group col-md-6">
                                     <input
@@ -288,17 +297,23 @@
                                     >
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <div class="input-group">
-                                        <input
-                                            type="text"
-                                            class="form-control price-summ product-order-list__item"
-                                            name="ordered_product-price"
-                                            :placeholder="$t('admin.order.form.ordered_products.price')"
-                                            v-model="product.total"
-                                        >
-                                        <div class="input-group-append">
-                                            <span class="input-group-text" id="basic-addon2">$</span>
+                                    <div>
+                                        <div class="input-group">
+                                            <input
+                                                type="text"
+                                                class="form-control price-summ product-order-list__item"
+                                                name="ordered_product-price"
+                                                :placeholder="$t('admin.order.form.ordered_products.price')"
+                                                v-model="product.total"
+                                            >
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" id="basic-addon2">$</span>
+                                            </div>
                                         </div>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="exampleCheck1" v-model="product.is_custom_price">
+                                        <label class="form-check-label" for="exampleCheck1">Custom price</label>
                                     </div>
                                 </div>
                             </div>

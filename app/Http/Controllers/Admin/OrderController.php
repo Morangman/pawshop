@@ -310,42 +310,51 @@ class OrderController extends Controller
 
             $resultPrice = 0;
 
-            $prices = Price::query()->where('category_id', $orderData['device']['id'])->get();
+            if (Arr::get($orderData, 'is_custom_price', null)) {
+                $customTotal = (float) Arr::get($orderData, 'total', null);
+
+                $ordersArray['order'][$key]['summ'] = $customTotal * (int) $orderData['ctn'];
+                $ordersArray['order'][$key]['total'] = $customTotal * (int) $orderData['ctn'];
     
-            foreach ($prices as $price) {
-                if ( $price->getAttribute('is_parsed')) {
-                    $similar = array_intersect($ids, $price->getAttribute('steps_ids'));
+                $orderTotalSumm += $customTotal * (int) $orderData['ctn'];
+            } else {
+                $prices = Price::query()->where('category_id', $orderData['device']['id'])->get();
     
-                    if (sizeof($ids) === sizeof($similar)) {
-                        $resultPrice = $price->getAttribute('price');
+                foreach ($prices as $price) {
+                    if ( $price->getAttribute('is_parsed')) {
+                        $similar = array_intersect($ids, $price->getAttribute('steps_ids'));
+        
+                        if (sizeof($ids) === sizeof($similar)) {
+                            $resultPrice = $price->getAttribute('price');
+                        }
                     }
                 }
-            }
-    
-            if ($addPercent) {
-                $priceAddPercent = ((float) $resultPrice * $addPercent) / 100;
-    
-                $resultPrice = number_format((float) $resultPrice + $priceAddPercent, 2, '.', '');
-            }
-    
-            if ($addToPrice) {
-                $resultPrice = number_format((float) $resultPrice + $addToPrice, 2, '.', '');
-            }
-    
-            if ($premiumPriceForDevice = $category->getAttribute('premium_price')) {
-                $resultPrice += (float) $premiumPriceForDevice;
-            }
-    
-            if ($isBroken) {
-                if ($priceForBroken = $category->getAttribute('price_for_broken')) {
-                    $resultPrice = $priceForBroken;
+        
+                if ($addPercent) {
+                    $priceAddPercent = ((float) $resultPrice * $addPercent) / 100;
+        
+                    $resultPrice = number_format((float) $resultPrice + $priceAddPercent, 2, '.', '');
                 }
+        
+                if ($addToPrice) {
+                    $resultPrice = number_format((float) $resultPrice + $addToPrice, 2, '.', '');
+                }
+        
+                if ($premiumPriceForDevice = $category->getAttribute('premium_price')) {
+                    $resultPrice += (float) $premiumPriceForDevice;
+                }
+        
+                if ($isBroken) {
+                    if ($priceForBroken = $category->getAttribute('price_for_broken')) {
+                        $resultPrice = $priceForBroken;
+                    }
+                }
+    
+                $ordersArray['order'][$key]['summ'] = $resultPrice * (int) $orderData['ctn'];
+                $ordersArray['order'][$key]['total'] = $resultPrice * (int) $orderData['ctn'];
+    
+                $orderTotalSumm += (float) $resultPrice * (int) $orderData['ctn'];
             }
-
-            $ordersArray['order'][$key]['summ'] = $resultPrice * (int) $orderData['ctn'];
-            $ordersArray['order'][$key]['total'] = $resultPrice * (int) $orderData['ctn'];
-
-            $orderTotalSumm += (float) $resultPrice * (int) $orderData['ctn'];
         }
         
         $expShipping = 20;
