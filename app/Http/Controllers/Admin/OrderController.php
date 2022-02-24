@@ -351,6 +351,8 @@ class OrderController extends Controller
                 if ($premiumPriceForDevice = $category->getAttribute('premium_price')) {
                     $resultPrice += (float) $premiumPriceForDevice;
                 }
+
+                $resultPrice = number_format($resultPrice - ($resultPrice / 100 * 20), 2, '.', '');
         
                 if ($isBroken) {
                     if ($priceForBroken = $category->getAttribute('price_for_broken')) {
