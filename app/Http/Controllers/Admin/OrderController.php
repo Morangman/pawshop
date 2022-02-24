@@ -240,6 +240,10 @@ class OrderController extends Controller
         foreach($ordersArray['order'] as $key => $orderData) {
             $ids = [];
 
+            if ($key === 0) {
+                continue;
+            }
+
             $category = Category::query()->whereKey($orderData['device']['id'])->first();
 
             $addToPrice = 0;
@@ -323,9 +327,13 @@ class OrderController extends Controller
                 foreach ($prices as $price) {
                     if ( $price->getAttribute('is_parsed')) {
                         $similar = array_intersect($ids, $price->getAttribute('steps_ids'));
-        
+
                         if (sizeof($ids) === sizeof($similar)) {
-                            $resultPrice = $price->getAttribute('price');
+                            if ($price->getAttribute('price') && $price->getAttribute('price') !== "0.00") {
+                                $resultPrice = $price->getAttribute('price');
+                            } else {
+                                $resultPrice = $price->getAttribute('custom_price');
+                            }
                         }
                     }
                 }
