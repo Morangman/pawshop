@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Message
@@ -47,4 +48,17 @@ class Message extends Model
         'viewed' => 'int',
         'time' => 'datetime',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function files(): HasMany
+    {
+        return $this->hasMany(
+            EmailFile::class,
+            'message_id',
+            'id',
+            'files'
+        );
+    }
 }

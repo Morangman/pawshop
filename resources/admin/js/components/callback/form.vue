@@ -43,7 +43,14 @@
                 
                         <li v-for="(message, i) in model.messages" :key="`message_${i}`" class="media" :class="message.sender === 2 ? 'media-chat-item-reverse' : ''">
                             <div class="media-body">
-                                <div class="media-chat-item"><span v-html="message.simple_text ? message.simple_text : message.text"></span></div>
+                                <div class="media-chat-item">
+                                    <span v-html="message.simple_text ? message.simple_text : message.text"></span>
+                                    <div class="files">
+                                        <a v-for="(file, i) in message.files" target="_blank" :key="`file_${i}`" :href="file.url">
+                                            <img :src="file.url" width="100" height="100" :alt="file.type">
+                                        </a>
+                                    </div>
+                                </div>
                                 <div class="font-size-sm text-muted mt-2">
                                     {{ message.time ? message.time : message.created_at }}
                                     <a href="javascript:0" v-if="message.simple_text && !message.simple_text_copy" v-on:click="showMore(i)">Show more</a>

@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Jobs;
 
 use App\Callback;
+use App\EmailFile;
 use App\Http\Controllers\Traits\TelegramTrait;
 use App\Message;
 use App\User;
@@ -13,10 +14,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
-use Client;
+use ImapReader;
 
 /**
  * Class CheckEmailJob
@@ -40,81 +40,48 @@ class CheckEmailJob implements ShouldQueue
             $mailuser = $config['user'];
             $mailpass = $config['password'];
 
-            $mailhost = '{rapid-recycle.com:993/imap/ssl/novalidate-cert}INBOX';
+            # set the mark as read flag (true by default). If you don't want emails to be marked as read/seen, set this to false.
+            $mark_as_read = true;
 
-            $mailbox = imap_open($mailhost,$mailuser,$mailpass) or die("<br />\nFAILLED! ".imap_last_error());
-
-            $emails = imap_search($mailbox,'UNSEEN');
-
-            if ($emails) {
-                $this->getMassages($mailbox, $emails);
-            }
-    
-            imap_close($mailbox);
-        }
-    }
-
-    /**
-     * @param $mailbox
-     * @param $emails
-     *
-     * @return void
-     */
-    public function getMassages($mailbox, $emails)
-    {
-        foreach ($emails as $id) {
-            $header = imap_headerinfo($mailbox, $id);
-
-            $structure = imap_fetchstructure($mailbox, $id);
-    
-            if (isset($structure->parts) && is_array($structure->parts) && isset($structure->parts[1])) {
-                $part = $structure->parts[1];
-
-                $message = imap_fetchbody($mailbox, $id, '2');
-
-                $message = $this->encodeMessage($part->encoding, $message);
-            } else {
-                $message = imap_fetchbody($mailbox, $id, "1.2");
-
-                if ($message === "") {
-                    $message = imap_fetchbody($mailbox, $id, "1.1");
-                }
-    
-                if ($message === "") {
-                    $message = imap_fetchbody($mailbox, $id, "1");
-                }
-    
-                if ($message === "") {
-                    $message = imap_fetchbody($mailbox, $id, "2");
-                }
-            }
-
-            $simpleMessage = strip_tags($message);
-
-            if (strpos($message, 'gmail_quote')) {
-                $simpleMessage = strip_tags(substr($message, 0, strpos($message, 'gmail_quote')));
-            }
+            # You can ommit this to use UTF-8 by default.
+            $encoding = 'UTF-8';
             
-            if (strpos($message, 'yahoo_quoted')) {
-                $simpleMessage = strip_tags(substr($message, 0, strpos($message, 'yahoo_quoted')));
-            }
-            
-            if (strpos($message, 'ymail_android_signature')) {
-                $simpleMessage = strip_tags(substr($message, 0, strpos($message, 'ymail_android_signature')));
-            }
-            
-            $fromEmail = $header->from[0]->mailbox . "@" . $header->from[0]->host;
+            $mailhost = '{rapid-recycle.com:993/imap/ssl/novalidate-cert}';
 
-            $fromName = imap_utf8($header->from[0]->personal);
+            # create a new Reader object
+            $imap = new ImapReader($mailhost, $mailuser, $mailpass, public_path() . '/imap', $mark_as_read, $encoding);
 
-            $time = Carbon::parse($header->date);
+            # You can then loop through $imap->emails() for each email.
+            foreach ($imap->unseen()->get() as $email) {
 
-            if (Callback::query()->where('email', '=', $fromEmail)->exists()) {
-                $callback = Callback::query()->where('email', '=', $fromEmail)->first();
+                $fromEmail = $email->fromEmail();
 
-                $callback->touch();
+                $fromName = $email->fromName();
     
-                Message::query()->create(
+                $time = Carbon::parse($email->date);
+
+                $message = $email->html();
+
+                $simpleMessage = mb_substr(strip_tags($email->plain()), 0, 50);
+
+                if (Callback::query()->where('email', '=', $fromEmail)->exists()) {
+                    $callback = Callback::query()->where('email', '=', $fromEmail)->first();
+    
+                    $callback->touch();
+                } else {
+                    $user = User::query()->where('email', '=', $fromEmail)->first();
+        
+                    $callback = Callback::query()->create(
+                        [
+                            'name' => $user ? $user->getAttribute('name') : $fromName,
+                            'email' => $fromEmail,
+                            'text' => $simpleMessage,
+                            'sender' => Callback::SENDER_FROM,
+                        ]
+                    );
+                }
+
+                $messageModel = Message::query()->create(
                     [
                         'name' => $fromName,
                         'email' => $fromEmail,
@@ -126,60 +93,25 @@ class CheckEmailJob implements ShouldQueue
                     ]
                 );
 
-                $this->sendMessage($simpleMessage ? $simpleMessage : 'New message', route('admin.callback.edit', ['callback' => $callback->getKey()]));
-            } else {
-                $user = User::query()->where('email', '=', $fromEmail)->first();
-    
-                $callback = Callback::query()->create(
-                    [
-                        'name' => $user ? $user->getAttribute('name') : $fromName,
-                        'email' => $fromEmail,
-                        'text' => $simpleMessage,
-                        'sender' => Callback::SENDER_FROM,
-                    ]
-                );
-    
-                Message::query()->create(
-                    [
-                        'name' => $fromName,
-                        'email' => $fromEmail,
-                        'text' => $message,
-                        'simple_text' => $simpleMessage,
-                        'sender' => Callback::SENDER_FROM,
-                        'chat_id' => $callback->getKey(),
-                        'time' => $time,
-                    ]
-                );
+                if ($email->hasAttachments()) {
+                    foreach ($email->attachments() as $file) {
+                        EmailFile::query()->create([
+                            'chat_id' => $callback->getKey(),
+                            'message_id' => $messageModel->id,
+                            'url' => '/imap/' . $file->name,
+                            'mime' => $file->mime,
+                            'type' => $file->type,
+                        ]);
+                    }
+                }
 
-                $this->sendMessage($simpleMessage ? $simpleMessage : 'New message', route('admin.callback.edit', ['callback' => $callback->getKey()]));
+                try {
+                    $this->sendMessage(
+                        $simpleMessage ? $simpleMessage : 'New message',
+                        route('admin.callback.edit', ['callback' => $callback->getKey()])
+                    );
+                } catch (\Exception $e) {}
             }
-        }
-    }
-
-    public function encodeMessage($encoding, $message)
-    {
-        switch ($encoding) {
-            # 7BIT
-            case 0:
-                return $message;
-            # 8BIT
-            case 1:
-                return quoted_printable_decode(imap_8bit($message));
-            # BINARY
-            case 2:
-                return imap_binary($message);
-            # BASE64
-            case 3:
-                return imap_base64($message);
-            # QUOTED-PRINTABLE
-            case 4:
-                return quoted_printable_decode($message);
-            # OTHER
-            case 5:
-                return $message;
-            # UNKNOWN
-            default:
-                return $message;
         }
     }
 }

@@ -4,8 +4,60 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9767c370902a1c02197f26a562062cbc",
+    "content-hash": "f4a5f3c9bb4bff871630f1f35b817370",
     "packages": [
+        {
+            "name": "benhall14/php-imap-reader",
+            "version": "v1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/benhall14/php-imap-reader.git",
+                "reference": "ba7bca02afb71b20d962b17238db17baa3169530"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/benhall14/php-imap-reader/zipball/ba7bca02afb71b20d962b17238db17baa3169530",
+                "reference": "ba7bca02afb71b20d962b17238db17baa3169530",
+                "shasum": ""
+            },
+            "require": {
+                "ext-imap": "*",
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "benhall14\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Hall",
+                    "email": "benhall14@hotmail.com",
+                    "homepage": "https://conobe.co.uk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A PHP class that makes working with IMAP in PHP simple.",
+            "homepage": "https://github.com/benhall14/php-imap-reader",
+            "keywords": [
+                "email",
+                "imap",
+                "mail",
+                "mailbox",
+                "php",
+                "pop3"
+            ],
+            "support": {
+                "issues": "https://github.com/benhall14/php-imap-reader/issues",
+                "source": "https://github.com/benhall14/php-imap-reader/tree/v1.4"
+            },
+            "time": "2022-03-03T14:28:09+00:00"
+        },
         {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "v0.1.1",
@@ -7026,5 +7078,5 @@
         "php": "^7.1.3"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }

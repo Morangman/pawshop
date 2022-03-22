@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Http\Controllers\Admin;
 
 use App\Callback;
+use App\EmailFile;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Callback\StoreRequest;
 use App\Http\Requests\Admin\Callback\UpdateRequest;
@@ -143,7 +144,7 @@ class CallbackController extends Controller
      */
     public function edit(Callback $callback): ViewContract
     {
-        $callback = Callback::query()->whereKey($callback->getKey())->with('messages')->first();
+        $callback = Callback::query()->whereKey($callback->getKey())->with('messages.files')->first();
 
         $user = User::query()->where('email', '=', $callback->getAttribute('email'))->first();
 
@@ -186,6 +187,8 @@ class CallbackController extends Controller
     public function delete(Callback $callback): JsonResponse
     {
         Message::query()->where('chat_id', '=', $callback->getKey())->delete();
+
+        EmailFile::query()->where('chat_id', '=', $callback->getKey())->delete();
 
         $callback->delete();
 

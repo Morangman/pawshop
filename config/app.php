@@ -237,6 +237,7 @@ return [
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'ImapReader' => benhall14\phpImapReader\Reader::class,
 
     ],
 
