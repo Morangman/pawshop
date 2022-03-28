@@ -22,6 +22,7 @@ class Price extends Model
      * @var array
      */
     protected $fillable = [
+        'updated',
         'category_id',
         'steps_ids',
         'price',
@@ -33,6 +34,7 @@ class Price extends Model
      * @var array
      */
     protected $casts = [
+        'updated' => 'int',
         'category_id' => 'int',
         'steps_ids' => 'array',
         'price' => 'string',

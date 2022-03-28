@@ -3,9 +3,11 @@
 namespace App\Console\Commands;
 
 use App\Category;
+use App\Price;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use App\Services\Traits\JsonDecodeTrait;
+use App\Step;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -62,11 +64,8 @@ class PullFailedPrices extends Command
         $failedPrices = DB::table('failed_prices')->get();
 
         foreach ($failedPrices as $fprice) {
-            $existCategory = DB::table('prices')->where('category_id', $fprice->getAttribute('category_id'))->exists();
-
-            if (!$existCategory) {
                     try {
-                        $slug = $fprice->getAttribute('device_slug');
+                        $slug = $fprice->device_slug;
 
                         if (Str::contains($slug, 'huawei-google-nexus-6p')) {
                             $slug = 'google-nexus-6p';
@@ -103,7 +102,7 @@ class PullFailedPrices extends Command
                                 [
                                     'form_params' => [
                                         'device_name' => $slug,
-                                        'attributes' => $fprice->getAttribute('attributes'),
+                                        'attributes' => json_decode($fprice->attributes, true),
                                         'sort' => 'best_match',
                                     ],
                                 ]
@@ -122,36 +121,52 @@ class PullFailedPrices extends Command
                                 }
                             }
 
-                            $data = [
-                                'category_id' => $fprice->getAttribute('category_id'),
-                                'condition' => isset($attrs['condition']) ? $attrs['condition'] : null,
-                                'network' => isset($attrs['network']) ? $attrs['network'] : null,
-                                'capacity' => isset($attrs['capacity']) ? $attrs['capacity'] : null,
+                            $ids = [];
+
+                            foreach (json_decode($fprice->attributes, true) as $key => $attr) {
+                                $stepId = Step::query()->where('slug', $attr)->where('attribute', $key)->first()->getKey();
+    
+                                $ids[] = $stepId;
+                            }
+
+                            // $data = [
+                            //     'category_id' => $fprice->getAttribute('category_id'),
+                            //     'condition' => isset($attrs['condition']) ? $attrs['condition'] : null,
+                            //     'network' => isset($attrs['network']) ? $attrs['network'] : null,
+                            //     'capacity' => isset($attrs['capacity']) ? $attrs['capacity'] : null,
+                            //     'price' => $maxPrice,
+                            // ];
+
+                            // DB::table('prices')->insert($data);
+
+                            $priceModel = Price::query()
+                                ->where('category_id', $fprice->category_id)
+                                ->whereJsonContains('steps_ids', $ids)
+                                ->first();
+
+                            $priceModel->update([
                                 'price' => $maxPrice,
-                            ];
+                            ]);
 
-                            DB::table('prices')->insert($data);
-
-                            $fprice->delete();
+                            DB::table('failed_prices')->where('id', $fprice->id)->delete();
                         }
                     } catch (\Exception $e) {
                         Log::info('Parse FAILED prices exception: ' . $e->getMessage());
 
-                        $this->line("{$fprice->getAttribute('device_name')} GET ERROR EXCEPTION");
+                        $this->line("{$fprice->device_name} GET ERROR EXCEPTION");
 
                         continue;
                     }
 
-                $this->line("{$fprice->getAttribute('device_name')}....OK");
+                $this->line("{$fprice->device_name}....OK");
 
                 $this->line('Memory now at: ' . memory_get_peak_usage());
-            }
         }
 
         $this->line("Work is done!");
     }
 
-    function maxValueInArray($array, $keyToSearch)
+    public function maxValueInArray($array, $keyToSearch)
     {
         $currentMax = NULL;
         foreach($array as $arr)

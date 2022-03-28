@@ -15,6 +15,7 @@ use App\Console\Commands\OrderNormalizeStatus;
 use App\Console\Commands\ParseBuybackPrices;
 use App\Console\Commands\PullData;
 use App\Console\Commands\PullPrices;
+use App\Console\Commands\UpdatePrices;
 use App\Console\Commands\PullFailedPrices;
 use App\Console\Commands\PullGraphicCards;
 use App\Console\Commands\RecountStatistics;
@@ -23,6 +24,7 @@ use App\Console\Commands\SendMailToCancelledOrder;
 use App\Console\Commands\SetCancelledOrder;
 use App\Console\Commands\SetProductsInWarehouse;
 use App\Console\Commands\SitemapGenerator;
+use App\Console\Commands\UpdateFailedPrices;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -37,6 +39,8 @@ class Kernel extends ConsoleKernel
         Reminder::class,
         PullData::class,
         PullPrices::class,
+        UpdatePrices::class,
+        UpdateFailedPrices::class,
         PullFailedPrices::class,
         CheckCart::class,
         Fedex::class,
@@ -70,6 +74,8 @@ class Kernel extends ConsoleKernel
         $schedule->command(CheckEmail::class)->everyThirtyMinutes();
         $schedule->command(FedexLabel::class)->dailyAt('12:00');
         $schedule->command(SetCancelledOrder::class)->dailyAt('12:00');
+        $schedule->command(UpdatePrices::class)->monthly();
+        $schedule->command(UpdateFailedPrices::class)->daily();
         // $schedule->command(CheckCardsAvailable::class)->everyMinute();
         // $schedule->command(CheckIphone::class)->everyMinute();
         $schedule->command(SitemapGenerator::class)->daily();

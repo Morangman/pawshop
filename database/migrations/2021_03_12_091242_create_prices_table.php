@@ -21,6 +21,7 @@ class CreatePricesTable extends Migration
         Schema::create('prices', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('category_id');
+            $table->unsignedTinyInteger('updated')->default(0);
             $table->json('steps_ids')->nullable();
             $table->decimal('price',10, 2)->default(0);
             $table->decimal('custom_price',10, 2)->default(0);
