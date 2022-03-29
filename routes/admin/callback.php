@@ -22,6 +22,11 @@ Route::post('', [
     'uses' => 'CallbackController@store',
 ]);
 
+Route::post('{callback}/block', [
+    'as' => '.block',
+    'uses' => 'CallbackController@block',
+]);
+
 Route::post('', [
     'as' => '.send-message',
     'uses' => 'CallbackController@sendEmail',

@@ -46,6 +46,7 @@ class Callback extends Model
         'text',
         'sender',
         'viewed',
+        'is_blocked',
     ];
 
     /**
@@ -58,6 +59,7 @@ class Callback extends Model
         'text' => 'string',
         'sender' => 'int',
         'viewed' => 'int',
+        'is_blocked' => 'int',
     ];
 
     /**

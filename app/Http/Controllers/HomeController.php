@@ -1272,6 +1272,7 @@ class HomeController extends Controller
      */
     public function addComment(\App\Http\Requests\Admin\Comment\StoreRequest $request): JsonResponse
     {
+        dd("OK");
         $comment = Comment::create(array_merge($request->all(), ['is_hidden' => true]));
 
         Notification::send(

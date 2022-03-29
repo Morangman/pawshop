@@ -30,6 +30,7 @@ class StoreRequest extends FormRequest
                 'nullable',
                 'string',
                 'max:255',
+                'email:rfc,dns',
             ],
             'text' => [
                 'required',

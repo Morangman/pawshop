@@ -160,6 +160,27 @@ class CallbackController extends Controller
     }
 
     /**
+     * @param \App\Callback $callback
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function block(Callback $callback): JsonResponse
+    {
+        if ($callback->is_blocked) {
+            $callback->update(['is_blocked' => 0]);
+        } else {
+            $callback->update(['is_blocked' => 1]);
+        }
+
+        Session::flash(
+            'success',
+            'Blocked status updated!'
+        );
+
+        return $this->json()->noContent();
+    }
+
+    /**
      * @param \App\Http\Requests\Admin\Callback\UpdateRequest $request
      * @param \App\Callback $callback
      *

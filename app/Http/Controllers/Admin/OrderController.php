@@ -203,6 +203,7 @@ class OrderController extends Controller
                 'suspectIp' => $suspectIp,
                 'barcodeSrc' => $d->getBarcodeHTML($order->getKey(), 'EAN13', 3.5, 100),
                 'steps' => $sortedSteps,
+                'user' => $order->user()->first()
             ]
         );
     }

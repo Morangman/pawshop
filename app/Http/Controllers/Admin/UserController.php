@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\StoreRequest;
 use App\Http\Requests\Admin\User\UpdateRequest;
+use App\Mail\VerificationMail;
 use App\Order;
 use App\User;
 use Illuminate\Contracts\View\View as ViewContract;
@@ -15,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use McMatters\LaravelRoles\Traits\HasRole;
@@ -102,6 +104,51 @@ class UserController extends Controller
         Session::flash(
             'success',
             Lang::get('admin/user.messages.update')
+        );
+
+        return $this->json()->noContent();
+    }
+
+    /**
+     * @param \App\User $user
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function verify(User $user): JsonResponse
+    {
+        $registerCode = random_int(100000, 999999);
+
+        $user->update(['register_code' => $registerCode]);
+
+        Mail::to($user->getAttribute('email'))
+            ->send(new VerificationMail(
+                $user->toArray(),
+            ));
+
+        Session::flash(
+            'success',
+            'Email sended!'
+        );
+
+        return $this->json()->noContent();
+    }
+
+    /**
+     * @param \App\User $user
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function block(User $user): JsonResponse
+    {
+        if ($user->is_blocked) {
+            $user->update(['is_blocked' => 0]);
+        } else {
+            $user->update(['is_blocked' => 1]);
+        }
+
+        Session::flash(
+            'success',
+            'Email is blocked!'
         );
 
         return $this->json()->noContent();

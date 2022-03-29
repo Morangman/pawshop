@@ -57,6 +57,19 @@ class CheckEmailJob implements ShouldQueue
                 $fromEmail = $email->fromEmail();
 
                 $fromName = $email->fromName();
+
+                // $excludeEmailArray = [
+                //     'MAILER-DAEMON@mx-out-15.default-host.net',
+                //     'wordpress@partner.rapidrefurb.net'
+                // ];
+    
+                // if (in_array($fromEmail, $excludeEmailArray)) {
+                //     continue;
+                // }
+    
+                if (str_contains($fromEmail, 'Mailer-Daemon')) {
+                    continue;
+                }
     
                 $time = Carbon::parse($email->date);
 
@@ -66,6 +79,10 @@ class CheckEmailJob implements ShouldQueue
 
                 if (Callback::query()->where('email', '=', $fromEmail)->exists()) {
                     $callback = Callback::query()->where('email', '=', $fromEmail)->first();
+
+                    if ($callback->is_blocked) {
+                        continue;
+                    }
     
                     $callback->touch();
                 } else {

@@ -8,7 +8,6 @@
                     </strong>
                     <div class="form-group">
                         <a
-                            type="submit"
                             class="btn btn-primary"
                             :href="$r('admin.order.barcode', {order: model.id})"
                             target="_blank"
@@ -16,7 +15,7 @@
                             Print barcode
                         </a>
                         <a class="btn btn-primary" :href="$r('thanks', {order_uuid: model.uuid})" target="_blank">Show Thank Page</a>
-                        <a class="btn btn-info" v-if="!model.tracking_number" href="javascript:0" v-on:click="getFedexLable()">
+                        <a class="btn btn-info" href="javascript:0" v-on:click="getFedexLable()">
                             <span v-if="!fedexLabelLoading">Create FedEx Label</span>
                             <span v-if="fedexLabelLoading">Loading..</span>
                         </a>
@@ -26,6 +25,8 @@
                             <strong>{{ $t('admin.order.form.user') }}</strong>
                         </label>
                         <a :href="$r('admin.user.edit', {user: model.user_id})">{{ model.user_id }}</a>
+                        <p class="text-warning" v-if="user && user.register_code">Email not confirmed</p>
+                        <p class="text-success" v-if="user && !user.register_code">Email confirmed</p>
                     </div>
                     <div class="form-group" v-if="model.payment.fedexLabel">
                         <label>
@@ -587,6 +588,10 @@
             model: {
                 type: Object,
                 required: true,
+            },
+            user: {
+                type: Object,
+                required: false,
             },
             bcode: {
                 type: String,

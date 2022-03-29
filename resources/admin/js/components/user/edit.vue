@@ -4,6 +4,8 @@
         :model.sync="model"
         :errors.sync="errors"
         @submit="update"
+        @verify="verifyUserEmail"
+        @block="blockUserEmail"
         @delete="deleteUser"
     >
     </user-form>
@@ -56,6 +58,50 @@
                     },
                 ).then(() => {
                     location.href = Router.route('admin.user.index');
+                }).catch(({ response: { data: { errors } } }) => {
+                    this.errors = errors;
+                    this.scrollToError();
+                });
+            },
+
+            verifyUserEmail(data) {
+                this.errors = {};
+                this.formData = new FormData();
+                this.formData.set('_method', 'POST');
+                this.collectFormData(data);
+
+                axios.post(
+                    Router.route('admin.user.verify', { user: this.user.id }),
+                    this.formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then(() => {
+                    location.href = Router.route('admin.user.edit', { user: this.user.id });
+                }).catch(({ response: { data: { errors } } }) => {
+                    this.errors = errors;
+                    this.scrollToError();
+                });
+            },
+
+            blockUserEmail(data) {
+                this.errors = {};
+                this.formData = new FormData();
+                this.formData.set('_method', 'POST');
+                this.collectFormData(data);
+
+                axios.post(
+                    Router.route('admin.user.block', { user: this.user.id }),
+                    this.formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then(() => {
+                    location.href = Router.route('admin.user.edit', { user: this.user.id });
                 }).catch(({ response: { data: { errors } } }) => {
                     this.errors = errors;
                     this.scrollToError();

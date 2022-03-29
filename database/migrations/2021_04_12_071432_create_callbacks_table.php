@@ -26,6 +26,7 @@ class CreateCallbacksTable extends Migration
             $table->text('text')->nullable();
             $table->tinyInteger('sender')->unsigned()->nullable();
             $table->tinyInteger('viewed')->unsigned()->default(1);
+            $table->tinyInteger('is_blocked')->default(0);
             $table->timestamps();
         });
     }

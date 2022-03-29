@@ -7,6 +7,7 @@
         :states.sync="states"
         :statuses.sync="statuses"
         :bcode.sync="bcode"
+        :user.sync="user"
         :suspect.sync="suspect"
         :errors.sync="errors"
         @submit="update"
@@ -26,6 +27,10 @@
 
         props: {
             order: {
+                type: Object,
+                required: true,
+            },
+            user: {
                 type: Object,
                 required: true,
             },

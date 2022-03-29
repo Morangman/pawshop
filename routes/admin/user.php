@@ -22,6 +22,16 @@ Route::post('', [
     'uses' => 'UserController@store',
 ]);
 
+Route::post('{user}/verify', [
+    'as' => '.verify',
+    'uses' => 'UserController@verify',
+]);
+
+Route::post('{user}/block', [
+    'as' => '.block',
+    'uses' => 'UserController@block',
+]);
+
 Route::get('{user}/edit', [
     'as' => '.edit',
     'uses' => 'UserController@edit',

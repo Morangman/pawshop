@@ -62,14 +62,13 @@ class RegisterController extends Controller
 
         User::query()->whereKey($user->getKey())->update([
             'is_active' => true,
-            'register_code' => null,
             'email_verified_at' => Carbon::now(),
         ]);
 
-        // Mail::to($user->getAttribute('email'))
-        //     ->send(new VerificationMail(
-        //         $user->toArray(),
-        //     ));
+        Mail::to($user->getAttribute('email'))
+            ->send(new VerificationMail(
+                $user->toArray(),
+            ));
 
         Auth::login($user);
 

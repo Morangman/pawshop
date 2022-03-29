@@ -181,6 +181,14 @@ class Order extends Model implements HasMedia
     }
 
     /**
+     * @return float
+     */
+    public function getTotalSummAttribute($value)
+    {
+        return number_format((float) $value, 2, '.', '');
+    }
+
+    /**
      * @return array
      */
     public function getFedexLableAttribute(): array

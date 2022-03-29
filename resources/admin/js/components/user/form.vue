@@ -32,6 +32,12 @@
                             class="form-control"
                             :class="{ 'border-danger': errors.email }"
                         >
+                        <div v-if="model.register_code" class="text-danger error">
+                            Email not confirmed
+                        </div>
+                        <div v-if="!model.register_code" class="text-success error">
+                            Email confirmed
+                        </div>
                         <div v-for="(error, i) in errors.email"
                              :key="`email__error__${i}`"
                              class="text-danger error"
@@ -124,6 +130,23 @@
                     >
                         {{ $t('common.word.delete') }}
                     </button>
+                    <button
+                        v-if="model.register_code"
+                        type="submit"
+                        class="btn btn-primary"
+                        @click.prevent="sendVerificationEmail()"
+                    >
+                        Send Verification Mail
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        @click.prevent="blockEmail()"
+                    >
+                        <span v-if="!model.is_blocked">Block</span>
+                        <span v-if="model.is_blocked">Deblock</span>
+                        this Email
+                    </button>
                 </template>
                 <button
                     type="submit"
@@ -157,6 +180,14 @@
         methods: {
             submit() {
                 this.$emit('submit', this.model);
+            },
+
+            sendVerificationEmail() {
+                this.$emit('verify', this.model);
+            },
+
+            blockEmail() {
+                this.$emit('block', this.model);
             },
 
             deleteUser() {

@@ -62,7 +62,15 @@
 
                     <textarea v-model="message.text" name="enter-message" class="form-control mb-3" rows="3" cols="1" placeholder="Enter your message..."></textarea>
 
-                    <div class="d-flex align-items-center">
+                    <div class="text-right">
+                        <button
+                            class="btn btn-primary"
+                            @click.prevent="blockEmail()"
+                        >
+                            <span v-if="!model.is_blocked">Block</span>
+                            <span v-if="model.is_blocked">Deblock</span>
+                            this Email
+                        </button>
                         <button v-on:click="sendMessage" type="button" class="btn bg-teal-400 btn-labeled btn-labeled-right ml-auto"><b><i class="icon-paperplane"></i></b> Send</button>
                     </div>
                 </div>
@@ -130,6 +138,22 @@
 
                 axios.post(
                     Router.route('admin.callback.send-message'),
+                    this.formData,
+                ).then(() => {
+                    location.reload();
+                }).catch(({ response: { data: { errors } } }) => {
+                    this.errors = errors;
+                    this.scrollToError();
+                });
+            },
+
+            blockEmail() {
+                this.errors = {};
+                this.formData = new FormData();
+                this.collectFormData(this.message);
+
+                axios.post(
+                    Router.route('admin.callback.block', { callback: this.model.id }),
                     this.formData,
                 ).then(() => {
                     location.reload();

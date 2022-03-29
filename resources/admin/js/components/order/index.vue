@@ -2,12 +2,7 @@
     <div class="card">
         <div class="card-body">
             <div class="form-group row">
-                <div class="col col-auto">
-                    <a :href="$r('admin.order.create')" class="btn btn-labeled btn-labeled-right bg-blue heading-btn">
-                        <b><i class="icon-add"></i></b>
-                        {{ $t('admin.order.index.header_btn') }}
-                    </a>
-                </div>
+   
                 <div class="form-group col-md-auto" v-if="!ordersstatus">
                     <label for="orderStatus" class="d-inline-block">{{ $t('admin.order.index.table.headers.status') }} :</label>
                     <select

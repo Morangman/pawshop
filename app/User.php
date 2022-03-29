@@ -39,6 +39,7 @@ class User extends Authenticatable
         'email_verified_at',
         'register_code',
         'is_active',
+        'is_blocked',
         'mail_subscription',
         'last_accessed_at',
     ];
@@ -67,6 +68,7 @@ class User extends Authenticatable
         'last_accessed_at' => 'datetime',
         'register_code' => 'int',
         'is_active' => 'bool',
+        'is_blocked' => 'bool',
         'mail_subscription' => 'bool',
         'password' => 'string',
     ];
