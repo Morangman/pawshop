@@ -12,6 +12,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 
 class UpdateFailedPrices extends Command
 {
@@ -144,6 +145,8 @@ class UpdateFailedPrices extends Command
 
                     $result = $this->decodeResult($response) ?? null;
 
+                    //Storage::disk('public')->put('response.json', json_encode($result, JSON_PRETTY_PRINT));
+
                     if ($result && $result['prices']) {
                         $maxPrice = $this->maxValueInArray($result['prices'], 'price');
 
@@ -170,6 +173,11 @@ class UpdateFailedPrices extends Command
                         ]);
 
                         echo 'Steps ids updated: ' . json_encode($priceModel->getAttribute('steps_ids')) . PHP_EOL;
+                    } else {
+                        $priceModel->update([
+                            'price' => 0,
+                            'updated' => 1,
+                        ]);
                     }
                 } catch (\Exception $e) {
                     // Log::info('Parse prices exception: ' . $e->getMessage());
