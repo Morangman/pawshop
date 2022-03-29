@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Callback;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\User\StoreRequest;
 use App\Http\Requests\Admin\User\UpdateRequest;
@@ -142,8 +143,21 @@ class UserController extends Controller
     {
         if ($user->is_blocked) {
             $user->update(['is_blocked' => 0]);
+
+            $callback = Callback::query()->where('email', '=', $user->email)->first();
+
+            if ($callback) {
+                $callback->update(['is_blocked' => 0]);
+            }
+            
         } else {
             $user->update(['is_blocked' => 1]);
+
+            $callback = Callback::query()->where('email', '=', $user->email)->first();
+
+            if ($callback) {
+                $callback->update(['is_blocked' => 1]);
+            }
         }
 
         Session::flash(
