@@ -63,7 +63,7 @@ Route::get('register', [
 Route::get('email/verify/{code}', [
     'as' => '.email.verify',
     'uses' => 'RegisterController@verifyEmail',
-    'middleware' => ['guest', 'throttle:3,60'],
+    'middleware' => ['throttle:3,60'],
 ]);
 
 Route::post('register', [
