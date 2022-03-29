@@ -126,6 +126,7 @@ class RegisterController extends Controller
      */
     public function verifyEmail(Request $request, string $code): RedirectResponse
     {
+        dd($request);
         $user = User::query()
             ->where('email', $request->get('email'))
             ->where('register_code', $code)
