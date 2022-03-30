@@ -117,13 +117,21 @@ class UpdateFailedPrices extends Command
                     try {
                         $client = new Client();
 
+                        $slug = str_replace(
+                            [
+                                'samsung-',
+                            ],
+                            '',
+                            $device->getAttribute('slug')
+                        );
+
                         $response = $client
                             ->request(
                                 'POST',
                                 $endpoint,
                                 [
                                     'form_params' => [
-                                        'device_name' => $device->getAttribute('slug'),
+                                        'device_name' => $slug,
                                         'attributes' => $attrs,
                                         'sort' => 'best_match',
                                     ],
