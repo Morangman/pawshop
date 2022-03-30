@@ -154,7 +154,7 @@ class UpdateFailedPrices extends Command
                             'updated' => 0,
                         ]);
     
-                        continue;
+                        // continue;
                     }
 
                     $result = $this->decodeResult($response) ?? null;
@@ -204,7 +204,7 @@ class UpdateFailedPrices extends Command
 
                     $this->line("{$device->getAttribute('name')} GET ERROR EXCEPTION");
 
-                    continue;
+                    // continue;
                 }
             }
 
