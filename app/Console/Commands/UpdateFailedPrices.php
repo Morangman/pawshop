@@ -93,9 +93,15 @@ class UpdateFailedPrices extends Command
 
         $this->line('Starting parsing prices...');
 
+        $client = new Client();
+
         foreach ($devices as $key => $device) {
 
-            $prices = Price::query()->where('updated', 0)->where('category_id', $device->id)->get();
+            $prices = Price::query()
+                ->where('updated', 0)
+                ->where('category_id', $device->id)
+                ->where('price', '>', 50)
+                ->get();
 
             foreach ($prices as $priceModel) {
                 $steps = Step::query()->whereIn('id', $priceModel->getAttribute('steps_ids'))->get();
@@ -115,8 +121,6 @@ class UpdateFailedPrices extends Command
 
                 try {
                     try {
-                        $client = new Client();
-
                         $slug = str_replace(
                             [
                                 'samsung-',
@@ -141,6 +145,8 @@ class UpdateFailedPrices extends Command
                             ->getContents();
                     } catch (\GuzzleHttp\Exception\RequestException $e) {
                         // Log::info('Parse prices exception: ' . $e->getMessage());
+
+                        // dd($e->getMessage());
 
                         $this->line("{$device->getAttribute('name')} GET ERROR EXCEPTION");
     
@@ -189,6 +195,8 @@ class UpdateFailedPrices extends Command
                     }
                 } catch (\Exception $e) {
                     // Log::info('Parse prices exception: ' . $e->getMessage());
+
+                    // dd($e->getMessage());
 
                     $priceModel->update([
                         'updated' => 0,
