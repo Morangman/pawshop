@@ -100,7 +100,7 @@ class UpdateFailedPrices extends Command
             $prices = Price::query()
                 ->where('updated', 0)
                 ->where('category_id', $device->id)
-                ->where('price', '>', 50)
+                // ->where('price', '>', 50)
                 ->get();
 
             foreach ($prices as $priceModel) {
