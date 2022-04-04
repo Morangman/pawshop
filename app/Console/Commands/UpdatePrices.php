@@ -181,7 +181,6 @@ class UpdatePrices extends Command
                         echo 'Steps ids updated: ' . json_encode($priceModel->getAttribute('steps_ids')) . PHP_EOL;
                     } else {
                         $priceModel->update([
-                            'price' => 0,
                             'updated' => 1,
                         ]);
                     }

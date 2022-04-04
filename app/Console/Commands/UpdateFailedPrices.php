@@ -84,7 +84,14 @@ class UpdateFailedPrices extends Command
 
         DB::connection()->disableQueryLog();
 
+        $priceCategoryIds = Price::query()
+            ->where('updated', 0)
+            ->pluck('category_id');
+
+        echo 'Total ctn: ' . count($priceCategoryIds) . PHP_EOL;
+
         $devices = Category::query()
+            ->whereIn('id', $priceCategoryIds)
             ->whereNotNull('custom_text')
             ->whereNotNull('subcategory_id')
             ->where('is_parsed', 1)
@@ -101,7 +108,6 @@ class UpdateFailedPrices extends Command
             $prices = Price::query()
                 ->where('updated', 0)
                 ->where('category_id', $device->id)
-                ->where('price', '>', 50)
                 ->get();
 
             echo 'Prices ctn: ' . $prices->count() . PHP_EOL;
@@ -112,6 +118,18 @@ class UpdateFailedPrices extends Command
                 $attrs = [];
 
                 foreach ($steps as $step) {
+                    if (!$step->attribute || !$step->slug) {
+                        $priceModel->update([
+                            'updated' => 1,
+                        ]);
+
+                        echo 'continue - Dont have attributes' . PHP_EOL;
+                    } else {
+                        $attrs += [
+                            $step->attribute => $step->slug
+                        ];
+                    }
+
                     $attrs += [
                         $step->attribute => $step->slug
                     ];
@@ -120,10 +138,10 @@ class UpdateFailedPrices extends Command
                 $result = [];
 
                 echo 'Category id: ' . $device->getKey() . PHP_EOL;
-                echo 'Try get by attributes: ' . json_encode($attrs) . PHP_EOL;
+                echo 'Try get by attributes: ' . $device->getAttribute('slug') . ' ' . json_encode($attrs) . PHP_EOL;
 
                 try {
-                    try {
+                    if ($attrs) {
                         $slug = str_replace(
                             [
                                 'samsung-',
@@ -146,21 +164,9 @@ class UpdateFailedPrices extends Command
                             )
                             ->getBody()
                             ->getContents();
-                    } catch (\GuzzleHttp\Exception\RequestException $e) {
-                        // Log::info('Parse prices exception: ' . $e->getMessage());
 
-                        // dd($e->getMessage());
-
-                        $this->line("{$device->getAttribute('name')} GET ERROR EXCEPTION");
-    
-                        $priceModel->update([
-                            'updated' => 0,
-                        ]);
-    
-                        // continue;
+                        $result = $this->decodeResult($response) ?? null;
                     }
-
-                    $result = $this->decodeResult($response) ?? null;
 
                     //Storage::disk('public')->put('response.json', json_encode($result, JSON_PRETTY_PRINT));
 
@@ -192,7 +198,6 @@ class UpdateFailedPrices extends Command
                         echo 'Steps ids updated: ' . json_encode($priceModel->getAttribute('steps_ids')) . PHP_EOL;
                     } else {
                         $priceModel->update([
-                            'price' => 0,
                             'updated' => 1,
                         ]);
                     }
@@ -207,6 +212,7 @@ class UpdateFailedPrices extends Command
 
                     $this->line("{$device->getAttribute('name')} GET ERROR EXCEPTION");
 
+                    break;
                     // continue;
                 }
             }
