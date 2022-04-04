@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
+use SebastianBergmann\CodeCoverage\Report\PHP;
 
 class UpdateFailedPrices extends Command
 {
@@ -100,8 +101,10 @@ class UpdateFailedPrices extends Command
             $prices = Price::query()
                 ->where('updated', 0)
                 ->where('category_id', $device->id)
-                // ->where('price', '>', 50)
+                ->where('price', '>', 50)
                 ->get();
+
+            echo 'Prices ctn: ' . $prices->count() . PHP_EOL;
 
             foreach ($prices as $priceModel) {
                 $steps = Step::query()->whereIn('id', $priceModel->getAttribute('steps_ids'))->get();
