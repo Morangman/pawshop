@@ -83,6 +83,10 @@ trait TelegramTrait
 
         $kboard = json_encode($keyboard);
 
+        if (str_contains($imageUrl, '.svg')) {
+            $imageUrl = 'https://rapid-recycle.com/client/images/category_sell_graphics_card_(gpu).png';
+        }
+
         $image = explode(PHP_EOL, $imageUrl);
         $image = urlencode(trim($image[0]));
         $text = urlencode("$title №$id\n$name\n$pruductName\n$price$");
