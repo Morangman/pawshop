@@ -89,13 +89,13 @@
                                         <small>Check</small>
                                     </span>
                                 </label>
-                                <label v-on:click="selectPaymentPayPal()" class="payment-radiobox">
+                                <!-- <label v-on:click="selectPaymentPayPal()" class="payment-radiobox">
                                     <input type="radio" name="payment-radios">
                                     <span>
                                         <img src="../../client/images/pay_paypal.svg" alt="pay_paypal">
                                         <small>PayPal</small>
                                     </span>
-                                </label>
+                                </label> -->
                                 <label v-on:click="selectPaymentZelle()" class="payment-radiobox">
                                     <input type="radio" name="payment-radios">
                                     <span>
