@@ -537,7 +537,7 @@ class PullDevices extends Command
                 foreach ($iphone['networks'] as $network) {
                     $networkStep = Step::query()
                         ->where('name_id', 7)
-                        ->where('slug', $capacity['slug'])
+                        ->where('slug', $network['slug'])
                         ->first();
 
                     CategoryStep::query()->create([
@@ -689,7 +689,7 @@ class PullDevices extends Command
                 foreach ($iphone['networks'] as $network) {
                     $networkStep = Step::query()
                         ->where('name_id', 7)
-                        ->where('slug', $capacity['slug'])
+                        ->where('slug', $network['slug'])
                         ->first();
 
                     CategoryStep::query()->create([
