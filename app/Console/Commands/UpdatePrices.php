@@ -149,7 +149,7 @@ class UpdatePrices extends Command
                             'updated' => 0,
                         ]);
     
-                        continue;
+                        dd("Fail");
                     }
 
                     $result = $this->decodeResult($response) ?? null;
