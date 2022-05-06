@@ -83,7 +83,7 @@ class UpdatePrices extends Command
         DB::connection()->disableQueryLog();
 
         $devices = Category::query()
-            ->where('id', '>', 1436)
+            // ->where('id', '>', 1593)
             ->whereNotNull('custom_text')
             ->whereNotNull('subcategory_id')
             ->where('is_parsed', 1)
