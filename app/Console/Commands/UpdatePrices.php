@@ -130,6 +130,10 @@ class UpdatePrices extends Command
                                 'POST',
                                 $endpoint,
                                 [
+                                    'headers' => [
+                                        'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36',
+                                        'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+                                    ],
                                     'form_params' => [
                                         'device_name' => $slug,
                                         'attributes' => $attrs,
@@ -140,8 +144,10 @@ class UpdatePrices extends Command
                             ->getBody()
                             ->getContents();
                     } catch (\GuzzleHttp\Exception\RequestException $e) {
+                        
                         dd($e->getMessage());
-                        Log::info('Parse prices exception: ' . $e->getMessage());
+
+                        report($e);
 
                         $this->line("{$device->getAttribute('name')} GET ERROR EXCEPTION");
     
