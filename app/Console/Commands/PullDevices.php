@@ -53,47 +53,6 @@ class PullDevices extends Command
      */
     public function handle()
     {
-        $cats = Category::query()->where('id', '>', 1436)->get();
-
-        foreach($cats as $device) {
-            $attributes = [];
-
-            foreach ($device->steps()->whereNotNull('slug')->get()->toArray() as $step) {
-                $attributes[$step['attribute']][] = [
-                    $step['attribute'] => $step['slug']
-                ];
-            }
-
-            $combinations = $this->array_cartesian_product($attributes);
-
-            foreach ($combinations as $combination) {
-                $attrs = [];
-
-                foreach ($combination as $attributes) {
-                    $attrs += $attributes;
-                }
-
-                $ids = [];
-
-                foreach ($attrs as $key => $attr) {
-                    $stepId = Step::query()->where('slug', $attr)->where('attribute', $key)->first()->getKey();
-
-                    $ids[] = $stepId;
-                }
-                
-                $data = [
-                    'category_id' => $device->getKey(),
-                    'steps_ids' => json_encode($ids),
-                    'price' => 0,
-                    'is_parsed' => 1,
-                ];
-
-                DB::table('prices')->insert($data);
-            }
-
-        }
-
-        dd("OK");
         $settings = Setting::latest('updated_at')->first();
 
         $basePath = $settings->getAttribute('general_settings')['base_path'];
