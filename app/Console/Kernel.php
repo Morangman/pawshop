@@ -14,6 +14,7 @@ use App\Console\Commands\FedexLabel;
 use App\Console\Commands\OrderNormalizeStatus;
 use App\Console\Commands\ParseBuybackPrices;
 use App\Console\Commands\PullData;
+use App\Console\Commands\PullDevices;
 use App\Console\Commands\PullPrices;
 use App\Console\Commands\UpdatePrices;
 use App\Console\Commands\PullFailedPrices;
@@ -56,7 +57,8 @@ class Kernel extends ConsoleKernel
         SetCancelledOrder::class,
         SendMailToCancelledOrder::class,
         ParseBuybackPrices::class,
-        CheckIphone::class
+        CheckIphone::class,
+        PullDevices::class,
     ];
 
     /**
