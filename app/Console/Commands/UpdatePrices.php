@@ -140,6 +140,7 @@ class UpdatePrices extends Command
                             ->getBody()
                             ->getContents();
                     } catch (\GuzzleHttp\Exception\RequestException $e) {
+                        dd($e->getMessage());
                         Log::info('Parse prices exception: ' . $e->getMessage());
 
                         $this->line("{$device->getAttribute('name')} GET ERROR EXCEPTION");
@@ -148,8 +149,6 @@ class UpdatePrices extends Command
                         $priceModel->update([
                             'updated' => 0,
                         ]);
-    
-                        dd("Fail");
                     }
 
                     $result = $this->decodeResult($response) ?? null;
@@ -186,6 +185,8 @@ class UpdatePrices extends Command
                         ]);
                     }
                 } catch (\Exception $e) {
+                    dd($e->getMessage());
+                    
                     Log::info('Parse prices exception: ' . $e->getMessage());
 
                     $priceModel->update([
@@ -193,8 +194,6 @@ class UpdatePrices extends Command
                     ]);
 
                     $this->line("{$device->getAttribute('name')} GET ERROR EXCEPTION");
-
-                    dd("Fail!");
                 }
             }
 
