@@ -154,8 +154,6 @@ class UpdatePrices extends Command
 
                     $result = $this->decodeResult($response) ?? null;
 
-                    dd($result);
-
                     if ($result && $result['prices']) {
                         $maxPrice = $this->maxValueInArray($result['prices'], 'price');
 
@@ -196,7 +194,7 @@ class UpdatePrices extends Command
 
                     $this->line("{$device->getAttribute('name')} GET ERROR EXCEPTION");
 
-                    continue;
+                    dd("Fail!");
                 }
             }
 

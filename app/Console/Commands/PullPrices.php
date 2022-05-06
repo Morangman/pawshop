@@ -204,7 +204,8 @@ class PullPrices extends Command
                             'attributes' => json_encode($attrs),
                         ]);
 
-                        continue;
+                        dd("OK");
+                        // continue;
                     }
                 }
 
