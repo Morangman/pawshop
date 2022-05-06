@@ -154,6 +154,8 @@ class UpdatePrices extends Command
 
                     $result = $this->decodeResult($response) ?? null;
 
+                    dd($result);
+
                     if ($result && $result['prices']) {
                         $maxPrice = $this->maxValueInArray($result['prices'], 'price');
 

@@ -53,6 +53,47 @@ class PullDevices extends Command
      */
     public function handle()
     {
+        $cats = Category::query()->where('id', '>', 1436)->get();
+
+        foreach($cats as $device) {
+            $attributes = [];
+
+            foreach ($device->steps()->whereNotNull('slug')->get()->toArray() as $step) {
+                $attributes[$step['attribute']][] = [
+                    $step['attribute'] => $step['slug']
+                ];
+            }
+
+            $combinations = $this->array_cartesian_product($attributes);
+
+            foreach ($combinations as $combination) {
+                $attrs = [];
+
+                foreach ($combination as $attributes) {
+                    $attrs += $attributes;
+                }
+
+                $ids = [];
+
+                foreach ($attrs as $key => $attr) {
+                    $stepId = Step::query()->where('slug', $attr)->where('attribute', $key)->first()->getKey();
+
+                    $ids[] = $stepId;
+                }
+                
+                $data = [
+                    'category_id' => $device->getKey(),
+                    'steps_ids' => json_encode($ids),
+                    'price' => 0,
+                    'is_parsed' => 1,
+                ];
+
+                DB::table('prices')->insert($data);
+            }
+
+        }
+
+        dd("OK");
         $settings = Setting::latest('updated_at')->first();
 
         $basePath = $settings->getAttribute('general_settings')['base_path'];
@@ -738,5 +779,29 @@ class PullDevices extends Command
                 $category->update(['image' => $media->getFullUrl()]);
             }
         }
+    }
+
+    function array_cartesian_product($arrays)
+    {
+        $result = array();
+        $arrays = array_values($arrays);
+        $sizeIn = sizeof($arrays);
+        $size = $sizeIn > 0 ? 1 : 0;
+        foreach ($arrays as $array)
+            $size = $size * sizeof($array);
+        for ($i = 0; $i < $size; $i ++)
+        {
+            $result[$i] = array();
+            for ($j = 0; $j < $sizeIn; $j ++)
+                array_push($result[$i], current($arrays[$j]));
+            for ($j = ($sizeIn -1); $j >= 0; $j --)
+            {
+                if (next($arrays[$j]))
+                    break;
+                elseif (isset ($arrays[$j]))
+                    reset($arrays[$j]);
+            }
+        }
+        return $result;
     }
 }
