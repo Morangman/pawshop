@@ -11,6 +11,7 @@ use App\StepName;
 use Illuminate\Console\Command;
 use Goutte\Client;
 use GuzzleHttp\Client as GuzzleClient;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -53,6 +54,25 @@ class PullDevices extends Command
      */
     public function handle()
     {
+        // парсинг на прямую с itsworthmore
+        // $client = new Client(HttpClient::create(['timeout' => 30 * 30 * 24]));
+
+        // $iphonesCrawler = $client->request('GET', 'https://www.itsworthmore.com/sell/iphone/iphone-13-pro-max');
+
+        // $scripts = [];
+        // $html = $iphonesCrawler->html();
+        
+        // preg_match_all("~<script[^>]*>\K[^<]*(?=</script>)~i", $html, $scripts);
+
+        // $productPricingExtraData = Arr::get($scripts, '0.6', []);
+
+        // $base64Value = $this->matchin($productPricingExtraData, "'pricingData'" . '    : "', '",');
+
+        // $decoded = base64_decode($base64Value[0][0]);
+
+        // dd(json_decode($decoded, true));
+
+
         $settings = Setting::latest('updated_at')->first();
 
         $basePath = $settings->getAttribute('general_settings')['base_path'];
@@ -326,6 +346,20 @@ class PullDevices extends Command
                 }
             }
         }
+    }
+
+    public function matchin($input, $start, $end){
+        $in      = array('/');
+        $out     = array('\/');
+        $startCh = str_replace($in, $out, $start);
+        $endCh   = str_replace($in, $out, $end);
+    
+        $pattern = '/(?<='.$startCh.').*?(?='.$endCh.')/sim';
+        // or you can use 
+        // $pattern = '/(?<='.$startCh.')[\\s\\S]*?(?='.$endCh.')/';
+    
+        preg_match_all($pattern, $input, $result);
+        return array($result[0]);
     }
 
     public function savePhone($iphoneCategory, $iphones) {
