@@ -804,9 +804,9 @@ class HomeController extends Controller
                 }
             }
 
-            // if ($step['value'] === 'Broken') {
-            //     $isBroken = true;
-            // }
+            if ($step['value'] === 'Broken') {
+                $isBroken = true;
+            }
 
 
             if ($step['id'] === 1111) {
