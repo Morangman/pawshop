@@ -105,39 +105,21 @@ class CategoryController extends Controller
      */
     public function update(UpdateRequest $request, Category $category): JsonResponse
     {
-        if ((int) $request->get('is_hidden') === 1){
-            if (Category::query()->where('subcategory_id', '=', $category->getKey())->exists()) {
-                $subCat = Category::query()->where('subcategory_id', '=', $category->getKey())->first();
+        $hidden = (int) $request->get('is_hidden');
 
-                if ($subCat) {
-                    while($subCat) {
-                        Category::query()->where('subcategory_id', '=', $subCat->getKey())->update([
-                            'is_hidden' => 1,
-                        ]);
-    
-                        if ($exist = Category::query()->where('subcategory_id', '=', $subCat->getKey())->first()) {
-                            $subCat = $exist;
-                        } else {
-                            $subCat = false;
-                        }
-                    }
-                }
-            }
-        } else {
-            if (Category::query()->where('subcategory_id', '=', $category->getKey())->exists()) {
-                $subCat = Category::query()->where('subcategory_id', '=', $category->getKey())->first();
+        if (Category::query()->where('subcategory_id', '=', $category->getKey())->exists()) {
+            $subCat = Category::query()->where('subcategory_id', '=', $category->getKey())->first();
 
-                if ($subCat) {
-                    while($subCat) {
-                        Category::query()->where('subcategory_id', '=', $subCat->getKey())->update([
-                            'is_hidden' => 0,
-                        ]);
-    
-                        if ($exist = Category::query()->where('subcategory_id', '=', $subCat->getKey())->first()) {
-                            $subCat = $exist;
-                        } else {
-                            $subCat = false;
-                        }
+            if ($subCat) {
+                while($subCat) {
+                    Category::query()->where('subcategory_id', '=', $subCat->getKey())->update([
+                        'is_hidden' => $hidden ?? 0,
+                    ]);
+
+                    if ($exist = Category::query()->where('subcategory_id', '=', $subCat->getKey())->first()) {
+                        $subCat = $exist;
+                    } else {
+                        $subCat = false;
                     }
                 }
             }
