@@ -85,6 +85,8 @@ class PullPrices extends Command
             ->whereNotNull('custom_text')
             ->whereNotNull('subcategory_id')
             ->where('is_parsed', 1)
+            ->where('subcategory_id', 28)
+            ->where('custom_text', '>', 200)
             ->get();
 
         $client = new Client();
