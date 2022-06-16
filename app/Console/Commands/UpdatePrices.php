@@ -82,11 +82,17 @@ class UpdatePrices extends Command
 
         DB::connection()->disableQueryLog();
 
+        $idsDone = [];
+
         $devices = Category::query()
             // ->where('id', '>', 1593)
+            ->whereNotIn('id', [1444, 1448, 1449, 29, 31, 36, 33, 1446, 34, 32, 86, 1445, 1451, 37, 38, 39])
             ->whereNotNull('custom_text')
             ->whereNotNull('subcategory_id')
             ->where('is_parsed', 1)
+            ->where('subcategory_id', 28)
+            ->where('custom_text', '>', 200)
+            ->orderBy('custom_text', 'desc')
             ->get();
 
         $endpoint = 'https://www.sellcell.com/devices/ajax_comparison/';
@@ -145,6 +151,9 @@ class UpdatePrices extends Command
                             ->getContents();
                     } catch (\GuzzleHttp\Exception\RequestException $e) {
                         
+                        var_dump($idsDone);
+                        echo PHP_EOL;
+                        echo PHP_EOL;
                         dd($e->getMessage());
 
                         report($e);
@@ -191,6 +200,9 @@ class UpdatePrices extends Command
                         ]);
                     }
                 } catch (\Exception $e) {
+                    var_dump($idsDone);
+                    echo PHP_EOL;
+                    echo PHP_EOL;
                     dd($e->getMessage());
                     
                     Log::info('Parse prices exception: ' . $e->getMessage());
@@ -254,6 +266,8 @@ class UpdatePrices extends Command
             $device->update(['custom_text' => $maxPriceByCategory]);
 
             $this->line("{$device->getAttribute('name')}....OK");
+
+            $idsDone[] = $device->id;
 
             $this->line('Memory now at: ' . memory_get_peak_usage());
 

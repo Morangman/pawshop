@@ -1178,7 +1178,7 @@ class HomeController extends Controller
 
         $category = Category::query()->where('slug', $slug)->first();
 
-        if (!$category) {
+        if (!$category || $category->is_hidden) {
             throw new NotFoundHttpException();
         }
 
