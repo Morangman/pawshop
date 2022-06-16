@@ -113,10 +113,18 @@ class CategoryController extends Controller
                         'is_hidden' => 1,
                     ]);
 
+                    $subCat1->subcategory()->update([
+                        'is_hidden' => 1,
+                    ]);
+
                     $subCat2 = Category::query()->where('subcategory_id', '=', $subCat1->getKey())->first();
 
                     if ($subCat2) {
                         $subCat2->update([
+                            'is_hidden' => 1,
+                        ]);
+
+                        $subCat2->subcategory()->update([
                             'is_hidden' => 1,
                         ]);
     
@@ -126,11 +134,19 @@ class CategoryController extends Controller
                             $subCat3->update([
                                 'is_hidden' => 1,
                             ]);
+
+                            $subCat3->subcategory()->update([
+                                'is_hidden' => 1,
+                            ]);
         
                             $subCat4 = Category::query()->where('subcategory_id', '=', $subCat3->getKey())->first();
 
                             if ($subCat4) {
                                 $subCat4->update([
+                                    'is_hidden' => 1,
+                                ]);
+
+                                $subCat4->subcategory()->update([
                                     'is_hidden' => 1,
                                 ]);
 
@@ -147,10 +163,18 @@ class CategoryController extends Controller
                         'is_hidden' => 0,
                     ]);
 
+                    $subCat1->subcategory()->update([
+                        'is_hidden' => 0,
+                    ]);
+
                     $subCat2 = Category::query()->where('subcategory_id', '=', $subCat1->getKey())->first();
 
                     if ($subCat2) {
                         $subCat2->update([
+                            'is_hidden' => 0,
+                        ]);
+
+                        $subCat2->subcategory()->update([
                             'is_hidden' => 0,
                         ]);
     
@@ -160,11 +184,19 @@ class CategoryController extends Controller
                             $subCat3->update([
                                 'is_hidden' => 0,
                             ]);
+
+                            $subCat3->subcategory()->update([
+                                'is_hidden' => 0,
+                            ]);
         
                             $subCat4 = Category::query()->where('subcategory_id', '=', $subCat3->getKey())->first();
 
                             if ($subCat4) {
                                 $subCat4->update([
+                                    'is_hidden' => 0,
+                                ]);
+
+                                $subCat4->subcategory()->update([
                                     'is_hidden' => 0,
                                 ]);
 
