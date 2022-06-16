@@ -116,11 +116,7 @@ class CategoryController extends Controller
                         'is_hidden' => $hidden ?? 0,
                     ]);
 
-                    if ($exist = Category::query()->where('subcategory_id', '=', $subCat->getKey())->first()) {
-                        $subCat = $exist;
-                    } else {
-                        $subCat = false;
-                    }
+                    $subCat = Category::query()->where('subcategory_id', '=', $subCat->getKey())->first() ?? false;
                 }
             }
         }
