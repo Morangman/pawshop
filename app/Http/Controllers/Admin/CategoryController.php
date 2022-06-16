@@ -107,15 +107,71 @@ class CategoryController extends Controller
     {
         if ((int) $request->get('is_hidden') === 1){
             if (Category::query()->where('subcategory_id', '=', $category->getKey())->exists()) {
-                Category::query()->where('subcategory_id', '=', $category->getKey())->update([
-                    'is_hidden' => 1,
-                ]);
+                $subCat1 = Category::query()->where('subcategory_id', '=', $category->getKey())->first();
+                if ($subCat1) {
+                    $subCat1->update([
+                        'is_hidden' => 1,
+                    ]);
+
+                    $subCat2 = Category::query()->where('subcategory_id', '=', $subCat1->getKey())->first();
+
+                    if ($subCat2) {
+                        $subCat2->update([
+                            'is_hidden' => 1,
+                        ]);
+    
+                        $subCat3 = Category::query()->where('subcategory_id', '=', $subCat2->getKey())->first();
+
+                        if ($subCat3) {
+                            $subCat3->update([
+                                'is_hidden' => 1,
+                            ]);
+        
+                            $subCat4 = Category::query()->where('subcategory_id', '=', $subCat3->getKey())->first();
+
+                            if ($subCat4) {
+                                $subCat4->update([
+                                    'is_hidden' => 1,
+                                ]);
+
+                            }
+                        }
+                    }
+                }
             }
         } else {
             if (Category::query()->where('subcategory_id', '=', $category->getKey())->exists()) {
-                Category::query()->where('subcategory_id', '=', $category->getKey())->update([
-                    'is_hidden' => 0,
-                ]);
+                $subCat1 = Category::query()->where('subcategory_id', '=', $category->getKey())->first();
+                if ($subCat1) {
+                    $subCat1->update([
+                        'is_hidden' => 0,
+                    ]);
+
+                    $subCat2 = Category::query()->where('subcategory_id', '=', $subCat1->getKey())->first();
+
+                    if ($subCat2) {
+                        $subCat2->update([
+                            'is_hidden' => 0,
+                        ]);
+    
+                        $subCat3 = Category::query()->where('subcategory_id', '=', $subCat2->getKey())->first();
+
+                        if ($subCat3) {
+                            $subCat3->update([
+                                'is_hidden' => 0,
+                            ]);
+        
+                            $subCat4 = Category::query()->where('subcategory_id', '=', $subCat3->getKey())->first();
+
+                            if ($subCat4) {
+                                $subCat4->update([
+                                    'is_hidden' => 0,
+                                ]);
+
+                            }
+                        }
+                    }
+                }
             }
         }
 
