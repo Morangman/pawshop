@@ -108,15 +108,43 @@ class CategoryController extends Controller
         $hidden = (int) $request->get('is_hidden');
 
         if (Category::query()->where('subcategory_id', '=', $category->getKey())->exists()) {
-            $subCat = Category::query()->where('subcategory_id', '=', $category->getKey())->first();
+            $subCats1 = Category::query()->where('subcategory_id', '=', $category->getKey())->get();
 
-            if ($subCat) {
-                while($subCat) {
-                    Category::query()->where('subcategory_id', '=', $subCat->getKey())->update([
+            foreach ($subCats1 as $c1) {
+                $c1->update([
+                    'is_hidden' => $hidden ?? 0,
+                ]);
+
+                $subCats2 = Category::query()->where('subcategory_id', '=', $c1->getKey())->get();
+
+                foreach ($subCats2 as $c2) {
+                    $c2->update([
                         'is_hidden' => $hidden ?? 0,
                     ]);
 
-                    $subCat = Category::query()->where('subcategory_id', '=', $subCat->getKey())->first() ?? false;
+                    $subCats3 = Category::query()->where('subcategory_id', '=', $c2->getKey())->get();
+
+                    foreach ($subCats3 as $c3) {
+                        $c3->update([
+                            'is_hidden' => $hidden ?? 0,
+                        ]);
+
+                        $subCats4 = Category::query()->where('subcategory_id', '=', $c3->getKey())->get();
+
+                        foreach ($subCats4 as $c4) {
+                            $c4->update([
+                                'is_hidden' => $hidden ?? 0,
+                            ]);
+
+                            $subCats5 = Category::query()->where('subcategory_id', '=', $c4->getKey())->get();
+
+                            foreach ($subCats5 as $c5) {
+                                $c5->update([
+                                    'is_hidden' => $hidden ?? 0,
+                                ]);
+                            }
+                        }
+                    }
                 }
             }
         }
