@@ -5,13 +5,16 @@ namespace App\Console\Commands;
 use App\Category;
 use App\Price;
 use App\Step;
-use GuzzleHttp\Client;
+use Goutte\Client;
 use Illuminate\Console\Command;
 use App\Services\Traits\JsonDecodeTrait;
+use App\Setting;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpClient\HttpClient;
 
 class UpdatePrices extends Command
 {
@@ -72,6 +75,104 @@ class UpdatePrices extends Command
      */
     public function handle()
     {
+        // $settings = Setting::latest('updated_at')->first();
+        // $basePath = $settings->getAttribute('general_settings')['base_path'];
+        // $samsungPoint = $settings->getAttribute('general_settings')['samsung_point'];
+        // $samsungCategory = Category::query()->where('id', 28)->first();
+        // $client = new Client(HttpClient::create(['timeout' => 30 * 30 * 24]));
+        // $samsungCrawler = $client->request('GET', $samsungPoint);
+
+        // $samsungPhones = $samsungCrawler->filter('.device')->each(function (Crawler $nodeCrawler) use ($basePath, $client) {
+        //     $samsungStepsCrawler = $client->request('GET', $basePath . $nodeCrawler->filter('a')->attr('href'));
+
+
+        //     $capacities = $samsungStepsCrawler->filter('.capacity-logos-sprite')->each(function (Crawler $nodeCrawler) {
+        //         $cpies = [];
+
+        //         return $cpies[] = [
+        //             'slug' => $slug = $nodeCrawler->filter('.do_ajax')->attr('value'),
+        //             'attribute' => $slug ? 'capacity' : null,
+        //             'name' => $nodeCrawler->filter('.do_ajax')->attr('data-attribute'),
+        //         ];
+        //     });
+
+
+        //     $price = (float) trim($nodeCrawler->filter('.price')->text(), '$');
+
+        //     if ($price > 100) {
+        //         return [
+        //             'image' => $basePath . $nodeCrawler->filter('img')->eq(1)->attr('src'),
+        //             'title' => $nodeCrawler->filter('.h4')->text(),
+        //             'slug' =>  'samsung-'. preg_replace('/^\/(.+?)\/samsung-(.+?)\/$/', "$2", $nodeCrawler->filter('a')->attr('href')),
+        //             'price' => trim($nodeCrawler->filter('.price')->text(), '$'),
+        //             'capacities' => $capacities,
+        //         ];
+        //     }
+        // });
+
+        // foreach ($samsungPhones as $sPhone) {
+        //     if ($sPhone) {
+
+        //     $device = Category::query()->where('slug', $sPhone['slug'])->first();
+
+        //     if ($device) {
+
+        
+        //     $maxPriceByCategory = (float) $sPhone['price'];
+
+        //     $premiumPrices = DB::table('premium_price')->where('category_id', $device->getKey())->get();
+
+        //     $addToPrice = 0;
+
+        //     $addPercent = 0;
+
+        //     $max = 0;
+
+        //     foreach ($premiumPrices as $premiumPrice) {
+        //         $step = Step::query()->whereKey($premiumPrice->step_id)->first();
+
+        //         $isCheckbox = $step->stepName->is_checkbox;
+
+        //         if ($pricePlus = $premiumPrice->price_plus) {
+        //             if ($isCheckbox) {
+        //                 $addToPrice += $pricePlus;
+        //             } else {
+        //                 if ($this->stepId !== $step->stepName->id) {
+        //                     if ($max < (float) $premiumPrice->price_plus) {
+        //                         $max = (float) $premiumPrice->price_plus;
+
+        //                         $addToPrice += $max;
+        //                     }
+        //                 } else {
+        //                     $max = 0;
+        //                 }
+        //             }
+        //         }
+
+        //         if ($percentPlus = $premiumPrice->price_percent) {
+        //             $addPercent += $percentPlus;
+        //         }
+
+        //         $this->stepId = $step->stepName->id;
+        //     }
+
+        //     if ($addPercent) {
+        //         $priceAddPercent = ((float) $maxPriceByCategory * $addPercent) / 100;
+
+        //         $maxPriceByCategory = number_format((float) $maxPriceByCategory + $priceAddPercent, 2, '.', '');
+        //     }
+
+        //     if ($addToPrice) {
+        //         $maxPriceByCategory = number_format((float) $maxPriceByCategory + $addToPrice, 2, '.', '');
+        //     }
+
+        //     $device->update(['custom_text' => $maxPriceByCategory]);
+        //     }
+        //     }
+        // }
+
+        // dd("OK");
+
         $this->line('Preparing for parsing prices...');
 
 //        Schema::disableForeignKeyConstraints();
@@ -86,11 +187,11 @@ class UpdatePrices extends Command
 
         $devices = Category::query()
             // ->where('id', '>', 1593)
-            ->whereNotIn('id', [1444, 1448, 1449, 29, 31, 36, 33, 1446, 34, 32, 86, 1445, 1451, 37, 38, 39])
+            // ->whereNotIn('id', [1444, 1448, 1449, 29, 31, 36, 33, 1446, 34, 32, 86, 1445, 1451, 37, 38, 39])
             ->whereNotNull('custom_text')
             ->whereNotNull('subcategory_id')
             ->where('is_parsed', 1)
-            ->where('subcategory_id', 28)
+            // ->where('subcategory_id', 28)
             ->where('custom_text', '>', 200)
             ->orderBy('custom_text', 'desc')
             ->get();
